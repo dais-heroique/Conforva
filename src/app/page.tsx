@@ -384,6 +384,7 @@ export default function LandingPage() {
             <div className="flex gap-5">
               <Link href="/cgu" className="hover:text-gray-600 transition-colors">CGU</Link>
               <Link href="/privacy" className="hover:text-gray-600 transition-colors">Confidentialité</Link>
+              <Link href="/mentions-legales" className="hover:text-gray-600 transition-colors">Mentions légales</Link>
             </div>
           </div>
           {/* Disclaimer discret */}

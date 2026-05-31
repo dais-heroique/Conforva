@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { renderToBuffer } from "@react-pdf/renderer"
-import { TechnicalFilePDF, LabelPDF } from "@/lib/pdf/templates"
+import { TechnicalFilePDF, LabelPDF, DeclarationOfConformityPDF } from "@/lib/pdf/templates"
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient()
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
   try {
     let pdfBuffer: Buffer
 
-    if (type === "technical") {
+    if (type === "technical" || type === "declaration") {
       const { data: ra } = await supabase
         .from("risk_assessments")
         .select("*")
@@ -51,9 +51,15 @@ export async function POST(req: NextRequest) {
         .limit(1)
         .single()
 
-      pdfBuffer = await renderToBuffer(
-        TechnicalFilePDF({ product, org, rp, riskAssessment: ra, technicalFile: tf, language, watermarked: tf?.watermarked ?? true })
-      )
+      if (type === "declaration") {
+        pdfBuffer = await renderToBuffer(
+          DeclarationOfConformityPDF({ product, org, rp, riskAssessment: ra, watermarked: tf?.watermarked ?? true })
+        )
+      } else {
+        pdfBuffer = await renderToBuffer(
+          TechnicalFilePDF({ product, org, rp, riskAssessment: ra, technicalFile: tf, language, watermarked: tf?.watermarked ?? true })
+        )
+      }
     } else {
       const { data: label } = await supabase
         .from("labels")

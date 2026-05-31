@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, ArrowLeft, Download, FileText, Tag, Shield, AlertTriangle } from "lucide-react"
+import { Loader2, ArrowLeft, Download, FileText, Tag, Shield, AlertTriangle, ScrollText } from "lucide-react"
 import { SUPPORTED_LANGUAGES, formatDate } from "@/lib/utils"
 import type { ProductRow, CategoryRow, RiskAssessmentRow, TechnicalFileRow, LabelRow } from "@/types/supabase"
 
@@ -43,7 +43,7 @@ export default function ExportPage({ params }: PageProps) {
     load()
   }, [id, router])
 
-  async function handleExportPDF(type: "technical" | "label", lang?: string) {
+  async function handleExportPDF(type: "technical" | "label" | "declaration", lang?: string) {
     setGenerating(type + (lang ?? ""))
     try {
       const res = await fetch("/api/export/pdf", {
@@ -152,6 +152,40 @@ export default function ExportPage({ params }: PageProps) {
                     PDF EN
                   </Button>
                 </div>
+              </div>
+            </>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Declaration of Conformity */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <ScrollText className="h-5 w-5 text-blue-600" />
+            Déclaration UE de Conformité (DoC)
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {!tf ? (
+            <p className="text-sm text-gray-500">Générez d'abord l'analyse de risque pour obtenir la déclaration.</p>
+          ) : (
+            <>
+              <p className="text-sm text-gray-600">Document attestant la conformité au Règlement GPSR UE 2023/988. À signer par le fabricant ou la Personne Responsable.</p>
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div>
+                  <p className="font-medium text-sm">Déclaration de Conformité (GPSR)</p>
+                  <p className="text-xs text-gray-500">Format UE standard — Article 24 du Règlement 2023/988</p>
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => handleExportPDF("declaration")}
+                  disabled={generating !== null}
+                  className="gap-1"
+                >
+                  {generating === "declaration" ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
+                  PDF
+                </Button>
               </div>
             </>
           )}

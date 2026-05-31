@@ -33,6 +33,28 @@ async function fetchProductPageText(url: string, maxChars = 3000): Promise<strin
   }
 }
 
+/** Determine which target markets are active from the product's target_markets array */
+function detectMarkets(targetMarkets: string[] | null | undefined): {
+  eu: boolean
+  us: boolean
+  cn: boolean
+  gb: boolean
+  ca: boolean
+  jp: boolean
+  au: boolean
+} {
+  const m = (targetMarkets ?? ["EU"]).map((s) => s.toUpperCase())
+  return {
+    eu: m.some((x) => ["EU", "EEA", "EUROPE", "FR", "DE", "IT", "ES", "NL", "BE", "PL"].includes(x)),
+    us: m.some((x) => ["US", "USA", "UNITED STATES", "AMERICA"].includes(x)),
+    cn: m.some((x) => ["CN", "CHINA", "CHINE", "CHN"].includes(x)),
+    gb: m.some((x) => ["GB", "UK", "UNITED KINGDOM", "GRANDE-BRETAGNE"].includes(x)),
+    ca: m.some((x) => ["CA", "CANADA"].includes(x)),
+    jp: m.some((x) => ["JP", "JAPAN", "JAPON"].includes(x)),
+    au: m.some((x) => ["AU", "AUSTRALIA", "AUSTRALIE"].includes(x)),
+  }
+}
+
 export async function POST(req: NextRequest) {
   if (!process.env.GROQ_API_KEY) {
     return NextResponse.json({ error: "AI generation not configured" }, { status: 503 })
@@ -83,81 +105,269 @@ export async function POST(req: NextRequest) {
     `Norme ${s.code} — ${s.title}: ${s.summary}\nExigences: ${JSON.stringify(s.requirements)}`
   ).join("\n\n") ?? "Règlement GPSR 2023/988 applicable"
 
-  const systemPrompt = `Tu es un expert en conformité réglementaire européenne, spécialisé dans le Règlement GPSR (UE 2023/988).
-Tu génères des analyses de risque et dossiers techniques professionnels pour des e-commerçants.
+  const markets = detectMarkets((product as any).target_markets)
+  const activeMarkets = Object.entries(markets)
+    .filter(([, v]) => v)
+    .map(([k]) => k.toUpperCase())
+    .join(", ")
 
-IMPORTANT:
-- Tu fournis une AIDE à la conformité, jamais une garantie juridique
-- Tu bases ton analyse sur les normes européennes applicables
-- Tu génères des sorties JSON structurées et précises
-- Tu es rigoureux, professionnel, et complet`
+  // Build a human-readable market requirements block to guide the AI
+  const marketGuidance = [
+    markets.eu ? "- UE: Règlement GPSR UE 2023/988, marquage CE, normes harmonisées CEN/CENELEC, REACH (règlement 1907/2006), RoHS (2011/65/UE), CLP (règlement 1272/2008), Personne Responsable obligatoire pour importateurs hors UE" : null,
+    markets.us ? "- USA: Consumer Product Safety Act (15 U.S.C. §2051), CPSC regulations, UL standards, ASTM International, California Proposition 65 (Safe Drinking Water and Toxic Enforcement Act of 1986), Federal Hazardous Substances Act (FHSA), FCC Part 15 si produit électronique, CPSIA si produit pour enfants" : null,
+    markets.cn ? "- CHINE: Normes nationales GB, Certification CCC (China Compulsory Certification) pour catégories obligatoires, SAMR (State Administration for Market Regulation), CNCA, normes GB/T et GB/Z applicables" : null,
+    markets.gb ? "- ROYAUME-UNI: UK Product Safety and Metrology Bill (PSMB), marquage UKCA (en remplacement du CE post-Brexit), Personne Responsable UK obligatoire, normes BS EN, OPSS (Office for Product Safety and Standards)" : null,
+    markets.ca ? "- CANADA: Loi canadienne sur la sécurité des produits de consommation (LCSPC / CCPSA), Santé Canada, normes CSA, étiquetage bilingue français/anglais obligatoire" : null,
+    markets.jp ? "- JAPON: Marque PSE (Product Safety Electrical Appliance & Material), réglementations METI (Ministry of Economy Trade and Industry), Loi sur la sécurité des appareils ménagers électriques (DENAN), normes JIS" : null,
+    markets.au ? "- AUSTRALIE / NZ: ACCC (Australian Competition and Consumer Commission), Australian Consumer Law, normes AS/NZS, RCM mark (Regulatory Compliance Mark) pour produits électriques, ACMA pour produits radiofréquences" : null,
+  ].filter(Boolean).join("\n")
 
-  const userPrompt = `Génère une analyse de risque GPSR complète pour ce produit.
+  const systemPrompt = `Tu es un expert senior en conformité réglementaire internationale et sécurité des produits de consommation, avec plus de 20 ans d'expérience couvrant l'Union Européenne (GPSR, REACH, RoHS, CLP, directives sectorielles), les États-Unis (CPSC, FHSA, FCC, CPSIA), la Chine (CCC, GB standards, SAMR), le Royaume-Uni (UKCA, PSMB), le Canada (CCPSA), le Japon (PSE, METI) et l'Australie (ACCC, AS/NZS).
 
-PRODUIT:
+Tu génères des analyses de risque et des dossiers techniques professionnels destinés à des fabricants, importateurs et e-commerçants souhaitant mettre leurs produits sur le marché en toute conformité réglementaire.
+
+TES PRINCIPES FONDAMENTAUX:
+1. Tu analyses systématiquement les dangers selon la méthodologie ISO 12100:2010 (estimation et évaluation des risques) et les exigences de l'Annexe III du règlement GPSR UE 2023/988
+2. Tu identifies tous les marchés cibles et adaptes précisément tes recommandations à chaque réglementation nationale ou régionale
+3. Tu cites les normes, articles réglementaires et standards techniques pertinents avec leurs références exactes
+4. Tu fournis des recommandations concrètes, actionnables et hiérarchisées par priorité
+5. Tu génères des sorties JSON parfaitement structurées, sans troncature, sans commentaire hors JSON
+6. Tu fournis toujours une aide à la conformité, jamais une garantie juridique absolue — tu le rappelles en disclaimer
+7. Ton analyse est exhaustive, professionnelle, et immédiatement exploitable par un responsable conformité ou un organisme notifié`
+
+  const userPrompt = `Génère une analyse de risque et un dossier technique international complets pour ce produit. Couvre TOUS les marchés détectés avec leurs exigences spécifiques.
+
+=== DONNÉES PRODUIT ===
 - Nom: ${product.name}
-- Référence: ${product.reference ?? "N/A"}
-- Catégorie: ${category?.name_fr ?? "Divers"} (${category?.code ?? "other"})
+- Référence / SKU: ${product.reference ?? "N/A"}
+- Catégorie: ${category?.name_fr ?? "Divers"} (code: ${category?.code ?? "other"})
 - Usage prévu: ${product.intended_use ?? "Non spécifié"}
-- Matériaux: ${product.materials?.join(", ") ?? "Non spécifiés"}
-- Poids: ${product.weight_g ? `${product.weight_g}g` : "Non spécifié"}
-- Marchés: ${product.target_markets?.join(", ") ?? "EU"}
-- Organisation: ${org?.name ?? "Non spécifiée"} (${org?.country ?? "EU"})
-${productUrl ? `- URL boutique: ${productUrl}` : ""}
+- Matériaux / Composants: ${(product as any).materials?.join(", ") ?? "Non spécifiés"}
+- Poids: ${(product as any).weight_g ? `${(product as any).weight_g}g` : "Non spécifié"}
+- Marchés cibles: ${(product as any).target_markets?.join(", ") ?? "EU"} — Marchés actifs détectés: ${activeMarkets}
+- Organisation fabricant/importateur: ${org?.name ?? "Non spécifiée"} (pays: ${org?.country ?? "EU"})
+${productUrl ? `- URL page produit: ${productUrl}` : ""}
 
-${webContent ? `CONTENU DE LA PAGE PRODUIT (extrait web):
-${webContent}
+=== EXIGENCES PAR MARCHÉ DÉTECTÉ ===
+${marketGuidance || "- UE: GPSR UE 2023/988 applicable par défaut"}
 
-` : ""}RÉPONSES QUESTIONNAIRE:
+=== RÉPONSES QUESTIONNAIRE DE CONFORMITÉ ===
 ${JSON.stringify(qr?.answers ?? {}, null, 2)}
 
-NORMES APPLICABLES:
+=== NORMES SECTORIELLES APPLICABLES (BASE DE DONNÉES) ===
 ${standardsText}
 
-Génère une réponse JSON avec exactement cette structure:
+${webContent ? `=== CONTENU DE LA PAGE PRODUIT (extrait web scraping) ===
+${webContent}
+
+` : ""}=== INSTRUCTIONS DE GÉNÉRATION ===
+Analyse exhaustivement ce produit selon TOUTES les réglementations des marchés détectés. Identifie au minimum 3 à 6 dangers distincts pertinents pour ce type de produit. Pour chaque danger, applique la méthodologie d'évaluation des risques ISO 12100:2010. Fournis des mesures de mitigation concrètes et hiérarchisées. Génère les sections du dossier technique avec un contenu substantiel (2 à 4 paragraphes par section), pas des placeholders vides.
+
+Retourne UNIQUEMENT le JSON suivant, sans aucun texte avant ou après, sans balises markdown, sans commentaires:
+
 {
-  "summary": "Résumé exécutif de l'analyse (2-3 phrases)",
+  "summary": "Résumé exécutif (3-4 phrases, professionnel)",
   "overall_severity": "low|medium|high|critical",
+  "risk_assessment_methodology": "Description de la méthodologie utilisée (ex: ISO 12100:2010, GPSR Annex III)",
+  "product_description": {
+    "general": "Description technique complète du produit",
+    "intended_use": "Usage normal prévu",
+    "foreseeable_misuse": ["Usage anormal prévisible 1", "..."],
+    "target_users": ["adultes", "enfants", "professionnels", "etc"],
+    "age_restrictions": "Ex: Non adapté aux moins de 3 ans / Pas de restriction",
+    "distribution_form": "Ex: Vente en ligne, emballage individuel",
+    "technical_specifications": "Caractéristiques techniques principales"
+  },
   "hazards": [
     {
       "id": "H1",
       "type": "physical|chemical|biological|ergonomic|electrical|thermal|other",
-      "title": "Titre court du danger",
-      "description": "Description détaillée du danger identifié",
+      "title": "Titre court",
+      "description": "Description détaillée incluant mécanisme de danger",
       "severity": "low|medium|high|critical",
+      "severity_justification": "Justification du niveau de gravité",
       "probability": "low|medium|high",
-      "affected_users": ["enfants", "adultes", "etc"],
+      "probability_justification": "Justification de la probabilité",
+      "risk_level": "acceptable|tolerable|unacceptable",
+      "affected_users": ["..."],
+      "exposure_conditions": "Conditions d'exposition au danger",
       "referenced_standards": ["EN XXXXX", "GPSR Art. X"]
     }
   ],
   "mitigation_measures": [
     {
       "hazard_id": "H1",
-      "measure": "Description de la mesure de prévention/mitigation",
-      "type": "design|warning|packaging|labeling|restriction",
+      "measure": "Description précise de la mesure",
+      "type": "design|protection|information|warning|packaging|labeling|restriction",
       "priority": "mandatory|recommended",
-      "norm_reference": "Norme ou article applicable"
+      "norm_reference": "Norme ou article applicable",
+      "implementation_details": "Comment implémenter concrètement"
     }
   ],
-  "referenced_standards": ["liste des normes citées"],
-  "required_tests": ["liste des tests à réaliser"],
-  "labeling_requirements": {
-    "fr": ["mention 1", "mention 2"],
-    "en": ["mention 1", "mention 2"],
-    "de": ["mention 1", "mention 2"],
-    "it": ["mention 1", "mention 2"],
-    "es": ["mention 1", "mention 2"]
+  "residual_risks": [
+    {
+      "hazard_id": "H1",
+      "description": "Risque résiduel après mesures",
+      "acceptability": "acceptable|to_monitor"
+    }
+  ],
+  "market_specific_requirements": {
+    "EU": {
+      "applicable": ${markets.eu},
+      "regulation": "Règlement GPSR UE 2023/988",
+      "ce_marking_required": true,
+      "responsible_person_required": true,
+      "declaration_of_conformity_required": true,
+      "harmonized_standards": ["Liste des normes harmonisées applicables"],
+      "specific_requirements": ["Exigence spécifique 1", "..."],
+      "labeling_mandatory_elements": ["Éléments obligatoires sur l'étiquette EU"]
+    },
+    "US": {
+      "applicable": ${markets.us},
+      "regulation": "CPSC / 15 U.S.C. §2051",
+      "certifications_required": ["UL", "ASTM", "FCC si applicable"],
+      "california_prop65_warning_required": false,
+      "specific_requirements": ["..."],
+      "labeling_requirements": ["..."]
+    },
+    "CN": {
+      "applicable": ${markets.cn},
+      "regulation": "GB Standards / SAMR / CNCA",
+      "ccc_required": false,
+      "applicable_gb_standards": ["GB XXXXX"],
+      "specific_requirements": ["..."]
+    },
+    "GB": {
+      "applicable": ${markets.gb},
+      "regulation": "UK Product Safety and Metrology Bill / UKCA",
+      "ukca_marking_required": false,
+      "specific_requirements": ["..."]
+    },
+    "CA": {
+      "applicable": ${markets.ca},
+      "regulation": "Loi canadienne sur la sécurité des produits de consommation (LCSPC/CCPSA)",
+      "bilingual_labeling_required": true,
+      "specific_requirements": ["..."]
+    },
+    "JP": {
+      "applicable": ${markets.jp},
+      "regulation": "PSE Mark / METI / DENAN Law",
+      "pse_mark_required": false,
+      "applicable_jis_standards": ["JIS XXXXX"],
+      "specific_requirements": ["..."]
+    },
+    "AU": {
+      "applicable": ${markets.au},
+      "regulation": "Australian Consumer Law / ACCC / AS-NZS standards",
+      "rcm_mark_required": false,
+      "specific_requirements": ["..."]
+    }
   },
-  "pictograms": ["liste des pictogrammes requis (ex: CE, flame, skull)"],
-  "responsible_person_required": true,
-  "declaration_of_conformity_required": true,
+  "referenced_standards": ["Liste complète des normes citées dans l'analyse"],
+  "required_tests": [
+    {
+      "test": "Nom du test",
+      "standard": "Norme de référence",
+      "mandatory": true,
+      "laboratory_accreditation": "ISO 17025 recommandé"
+    }
+  ],
+  "reach_svhc_assessment": "Évaluation REACH substances préoccupantes (SVHC) — pertinence et liste de substances à vérifier",
+  "rohs_applicable": false,
+  "rohs_assessment": "Évaluation RoHS si applicable (restrictions substances dangereuses dans équipements électriques)",
+  "packaging_requirements": ["Exigence emballage 1", "Directive 94/62/CE si UE", "..."],
+  "traceability_requirements": {
+    "batch_number_required": true,
+    "serial_number_required": false,
+    "qr_code_recommended": true,
+    "minimum_retention_years": 10
+  },
+  "declaration_of_conformity_content": {
+    "product_description": "Description complète du produit pour la Déclaration de Conformité",
+    "applicable_regulations": ["GPSR UE 2023/988", "..."],
+    "standards_complied": ["EN XXXXX:XXXX", "..."],
+    "assessment_procedure": "Description de la procédure d'évaluation de la conformité suivie",
+    "additional_information": "Informations complémentaires à mentionner dans la DoC"
+  },
+  "labeling_requirements": {
+    "fr": ["Mention obligatoire FR 1", "..."],
+    "en": ["Mandatory mention EN 1", "..."],
+    "de": ["Pflichtangabe DE 1", "..."],
+    "it": ["Menzione obbligatoria IT 1", "..."],
+    "es": ["Mención obligatoria ES 1", "..."],
+    "zh": ["强制说明 ZH 1", "..."],
+    "ja": ["必須表示 JA 1", "..."]
+  },
+  "pictograms": ["CE", "WEEE si applicable", "flamme", "etc"],
+  "instructions_for_use": {
+    "fr": ["Instruction d'utilisation FR 1", "..."],
+    "en": ["Instruction for use EN 1", "..."]
+  },
   "technical_file_sections": [
     {
-      "section": "1. Description du produit",
-      "content": "Contenu détaillé de la section"
+      "section": "1. Description générale du produit",
+      "content": "Description technique complète et détaillée du produit, incluant sa nature, ses composants principaux, ses caractéristiques dimensionnelles et physiques, et son positionnement commercial. Cette section constitue la base d'identification du produit dans le dossier technique."
+    },
+    {
+      "section": "2. Usage prévu et utilisation prévisible abusive",
+      "content": "Définition précise de l'usage normal du produit tel que prévu par le fabricant, accompagnée d'une analyse des utilisations abusives prévisibles susceptibles d'engendrer des dangers. Inclut l'identification des groupes d'utilisateurs vulnérables (enfants, personnes âgées, personnes handicapées) conformément à l'Article 6 du GPSR UE 2023/988."
+    },
+    {
+      "section": "3. Fabricant et chaîne d'approvisionnement",
+      "content": "Identification complète du fabricant ou de l'importateur responsable de la mise sur le marché, incluant coordonnées, pays d'établissement et rôle dans la chaîne d'approvisionnement. Conformément à l'Article 10 du GPSR, les importateurs établis hors UE doivent désigner une Personne Responsable établie dans l'Union Européenne."
+    },
+    {
+      "section": "4. Normes et réglementations applicables",
+      "content": "Liste exhaustive des réglementations, directives et normes harmonisées applicables au produit pour chaque marché cible, avec justification de leur applicabilité. Inclut les normes européennes EN, les standards ISO/IEC, et les réglementations nationales des marchés détectés (CPSC/US, GB standards/CN, BS EN/UK, etc.)."
+    },
+    {
+      "section": "5. Évaluation des risques — Méthodologie",
+      "content": "Description de la méthodologie d'évaluation des risques appliquée, basée sur ISO 12100:2010 (principes généraux de conception — appréciation et réduction du risque) et l'Annexe III du Règlement GPSR UE 2023/988. L'évaluation prend en compte la gravité du dommage potentiel, la probabilité d'occurrence et la population exposée, aboutissant à un niveau de risque global."
+    },
+    {
+      "section": "6. Évaluation des risques — Résultats",
+      "content": "Présentation synthétique de l'ensemble des dangers identifiés, avec leur cotation (gravité × probabilité) et leur niveau de risque résultant (acceptable, tolérable, inacceptable). Chaque danger est référencé par un identifiant unique (H1, H2, etc.) permettant la traçabilité avec les mesures de mitigation."
+    },
+    {
+      "section": "7. Mesures de réduction des risques",
+      "content": "Description détaillée de l'ensemble des mesures de maîtrise des risques retenues, classées selon la hiérarchie de prévention ISO 12100: (1) mesures de conception intrinsèquement sûre, (2) protections et dispositifs de protection, (3) informations pour l'utilisation. Chaque mesure est associée au danger qu'elle traite et à sa priorité de mise en œuvre."
+    },
+    {
+      "section": "8. Risques résiduels",
+      "content": "Identification et évaluation des risques résiduels subsistant après application de toutes les mesures de maîtrise. Ces risques, jugés tolérables ou acceptables, doivent être communiqués aux utilisateurs via les instructions d'utilisation, les avertissements et l'étiquetage. Cette section justifie l'acceptabilité globale du produit."
+    },
+    {
+      "section": "9. Tests et essais requis",
+      "content": "Liste complète des tests de conformité à réaliser, avec les normes de référence, le caractère obligatoire ou recommandé, et les accréditations requises pour les laboratoires (ISO/IEC 17025). Inclut les essais physiques, chimiques, électriques et de performance selon les marchés cibles."
+    },
+    {
+      "section": "10. Marquage et étiquetage",
+      "content": "Exigences complètes de marquage et d'étiquetage pour tous les marchés cibles: marquage CE (UE), UKCA (GB), marque CCC (CN), PSE (JP), RCM (AU), ainsi que les mentions légales obligatoires dans chaque langue requise. Inclut les pictogrammes de sécurité, les avertissements CLP/GHS et les informations traçabilité."
+    },
+    {
+      "section": "11. Instructions d'utilisation",
+      "content": "Contenu obligatoire des instructions d'utilisation conformément à l'Article 8 du GPSR et aux normes applicables. Les instructions doivent être rédigées dans la ou les langues officielles du pays de mise sur le marché, être claires et compréhensibles, et couvrir l'utilisation normale, les mises en garde, l'entretien et l'élimination."
+    },
+    {
+      "section": "12. Substances réglementées (REACH/CLP/RoHS)",
+      "content": "Évaluation de la conformité aux réglementations sur les substances chimiques: REACH (règlement CE 1907/2006) pour les substances extrêmement préoccupantes (SVHC) au-delà du seuil de 0,1% en poids, RoHS (directive 2011/65/UE) pour les restrictions dans les équipements électriques, et CLP (règlement CE 1272/2008) pour la classification et l'étiquetage. Inclut les équivalents US (Prop 65), chinois (China REACH) et autres marchés."
+    },
+    {
+      "section": "13. Traçabilité et identification",
+      "content": "Système de traçabilité mis en place conformément à l'Article 9 du GPSR: numérotation de lot, numéro de série si applicable, code QR recommandé pour accès aux informations numériques de sécurité. La documentation doit être conservée pendant une durée minimale de 10 ans après la mise sur le marché, conformément aux obligations réglementaires."
+    },
+    {
+      "section": "14. Exigences par marché (UE / USA / Chine / UK)",
+      "content": "Analyse comparative des exigences spécifiques à chaque marché cible, incluant les certifications obligatoires, les organismes de contrôle compétents, les procédures de notification en cas d'incident, et les obligations de rappel. Cette section permet au responsable conformité d'identifier les actions prioritaires pour chaque territoire."
+    },
+    {
+      "section": "15. Conclusion et recommandations",
+      "content": "Synthèse de l'évaluation globale de conformité du produit, avec un plan d'action priorisé listant les étapes indispensables avant mise sur le marché (tests manquants, certifications à obtenir, modifications produit requises, documents à compléter). Inclut une estimation du niveau de risque résiduel global et une recommandation sur la mise sur le marché."
     }
   ],
-  "disclaimer": "Ce document est une aide à la conformité. Une validation par un expert juridique ou un organisme notifié est indispensable avant toute mise sur le marché EU."
+  "responsible_person_required": true,
+  "declaration_of_conformity_required": true,
+  "disclaimer": "Ce document est une aide à la conformité généré par intelligence artificielle. Il ne constitue pas un avis juridique ou réglementaire. Une validation par un expert qualifié ou un organisme notifié est indispensable avant toute mise sur le marché."
 }`
 
   try {
@@ -169,7 +379,7 @@ Génère une réponse JSON avec exactement cette structure:
       try {
         response = await openai.chat.completions.create({
           model,
-          max_tokens: 4096,
+          max_tokens: 8000,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt },
@@ -196,6 +406,19 @@ Génère une réponse JSON avec exactement cette structure:
     if (!jsonMatch) throw new Error("No JSON in response")
 
     const analysisData = JSON.parse(jsonMatch[0])
+
+    // Merge detected market flags into market_specific_requirements so they reflect
+    // the actual product configuration even if the AI overrode them
+    if (analysisData.market_specific_requirements) {
+      const msr = analysisData.market_specific_requirements
+      if (msr.EU) msr.EU.applicable = markets.eu
+      if (msr.US) msr.US.applicable = markets.us
+      if (msr.CN) msr.CN.applicable = markets.cn
+      if (msr.GB) msr.GB.applicable = markets.gb
+      if (msr.CA) msr.CA.applicable = markets.ca
+      if (msr.JP) msr.JP.applicable = markets.jp
+      if (msr.AU) msr.AU.applicable = markets.au
+    }
 
     // Get existing version count
     const { count } = await supabase
@@ -232,25 +455,33 @@ Génère une réponse JSON avec exactement cette structure:
         sections: analysisData.technical_file_sections ?? [],
         analysis: analysisData,
         product: { name: product.name, reference: product.reference, category: category?.name_fr },
+        market_specific_requirements: analysisData.market_specific_requirements ?? {},
+        declaration_of_conformity: analysisData.declaration_of_conformity_content ?? {},
+        traceability: analysisData.traceability_requirements ?? {},
       },
       status: "draft",
       watermarked: true,
     })
 
-    // Create labels for each language
-    const langs = ["fr", "en", "de", "it", "es"] as const
+    // Create labels for each language — including zh and ja if present
+    const langs = ["fr", "en", "de", "it", "es", "zh", "ja"] as const
     for (const lang of langs) {
+      const warnings = analysisData.labeling_requirements?.[lang] ?? []
+      // Skip languages with no content to avoid empty label rows
+      if (warnings.length === 0) continue
       await supabase.from("labels").upsert({
         product_id: productId,
         language: lang,
         content: {
           product_name: product.name,
           reference: product.reference,
-          warnings: analysisData.labeling_requirements?.[lang] ?? [],
+          warnings,
           manufacturer: org?.name,
+          instructions_for_use: analysisData.instructions_for_use?.[lang] ?? [],
+          pictograms: analysisData.pictograms ?? [],
         },
         pictograms: analysisData.pictograms ?? [],
-        warnings: analysisData.labeling_requirements?.[lang] ?? [],
+        warnings,
         clp_mentions: [],
       }, { onConflict: "product_id,language" })
     }
@@ -267,7 +498,13 @@ Génère une réponse JSON avec exactement cette structure:
         action: "generate_risk_assessment",
         entity_type: "risk_assessment",
         entity_id: ra.id,
-        details: { product_id: productId, version, severity: ra.severity },
+        details: {
+          product_id: productId,
+          version,
+          severity: ra.severity,
+          markets_analyzed: activeMarkets,
+          ai_model: usedModel,
+        },
       })
     }
 

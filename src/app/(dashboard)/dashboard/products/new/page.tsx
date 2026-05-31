@@ -12,9 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, Package, ArrowRight, ArrowLeft, Link2 } from "lucide-react"
 import type { CategoryRow } from "@/types/supabase"
-import { EU_COUNTRIES } from "@/lib/utils"
-
-const MARKET_OPTIONS = EU_COUNTRIES.map(c => c.code)
+import { WORLD_MARKETS, WORLD_MARKET_REGIONS } from "@/lib/utils"
 
 export default function NewProductPage() {
   const router = useRouter()
@@ -197,22 +195,33 @@ export default function NewProductPage() {
               </div>
             </div>
             <div>
-              <Label className="mb-2 block">Marchés cibles UE</Label>
-              <div className="flex flex-wrap gap-2">
-                {EU_COUNTRIES.slice(0, 12).map(country => (
-                  <button
-                    key={country.code}
-                    type="button"
-                    onClick={() => toggleMarket(country.code)}
-                    className={`rounded-full px-3 py-1 text-xs font-medium border transition-colors ${
-                      form.target_markets.includes(country.code)
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-white text-gray-600 border-gray-200 hover:border-blue-300"
-                    }`}
-                  >
-                    {country.label}
-                  </button>
-                ))}
+              <Label className="mb-2 block">Marchés cibles</Label>
+              <div className="space-y-3">
+                {WORLD_MARKET_REGIONS.map(region => {
+                  const regionLabels: Record<string, string> = { EU: 'Union Européenne', Europe: 'Europe (hors UE)', Americas: 'Amériques', 'Asia-Pacific': 'Asie-Pacifique', MEA: 'Moyen-Orient & Afrique' }
+                  const countries = WORLD_MARKETS.filter(c => c.region === region)
+                  return (
+                    <div key={region}>
+                      <p className="text-xs font-medium text-gray-500 mb-1.5">{regionLabels[region]}</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {countries.map(country => (
+                          <button
+                            key={country.code}
+                            type="button"
+                            onClick={() => toggleMarket(country.code)}
+                            className={`rounded-full px-2.5 py-1 text-xs font-medium border transition-colors ${
+                              form.target_markets.includes(country.code)
+                                ? "bg-blue-600 text-white border-blue-600"
+                                : "bg-white text-gray-600 border-gray-200 hover:border-blue-300"
+                            }`}
+                          >
+                            {country.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
             <div className="flex gap-3">
