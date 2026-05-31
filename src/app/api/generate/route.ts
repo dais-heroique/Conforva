@@ -2,7 +2,14 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import OpenAI from "openai"
 
-const OPENROUTER_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
+const FREE_MODELS = [
+  "moonshotai/kimi-k2.6:free",
+  "meta-llama/llama-3.3-70b-instruct:free",
+  "deepseek/deepseek-r1-0528:free",
+  "google/gemma-3-27b-it:free",
+  "qwen/qwen3-235b-a22b:free",
+  "mistralai/mistral-7b-instruct:free",
+]
 
 /** Strip HTML tags and collapse whitespace, return first maxChars chars */
 async function fetchProductPageText(url: string, maxChars = 3000): Promise<string> {
@@ -161,14 +168,33 @@ Génère une réponse JSON avec exactement cette structure:
 }`
 
   try {
-    const response = await openai.chat.completions.create({
-      model: OPENROUTER_MODEL,
-      max_tokens: 4096,
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
-      ],
-    })
+    let response: Awaited<ReturnType<typeof openai.chat.completions.create>> | null = null
+    let usedModel = FREE_MODELS[0]
+    let lastError: unknown
+
+    for (const model of FREE_MODELS) {
+      try {
+        response = await openai.chat.completions.create({
+          model,
+          max_tokens: 4096,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt },
+          ],
+        })
+        usedModel = model
+        break
+      } catch (err: unknown) {
+        const status = (err as { status?: number })?.status
+        if (status === 429 || status === 503) {
+          lastError = err
+          continue
+        }
+        throw err
+      }
+    }
+
+    if (!response) throw lastError ?? new Error("All models unavailable")
 
     const text = response.choices[0]?.message?.content
     if (!text) throw new Error("Empty response from AI")
@@ -197,7 +223,7 @@ Génère une réponse JSON avec exactement cette structure:
         referenced_standards: analysisData.referenced_standards ?? [],
         status: "draft",
         validated_by_human: false,
-        ai_model: OPENROUTER_MODEL,
+        ai_model: usedModel,
         content_json: analysisData,
       })
       .select()
