@@ -1,12 +1,21 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
-import Anthropic from "@anthropic-ai/sdk"
+import OpenAI from "openai"
+
+const OPENROUTER_MODEL = "moonshotai/kimi-k2:free"
 
 export async function POST(req: NextRequest) {
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.OPENROUTER_API_KEY) {
     return NextResponse.json({ error: "AI generation not configured" }, { status: 503 })
   }
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  const openai = new OpenAI({
+    apiKey: process.env.OPENROUTER_API_KEY,
+    baseURL: "https://openrouter.ai/api/v1",
+    defaultHeaders: {
+      "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL ?? "https://conforva.com",
+      "X-Title": "Conforva",
+    },
+  })
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -119,17 +128,19 @@ Génère une réponse JSON avec exactement cette structure:
 }`
 
   try {
-    const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-6",
+    const response = await openai.chat.completions.create({
+      model: OPENROUTER_MODEL,
       max_tokens: 4096,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userPrompt }],
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
     })
 
-    const content = response.content[0]
-    if (content.type !== "text") throw new Error("Unexpected response type")
+    const text = response.choices[0]?.message?.content
+    if (!text) throw new Error("Empty response from AI")
 
-    const jsonMatch = content.text.match(/\{[\s\S]*\}/)
+    const jsonMatch = text.match(/\{[\s\S]*\}/)
     if (!jsonMatch) throw new Error("No JSON in response")
 
     const analysisData = JSON.parse(jsonMatch[0])
@@ -153,7 +164,7 @@ Génère une réponse JSON avec exactement cette structure:
         referenced_standards: analysisData.referenced_standards ?? [],
         status: "draft",
         validated_by_human: false,
-        ai_model: "claude-sonnet-4-6",
+        ai_model: OPENROUTER_MODEL,
         content_json: analysisData,
       })
       .select()
