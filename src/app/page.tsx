@@ -80,9 +80,9 @@ const INCLUDED = [
 ]
 
 const CATEGORIES = [
-  "🕯️ Bougies", "🧸 Jouets", "👕 Textiles", "💄 Cosmétiques",
-  "🔌 Électronique", "🍼 Puériculture", "🏡 Décoration",
-  "🛋️ Mobilier", "⚽ Sport", "🍽️ Contact alimentaire",
+  "Bougies & parfums", "Jouets", "Textiles & vêtements", "Cosmétiques",
+  "Électronique", "Puériculture", "Décoration intérieure",
+  "Mobilier", "Sport & loisirs", "Contact alimentaire",
 ]
 
 export default function LandingPage() {

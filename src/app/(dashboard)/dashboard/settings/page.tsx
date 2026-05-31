@@ -79,7 +79,7 @@ export default function SettingsPage() {
   )
 
   return (
-    <div className="p-8 max-w-2xl mx-auto space-y-8">
+    <div className="p-4 md:p-8 max-w-2xl mx-auto space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
         <p className="text-sm text-gray-500 mt-1">Gérez votre organisation et vos préférences</p>
@@ -153,7 +153,7 @@ export default function SettingsPage() {
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 {SUPPORTED_LANGUAGES.map(l => (
-                  <SelectItem key={l.code} value={l.code}>{l.flag} {l.label}</SelectItem>
+                  <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

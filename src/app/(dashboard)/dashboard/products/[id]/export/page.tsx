@@ -75,7 +75,7 @@ export default function ExportPage({ params }: PageProps) {
   const isValidated = ra?.validated_by_human && tf?.status === "validated"
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-6">
+    <div className="p-4 md:p-8 max-w-3xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <Link href={`/dashboard/products/${id}`}>
           <Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button>
@@ -176,7 +176,7 @@ export default function ExportPage({ params }: PageProps) {
                 return (
                   <div key={lang.code} className="flex items-center justify-between rounded-lg border p-3">
                     <div className="flex items-center gap-2">
-                      <span>{lang.flag}</span>
+                      <span className="text-xs font-mono bg-gray-100 rounded px-1.5 py-0.5">{lang.short}</span>
                       <div>
                         <p className="font-medium text-sm">{lang.label}</p>
                         <p className="text-xs text-gray-500">

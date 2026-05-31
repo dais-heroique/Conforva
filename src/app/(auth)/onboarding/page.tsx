@@ -151,11 +151,11 @@ export default function OnboardingPage() {
                 <Select value={form.locale} onValueChange={v => update("locale", v)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="fr">🇫🇷 Français</SelectItem>
-                    <SelectItem value="en">🇬🇧 English</SelectItem>
-                    <SelectItem value="de">🇩🇪 Deutsch</SelectItem>
-                    <SelectItem value="es">🇪🇸 Español</SelectItem>
-                    <SelectItem value="it">🇮🇹 Italiano</SelectItem>
+                    <SelectItem value="fr">Français</SelectItem>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="de">Deutsch</SelectItem>
+                    <SelectItem value="es">Español</SelectItem>
+                    <SelectItem value="it">Italiano</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

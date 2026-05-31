@@ -87,7 +87,7 @@ export default function NewProductPage() {
   const selectedCategory = categories.find(c => c.id === form.category_id)
 
   return (
-    <div className="p-8 max-w-2xl mx-auto space-y-6">
+    <div className="p-4 md:p-8 max-w-2xl mx-auto space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Nouveau produit</h1>
         <p className="text-sm text-gray-500 mt-1">Étape {step} sur 2</p>
@@ -129,14 +129,14 @@ export default function NewProductPage() {
                 <SelectContent>
                   {categories.map(cat => (
                     <SelectItem key={cat.id} value={cat.id}>
-                      {cat.icon} {cat.name_fr}
+                      {cat.name_fr}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               {selectedCategory && (
                 <div className="rounded-lg bg-blue-50 border border-blue-100 p-3 text-sm space-y-1">
-                  <p className="font-medium text-blue-900">{selectedCategory.icon} {selectedCategory.name_fr}</p>
+                  <p className="font-medium text-blue-900">{selectedCategory.name_fr}</p>
                   <p className="text-blue-700">{selectedCategory.description}</p>
                   <p className="text-xs text-blue-600">
                     Normes : {selectedCategory.applicable_standards?.join(", ")}

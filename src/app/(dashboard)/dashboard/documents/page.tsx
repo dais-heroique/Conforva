@@ -28,7 +28,7 @@ export default async function DocumentsPage() {
     .order("created_at", { ascending: false })
 
   return (
-    <div className="p-8 space-y-8 max-w-5xl mx-auto">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-5xl mx-auto">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Documents</h1>
         <p className="text-sm text-gray-500 mt-1">Tous vos dossiers techniques et analyses de risque</p>

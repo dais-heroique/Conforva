@@ -29,7 +29,7 @@ export default async function ProductsPage() {
   const complianceMap = Object.fromEntries((complianceList ?? []).map(c => [c.product_id, c]))
 
   return (
-    <div className="p-8 space-y-6 max-w-7xl mx-auto">
+    <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Mes produits</h1>

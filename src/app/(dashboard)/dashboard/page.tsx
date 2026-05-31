@@ -46,7 +46,7 @@ export default async function DashboardPage() {
   const incompleteCount = totalProducts - compliantCount - inProgressCount
 
   return (
-    <div className="p-8 space-y-8 max-w-7xl mx-auto">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
@@ -60,18 +60,18 @@ export default async function DashboardPage() {
       <DisclaimerBanner />
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: "Produits", value: totalProducts, icon: Package, color: "blue" },
-          { label: "Conformes", value: compliantCount, icon: CheckCircle2, color: "green" },
-          { label: "En cours", value: inProgressCount, icon: Clock, color: "amber" },
-          { label: "Incomplets", value: incompleteCount, icon: AlertCircle, color: "red" },
-        ].map(({ label, value, icon: Icon, color }) => (
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        {([
+          { label: "Produits", value: totalProducts, icon: Package, bg: "bg-blue-50", fg: "text-blue-600" },
+          { label: "Conformes", value: compliantCount, icon: CheckCircle2, bg: "bg-green-50", fg: "text-green-600" },
+          { label: "En cours", value: inProgressCount, icon: Clock, bg: "bg-amber-50", fg: "text-amber-600" },
+          { label: "Incomplets", value: incompleteCount, icon: AlertCircle, bg: "bg-red-50", fg: "text-red-600" },
+        ] as const).map(({ label, value, icon: Icon, bg, fg }) => (
           <Card key={label}>
             <CardContent className="pt-5">
               <div className="flex items-center gap-3">
-                <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-${color}-50`}>
-                  <Icon className={`h-5 w-5 text-${color}-600`} />
+                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${bg}`}>
+                  <Icon className={`h-5 w-5 ${fg}`} />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-900">{value}</p>
@@ -155,7 +155,9 @@ export default async function DashboardPage() {
                 return (
                   <Link key={product.id} href={`/dashboard/products/${product.id}`}>
                     <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/30 transition-colors cursor-pointer">
-                      <div className="text-2xl">{cat?.icon ?? "📦"}</div>
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+                          <Package className="h-4 w-4 text-gray-500" />
+                        </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-900 truncate">{product.name}</p>
                         <p className="text-xs text-gray-500">

@@ -67,7 +67,7 @@ export default async function BillingPage() {
     .eq("org_id", (await supabase.from("organizations").select("id").eq("owner_id", user.id).single()).data?.id ?? "")
 
   return (
-    <div className="p-8 space-y-8 max-w-5xl mx-auto">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-5xl mx-auto">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Facturation</h1>
         <p className="text-sm text-gray-500 mt-1">Gérez votre abonnement Conforva</p>

@@ -38,11 +38,11 @@ export function getComplianceBg(score: number): string {
 }
 
 export const SUPPORTED_LANGUAGES = [
-  { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
-  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
-  { code: 'es', label: 'Español', flag: '🇪🇸' },
+  { code: 'fr', label: 'Français', short: 'FR' },
+  { code: 'en', label: 'English', short: 'EN' },
+  { code: 'de', label: 'Deutsch', short: 'DE' },
+  { code: 'it', label: 'Italiano', short: 'IT' },
+  { code: 'es', label: 'Español', short: 'ES' },
 ] as const
 
 export const EU_COUNTRIES = [

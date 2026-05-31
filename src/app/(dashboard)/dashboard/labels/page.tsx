@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Tag, Download, Eye, AlertTriangle } from "lucide-react"
+import { Tag, Download, Eye, AlertTriangle, Package } from "lucide-react"
 import { SUPPORTED_LANGUAGES, formatDate } from "@/lib/utils"
 
 export default async function LabelsPage() {
@@ -32,7 +32,7 @@ export default async function LabelsPage() {
   }, {} as Record<string, { product: any; labels: typeof labels }>) ?? {}
 
   return (
-    <div className="p-8 space-y-6 max-w-5xl mx-auto">
+    <div className="p-4 md:p-8 space-y-6 max-w-5xl mx-auto">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Étiquettes multilingues</h1>
         <p className="text-sm text-gray-500 mt-1">Avertissements de sécurité générés en FR, EN, DE, IT, ES</p>
@@ -55,7 +55,9 @@ export default async function LabelsPage() {
             <Card key={productId}>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-3">
-                  <span className="text-2xl">{product?.product_categories?.icon ?? "📦"}</span>
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+                    <Package className="h-4 w-4 text-gray-500" />
+                  </div>
                   <div>
                     <p className="text-base font-semibold">{product?.name}</p>
                     <p className="text-xs text-gray-500 font-normal">
@@ -73,7 +75,7 @@ export default async function LabelsPage() {
                       <div key={lang.code} className={`rounded-xl border p-4 space-y-3 ${label ? "" : "opacity-40"}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <span className="text-lg">{lang.flag}</span>
+                            <span className="text-xs font-mono bg-gray-100 rounded px-1.5 py-0.5">{lang.short}</span>
                             <span className="font-medium text-sm">{lang.label}</span>
                           </div>
                           {label ? (

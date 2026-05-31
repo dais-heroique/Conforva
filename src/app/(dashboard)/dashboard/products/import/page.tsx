@@ -89,7 +89,7 @@ export default function ImportPage() {
   const CATEGORY_CODES = ["candle", "toy", "textile", "cosmetic", "electronics", "puericulture", "decoration", "furniture", "food_contact", "sport", "other"]
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-6">
+    <div className="p-4 md:p-8 max-w-3xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <Link href="/dashboard/products">
           <Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button>

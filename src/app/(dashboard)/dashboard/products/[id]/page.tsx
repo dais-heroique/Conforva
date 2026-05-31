@@ -15,7 +15,7 @@ import { DisclaimerBanner } from "@/components/layout/disclaimer-banner"
 import { useToast } from "@/hooks/use-toast"
 import {
   Loader2, AlertTriangle, CheckCircle2, ShieldCheck, FileText,
-  Tag, ArrowLeft, RefreshCw, Download, Edit
+  Tag, ArrowLeft, RefreshCw, Download, Edit, Package,
 } from "lucide-react"
 import type {
   ProductRow, CategoryRow, RiskAssessmentRow, TechnicalFileRow,
@@ -145,28 +145,30 @@ export default function ProductDetailPage({ params }: PageProps) {
   const analysisData = riskAssessment?.content_json as any
 
   return (
-    <div className="p-8 space-y-6 max-w-5xl mx-auto">
+    <div className="p-4 md:p-8 space-y-6 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-3">
         <Link href="/dashboard/products">
           <Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button>
         </Link>
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3">
-            <span className="text-3xl">{category?.icon ?? "📦"}</span>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-100">
+              <Package className="h-5 w-5 text-gray-500" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-xl md:text-2xl font-bold text-gray-900 truncate">{product.name}</h1>
               <p className="text-sm text-gray-500">
-                {category?.name_fr} {product.reference && `· Réf: ${product.reference}`}
+                {category?.name_fr}{product.reference && ` · Réf: ${product.reference}`}
               </p>
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2">
           <Badge variant="secondary" className={getComplianceBg(score)}>
-            Score : {score}%
+            {score}%
           </Badge>
-          <Link href={`/dashboard/products/${id}/questionnaire`}>
+          <Link href={`/dashboard/products/${id}/questionnaire`} className="hidden sm:block">
             <Button variant="outline" size="sm" className="gap-1">
               <Edit className="h-4 w-4" />Questionnaire
             </Button>
@@ -200,14 +202,18 @@ export default function ProductDetailPage({ params }: PageProps) {
 
       <Tabs defaultValue="analysis">
         <TabsList className="grid grid-cols-3 w-full">
-          <TabsTrigger value="analysis" className="gap-2">
-            <ShieldCheck className="h-4 w-4" />Analyse de risque
+          <TabsTrigger value="analysis" className="gap-1.5 text-xs sm:text-sm">
+            <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
+            <span className="hidden sm:inline">Analyse de risque</span>
+            <span className="sm:hidden">Analyse</span>
           </TabsTrigger>
-          <TabsTrigger value="technical" className="gap-2">
-            <FileText className="h-4 w-4" />Dossier technique
+          <TabsTrigger value="technical" className="gap-1.5 text-xs sm:text-sm">
+            <FileText className="h-3.5 w-3.5 shrink-0" />
+            <span className="hidden sm:inline">Dossier technique</span>
+            <span className="sm:hidden">Dossier</span>
           </TabsTrigger>
-          <TabsTrigger value="labels" className="gap-2">
-            <Tag className="h-4 w-4" />Étiquettes
+          <TabsTrigger value="labels" className="gap-1.5 text-xs sm:text-sm">
+            <Tag className="h-3.5 w-3.5 shrink-0" />Étiquettes
           </TabsTrigger>
         </TabsList>
 
@@ -248,7 +254,7 @@ export default function ProductDetailPage({ params }: PageProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Badge variant={riskAssessment.validated_by_human ? "success" : "warning"}>
-                    {riskAssessment.validated_by_human ? "✓ Validé" : "⏳ En attente de validation"}
+                    {riskAssessment.validated_by_human ? "Validé" : "En attente de validation"}
                   </Badge>
                   <span className="text-sm text-gray-500">Version {riskAssessment.version}</span>
                 </div>
@@ -405,7 +411,7 @@ export default function ProductDetailPage({ params }: PageProps) {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <Badge variant={technicalFile.watermarked ? "warning" : "success"}>
-                  {technicalFile.watermarked ? "⚠ Document non validé (watermark)" : "✓ Document validé"}
+                  {technicalFile.watermarked ? "Non validé — watermark actif" : "Document validé"}
                 </Badge>
                 <Link href={`/dashboard/products/${id}/export`}>
                   <Button size="sm" className="gap-1">
@@ -462,7 +468,8 @@ export default function ProductDetailPage({ params }: PageProps) {
                   <Card key={label.id}>
                     <CardHeader className="pb-2">
                       <CardTitle className="text-base flex items-center gap-2">
-                        <span>{lang?.flag}</span>{lang?.label}
+                        <span className="text-xs font-mono bg-gray-100 rounded px-1.5 py-0.5">{lang?.short}</span>
+                        {lang?.label}
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
