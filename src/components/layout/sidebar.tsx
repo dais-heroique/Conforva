@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import {
   LayoutDashboard, Package, FileText, Tag, Settings,
-  CreditCard, Shield, LogOut, ChevronRight, Menu, X,
+  CreditCard, Shield, LogOut, ChevronRight, Menu, X, Rss,
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
@@ -18,6 +18,7 @@ const navItems = [
   { href: "/dashboard/documents", label: "Documents", icon: FileText },
   { href: "/dashboard/labels", label: "Étiquettes", icon: Tag },
   { href: "/dashboard/responsible-person", label: "Pers. Responsable", icon: Shield },
+  { href: "/dashboard/regulatory", label: "Veille Réglementaire", icon: Rss },
   { href: "/dashboard/billing", label: "Facturation", icon: CreditCard },
   { href: "/dashboard/settings", label: "Paramètres", icon: Settings },
 ]
