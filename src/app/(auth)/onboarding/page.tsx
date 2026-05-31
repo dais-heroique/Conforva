@@ -83,15 +83,15 @@ export default function OnboardingPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2"><Building2 className="h-5 w-5 text-blue-600" />Votre organisation</CardTitle>
-              <CardDescription>Informations sur votre boutique / entreprise</CardDescription>
+              <CardDescription>Votre nom, votre boutique ou votre entreprise</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
               <div className="space-y-2">
-                <Label htmlFor="orgName">Nom de votre boutique / entreprise *</Label>
+                <Label htmlFor="orgName">Votre nom, boutique ou entreprise *</Label>
                 <Input
                   id="orgName"
-                  placeholder="Ma Boutique SARL"
+                  placeholder="ex : Jean Dupont, Ma Boutique, Société XYZ"
                   value={form.orgName}
                   onChange={e => update("orgName", e.target.value)}
                 />

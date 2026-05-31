@@ -45,14 +45,14 @@ export default function LoginPage() {
         <div className="text-center">
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white font-bold text-2xl mb-4">C</div>
           <h1 className="text-2xl font-bold text-gray-900">Conforva</h1>
-          <p className="text-gray-500 text-sm mt-1">Conformité GPSR pour e-commerçants EU</p>
+          <p className="text-gray-500 text-sm mt-1">Dossiers de conformité GPSR</p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Connexion / Inscription</CardTitle>
+            <CardTitle>Accéder à Conforva</CardTitle>
             <CardDescription>
-              Entrez votre email pour recevoir un lien de connexion sécurisé.
+              Entrez n'importe quelle adresse email — un lien de connexion vous sera envoyé.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -84,7 +84,7 @@ export default function LoginPage() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="vous@boutique.com"
+                    placeholder="votre@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required

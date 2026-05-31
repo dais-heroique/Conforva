@@ -140,9 +140,9 @@ export default function LandingPage() {
             animate="show"
             className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight"
           >
-            La conformité GPSR,<br />
+            Conformité GPSR,<br />
             <span className="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent animate-gradient">
-              sans les complications
+              accessible à tous
             </span>
           </motion.h1>
 
@@ -154,6 +154,7 @@ export default function LandingPage() {
           >
             Constituez votre dossier technique, analyse de risque et étiquettes multilingues
             pour tout produit physique vendu dans l'Union Européenne.
+            Pour les vendeurs indépendants, boutiques, et marques — sans expertise technique requise.
           </motion.p>
 
           <motion.div
