@@ -2,13 +2,10 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import OpenAI from "openai"
 
-const FREE_MODELS = [
-  "moonshotai/kimi-k2.6:free",
-  "meta-llama/llama-3.3-70b-instruct:free",
-  "deepseek/deepseek-r1-0528:free",
-  "google/gemma-3-27b-it:free",
-  "qwen/qwen3-235b-a22b:free",
-  "mistralai/mistral-7b-instruct:free",
+const GEMINI_MODELS = [
+  "gemini-2.0-flash-lite",
+  "gemini-2.0-flash",
+  "gemini-1.5-flash",
 ]
 
 /** Strip HTML tags and collapse whitespace, return first maxChars chars */
@@ -37,16 +34,12 @@ async function fetchProductPageText(url: string, maxChars = 3000): Promise<strin
 }
 
 export async function POST(req: NextRequest) {
-  if (!process.env.OPENROUTER_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     return NextResponse.json({ error: "AI generation not configured" }, { status: 503 })
   }
   const openai = new OpenAI({
-    apiKey: process.env.OPENROUTER_API_KEY,
-    baseURL: "https://openrouter.ai/api/v1",
-    defaultHeaders: {
-      "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL ?? "https://conforva.com",
-      "X-Title": "Conforva",
-    },
+    apiKey: process.env.GEMINI_API_KEY,
+    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
   })
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -169,10 +162,10 @@ Génère une réponse JSON avec exactement cette structure:
 
   try {
     let response: Awaited<ReturnType<typeof openai.chat.completions.create>> | null = null
-    let usedModel = FREE_MODELS[0]
+    let usedModel = GEMINI_MODELS[0]
     let lastError: unknown
 
-    for (const model of FREE_MODELS) {
+    for (const model of GEMINI_MODELS) {
       try {
         response = await openai.chat.completions.create({
           model,
@@ -186,7 +179,7 @@ Génère une réponse JSON avec exactement cette structure:
         break
       } catch (err: unknown) {
         const status = (err as { status?: number })?.status
-        if (status === 429 || status === 503) {
+        if (status === 429 || status === 503 || status === 404) {
           lastError = err
           continue
         }
