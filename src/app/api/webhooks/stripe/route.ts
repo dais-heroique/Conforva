@@ -3,15 +3,13 @@ import Stripe from "stripe"
 import { createClient } from "@/lib/supabase/server"
 import type { Plan } from "@/types/supabase"
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: "2026-05-27.dahlia" })
-
-const PRICE_TO_PLAN: Record<string, Plan> = {
-  [process.env.STRIPE_PRICE_STARTER ?? ""]: "starter",
-  [process.env.STRIPE_PRICE_GROWTH ?? ""]: "growth",
-  [process.env.STRIPE_PRICE_PRO ?? ""]: "pro",
-}
-
 export async function POST(req: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: "2026-05-27.dahlia" })
+  const PRICE_TO_PLAN: Record<string, Plan> = {
+    [process.env.STRIPE_PRICE_STARTER ?? ""]: "starter",
+    [process.env.STRIPE_PRICE_GROWTH ?? ""]: "growth",
+    [process.env.STRIPE_PRICE_PRO ?? ""]: "pro",
+  }
   const body = await req.text()
   const signature = req.headers.get("stripe-signature")!
 
