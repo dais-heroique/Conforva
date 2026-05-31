@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Package, ArrowRight, ArrowLeft } from "lucide-react"
+import { Loader2, Package, ArrowRight, ArrowLeft, Link2 } from "lucide-react"
 import type { CategoryRow } from "@/types/supabase"
 import { EU_COUNTRIES } from "@/lib/utils"
 
@@ -26,6 +26,7 @@ export default function NewProductPage() {
     name: "",
     reference: "",
     category_id: "",
+    product_url: "",
     intended_use: "",
     weight_g: "",
     length_mm: "",
@@ -68,6 +69,7 @@ export default function NewProductPage() {
       name: form.name,
       reference: form.reference || null,
       category_id: form.category_id || null,
+      product_url: form.product_url || null,
       intended_use: form.intended_use || null,
       weight_g: form.weight_g ? parseFloat(form.weight_g) : null,
       dimensions: form.length_mm ? {
@@ -119,6 +121,20 @@ export default function NewProductPage() {
             <div className="space-y-2">
               <Label htmlFor="reference">Référence / SKU</Label>
               <Input id="reference" placeholder="ex: BOU-VANI-200" value={form.reference} onChange={e => update("reference", e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="product_url" className="flex items-center gap-1.5">
+                <Link2 className="h-3.5 w-3.5" />
+                URL de la page produit
+                <span className="text-xs text-gray-400 font-normal ml-1">— l'IA ira lire la page pour enrichir l'analyse</span>
+              </Label>
+              <Input
+                id="product_url"
+                type="url"
+                placeholder="https://votreboutique.com/produit/..."
+                value={form.product_url}
+                onChange={e => update("product_url", e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label>Catégorie de produit *</Label>

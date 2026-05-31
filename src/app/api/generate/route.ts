@@ -2,7 +2,32 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import OpenAI from "openai"
 
-const OPENROUTER_MODEL = "moonshotai/kimi-k2:free"
+const OPENROUTER_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
+
+/** Strip HTML tags and collapse whitespace, return first maxChars chars */
+async function fetchProductPageText(url: string, maxChars = 3000): Promise<string> {
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; Conforva/1.0)" },
+      signal: AbortSignal.timeout(8000),
+    })
+    if (!res.ok) return ""
+    const html = await res.text()
+    const text = html
+      .replace(/<script[\s\S]*?<\/script>/gi, "")
+      .replace(/<style[\s\S]*?<\/style>/gi, "")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/&nbsp;/g, " ")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/\s{2,}/g, " ")
+      .trim()
+    return text.slice(0, maxChars)
+  } catch {
+    return ""
+  }
+}
 
 export async function POST(req: NextRequest) {
   if (!process.env.OPENROUTER_API_KEY) {
@@ -49,6 +74,10 @@ export async function POST(req: NextRequest) {
     .eq("owner_id", user.id)
     .single()
 
+  // Fetch product page if URL provided
+  const productUrl = (product as any).product_url as string | null
+  const webContent = productUrl ? await fetchProductPageText(productUrl) : ""
+
   const category = (product as any).product_categories
   const standardsText = standards?.map(s =>
     `Norme ${s.code} — ${s.title}: ${s.summary}\nExigences: ${JSON.stringify(s.requirements)}`
@@ -74,8 +103,12 @@ PRODUIT:
 - Poids: ${product.weight_g ? `${product.weight_g}g` : "Non spécifié"}
 - Marchés: ${product.target_markets?.join(", ") ?? "EU"}
 - Organisation: ${org?.name ?? "Non spécifiée"} (${org?.country ?? "EU"})
+${productUrl ? `- URL boutique: ${productUrl}` : ""}
 
-RÉPONSES QUESTIONNAIRE:
+${webContent ? `CONTENU DE LA PAGE PRODUIT (extrait web):
+${webContent}
+
+` : ""}RÉPONSES QUESTIONNAIRE:
 ${JSON.stringify(qr?.answers ?? {}, null, 2)}
 
 NORMES APPLICABLES:

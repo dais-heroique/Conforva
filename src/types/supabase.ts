@@ -194,6 +194,7 @@ export type Database = {
           metadata_json: Json | null
           name: string
           org_id: string
+          product_url: string | null
           reference: string | null
           source: string | null
           source_id: string | null
@@ -207,6 +208,7 @@ export type Database = {
           dimensions?: Json | null
           id?: string
           intended_use?: string | null
+          product_url?: string | null
           materials?: string[] | null
           metadata_json?: Json | null
           name: string
@@ -228,6 +230,7 @@ export type Database = {
           metadata_json?: Json | null
           name?: string
           org_id?: string
+          product_url?: string | null
           reference?: string | null
           source?: string | null
           source_id?: string | null
