@@ -15,7 +15,7 @@ import { DisclaimerBanner } from "@/components/layout/disclaimer-banner"
 import { useToast } from "@/hooks/use-toast"
 import {
   Loader2, AlertTriangle, CheckCircle2, ShieldCheck, FileText,
-  Tag, ArrowLeft, RefreshCw, Download, Edit, Package,
+  Tag, ArrowLeft, RefreshCw, Download, Edit, Package, ExternalLink,
 } from "lucide-react"
 import type {
   ProductRow, CategoryRow, RiskAssessmentRow, TechnicalFileRow,
@@ -168,6 +168,11 @@ export default function ProductDetailPage({ params }: PageProps) {
           <Badge variant="secondary" className={getComplianceBg(score)}>
             {score}%
           </Badge>
+          <Link href={`/verify/${id}`} target="_blank" rel="noopener noreferrer" className="hidden sm:block">
+            <Button variant="outline" size="sm" className="gap-1">
+              <ExternalLink className="h-4 w-4" />Vérifier
+            </Button>
+          </Link>
           <Link href={`/dashboard/products/${id}/questionnaire`} className="hidden sm:block">
             <Button variant="outline" size="sm" className="gap-1">
               <Edit className="h-4 w-4" />Questionnaire
