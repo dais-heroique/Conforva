@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import OpenAI from "openai"
 
-const GEMINI_MODELS = [
-  "gemini-2.0-flash-lite",
-  "gemini-2.0-flash",
-  "gemini-1.5-flash",
+const GROQ_MODELS = [
+  "llama-3.3-70b-versatile",
+  "llama-3.1-8b-instant",
+  "mixtral-8x7b-32768",
 ]
 
 /** Strip HTML tags and collapse whitespace, return first maxChars chars */
@@ -34,12 +34,12 @@ async function fetchProductPageText(url: string, maxChars = 3000): Promise<strin
 }
 
 export async function POST(req: NextRequest) {
-  if (!process.env.GEMINI_API_KEY) {
+  if (!process.env.GROQ_API_KEY) {
     return NextResponse.json({ error: "AI generation not configured" }, { status: 503 })
   }
   const openai = new OpenAI({
-    apiKey: process.env.GEMINI_API_KEY,
-    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
+    apiKey: process.env.GROQ_API_KEY,
+    baseURL: "https://api.groq.com/openai/v1",
   })
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -162,10 +162,10 @@ Génère une réponse JSON avec exactement cette structure:
 
   try {
     let response: Awaited<ReturnType<typeof openai.chat.completions.create>> | null = null
-    let usedModel = GEMINI_MODELS[0]
+    let usedModel = GROQ_MODELS[0]
     let lastError: unknown
 
-    for (const model of GEMINI_MODELS) {
+    for (const model of GROQ_MODELS) {
       try {
         response = await openai.chat.completions.create({
           model,
