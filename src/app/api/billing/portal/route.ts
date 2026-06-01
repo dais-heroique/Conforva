@@ -13,9 +13,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard/billing", req.url))
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.startsWith("http")
+    ? process.env.NEXT_PUBLIC_APP_URL
+    : `https://${req.headers.get("host")}`
+
   const session = await stripe.billingPortal.sessions.create({
     customer: userData.stripe_customer_id,
-    return_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/billing`,
+    return_url: `${baseUrl}/dashboard/billing`,
   })
 
   return NextResponse.redirect(session.url)

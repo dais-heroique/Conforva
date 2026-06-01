@@ -23,13 +23,17 @@ export async function POST(req: NextRequest) {
     await supabase.from("users").update({ stripe_customer_id: customerId }).eq("id", user.id)
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.startsWith("http")
+    ? process.env.NEXT_PUBLIC_APP_URL
+    : `https://${req.headers.get("host")}`
+
   const session = await stripe.checkout.sessions.create({
     customer: customerId,
     mode: "subscription",
     payment_method_types: ["card"],
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/billing?success=true`,
-    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/billing?cancelled=true`,
+    success_url: `${baseUrl}/dashboard/billing?success=true`,
+    cancel_url: `${baseUrl}/dashboard/billing?cancelled=true`,
     metadata: { user_id: user.id },
   })
 
