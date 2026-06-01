@@ -11,18 +11,18 @@ export const metadata: Metadata = {
   keywords: ["GPSR", "conformité UE", "dossier technique", "analyse de risque", "étiquetage produit"],
   icons: {
     icon: [
-      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.png", type: "image/png" },
     ],
     apple: [
-      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.png", type: "image/png" },
     ],
-    shortcut: "/icon.png",
+    shortcut: "/favicon.png",
   },
   openGraph: {
     title: "Conforva — Conformité GPSR simplifiée",
     description: "SaaS de conformité GPSR pour e-commerçants vendant dans l'UE",
     type: "website",
-    images: [{ url: "/icon.png", width: 512, height: 512, alt: "Conforva" }],
+    images: [{ url: "/favicon.png", width: 512, height: 512, alt: "Conforva" }],
   },
 }
 

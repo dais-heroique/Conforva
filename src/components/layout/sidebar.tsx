@@ -43,7 +43,7 @@ function NavContent({ user, org, onClose }: SidebarProps & { onClose?: () => voi
       <div className="flex h-16 items-center justify-between px-6 border-b border-gray-100">
         <Link href="/dashboard" className="flex items-center gap-2.5" onClick={onClose}>
           <div className="flex h-9 w-9 items-center justify-center rounded-xl overflow-hidden bg-white ring-1 ring-gray-100 shadow-sm flex-shrink-0">
-            <img src="/logo.png" alt="Conforva" className="h-8 w-8 object-contain" />
+            <img src="/favicon.png" alt="Conforva" className="h-8 w-8 object-contain" />
           </div>
           <span className="font-bold text-gray-900 text-lg">Conforva</span>
         </Link>
@@ -123,7 +123,7 @@ export function Sidebar({ user, org }: SidebarProps) {
         </button>
         <Link href="/dashboard" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden bg-white ring-1 ring-gray-100 shadow-sm flex-shrink-0">
-            <img src="/logo.png" alt="Conforva" className="h-7 w-7 object-contain" />
+            <img src="/favicon.png" alt="Conforva" className="h-7 w-7 object-contain" />
           </div>
           <span className="font-bold text-gray-900">Conforva</span>
         </Link>
