@@ -27,7 +27,7 @@ export default async function DashboardPage() {
   if (!user) redirect("/auth/login")
 
   const { data: org } = await supabase
-    .from("organizations").select("*").eq("owner_id", user.id).single()
+    .from("organizations").select("id, name, owner_id").eq("owner_id", user.id).single()
   if (!org) redirect("/onboarding")
 
   const { data: userData } = await supabase

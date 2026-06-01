@@ -10,8 +10,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
   if (!user) redirect("/auth/login")
 
   const [{ data: userData }, { data: org }] = await Promise.all([
-    supabase.from("users").select("*").eq("id", user.id).single(),
-    supabase.from("organizations").select("*").eq("owner_id", user.id).single(),
+    supabase.from("users").select("id, email, plan").eq("id", user.id).single() as any,
+    supabase.from("organizations").select("id, name, owner_id").eq("owner_id", user.id).single() as any,
   ])
 
   if (!userData) redirect("/auth/login")

@@ -53,7 +53,7 @@ export default async function BillingPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/auth/login")
 
-  const { data: userData } = await supabase.from("users").select("*").eq("id", user.id).single()
+  const { data: userData } = await supabase.from("users").select("id, plan, stripe_subscription_id").eq("id", user.id).single()
   const currentPlan = userData?.plan as Plan ?? "free"
 
   const { data: products } = await supabase

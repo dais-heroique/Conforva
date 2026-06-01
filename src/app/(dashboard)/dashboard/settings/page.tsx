@@ -31,8 +31,8 @@ export default function SettingsPage() {
       if (!authUser) return
 
       const [{ data: u }, { data: o }] = await Promise.all([
-        supabase.from("users").select("*").eq("id", authUser.id).single(),
-        supabase.from("organizations").select("*").eq("owner_id", authUser.id).single(),
+        supabase.from("users").select("id, email, plan, locale, created_at, stripe_customer_id, stripe_subscription_id, subscription_status, updated_at").eq("id", authUser.id).single(),
+        supabase.from("organizations").select("id, name, owner_id, country, vat_number, website, sector, created_at, updated_at").eq("owner_id", authUser.id).single(),
       ])
 
       if (u) { setUser(u); setUserForm({ locale: u.locale }) }
