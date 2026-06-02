@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import {
   CheckCircle2, ArrowRight, ChevronRight,
   ShieldCheck, FileText, Globe, Users, AlertTriangle,
-  BarChart3, Lock, Clock,
+  BarChart3,
 } from "lucide-react"
 
 function FadeIn({ children, className = "", delay = 0 }: {
@@ -314,77 +314,163 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── CONNECTORS ─── */}
-      <section className="py-20 px-5">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+      {/* ─── DOCUMENT PROOF ─── */}
+      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
+        <div className="max-w-5xl mx-auto">
+          <FadeIn>
+            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Ce que vous obtenez</p>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">Un vrai dossier, pas un template</h2>
+            <p className="text-sm text-gray-500 mb-10">Voici un exemple réel de ce que Conforva génère — dossier technique complet, analyse de risque structurée, étiquetage multilingue et déclaration de conformité.</p>
+          </FadeIn>
+
+          <div className="grid lg:grid-cols-2 gap-5">
+            {/* Technical file sections */}
             <FadeIn>
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4">Importez vos produits en un clic depuis votre boutique</h2>
-              <p className="text-gray-500 text-sm leading-relaxed mb-6">
-                Toutes les informations dont vous avez besoin sont déjà dans votre catalogue en ligne.
-                Conforva les récupère directement — nom, description, SKU, matériaux — et pré-remplit votre dossier de conformité instantanément.
-                Zéro ressaisie, zéro erreur de copier-coller.
-              </p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  "URL produit Shopify → données importées en 2 secondes",
-                  "WooCommerce : connexion via clés API, sélection du produit depuis Conforva",
-                  "Nom, description, SKU, matériaux détectés automatiquement",
-                  "Pré-remplissage du questionnaire · Gain de temps garanti",
-                ].map(item => (
-                  <li key={item} className="flex items-start gap-3 text-sm text-gray-600">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />{item}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/auth/login">
-                <Button className="gap-2">Voir les plans <ArrowRight className="h-4 w-4" /></Button>
-              </Link>
-            </FadeIn>
-
-            <FadeIn delay={0.1} className="space-y-4">
-              <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-9 w-9 rounded-xl bg-[#95BF47] flex items-center justify-center font-bold text-white text-sm shrink-0">S</div>
+              <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
+                  <FileText className="h-4 w-4 text-blue-600 shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-gray-900">Connecteur Shopify</p>
-                    <p className="text-xs text-gray-400">Boutiques publiques — sans clé API</p>
+                    <p className="text-xs font-semibold text-gray-900">Dossier Technique — Art. 22 GPSR</p>
+                    <p className="text-[10px] text-gray-400">Bougie parfumée en cire de soja — ref. BG-SOY-200</p>
                   </div>
-                  <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-2.5 py-0.5 shrink-0">Actif</span>
+                  <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-2 py-0.5 shrink-0">15 sections</span>
                 </div>
-                <div className="bg-gray-50 rounded-lg px-3 py-2.5 border border-gray-200 text-xs text-gray-400 font-mono truncate">
-                  https://votre-boutique.myshopify.com/products/nom-produit
-                </div>
-                <div className="mt-3 grid grid-cols-4 gap-1.5">
-                  {["Nom", "Description", "SKU", "Matériaux"].map(f => (
-                    <div key={f} className="rounded-lg bg-blue-50 border border-blue-100 py-1.5 text-center">
-                      <CheckCircle2 className="h-3 w-3 text-blue-400 mx-auto mb-0.5" />
-                      <p className="text-[9px] text-blue-600 font-medium">{f}</p>
-                    </div>
+                <ul className="divide-y divide-gray-50">
+                  {[
+                    ["1. Description générale du produit", true],
+                    ["2. Identification du fabricant", true],
+                    ["3. Usage prévu et population cible", true],
+                    ["4. Réglementation et normes applicables", true],
+                    ["5. Analyse de risque (ISO 12100:2010)", true],
+                    ["6. Mesures de réduction des risques", true],
+                    ["7. Résultats d'essais et tests", true],
+                    ["8. Normes harmonisées appliquées", true],
+                    ["9. Étiquetage et avertissements", true],
+                    ["10. Instructions d'utilisation", true],
+                    ["11. Traçabilité et identification", true],
+                    ["12. Personne Responsable EU (Art. 16)", true],
+                    ["13. Déclaration UE de conformité", true],
+                    ["14. Procédures de surveillance", true],
+                    ["15. Historique des révisions", true],
+                  ].map(([label, done]) => (
+                    <li key={label as string} className="flex items-center gap-3 px-5 py-2.5">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                      <span className="text-xs text-gray-700">{label as string}</span>
+                    </li>
                   ))}
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-9 w-9 rounded-xl bg-[#7F54B3] flex items-center justify-center font-bold text-white text-sm shrink-0">W</div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-gray-900">Connecteur WooCommerce</p>
-                    <p className="text-xs text-gray-400">Via REST API WooCommerce</p>
-                  </div>
-                  <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-2.5 py-0.5 shrink-0">Actif</span>
-                </div>
-                <div className="space-y-1.5">
-                  {[{ l: "Site", v: "https://monsite.com" }, { l: "Consumer Key", v: "ck_•••••••••••••••••" }, { l: "Produit", v: "Choisir dans la liste…" }].map(r => (
-                    <div key={r.l} className="flex items-center gap-3 bg-gray-50 rounded-lg px-3 py-2 border border-gray-200">
-                      <span className="text-[10px] text-gray-400 w-24 shrink-0">{r.l}</span>
-                      <span className="text-xs text-gray-600 truncate">{r.v}</span>
-                    </div>
-                  ))}
-                </div>
+                </ul>
               </div>
             </FadeIn>
+
+            <div className="space-y-5">
+              {/* Risk assessment table */}
+              <FadeIn delay={0.08}>
+                <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                  <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
+                    <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
+                    <p className="text-xs font-semibold text-gray-900">Analyse de risque — Extrait</p>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-[10px]">
+                      <thead className="bg-gray-50 border-b border-gray-100">
+                        <tr>
+                          {["Réf.", "Danger", "Gravité", "Probabilité", "NR", "Mesure"].map(h => (
+                            <th key={h} className="px-3 py-2 text-left font-semibold text-gray-500 whitespace-nowrap">{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-50">
+                        {[
+                          { ref: "H1", danger: "Incendie / flamme nue", g: "4", p: "3", nr: "12", mesure: "Étiquette avertissement" },
+                          { ref: "H2", danger: "Brûlure par cire chaude", g: "3", p: "2", nr: "6", mesure: "Instructions d'usage" },
+                          { ref: "H3", danger: "Ingestion (enfant < 3 ans)", g: "4", p: "1", nr: "4", mesure: "Mise en garde CE" },
+                          { ref: "H4", danger: "Fumée / composés VOC", g: "2", p: "3", nr: "6", mesure: "Ventilation requise" },
+                        ].map(row => (
+                          <tr key={row.ref} className="hover:bg-gray-50/50">
+                            <td className="px-3 py-2 font-mono text-gray-500">{row.ref}</td>
+                            <td className="px-3 py-2 text-gray-700 max-w-[110px]">{row.danger}</td>
+                            <td className="px-3 py-2 text-center font-semibold text-red-600">{row.g}</td>
+                            <td className="px-3 py-2 text-center font-semibold text-amber-600">{row.p}</td>
+                            <td className="px-3 py-2 text-center font-bold text-gray-900">{row.nr}</td>
+                            <td className="px-3 py-2 text-gray-500">{row.mesure}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </FadeIn>
+
+              {/* Multilingual labels */}
+              <FadeIn delay={0.14}>
+                <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                  <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
+                    <Globe className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <p className="text-xs font-semibold text-gray-900">Étiquetage sécurité — Art. 9 GPSR</p>
+                  </div>
+                  <div className="divide-y divide-gray-50">
+                    {[
+                      { lang: "FR", flag: "🇫🇷", text: "⚠ Ne jamais laisser sans surveillance. Tenir hors de portée des enfants. Brûler sur surface résistante à la chaleur." },
+                      { lang: "EN", flag: "🇬🇧", text: "⚠ Never leave unattended. Keep away from children. Burn on heat-resistant surface only." },
+                      { lang: "DE", flag: "🇩🇪", text: "⚠ Niemals unbeaufsichtigt lassen. Von Kindern fernhalten. Nur auf hitzebeständiger Unterlage verwenden." },
+                    ].map(row => (
+                      <div key={row.lang} className="px-5 py-3 flex items-start gap-3">
+                        <span className="text-base shrink-0 mt-0.5">{row.flag}</span>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mr-2">{row.lang}</span>
+                          <span className="text-[10px] text-gray-600 leading-relaxed">{row.text}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="px-5 py-2.5 bg-gray-50 border-t border-gray-100">
+                    <p className="text-[10px] text-gray-400">+ IT, ES, ZH, JA selon votre plan · Sélection à la génération</p>
+                  </div>
+                </div>
+              </FadeIn>
+
+              {/* DoC header */}
+              <FadeIn delay={0.2}>
+                <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                  <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
+                    <ShieldCheck className="h-4 w-4 text-blue-600 shrink-0" />
+                    <p className="text-xs font-semibold text-gray-900">Déclaration UE de Conformité — Art. 24</p>
+                  </div>
+                  <div className="px-5 py-4 space-y-2">
+                    {[
+                      ["Produit", "Bougie parfumée — BG-SOY-200"],
+                      ["Fabricant", "Maison Lumière SAS · Lyon, France"],
+                      ["Réglementation", "Règlement (UE) 2023/988 (GPSR)"],
+                      ["Norme", "EN 15493:2019 · EN 15426:2019"],
+                      ["Déclarée conforme le", "02/06/2026"],
+                    ].map(([k, v]) => (
+                      <div key={k as string} className="flex gap-3 text-[10px]">
+                        <span className="text-gray-400 w-32 shrink-0">{k as string}</span>
+                        <span className="text-gray-800 font-medium">{v as string}</span>
+                      </div>
+                    ))}
+                    <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
+                      <span className="text-[9px] text-gray-400 italic">Signature du représentant légal</span>
+                      <span className="text-[9px] font-mono text-gray-300 select-none">DOC-BG-SOY-200-v1.pdf</span>
+                    </div>
+                  </div>
+                </div>
+              </FadeIn>
+            </div>
           </div>
+
+          {/* Import hint */}
+          <FadeIn delay={0.1}>
+            <div className="mt-8 rounded-xl border border-gray-200 bg-white p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 mb-0.5">Importez depuis Shopify ou WooCommerce</p>
+                <p className="text-xs text-gray-500">Collez l'URL de votre fiche produit Shopify — Conforva récupère automatiquement le nom, la description et les matériaux pour pré-remplir votre dossier.</p>
+              </div>
+              <div className="shrink-0 flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 w-full sm:w-auto">
+                <span className="text-[10px] font-mono text-gray-400 truncate max-w-[220px]">https://votre-boutique.myshopify.com/products/…</span>
+              </div>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
