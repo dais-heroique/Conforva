@@ -2,10 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { Plus, Package, Upload } from "lucide-react"
+import { Plus, Package, Upload, CheckCircle2, Clock, AlertCircle } from "lucide-react"
 import { getComplianceBg, formatDate } from "@/lib/utils"
 
 export default async function ProductsPage() {
@@ -29,78 +26,87 @@ export default async function ProductsPage() {
   const complianceMap = Object.fromEntries((complianceList ?? []).map(c => [c.product_id, c]))
 
   return (
-    <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Mes produits</h1>
-          <p className="text-sm text-gray-500 mt-1">{products?.length ?? 0} produit(s)</p>
-        </div>
-        <div className="flex gap-3">
-          <Link href="/dashboard/products/import">
-            <Button variant="outline" className="gap-2"><Upload className="h-4 w-4" />Importer</Button>
-          </Link>
-          <Link href="/dashboard/products/new">
-            <Button className="gap-2"><Plus className="h-4 w-4" />Nouveau produit</Button>
-          </Link>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gray-50/50">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-5">
 
-      {!products || products.length === 0 ? (
-        <Card>
-          <CardContent className="py-20 text-center space-y-4">
-            <Package className="h-16 w-16 text-gray-200 mx-auto" />
-            <div>
-              <p className="text-lg font-medium text-gray-900">Aucun produit</p>
-              <p className="text-sm text-gray-500 mt-1">Créez votre premier produit pour commencer votre dossier GPSR.</p>
+        {/* Header */}
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">Mes produits</h1>
+            <p className="text-sm text-gray-400 mt-0.5">{products?.length ?? 0} produit{(products?.length ?? 0) !== 1 ? "s" : ""}</p>
+          </div>
+          <div className="flex gap-2">
+            <Link href="/dashboard/products/import">
+              <Button variant="outline" size="sm" className="gap-2"><Upload className="h-3.5 w-3.5" /><span className="hidden sm:inline">Importer</span></Button>
+            </Link>
+            <Link href="/dashboard/products/new">
+              <Button size="sm" className="gap-2 shadow-sm"><Plus className="h-3.5 w-3.5" />Nouveau</Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Empty state */}
+        {!products || products.length === 0 ? (
+          <div className="bg-white rounded-xl border border-gray-100 flex flex-col items-center justify-center py-20 px-6 text-center">
+            <div className="h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-5">
+              <Package className="h-7 w-7 text-blue-400" />
             </div>
-            <div className="flex justify-center gap-3 pt-2">
+            <p className="text-lg font-semibold text-gray-900 mb-2">Aucun produit</p>
+            <p className="text-sm text-gray-500 mb-6 max-w-xs">Ajoutez votre premier produit pour commencer votre dossier de conformité GPSR.</p>
+            <div className="flex flex-col sm:flex-row gap-3">
               <Link href="/dashboard/products/import">
-                <Button variant="outline" className="gap-2"><Upload className="h-4 w-4" />Importer CSV</Button>
+                <Button variant="outline" size="sm" className="gap-2 w-full sm:w-auto"><Upload className="h-3.5 w-3.5" />Importer CSV</Button>
               </Link>
               <Link href="/dashboard/products/new">
-                <Button className="gap-2"><Plus className="h-4 w-4" />Créer manuellement</Button>
+                <Button size="sm" className="gap-2 w-full sm:w-auto"><Plus className="h-3.5 w-3.5" />Créer manuellement</Button>
               </Link>
             </div>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid gap-4">
-          {products.map((product) => {
-            const cs = complianceMap[product.id]
-            const score = cs?.score ?? 0
-            const status = cs?.status ?? "incomplete"
-            const cat = product.product_categories as any
-            return (
-              <Link key={product.id} href={`/dashboard/products/${product.id}`}>
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                  <CardContent className="py-4 px-6">
-                    <div className="flex items-center gap-4">
-                      <div className="text-3xl">{cat?.icon ?? "📦"}</div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-900">{product.name}</p>
-                        <p className="text-sm text-gray-500">
-                          {cat?.name_fr ?? "Non catégorisé"}
-                          {product.reference && <> · <span className="font-mono text-xs">{product.reference}</span></>}
-                          {" · "}{formatDate(product.created_at)}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="hidden md:flex flex-col items-end gap-1 w-28">
-                          <Progress value={score} className="h-1.5 w-full" />
-                          <span className="text-xs text-gray-500">{score}% complet</span>
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl border border-gray-100 divide-y divide-gray-50 overflow-hidden">
+            {products.map((product) => {
+              const cs = complianceMap[product.id]
+              const score = cs?.score ?? 0
+              const status = cs?.status ?? "incomplete"
+              const cat = product.product_categories as any
+              const dot = score >= 80 ? "bg-emerald-400" : score >= 50 ? "bg-amber-400" : "bg-red-400"
+              const StatusIcon = score >= 80 ? CheckCircle2 : score >= 50 ? Clock : AlertCircle
+              const iconColor = score >= 80 ? "text-emerald-500" : score >= 50 ? "text-amber-500" : "text-red-400"
+              return (
+                <Link key={product.id} href={`/dashboard/products/${product.id}`}>
+                  <div className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50/70 transition-colors cursor-pointer group">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-xl border border-gray-100">
+                      {cat?.icon ?? "📦"}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm text-gray-900 truncate group-hover:text-blue-700 transition-colors">{product.name}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        {cat?.name_fr ?? "Non catégorisé"}
+                        {product.reference && <span className="font-mono"> · {product.reference}</span>}
+                        <span className="hidden sm:inline"> · {formatDate(product.created_at)}</span>
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <div className="hidden md:flex items-center gap-2">
+                        <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                          <div className={`h-full rounded-full transition-all ${dot}`} style={{ width: `${score}%` }} />
                         </div>
-                        <Badge variant="secondary" className={getComplianceBg(score)}>
+                        <span className="text-xs text-gray-500 font-medium w-8 text-right">{score}%</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <StatusIcon className={`h-3.5 w-3.5 shrink-0 ${iconColor}`} />
+                        <span className={`text-[11px] font-medium rounded-full px-2 py-0.5 hidden sm:inline ${getComplianceBg(score)}`}>
                           {status === "compliant" ? "Conforme" : status === "in_progress" ? "En cours" : "Incomplet"}
-                        </Badge>
+                        </span>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            )
-          })}
-        </div>
-      )}
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

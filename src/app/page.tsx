@@ -133,7 +133,7 @@ const CATEGORIES = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden w-full">
 
       {/* ─── NAV ─── */}
       <motion.header
@@ -177,9 +177,8 @@ export default function LandingPage() {
           </motion.div>
 
           <motion.h1 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.07 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.08] tracking-tight text-gray-900">
-            Dossiers de conformité GPSR,<br />
-            <span className="text-blue-600">générés en quelques minutes</span>
+            className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-gray-900">
+            Dossiers de conformité GPSR, <span className="text-blue-600">générés en quelques minutes</span>
           </motion.h1>
 
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.18 }}
@@ -191,12 +190,12 @@ export default function LandingPage() {
           <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.28 }}
             className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/auth/login">
-              <Button size="lg" className="gap-2 shadow-md shadow-blue-100 hover:-translate-y-0.5 transition-all">
+              <Button size="lg" className="gap-2 shadow-sm">
                 Créer un compte gratuit <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
             <a href="#comment">
-              <Button size="lg" variant="outline" className="hover:-translate-y-0.5 transition-all">
+              <Button size="lg" variant="outline">
                 Voir comment ça marche
               </Button>
             </a>
@@ -231,7 +230,7 @@ export default function LandingPage() {
               const Icon = f.icon
               return (
                 <FadeIn key={f.title} delay={i * 0.05}>
-                  <div className="h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+                  <div className="h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm hover:border-blue-100 hover:bg-blue-50/20 transition-colors duration-150">
                     <div className={`h-10 w-10 rounded-xl ${f.color} flex items-center justify-center mb-4`}>
                       <Icon className="h-5 w-5 text-white" />
                     </div>
@@ -446,7 +445,7 @@ export default function LandingPage() {
           <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
             {PLANS.map((plan, i) => (
               <FadeIn key={plan.name} delay={i * 0.07}>
-                <div className={`relative flex flex-col rounded-2xl border p-6 gap-5 transition-all hover:-translate-y-1 duration-200 ${
+                <div className={`relative flex flex-col rounded-2xl border p-6 gap-5 transition-colors duration-150 ${
                   plan.highlight ? "border-blue-600 bg-blue-600 text-white shadow-xl shadow-blue-200" : "border-gray-200 bg-white shadow-sm hover:shadow-md"
                 }`}>
                   {plan.highlight && (
@@ -496,7 +495,7 @@ export default function LandingPage() {
           <h2 className="relative text-2xl sm:text-3xl font-bold mb-3">Commencez avec 1 produit, gratuitement</h2>
           <p className="relative text-blue-100 mb-8 text-sm">Aucune carte bancaire · Compte créé en 30 secondes · Premier dossier immédiat</p>
           <Link href="/auth/login">
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 hover:scale-[1.02] transition-all shadow-md gap-2">
+            <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 shadow-md gap-2">
               Créer mon compte gratuit <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
