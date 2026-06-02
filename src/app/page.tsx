@@ -67,7 +67,6 @@ const PLANS = [
       "Analyse de risque IA",
       "Déclaration de Conformité",
     ],
-    missing: ["Import Shopify / WooCommerce", "Langues supplémentaires"],
     cta: "Commencer gratuitement",
   },
   {
@@ -82,7 +81,6 @@ const PLANS = [
       "Déclaration de Conformité",
       "Support email",
     ],
-    missing: ["Import Shopify / WooCommerce"],
     cta: "Démarrer",
   },
   {
@@ -99,7 +97,6 @@ const PLANS = [
       "Personne Responsable EU",
       "Support prioritaire",
     ],
-    missing: [],
     cta: "Choisir Growth",
   },
   {
@@ -111,11 +108,13 @@ const PLANS = [
       "150 dossiers techniques",
       "Étiquettes 7 langues (choix libre)",
       "Import Shopify & WooCommerce",
+      "Import CSV",
+      "Alertes normes",
+      "Personne Responsable EU",
       "Accès API",
       "Rapports personnalisés",
       "Support dédié",
     ],
-    missing: [],
     cta: "Choisir Pro",
   },
 ]
@@ -336,9 +335,8 @@ export default function LandingPage() {
               <div className="space-y-4">
                 {/* Base languages */}
                 <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="mb-3">
                     <p className="text-xs font-semibold text-gray-300">Langues de base</p>
-                    <span className="text-[10px] bg-white/10 text-gray-300 rounded-full px-2 py-0.5">Tous les plans</span>
                   </div>
                   <div className="flex gap-2">
                     {LANGUAGES.filter(l => l.base).map(l => (
@@ -351,9 +349,8 @@ export default function LandingPage() {
                 </div>
                 {/* All languages */}
                 <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/30 p-4">
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="mb-3">
                     <p className="text-xs font-semibold text-emerald-300">Toutes les langues</p>
-                    <span className="text-[10px] bg-emerald-500/20 text-emerald-300 rounded-full px-2 py-0.5">Growth & Pro</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {LANGUAGES.map(l => (
@@ -376,7 +373,6 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <FadeIn>
-              <span className="inline-block rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold px-3 py-1 mb-4">Growth & Pro</span>
               <h2 className="text-2xl sm:text-3xl font-bold mb-4">Importez vos produits en un clic depuis votre boutique</h2>
               <p className="text-gray-500 text-sm leading-relaxed mb-6">
                 Toutes les informations dont vous avez besoin sont déjà dans votre catalogue en ligne.
@@ -524,12 +520,6 @@ export default function LandingPage() {
                     {plan.features.map(f => (
                       <li key={f} className={`flex items-start gap-2 text-sm ${plan.highlight ? "text-blue-100" : "text-gray-600"}`}>
                         <CheckCircle2 className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${plan.highlight ? "text-blue-200" : "text-emerald-500"}`} />
-                        {f}
-                      </li>
-                    ))}
-                    {plan.missing.map(f => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-gray-300 line-through">
-                        <span className="h-3.5 w-3.5 shrink-0 mt-0.5 flex items-center justify-center">—</span>
                         {f}
                       </li>
                     ))}
