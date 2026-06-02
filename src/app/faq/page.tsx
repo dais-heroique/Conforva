@@ -80,7 +80,7 @@ const SECTIONS = [
       },
       {
         q: "Puis-je obtenir un remboursement ?",
-        a: "Nous proposons une garantie satisfait ou remboursé de 14 jours à partir de la date de souscription. Contactez-nous à support@conforva.com en mentionnant votre numéro de commande.",
+        a: "Conformément à l'article L. 221-18 du Code de la consommation, un droit de rétractation de 14 jours s'applique à partir de la souscription. Au-delà, aucun remboursement au prorata n'est accordé sauf défaut majeur du service. Contactez support@conforva.com avec votre numéro de commande.",
       },
     ],
   },
@@ -115,9 +115,8 @@ export default function FAQPage() {
           <p className="text-gray-500 text-base leading-relaxed">
             Vous ne trouvez pas ce que vous cherchez ?{" "}
             <Link href="/contact" className="text-blue-600 underline underline-offset-2 hover:text-blue-700">
-              Contactez-nous
-            </Link>
-            , nous répondons en moins de 24h.
+              Contactez-moi directement
+            </Link>.
           </p>
         </div>
 
@@ -146,7 +145,7 @@ export default function FAQPage() {
 
         <div className="mt-14 rounded-2xl bg-blue-50 border border-blue-100 p-8 text-center">
           <h2 className="text-lg font-bold text-gray-900 mb-2">Vous avez une autre question ?</h2>
-          <p className="text-sm text-gray-500 mb-5">Notre équipe vous répond en moins de 24h les jours ouvrés.</p>
+          <p className="text-sm text-gray-500 mb-5">Envoyez un message à support@conforva.com.</p>
           <Link href="/contact">
             <button className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
               Envoyer un message

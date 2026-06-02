@@ -43,7 +43,7 @@ const PLANS = [
     price: "199€",
     period: "/mois",
     products: 150,
-    features: ["150 références produits", "Connecteur WooCommerce", "API access", "Rapports personnalisés", "Account manager dédié"],
+    features: ["150 références produits", "Connecteur WooCommerce", "API access", "Rapports personnalisés", "Support prioritaire"],
     priceId: process.env.STRIPE_PRICE_PRO,
   },
 ]
@@ -154,7 +154,7 @@ export default async function BillingPage() {
               </div>
               <div>
                 <p className="font-semibold text-gray-900">Enterprise — 150+ références</p>
-                <p className="text-sm text-gray-500">Sur devis · API access · SLA · Compte manager dédié</p>
+                <p className="text-sm text-gray-500">Sur devis · API access · SLA personnalisé</p>
               </div>
             </div>
             <a href="mailto:contact@conforva.com">

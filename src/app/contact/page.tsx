@@ -5,7 +5,7 @@ import { Mail, Clock, MessageSquare, HelpCircle } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Contact | Conforva",
-  description: "Contactez l'équipe Conforva pour toute question sur la conformité GPSR, la facturation ou le support technique.",
+  description: "Contactez Conforva pour toute question sur la conformité GPSR, la facturation ou le support technique.",
 }
 
 export default function ContactPage() {
@@ -17,7 +17,7 @@ export default function ContactPage() {
         <div className="mb-12">
           <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-2">Support</p>
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Contactez-nous</h1>
-          <p className="text-gray-500 text-base">Nous lisons et répondons à chaque message. Réponse garantie en moins de 24h les jours ouvrés.</p>
+          <p className="text-gray-500 text-base">Je lis chaque message et réponds dès que possible.</p>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4 mb-10">
@@ -42,8 +42,8 @@ export default function ContactPage() {
               <p className="font-semibold text-gray-900">Délai de réponse</p>
             </div>
             <p className="text-sm text-gray-500 leading-relaxed">
-              Moins de <strong className="text-gray-700">24h</strong> les jours ouvrés<br />
-              (lun–ven, 9h–18h CET)
+              Je fais de mon mieux pour répondre rapidement.<br />
+              Les jours ouvrés en priorité.
             </p>
           </div>
 
@@ -75,8 +75,8 @@ export default function ContactPage() {
 
         <div className="rounded-2xl border border-gray-100 bg-blue-50/50 p-6 text-center">
           <p className="text-sm text-gray-600 leading-relaxed">
-            Pour les questions réglementaires complexes, nous vous orienterons vers des ressources officielles ou des experts en conformité qualifiés.<br />
-            Conforva répond en <strong>français</strong> et en <strong>anglais</strong>.
+            Pour les questions réglementaires complexes, je vous oriente vers des ressources officielles ou des experts qualifiés.<br />
+            Je réponds en <strong>français</strong> et en <strong>anglais</strong>.
           </p>
         </div>
       </main>
