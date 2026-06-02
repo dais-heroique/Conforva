@@ -67,8 +67,10 @@ export async function POST(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const { productId } = await req.json()
+  const body = await req.json()
+  const { productId, languages } = body as { productId: string; languages?: string[] }
   if (!productId) return NextResponse.json({ error: "productId required" }, { status: 400 })
+  const requestedLanguages = languages && languages.length > 0 ? languages : ["fr", "en"]
 
   // Load product with all related data
   const { data: product, error: pErr } = await supabase
@@ -463,12 +465,10 @@ Retourne UNIQUEMENT le JSON suivant, sans aucun texte avant ou après, sans bali
       watermarked: true,
     })
 
-    // Create labels for each language — including zh and ja if present
-    const langs = ["fr", "en", "de", "it", "es", "zh", "ja"] as const
+    // Create labels only for languages selected by the user at generation time
+    const langs = requestedLanguages as Array<"fr" | "en" | "de" | "it" | "es" | "zh" | "ja">
     for (const lang of langs) {
       const warnings = analysisData.labeling_requirements?.[lang] ?? []
-      // Skip languages with no content to avoid empty label rows
-      if (warnings.length === 0) continue
       await supabase.from("labels").upsert({
         product_id: productId,
         language: lang,

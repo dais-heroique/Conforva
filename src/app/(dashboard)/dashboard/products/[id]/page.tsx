@@ -21,7 +21,9 @@ import type {
   ProductRow, CategoryRow, RiskAssessmentRow, TechnicalFileRow,
   LabelRow, ComplianceStatusRow, QuestionnaireResponseRow
 } from "@/types/supabase"
-import { getComplianceBg, getComplianceColor, SUPPORTED_LANGUAGES } from "@/lib/utils"
+import { getComplianceBg, getComplianceColor, SUPPORTED_LANGUAGES, PLAN_LANGUAGES, type LangCode } from "@/lib/utils"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
+import type { Plan } from "@/types/supabase"
 
 interface PageProps { params: Promise<{ id: string }> }
 
@@ -43,9 +45,13 @@ export default function ProductDetailPage({ params }: PageProps) {
   const [labels, setLabels] = useState<LabelRow[]>([])
   const [compliance, setCompliance] = useState<ComplianceStatusRow | null>(null)
   const [validationChecked, setValidationChecked] = useState(false)
+  const [userPlan, setUserPlan] = useState<Plan>("free")
+  const [showLangPicker, setShowLangPicker] = useState(false)
+  const [selectedLanguages, setSelectedLanguages] = useState<LangCode[]>(["fr", "en"])
 
   async function loadData() {
     const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
     const [
       { data: prod },
       { data: qrData },
@@ -53,6 +59,7 @@ export default function ProductDetailPage({ params }: PageProps) {
       { data: tf },
       { data: lbls },
       { data: cs },
+      { data: userData },
     ] = await Promise.all([
       supabase.from("products").select("*, product_categories(*)").eq("id", id).single(),
       supabase.from("questionnaire_responses").select("*").eq("product_id", id).single(),
@@ -60,6 +67,7 @@ export default function ProductDetailPage({ params }: PageProps) {
       supabase.from("technical_files").select("*").eq("product_id", id).order("version", { ascending: false }).limit(1).single(),
       supabase.from("labels").select("*").eq("product_id", id),
       supabase.from("compliance_status").select("*").eq("product_id", id).single(),
+      user ? supabase.from("users").select("plan").eq("id", user.id).single() : Promise.resolve({ data: null }),
     ])
     if (!prod) { router.push("/dashboard/products"); return }
     setProduct(prod as unknown as FullProduct)
@@ -68,18 +76,26 @@ export default function ProductDetailPage({ params }: PageProps) {
     setTechnicalFile(tf)
     setLabels(lbls ?? [])
     setCompliance(cs)
+    const plan = (userData as any)?.plan ?? "free"
+    setUserPlan(plan)
+    setSelectedLanguages(PLAN_LANGUAGES[plan] ?? ["fr", "en"])
     setLoading(false)
   }
 
   useEffect(() => { loadData() }, [id])
 
-  async function handleGenerate() {
+  function handleGenerate() {
+    setShowLangPicker(true)
+  }
+
+  async function doGenerate(langs: LangCode[]) {
+    setShowLangPicker(false)
     setGenerating(true)
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId: id }),
+        body: JSON.stringify({ productId: id, languages: langs }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? "Erreur inconnue")
@@ -508,6 +524,56 @@ export default function ProductDetailPage({ params }: PageProps) {
           )}
         </TabsContent>
       </Tabs>
+
+      {/* Language picker dialog */}
+      <Dialog open={showLangPicker} onOpenChange={setShowLangPicker}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Langues d'étiquetage</DialogTitle>
+            <DialogDescription>
+              Choisissez les langues pour lesquelles générer les étiquettes de sécurité.
+              {userPlan === "free" && <span className="block mt-1 text-amber-600 text-xs">Plan Gratuit — FR et EN uniquement.</span>}
+              {userPlan === "starter" && <span className="block mt-1 text-blue-600 text-xs">Plan Starter — 5 langues disponibles.</span>}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-2 space-y-2">
+            {SUPPORTED_LANGUAGES.map(lang => {
+              const available = (PLAN_LANGUAGES[userPlan] ?? ["fr", "en"]).includes(lang.code as LangCode)
+              const checked = selectedLanguages.includes(lang.code as LangCode)
+              return (
+                <label
+                  key={lang.code}
+                  className={`flex items-center gap-3 rounded-lg border px-4 py-3 cursor-pointer transition-colors ${
+                    !available ? "opacity-40 cursor-not-allowed bg-gray-50" :
+                    checked ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:bg-gray-50"
+                  }`}
+                >
+                  <Checkbox
+                    checked={checked}
+                    disabled={!available || lang.code === "fr"}
+                    onCheckedChange={(v) => {
+                      if (!available) return
+                      setSelectedLanguages(prev =>
+                        v ? [...prev, lang.code as LangCode] : prev.filter(c => c !== lang.code)
+                      )
+                    }}
+                  />
+                  <span className="text-xs font-bold text-gray-500 w-6">{lang.short}</span>
+                  <span className="text-sm font-medium text-gray-800">{lang.label}</span>
+                  {!available && <span className="ml-auto text-[10px] text-gray-400">Plan supérieur</span>}
+                </label>
+              )
+            })}
+          </div>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setShowLangPicker(false)}>Annuler</Button>
+            <Button onClick={() => doGenerate(selectedLanguages)} disabled={selectedLanguages.length === 0} className="gap-2">
+              {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
+              Générer ({selectedLanguages.length} langue{selectedLanguages.length > 1 ? "s" : ""})
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

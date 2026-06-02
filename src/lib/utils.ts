@@ -43,7 +43,19 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'de', label: 'Deutsch', short: 'DE' },
   { code: 'it', label: 'Italiano', short: 'IT' },
   { code: 'es', label: 'Español', short: 'ES' },
+  { code: 'zh', label: '中文', short: 'ZH' },
+  { code: 'ja', label: '日本語', short: 'JA' },
 ] as const
+
+export type LangCode = typeof SUPPORTED_LANGUAGES[number]['code']
+
+export const PLAN_LANGUAGES: Record<string, LangCode[]> = {
+  free:       ['fr', 'en'],
+  starter:    ['fr', 'en', 'de', 'it', 'es'],
+  growth:     ['fr', 'en', 'de', 'it', 'es', 'zh', 'ja'],
+  pro:        ['fr', 'en', 'de', 'it', 'es', 'zh', 'ja'],
+  enterprise: ['fr', 'en', 'de', 'it', 'es', 'zh', 'ja'],
+}
 
 export const EU_COUNTRIES = [
   { code: 'FR', label: 'France' },
