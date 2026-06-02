@@ -1,14 +1,16 @@
+import type { Metadata } from "next"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ArrowLeft } from "lucide-react"
+import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
+
+export const metadata: Metadata = {
+  title: "Mentions légales | Conforva",
+}
 
 export default function MentionsLegalesPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-16 px-6">
-      <div className="max-w-3xl mx-auto space-y-8">
-        <div className="flex items-center gap-3">
-          <Link href="/"><Button variant="ghost" size="sm"><ArrowLeft className="h-4 w-4 mr-1" />Accueil</Button></Link>
-        </div>
+    <div className="min-h-screen bg-white">
+      <PublicNav />
+      <div className="max-w-3xl mx-auto px-6 py-16 space-y-8">
 
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Mentions légales</h1>
@@ -138,6 +140,7 @@ Technologies utilisées : Next.js (Vercel), Supabase, Stripe, Groq, Resend, Tail
 
         </div>
       </div>
+      <PublicFooter />
     </div>
   )
 }
