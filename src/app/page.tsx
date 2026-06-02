@@ -163,101 +163,47 @@ export default function LandingPage() {
       </motion.header>
 
       {/* ─── HERO ─── */}
-      <section className="relative overflow-hidden px-5 pt-20 pb-16 sm:pt-28 sm:pb-24">
+      <section className="relative overflow-hidden px-5 pt-20 pb-16 sm:pt-32 sm:pb-24 text-center">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-[560px] w-[900px] bg-gradient-to-b from-blue-50/80 to-transparent blur-3xl rounded-full" />
         </div>
 
-        <div className="relative max-w-5xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left */}
-            <div>
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
-                className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3.5 py-1.5 text-xs font-medium text-blue-700 mb-6">
-                <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
-                GPSR (UE) 2023/988 — en vigueur depuis décembre 2024
-              </motion.div>
+        <div className="relative max-w-3xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
+            className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3.5 py-1.5 text-xs font-medium text-blue-700 mb-6">
+            <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
+            GPSR (UE) 2023/988 — en vigueur depuis décembre 2024
+          </motion.div>
 
-              <motion.h1 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.07 }}
-                className="text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-gray-900">
-                Dossiers de conformité GPSR,<br />
-                <span className="text-blue-600">générés en quelques minutes</span>
-              </motion.h1>
+          <motion.h1 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.07 }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.08] tracking-tight text-gray-900">
+            Dossiers de conformité GPSR,<br />
+            <span className="text-blue-600">générés en quelques minutes</span>
+          </motion.h1>
 
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.18 }}
-                className="mt-5 text-base text-gray-500 leading-relaxed max-w-md">
-                Analyse de risque, dossier technique 15 sections et déclaration de conformité UE —
-                structurés selon le règlement (UE) 2023/988, pour tout vendeur ou fabricant dans l'UE.
-              </motion.p>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.18 }}
+            className="mt-6 text-lg text-gray-500 leading-relaxed max-w-xl mx-auto">
+            Analyse de risque, dossier technique 15 sections et déclaration de conformité UE —
+            structurés selon le règlement (UE) 2023/988, pour tout vendeur ou fabricant dans l'UE.
+          </motion.p>
 
-              <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.28 }}
-                className="mt-8 flex flex-col sm:flex-row gap-3">
-                <Link href="/auth/login">
-                  <Button size="lg" className="gap-2 shadow-md shadow-blue-100 hover:-translate-y-0.5 transition-all">
-                    Créer un compte gratuit <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <a href="#comment">
-                  <Button size="lg" variant="outline" className="hover:-translate-y-0.5 transition-all">
-                    Voir comment ça marche
-                  </Button>
-                </a>
-              </motion.div>
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.38 }}
-                className="mt-3 text-xs text-gray-400">
-                Gratuit pour 1 référence · Aucune carte bancaire requise
-              </motion.p>
-            </div>
-
-            {/* Right — mock document card */}
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.55, delay: 0.2 }}
-              className="hidden lg:block">
-              <div className="rounded-2xl border border-gray-200 bg-white shadow-xl overflow-hidden">
-                {/* card header */}
-                <div className="bg-blue-600 px-5 py-4 flex items-center justify-between">
-                  <div>
-                    <p className="text-white font-semibold text-sm">Dossier technique GPSR</p>
-                    <p className="text-blue-200 text-xs mt-0.5">Règlement (UE) 2023/988 · Art. 22</p>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-green-400" />
-                    <span className="text-white text-xs">Validé</span>
-                  </div>
-                </div>
-                {/* card body */}
-                <div className="p-5 space-y-3">
-                  {[
-                    { label: "Produit", val: "Bougie parfumée — Jasmin & Cerisier" },
-                    { label: "Référence", val: "BC-JAC-001" },
-                    { label: "Marchés", val: "UE · France · Allemagne · Espagne" },
-                    { label: "Normes", val: "EN 15493:2007 · EN 14059:2002" },
-                  ].map(r => (
-                    <div key={r.label} className="flex items-start gap-3">
-                      <span className="text-xs text-gray-400 w-20 shrink-0 pt-0.5">{r.label}</span>
-                      <span className="text-xs font-medium text-gray-800">{r.val}</span>
-                    </div>
-                  ))}
-                  <div className="pt-2 border-t border-gray-100">
-                    <p className="text-[11px] text-gray-400 mb-2">Score de conformité</p>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                        <div className="h-full w-[88%] bg-green-500 rounded-full" />
-                      </div>
-                      <span className="text-xs font-bold text-green-600">88%</span>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2 pt-1">
-                    {["Étiquettes FR · EN · DE", "DoC signée", "15/15 sections"].map(t => (
-                      <div key={t} className="rounded-lg bg-green-50 border border-green-100 px-2 py-1.5 text-center">
-                        <CheckCircle2 className="h-3 w-3 text-green-500 mx-auto mb-0.5" />
-                        <p className="text-[9px] text-green-700 font-medium leading-tight">{t}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+          <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.28 }}
+            className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/auth/login">
+              <Button size="lg" className="gap-2 shadow-md shadow-blue-100 hover:-translate-y-0.5 transition-all">
+                Créer un compte gratuit <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <a href="#comment">
+              <Button size="lg" variant="outline" className="hover:-translate-y-0.5 transition-all">
+                Voir comment ça marche
+              </Button>
+            </a>
+          </motion.div>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.38 }}
+            className="mt-3 text-xs text-gray-400">
+            Gratuit pour 1 référence · Aucune carte bancaire requise
+          </motion.p>
         </div>
       </section>
 
