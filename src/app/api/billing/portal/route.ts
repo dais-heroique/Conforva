@@ -22,5 +22,5 @@ export async function POST(req: NextRequest) {
     return_url: `${baseUrl}/dashboard/billing`,
   })
 
-  return NextResponse.redirect(session.url)
+  return NextResponse.redirect(session.url, 303)
 }

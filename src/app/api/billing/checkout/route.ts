@@ -37,5 +37,5 @@ export async function POST(req: NextRequest) {
     metadata: { user_id: user.id },
   })
 
-  return NextResponse.redirect(session.url!)
+  return NextResponse.redirect(session.url!, 303)
 }
