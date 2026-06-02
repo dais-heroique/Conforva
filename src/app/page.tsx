@@ -32,7 +32,6 @@ const FEATURES = [
   { icon: Globe, title: "Déclaration de Conformité Art. 24", desc: "Génération de la DoC conforme à l'article 24. Document prêt à signer par le fabricant ou la Personne Responsable EU, en FR et EN.", color: "bg-emerald-600" },
   { icon: Users, title: "Personne Responsable EU Art. 16", desc: "Obligatoire pour tout produit hors UE vendu dans l'UE. Documentation et stockage des coordonnées de votre Personne Responsable.", color: "bg-orange-500" },
   { icon: AlertTriangle, title: "Étiquetage multilingue Art. 9(7)", desc: "Avertissements de sécurité en FR, EN, DE, IT, ES, ZH et JA. Mentions CLP et informations produit conformes aux exigences réglementaires.", color: "bg-rose-500" },
-  { icon: Zap, title: "Import Shopify & WooCommerce", desc: "Importez vos fiches produits directement depuis votre boutique. Nom, description, référence et matériaux pré-remplis automatiquement.", color: "bg-amber-500" },
 ]
 
 const STEPS = [
@@ -55,10 +54,10 @@ const INCLUDED = [
 ]
 
 const PLANS = [
-  { name: "Gratuit", price: "0", sub: "1 référence", features: ["1 dossier complet", "Export PDF watermarké", "Étiquettes multilingues", "Analyse de risque IA"], cta: "Commencer gratuitement", accent: false, popular: false },
-  { name: "Starter", price: "29", sub: "5 références", features: ["5 dossiers complets", "PDF sans watermark", "Déclaration de Conformité", "Étiquettes 7 langues", "Support email"], cta: "Démarrer", accent: false, popular: false },
-  { name: "Growth", price: "79", sub: "30 références", features: ["30 dossiers complets", "Import CSV", "Connecteur Shopify", "Alertes normes", "Personne Responsable EU", "Support prioritaire"], cta: "Choisir Growth", accent: true, popular: true },
-  { name: "Pro", price: "199", sub: "150 références", features: ["150 dossiers complets", "Connecteur WooCommerce", "Accès API", "Rapports personnalisés", "Support dédié"], cta: "Choisir Pro", accent: false, popular: false },
+  { name: "Gratuit", price: "0", sub: "1 référence", features: ["1 dossier complet", "Export PDF watermarké", "Import Shopify & WooCommerce", "Étiquettes multilingues", "Analyse de risque IA"], cta: "Commencer gratuitement", accent: false, popular: false },
+  { name: "Starter", price: "29", sub: "5 références", features: ["5 dossiers complets", "PDF sans watermark", "Import Shopify & WooCommerce", "Déclaration de Conformité", "Étiquettes 7 langues", "Support email"], cta: "Démarrer", accent: false, popular: false },
+  { name: "Growth", price: "79", sub: "30 références", features: ["30 dossiers complets", "Import CSV", "Import Shopify & WooCommerce", "Alertes normes", "Personne Responsable EU", "Support prioritaire"], cta: "Choisir Growth", accent: true, popular: true },
+  { name: "Pro", price: "199", sub: "150 références", features: ["150 dossiers complets", "Import Shopify & WooCommerce", "Accès API", "Rapports personnalisés", "Support dédié"], cta: "Choisir Pro", accent: false, popular: false },
 ]
 
 const MARKETS = ["UE (GPSR 2023/988)", "USA (CPSC)", "Royaume-Uni (UKCA)", "Chine (CCC)", "Canada (CCPSA)", "Japon (PSE)", "Australie (RCM)"]
@@ -76,10 +75,8 @@ export default function LandingPage() {
         className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur-sm"
       >
         <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-lg overflow-hidden flex items-center justify-center bg-white ring-1 ring-gray-200 shadow-sm">
-              <img src="/favicon.png" alt="Conforva" className="h-7 w-7 object-contain" />
-            </div>
+          <Link href="/" className="flex items-center gap-2">
+            <img src="/favicon.png" alt="Conforva" className="h-8 w-8 object-contain" />
             <span className="font-semibold text-gray-900 text-[15px]">Conforva</span>
           </Link>
 
@@ -230,6 +227,93 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Connectors highlight */}
+      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <FadeIn>
+              <span className="inline-block rounded-full bg-amber-100 text-amber-700 text-xs font-semibold px-3 py-1 mb-4">Inclus dans tous les plans</span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+                Importez vos produits en un clic depuis Shopify ou WooCommerce
+              </h2>
+              <p className="text-gray-500 leading-relaxed mb-6">
+                Vous avez déjà toutes les informations dans votre boutique. Conforva les récupère directement —
+                nom, description, référence SKU, images — et pré-remplit votre dossier de conformité instantanément.
+                Zéro ressaisie, aucune erreur de copier-coller.
+              </p>
+              <ul className="space-y-3 mb-8">
+                {[
+                  "Collez l'URL de votre produit Shopify → données importées automatiquement",
+                  "Connectez votre WooCommerce avec vos clés API → choisissez parmi vos produits",
+                  "Nom, description, SKU, matériaux détectés et pré-remplis dans le formulaire",
+                  "Disponible dès le plan gratuit — sans restriction",
+                ].map(item => (
+                  <li key={item} className="flex items-start gap-3 text-sm text-gray-700">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/auth/login">
+                <Button className="gap-2">
+                  Essayer gratuitement <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </FadeIn>
+
+            <FadeIn delay={0.1}>
+              <div className="grid grid-cols-1 gap-4">
+                {/* Shopify card */}
+                <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="h-9 w-9 rounded-xl bg-[#96BF48] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">S</div>
+                    <div>
+                      <p className="font-semibold text-gray-900 text-sm">Connecteur Shopify</p>
+                      <p className="text-xs text-gray-400">Boutiques publiques — sans clé API</p>
+                    </div>
+                    <span className="ml-auto text-[10px] font-semibold bg-emerald-100 text-emerald-700 rounded-full px-2.5 py-0.5">Actif</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2.5 border border-gray-200">
+                    <span className="text-xs text-gray-400 truncate">https://monshop.myshopify.com/products/nom-du-produit</span>
+                  </div>
+                  <div className="mt-3 grid grid-cols-3 gap-2">
+                    {["Nom produit", "Description", "SKU · Prix"].map(f => (
+                      <div key={f} className="rounded-lg bg-blue-50 border border-blue-100 px-2 py-1.5 text-center">
+                        <p className="text-[10px] text-blue-700 font-medium">{f}</p>
+                        <p className="text-[10px] text-blue-400">importé</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* WooCommerce card */}
+                <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="h-9 w-9 rounded-xl bg-[#7F54B3] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">W</div>
+                    <div>
+                      <p className="font-semibold text-gray-900 text-sm">Connecteur WooCommerce</p>
+                      <p className="text-xs text-gray-400">Via clés API WooCommerce REST</p>
+                    </div>
+                    <span className="ml-auto text-[10px] font-semibold bg-emerald-100 text-emerald-700 rounded-full px-2.5 py-0.5">Actif</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 border border-gray-200">
+                      <span className="text-[10px] text-gray-400 font-medium w-24 shrink-0">Site URL</span>
+                      <span className="text-xs text-gray-500 truncate">https://monsite.com</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 border border-gray-200">
+                      <span className="text-[10px] text-gray-400 font-medium w-24 shrink-0">Consumer Key</span>
+                      <span className="text-xs text-gray-400">ck_••••••••••</span>
+                    </div>
+                  </div>
+                  <p className="mt-3 text-[11px] text-gray-400">Listez et sélectionnez vos produits directement depuis Conforva.</p>
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
+
       {/* Markets band */}
       <section className="py-14 px-5 bg-gray-900 text-white">
         <div className="max-w-5xl mx-auto">
@@ -368,9 +452,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
             <div className="flex items-center gap-2.5">
-              <div className="h-7 w-7 rounded-lg overflow-hidden flex items-center justify-center bg-white ring-1 ring-gray-200 shadow-sm">
-                <img src="/favicon.png" alt="Conforva" className="h-6 w-6 object-contain" />
-              </div>
+              <img src="/favicon.png" alt="Conforva" className="h-7 w-7 object-contain" />
               <span className="font-semibold text-gray-700">Conforva</span>
               <span className="hidden sm:inline text-gray-300">—</span>
               <span className="hidden sm:inline">Conformité GPSR pour e-commerçants</span>
