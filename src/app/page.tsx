@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import {
   CheckCircle2, ArrowRight, ChevronRight,
   ShieldCheck, FileText, Globe, Users, AlertTriangle,
-  BarChart3,
+  BarChart3, X,
 } from "lucide-react"
 
 function FadeIn({ children, className = "", delay = 0 }: {
@@ -111,7 +111,6 @@ const PLANS = [
       "Import CSV",
       "Alertes normes",
       "Personne Responsable EU",
-      "Accès API",
       "Rapports personnalisés",
       "Support dédié",
     ],
@@ -217,6 +216,53 @@ export default function LandingPage() {
         </div>
       </div>
 
+      {/* ─── GPSR STAKES ─── */}
+      <section className="py-16 px-5">
+        <div className="max-w-5xl mx-auto">
+          <FadeIn>
+            <p className="text-xs font-semibold uppercase tracking-widest text-red-500 mb-1">Pourquoi maintenant ?</p>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">Le GPSR est en vigueur. Êtes-vous en conformité ?</h2>
+            <p className="text-sm text-gray-500 max-w-2xl leading-relaxed">Depuis le 13 décembre 2024, tout produit de consommation vendu dans l'Union Européenne doit respecter le règlement (UE) 2023/988 — sans exception, même si vous vendez depuis hors de l'UE.</p>
+          </FadeIn>
+          <div className="mt-8 grid sm:grid-cols-3 gap-4">
+            {[
+              { n: "13 déc. 2024", label: "Date d'entrée en vigueur", sub: "Aucune période de grâce — le règlement s'applique immédiatement.", color: "border-red-200 bg-red-50" },
+              { n: "10 ans", label: "Conservation du dossier technique", sub: "L'Art. 22 impose de conserver le dossier technique 10 ans à compter de la mise sur le marché.", color: "border-amber-200 bg-amber-50" },
+              { n: "Toute vente EU", label: "Sans dérogation géographique", sub: "Vendeur américain, chinois, français — peu importe : si le consommateur est en UE, le GPSR s'applique.", color: "border-blue-200 bg-blue-50" },
+            ].map((s, i) => (
+              <FadeIn key={s.n} delay={i * 0.07}>
+                <div className={`rounded-2xl border ${s.color} p-5 h-full`}>
+                  <p className="text-2xl font-black text-gray-900 mb-1">{s.n}</p>
+                  <p className="text-sm font-semibold text-gray-800 mb-1">{s.label}</p>
+                  <p className="text-xs text-gray-500 leading-relaxed">{s.sub}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+          <FadeIn>
+            <div className="mt-5 rounded-2xl border border-gray-200 bg-white shadow-sm p-6">
+              <p className="text-sm font-semibold text-gray-900 mb-4">Ce que risquent les vendeurs non conformes</p>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {[
+                  { icon: "🚫", title: "Retrait du marché", desc: "Les autorités de surveillance peuvent imposer le rappel ou le retrait immédiat des produits non conformes." },
+                  { icon: "✈️", title: "Blocage douanier", desc: "Les douanes EU peuvent bloquer vos marchandises à l'importation si la documentation est absente ou incomplète." },
+                  { icon: "📋", title: "Suspension d'annonces", desc: "Amazon EU suspend les annonces sans Personne Responsable EU documentée (Art. 16)." },
+                  { icon: "⚖️", title: "Responsabilité aggravée", desc: "En cas d'accident, l'absence de dossier technique constitue une preuve d'imprudence en droit civil et pénal." },
+                ].map(r => (
+                  <div key={r.title} className="flex items-start gap-3 rounded-xl bg-gray-50 border border-gray-100 p-4">
+                    <span className="text-lg shrink-0 mt-0.5">{r.icon}</span>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">{r.title}</p>
+                      <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{r.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
       {/* ─── FEATURES ─── */}
       <section id="fonctionnalites" className="py-20 px-5">
         <div className="max-w-6xl mx-auto">
@@ -240,6 +286,58 @@ export default function LandingPage() {
                 </FadeIn>
               )
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── USE CASES ─── */}
+      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
+        <div className="max-w-5xl mx-auto">
+          <FadeIn>
+            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Pour qui ?</p>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">Votre profil de vendeur, vos obligations</h2>
+            <p className="text-sm text-gray-500 max-w-xl leading-relaxed">Fabricant, importateur, distributeur ou revendeur — si un consommateur EU peut acheter votre produit, vous êtes concerné par le GPSR.</p>
+          </FadeIn>
+          <div className="mt-10 grid sm:grid-cols-2 gap-4">
+            {[
+              {
+                emoji: "📦",
+                title: "Seller Amazon FBA (hors UE)",
+                desc: "Vous sourcez depuis la Chine ou l'Asie du Sud-Est et vendez sur Amazon EU. Amazon exige une Personne Responsable EU et un dossier technique pour chaque ASIN. Sans eux, votre annonce est suspendue.",
+                tags: ["Art. 16 obligatoire", "Dossier par ASIN", "Représentant EU requis"],
+              },
+              {
+                emoji: "🛍️",
+                title: "Dropshipper / Revendeur en ligne",
+                desc: "Même si vous ne fabriquez pas le produit, dès que vous le mettez sur le marché EU, vous devenez légalement distributeur ou importateur — et donc responsable de sa conformité.",
+                tags: ["Responsabilité distributeur", "Documentation obligatoire"],
+              },
+              {
+                emoji: "🏷️",
+                title: "Marque indépendante",
+                desc: "Votre propre marque, vos propres produits. Un dossier technique complet pour chaque référence, conservé 10 ans. Gérez tout votre catalogue depuis un seul tableau de bord.",
+                tags: ["Multi-références", "Export PDF signable", "10 ans de traçabilité"],
+              },
+              {
+                emoji: "🌐",
+                title: "E-commerçant multi-canal",
+                desc: "Shopify, Amazon, BtoB, boutique physique — peu importe le canal. Si le produit arrive chez un consommateur EU, le GPSR s'applique. Importez vos fiches produits directement depuis Shopify.",
+                tags: ["Import Shopify", "Tous canaux de vente"],
+              },
+            ].map((uc, i) => (
+              <FadeIn key={uc.title} delay={i * 0.07}>
+                <div className="h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:border-blue-100 hover:bg-blue-50/20 transition-colors duration-150">
+                  <div className="text-3xl mb-4">{uc.emoji}</div>
+                  <h3 className="font-semibold text-gray-900 mb-2">{uc.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">{uc.desc}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {uc.tags.map(t => (
+                      <span key={t} className="rounded-full bg-blue-50 border border-blue-100 px-2.5 py-0.5 text-[11px] font-medium text-blue-700">{t}</span>
+                    ))}
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
           </div>
         </div>
       </section>
@@ -474,6 +572,74 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── ARTICLE BREAKDOWN ─── */}
+      <section className="py-20 px-5">
+        <div className="max-w-5xl mx-auto">
+          <FadeIn>
+            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Conformité article par article</p>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">Ce que le GPSR exige — ce que Conforva génère</h2>
+            <p className="text-sm text-gray-500 max-w-xl leading-relaxed">Chaque document produit par Conforva correspond à un article précis du règlement (UE) 2023/988.</p>
+          </FadeIn>
+          <div className="mt-10 space-y-4">
+            {[
+              {
+                art: "Art. 9",
+                title: "Étiquetage et informations produit",
+                required: "Avertissements de sécurité dans la langue de chaque pays de vente. Identification du fabricant ou de son représentant EU. Numéro de modèle, référence ou lot permettant l'identification du produit.",
+                coverage: "Génération des étiquettes de sécurité adaptées à votre catégorie produit, dans jusqu'à 7 langues (FR, EN, DE, IT, ES, ZH, JA). Langues sélectionnées au moment de la génération selon votre plan.",
+                bg: "bg-rose-50",
+                border: "border-rose-200",
+              },
+              {
+                art: "Art. 16",
+                title: "Personne Responsable EU",
+                required: "Obligatoire pour tout fabricant établi hors de l'Union Européenne. Doit être un opérateur économique établi dans l'UE, pouvant être contacté par les autorités de surveillance du marché.",
+                coverage: "Section dédiée pour renseigner et documenter les coordonnées complètes de votre Personne Responsable EU. Documentation exportable pour les marketplaces et les autorités douanières.",
+                bg: "bg-violet-50",
+                border: "border-violet-200",
+              },
+              {
+                art: "Art. 22",
+                title: "Dossier technique",
+                required: "Document obligatoire regroupant : description du produit, dessins techniques, liste des normes appliquées, évaluation des risques, résultats de tests ou justifications alternatives, instructions d'utilisation. Conservation obligatoire pendant 10 ans.",
+                coverage: "15 sections générées automatiquement à partir de vos données produit. Analyse de risque structurée selon la méthodologie ISO 12100:2010. Export PDF complet, prêt pour un organisme notifié.",
+                bg: "bg-blue-50",
+                border: "border-blue-200",
+              },
+              {
+                art: "Art. 24",
+                title: "Déclaration UE de Conformité",
+                required: "Document officiel signé par le fabricant ou son représentant légal EU, attestant formellement que le produit satisfait à toutes les exigences applicables du règlement GPSR et des normes harmonisées retenues.",
+                coverage: "Génération de la Déclaration de Conformité pré-remplie : identification précise du produit, fabricant, réglementation applicable, normes harmonisées utilisées, date et signature prêtes à apposer.",
+                bg: "bg-emerald-50",
+                border: "border-emerald-200",
+              },
+            ].map((item, i) => (
+              <FadeIn key={item.art} delay={i * 0.06}>
+                <div className={`rounded-2xl border ${item.border} ${item.bg} p-6`}>
+                  <div className="flex flex-col sm:flex-row gap-5">
+                    <div className="sm:w-44 shrink-0">
+                      <span className="inline-block rounded-full bg-white border border-gray-200 px-3 py-1 text-xs font-bold text-blue-700 mb-2">{item.art}</span>
+                      <h3 className="font-bold text-gray-900 text-sm leading-snug">{item.title}</h3>
+                    </div>
+                    <div className="flex-1 grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Ce qu'exige le règlement</p>
+                        <p className="text-xs text-gray-700 leading-relaxed">{item.required}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-blue-600 mb-1.5">Ce que Conforva génère</p>
+                        <p className="text-xs text-gray-700 leading-relaxed">{item.coverage}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── HOW IT WORKS ─── */}
       <section id="comment" className="py-20 px-5 bg-gray-50 border-y border-gray-100">
         <div className="max-w-5xl mx-auto">
@@ -514,6 +680,111 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ─── FAQ PREVIEW ─── */}
+      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
+        <div className="max-w-3xl mx-auto">
+          <FadeIn className="text-center mb-10">
+            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Questions fréquentes</p>
+            <h2 className="text-2xl sm:text-3xl font-bold">Ce que tout le monde demande</h2>
+          </FadeIn>
+          <div className="space-y-2.5">
+            {[
+              {
+                q: "Les documents générés sont-ils légalement valides ?",
+                a: "Conforva génère une base documentaire structurée et conforme au format requis par le GPSR. Ces documents doivent être relus, complétés avec vos données réelles (résultats de tests si requis, certificats) et signés. Ils ne constituent pas un avis juridique mais forment un dossier solide, prêt à être soumis ou présenté à des autorités.",
+              },
+              {
+                q: "Le GPSR s'applique-t-il si je vends depuis hors de l'UE ?",
+                a: "Oui. Dès que le consommateur final se trouve dans l'Union Européenne, le GPSR s'applique, quelle que soit l'origine géographique du vendeur. Les plateformes comme Amazon EU appliquent déjà ce règlement à toutes les annonces destinées aux marchés européens.",
+              },
+              {
+                q: "Faut-il obligatoirement des tests en laboratoire ?",
+                a: "Les tests ne sont pas systématiquement obligatoires pour tous les produits. L'analyse de risque peut s'appuyer sur les données techniques existantes et les normes harmonisées. Pour les produits à risque élevé (puériculture, jouets, électronique haute tension), les tests restent fortement recommandés et parfois requis par les normes applicables.",
+              },
+              {
+                q: "L'essai gratuit nécessite-t-il une carte bancaire ?",
+                a: "Non. Vous créez votre compte avec votre email ou votre compte Google, et vous pouvez générer un premier dossier complet — analyse de risque, dossier technique, déclaration de conformité — sans renseigner aucune information de paiement.",
+              },
+              {
+                q: "Combien de temps faut-il pour générer un dossier ?",
+                a: "En moyenne 5 à 10 minutes pour remplir le questionnaire produit. La génération IA prend ensuite 1 à 2 minutes. Le dossier est disponible en PDF immédiatement après validation.",
+              },
+            ].map(item => (
+              <FadeIn key={item.q}>
+                <details className="group rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm">
+                  <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer select-none list-none hover:bg-gray-50 transition-colors">
+                    <span className="font-medium text-sm text-gray-900">{item.q}</span>
+                    <ChevronRight className="h-4 w-4 text-gray-400 shrink-0 transition-transform group-open:rotate-90" />
+                  </summary>
+                  <div className="px-5 pb-5 pt-2 text-sm text-gray-600 leading-relaxed border-t border-gray-50">
+                    {item.a}
+                  </div>
+                </details>
+              </FadeIn>
+            ))}
+          </div>
+          <FadeIn>
+            <p className="mt-8 text-center">
+              <Link href="/faq" className="text-sm text-blue-600 font-medium hover:underline">
+                Voir toutes les questions fréquentes →
+              </Link>
+            </p>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ─── COMPARISON ─── */}
+      <section className="py-20 px-5">
+        <div className="max-w-5xl mx-auto">
+          <FadeIn>
+            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Pourquoi Conforva ?</p>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">Comparé aux alternatives</h2>
+            <p className="text-sm text-gray-500 max-w-xl leading-relaxed">Toutes les voies mènent (ou ne mènent pas) à la conformité — pas au même coût ni dans le même délai.</p>
+          </FadeIn>
+          <FadeIn>
+            <div className="mt-8 overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
+              <table className="w-full text-sm min-w-[620px]">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="px-5 py-4 text-left text-xs font-semibold text-gray-500 bg-gray-50 w-44">Critère</th>
+                    <th className="px-5 py-4 text-left text-xs font-bold text-blue-700 bg-blue-50">Conforva</th>
+                    <th className="px-5 py-4 text-left text-xs font-semibold text-gray-500 bg-gray-50">Template Word/Excel</th>
+                    <th className="px-5 py-4 text-left text-xs font-semibold text-gray-500 bg-gray-50">Expert conformité</th>
+                    <th className="px-5 py-4 text-left text-xs font-semibold text-gray-500 bg-gray-50">Ne rien faire</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {[
+                    ["Temps par dossier", "< 10 minutes", "2 à 5 jours", "1 à 4 semaines", "—"],
+                    ["Coût par référence", "dès 5,80 €/mois", "Gratuit", "500 à 2 000 €", "0 €"],
+                    ["Dossier technique Art. 22", true, "Partiel", true, false],
+                    ["Analyse risque ISO 12100", true, false, true, false],
+                    ["Déclaration de Conformité", true, false, true, false],
+                    ["Étiquetage multilingue 7 langues", true, false, "Selon contrat", false],
+                    ["Personne Responsable EU (Art. 16)", true, false, "Selon contrat", false],
+                    ["Mise à jour des normes", "Automatique", "Manuelle", "Facturable", false],
+                    ["Export PDF prêt à signer", true, "Manuel", true, false],
+                    ["En cas de contrôle douanier", "Dossier complet", "Incomplet", "Dossier complet", "Risque élevé"],
+                  ].map(([criterion, ...values]) => (
+                    <tr key={criterion as string} className="hover:bg-gray-50/50">
+                      <td className="px-5 py-3.5 text-xs font-medium text-gray-700">{criterion as string}</td>
+                      {values.map((v, i) => (
+                        <td key={i} className={`px-5 py-3.5 text-xs ${i === 0 ? "bg-blue-50/40 font-semibold text-blue-800" : ""}`}>
+                          {v === true ? <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                            : v === false ? <X className="h-4 w-4 text-gray-300" />
+                            : <span className={v === "Risque élevé" ? "text-red-500 font-medium" : "text-gray-500"}>{v as string}</span>
+                          }
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </FadeIn>
         </div>
@@ -623,7 +894,9 @@ export default function LandingPage() {
               <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Légal</p>
               <ul className="space-y-2 text-sm text-gray-500">
                 <li><Link href="/cgu" className="hover:text-gray-900 transition-colors">CGU</Link></li>
+                <li><Link href="/cgv" className="hover:text-gray-900 transition-colors">CGV</Link></li>
                 <li><Link href="/privacy" className="hover:text-gray-900 transition-colors">Confidentialité</Link></li>
+                <li><Link href="/cookies" className="hover:text-gray-900 transition-colors">Cookies</Link></li>
                 <li><Link href="/mentions-legales" className="hover:text-gray-900 transition-colors">Mentions légales</Link></li>
               </ul>
             </div>
