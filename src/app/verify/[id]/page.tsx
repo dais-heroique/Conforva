@@ -15,28 +15,6 @@ interface PageProps {
   params: Promise<{ id: string }>
 }
 
-const MARKET_FLAGS: Record<string, string> = {
-  FR: "🇫🇷",
-  DE: "🇩🇪",
-  ES: "🇪🇸",
-  IT: "🇮🇹",
-  NL: "🇳🇱",
-  BE: "🇧🇪",
-  PT: "🇵🇹",
-  PL: "🇵🇱",
-  US: "🇺🇸",
-  GB: "🇬🇧",
-  CN: "🇨🇳",
-  JP: "🇯🇵",
-  CA: "🇨🇦",
-  AU: "🇦🇺",
-  CH: "🇨🇭",
-  SE: "🇸🇪",
-  DK: "🇩🇰",
-  NO: "🇳🇴",
-  AT: "🇦🇹",
-  CZ: "🇨🇿",
-}
 
 function severityLabel(s: string | null | undefined): { label: string; cls: string } {
   switch (s?.toLowerCase()) {
@@ -280,9 +258,8 @@ export default async function VerifyPage({ params }: PageProps) {
                     {markets.slice(0, 6).map((m) => (
                       <span
                         key={m}
-                        className="inline-flex items-center gap-1 rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-700"
+                        className="inline-flex items-center rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-700"
                       >
-                        {MARKET_FLAGS[m] && <span>{MARKET_FLAGS[m]}</span>}
                         {m}
                       </span>
                     ))}

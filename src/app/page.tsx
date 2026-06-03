@@ -8,6 +8,8 @@ import {
   CheckCircle2, ArrowRight, ChevronRight,
   ShieldCheck, FileText, Globe, Users, AlertTriangle,
   BarChart3, X,
+  Ban, Plane, ClipboardX, Scale,
+  Package, ShoppingBag, Tag,
 } from "lucide-react"
 
 function FadeIn({ children, className = "", delay = 0 }: {
@@ -253,13 +255,15 @@ export default function LandingPage() {
               <p className="text-sm font-semibold text-gray-900 mb-4">Ce que risquent les vendeurs non conformes</p>
               <div className="grid sm:grid-cols-2 gap-3">
                 {[
-                  { icon: "🚫", title: "Retrait du marché", desc: "Les autorités de surveillance peuvent imposer le rappel ou le retrait immédiat des produits non conformes." },
-                  { icon: "✈️", title: "Blocage douanier", desc: "Les douanes EU peuvent bloquer vos marchandises à l'importation si la documentation est absente ou incomplète." },
-                  { icon: "📋", title: "Suspension d'annonces", desc: "Amazon EU suspend les annonces sans Personne Responsable EU documentée (Art. 16)." },
-                  { icon: "⚖️", title: "Responsabilité aggravée", desc: "En cas d'accident, l'absence de dossier technique constitue une preuve d'imprudence en droit civil et pénal." },
+                  { Icon: Ban, color: "bg-red-50 border-red-100 text-red-600", title: "Retrait du marché", desc: "Les autorités de surveillance peuvent imposer le rappel ou le retrait immédiat des produits non conformes." },
+                  { Icon: Plane, color: "bg-orange-50 border-orange-100 text-orange-600", title: "Blocage douanier", desc: "Les douanes EU peuvent bloquer vos marchandises à l'importation si la documentation est absente ou incomplète." },
+                  { Icon: ClipboardX, color: "bg-amber-50 border-amber-100 text-amber-600", title: "Suspension d'annonces", desc: "Amazon EU suspend les annonces sans Personne Responsable EU documentée (Art. 16)." },
+                  { Icon: Scale, color: "bg-rose-50 border-rose-100 text-rose-600", title: "Responsabilité aggravée", desc: "En cas d'accident, l'absence de dossier technique constitue une preuve d'imprudence en droit civil et pénal." },
                 ].map(r => (
                   <div key={r.title} className="flex items-start gap-3 rounded-xl bg-gray-50 border border-gray-100 p-4">
-                    <span className="text-lg shrink-0 mt-0.5">{r.icon}</span>
+                    <div className={`h-8 w-8 rounded-lg border flex items-center justify-center shrink-0 mt-0.5 ${r.color}`}>
+                      <r.Icon className="h-4 w-4" />
+                    </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-900">{r.title}</p>
                       <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{r.desc}</p>
@@ -310,25 +314,29 @@ export default function LandingPage() {
           <div className="mt-10 grid sm:grid-cols-2 gap-4">
             {[
               {
-                emoji: "📦",
+                Icon: Package,
+                color: "bg-blue-600",
                 title: "Seller Amazon FBA (hors UE)",
                 desc: "Vous sourcez depuis la Chine ou l'Asie du Sud-Est et vendez sur Amazon EU. Amazon exige une Personne Responsable EU et un dossier technique pour chaque ASIN. Sans eux, votre annonce est suspendue.",
                 tags: ["Art. 16 obligatoire", "Dossier par ASIN", "Représentant EU requis"],
               },
               {
-                emoji: "🛍️",
+                Icon: ShoppingBag,
+                color: "bg-indigo-600",
                 title: "Dropshipper / Revendeur en ligne",
                 desc: "Même si vous ne fabriquez pas le produit, dès que vous le mettez sur le marché EU, vous devenez légalement distributeur ou importateur — et donc responsable de sa conformité.",
                 tags: ["Responsabilité distributeur", "Documentation obligatoire"],
               },
               {
-                emoji: "🏷️",
+                Icon: Tag,
+                color: "bg-violet-600",
                 title: "Marque indépendante",
                 desc: "Votre propre marque, vos propres produits. Un dossier technique complet pour chaque référence, conservé 10 ans. Gérez tout votre catalogue depuis un seul tableau de bord.",
                 tags: ["Multi-références", "Export PDF signable", "10 ans de traçabilité"],
               },
               {
-                emoji: "🌐",
+                Icon: Globe,
+                color: "bg-emerald-600",
                 title: "E-commerçant multi-canal",
                 desc: "Shopify, Amazon, BtoB, boutique physique — peu importe le canal. Si le produit arrive chez un consommateur EU, le GPSR s'applique. Importez vos fiches produits directement depuis Shopify.",
                 tags: ["Import Shopify", "Tous canaux de vente"],
@@ -336,7 +344,9 @@ export default function LandingPage() {
             ].map((uc, i) => (
               <FadeIn key={uc.title} delay={i * 0.07}>
                 <div className="h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:border-blue-100 hover:bg-blue-50/20 transition-colors duration-150">
-                  <div className="text-3xl mb-4">{uc.emoji}</div>
+                  <div className={`h-10 w-10 rounded-xl ${uc.color} flex items-center justify-center mb-4`}>
+                    <uc.Icon className="h-5 w-5 text-white" />
+                  </div>
                   <h3 className="font-semibold text-gray-900 mb-2">{uc.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed mb-4">{uc.desc}</p>
                   <div className="flex flex-wrap gap-1.5">
@@ -517,16 +527,13 @@ export default function LandingPage() {
                   </div>
                   <div className="divide-y divide-gray-50">
                     {[
-                      { lang: "FR", flag: "🇫🇷", text: "⚠ Ne jamais laisser sans surveillance. Tenir hors de portée des enfants. Brûler sur surface résistante à la chaleur." },
-                      { lang: "EN", flag: "🇬🇧", text: "⚠ Never leave unattended. Keep away from children. Burn on heat-resistant surface only." },
-                      { lang: "DE", flag: "🇩🇪", text: "⚠ Niemals unbeaufsichtigt lassen. Von Kindern fernhalten. Nur auf hitzebeständiger Unterlage verwenden." },
+                      { lang: "FR", text: "AVERT. Ne jamais laisser sans surveillance. Tenir hors de portée des enfants. Brûler sur surface résistante à la chaleur." },
+                      { lang: "EN", text: "WARN. Never leave unattended. Keep away from children. Burn on heat-resistant surface only." },
+                      { lang: "DE", text: "ACHTG. Niemals unbeaufsichtigt lassen. Von Kindern fernhalten. Nur auf hitzebeständiger Unterlage verwenden." },
                     ].map(row => (
                       <div key={row.lang} className="px-5 py-3 flex items-start gap-3">
-                        <span className="text-base shrink-0 mt-0.5">{row.flag}</span>
-                        <div className="flex-1 min-w-0">
-                          <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mr-2">{row.lang}</span>
-                          <span className="text-[10px] text-gray-600 leading-relaxed">{row.text}</span>
-                        </div>
+                        <span className="text-[10px] font-bold text-white bg-gray-700 rounded px-1.5 py-0.5 shrink-0 mt-0.5 tracking-wider">{row.lang}</span>
+                        <span className="text-[10px] text-gray-600 leading-relaxed flex-1 min-w-0">{row.text}</span>
                       </div>
                     ))}
                   </div>
@@ -764,21 +771,20 @@ export default function LandingPage() {
                     <th className="px-5 py-4 text-left text-xs font-bold text-blue-700 bg-blue-50">Conforva</th>
                     <th className="px-5 py-4 text-left text-xs font-semibold text-gray-500 bg-gray-50">Template Word/Excel</th>
                     <th className="px-5 py-4 text-left text-xs font-semibold text-gray-500 bg-gray-50">Expert conformité</th>
-                    <th className="px-5 py-4 text-left text-xs font-semibold text-gray-500 bg-gray-50">Ne rien faire</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {[
-                    ["Temps par dossier", "< 10 minutes", "2 à 5 jours", "1 à 4 semaines", "—"],
-                    ["Coût par référence", "dès 5,80 €/mois", "Gratuit", "500 à 2 000 €", "0 €"],
-                    ["Dossier technique Art. 22", true, "Partiel", true, false],
-                    ["Analyse risque ISO 12100", true, false, true, false],
-                    ["Déclaration de Conformité", true, false, true, false],
-                    ["Étiquetage multilingue 7 langues", true, false, "Selon contrat", false],
-                    ["Personne Responsable EU (Art. 16)", true, false, "Selon contrat", false],
-                    ["Mise à jour des normes", "Automatique", "Manuelle", "Facturable", false],
-                    ["Export PDF prêt à signer", true, "Manuel", true, false],
-                    ["En cas de contrôle douanier", "Dossier complet", "Incomplet", "Dossier complet", "Risque élevé"],
+                    ["Temps par dossier", "< 10 minutes", "2 à 5 jours", "1 à 4 semaines"],
+                    ["Coût par référence", "dès 5,80 €/mois", "Gratuit", "500 à 2 000 €"],
+                    ["Dossier technique Art. 22", true, "Partiel", true],
+                    ["Analyse risque ISO 12100", true, false, true],
+                    ["Déclaration de Conformité", true, false, true],
+                    ["Étiquetage multilingue 7 langues", true, false, "Selon contrat"],
+                    ["Personne Responsable EU (Art. 16)", true, false, "Selon contrat"],
+                    ["Mise à jour des normes", "Automatique", "Manuelle", "Facturable"],
+                    ["Export PDF prêt à signer", true, "Manuel", true],
+                    ["En cas de contrôle douanier", "Dossier complet", "Incomplet", "Dossier complet"],
                   ].map(([criterion, ...values]) => (
                     <tr key={criterion as string} className="hover:bg-gray-50/50">
                       <td className="px-5 py-3.5 text-xs font-medium text-gray-700">{criterion as string}</td>
@@ -786,7 +792,7 @@ export default function LandingPage() {
                         <td key={i} className={`px-5 py-3.5 text-xs ${i === 0 ? "bg-blue-50/40 font-semibold text-blue-800" : ""}`}>
                           {v === true ? <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                             : v === false ? <X className="h-4 w-4 text-gray-300" />
-                            : <span className={v === "Risque élevé" ? "text-red-500 font-medium" : "text-gray-500"}>{v as string}</span>
+                            : <span className="text-gray-500">{v as string}</span>
                           }
                         </td>
                       ))}
