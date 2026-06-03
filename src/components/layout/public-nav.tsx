@@ -65,7 +65,9 @@ export function PublicFooter() {
             <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Légal</p>
             <ul className="space-y-2 text-sm text-gray-500">
               <li><Link href="/cgu" className="hover:text-gray-900 transition-colors">CGU</Link></li>
+              <li><Link href="/cgv" className="hover:text-gray-900 transition-colors">CGV</Link></li>
               <li><Link href="/privacy" className="hover:text-gray-900 transition-colors">Confidentialité</Link></li>
+              <li><Link href="/cookies" className="hover:text-gray-900 transition-colors">Cookies</Link></li>
               <li><Link href="/mentions-legales" className="hover:text-gray-900 transition-colors">Mentions légales</Link></li>
             </ul>
           </div>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { DM_Sans } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
@@ -23,6 +23,13 @@ export const metadata: Metadata = {
     type: "website",
     images: [{ url: "/favicon.png", width: 512, height: 512, alt: "Conforva" }],
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

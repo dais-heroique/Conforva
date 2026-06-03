@@ -39,6 +39,8 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/security') ||
     request.nextUrl.pathname.startsWith('/status') ||
     request.nextUrl.pathname.startsWith('/verify') ||
+    request.nextUrl.pathname.startsWith('/cgv') ||
+    request.nextUrl.pathname.startsWith('/cookies') ||
     request.nextUrl.pathname.startsWith('/api/webhooks') ||
     request.nextUrl.pathname.startsWith('/api/contact')
 
