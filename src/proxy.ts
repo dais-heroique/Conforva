@@ -1,8 +1,76 @@
-import { type NextRequest } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
+const LOCALES = ['fr', 'en', 'de', 'it', 'es'] as const
+type Locale = typeof LOCALES[number]
+const DEFAULT_LOCALE: Locale = 'fr'
+
+function detectLocale(request: NextRequest): Locale {
+  const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value
+  if (cookieLocale && LOCALES.includes(cookieLocale as Locale)) {
+    return cookieLocale as Locale
+  }
+
+  const acceptLanguage = request.headers.get('accept-language')
+  if (acceptLanguage) {
+    const langs = acceptLanguage
+      .split(',')
+      .map(part => {
+        const [lang, q] = part.trim().split(';q=')
+        return { lang: lang.trim().toLowerCase().split('-')[0], q: q ? parseFloat(q) : 1.0 }
+      })
+      .sort((a, b) => b.q - a.q)
+
+    for (const { lang } of langs) {
+      if (LOCALES.includes(lang as Locale)) return lang as Locale
+    }
+  }
+
+  return DEFAULT_LOCALE
+}
+
 export async function proxy(request: NextRequest) {
-  return await updateSession(request)
+  const locale = detectLocale(request)
+
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-locale', locale)
+
+  const modifiedRequest = new NextRequest(request.url, {
+    method: request.method,
+    headers: requestHeaders,
+    body: request.body,
+    // @ts-ignore
+    duplex: 'half',
+  })
+
+  request.cookies.getAll().forEach(({ name, value }) => {
+    modifiedRequest.cookies.set(name, value)
+  })
+
+  const supabaseResponse = await updateSession(modifiedRequest)
+
+  if (supabaseResponse.status === 307 || supabaseResponse.status === 302 || supabaseResponse.status === 308) {
+    return supabaseResponse
+  }
+
+  const finalResponse = NextResponse.next({
+    request: { headers: requestHeaders },
+  })
+
+  supabaseResponse.cookies.getAll().forEach(cookie => {
+    finalResponse.cookies.set(cookie)
+  })
+
+  const existingCookie = request.cookies.get('NEXT_LOCALE')?.value
+  if (!existingCookie || !LOCALES.includes(existingCookie as Locale)) {
+    finalResponse.cookies.set('NEXT_LOCALE', locale, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: 'lax',
+    })
+  }
+
+  return finalResponse
 }
 
 export const config = {
