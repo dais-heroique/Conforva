@@ -278,7 +278,7 @@ export default async function DashboardPage() {
                           <Package className="h-4 w-4 text-gray-400" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate group-hover:text-blue-700 transition-colors">
+                          <p className="text-sm font-medium text-gray-900 break-words group-hover:text-blue-700 transition-colors">
                             {product.name}
                           </p>
                           <div className="flex items-center gap-2 mt-1">

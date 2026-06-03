@@ -126,7 +126,7 @@ export default async function ProductsPage() {
                           <Package className="h-4 w-4 text-gray-400" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-blue-700 transition-colors leading-snug">
+                          <p className="text-sm font-semibold text-gray-900 break-words group-hover:text-blue-700 transition-colors leading-snug">
                             {product.name}
                           </p>
                           <p className="text-[11px] text-gray-400 mt-0.5 truncate">

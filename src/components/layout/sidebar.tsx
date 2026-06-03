@@ -44,7 +44,7 @@ function NavContent({ user, org, onClose }: SidebarProps & { onClose?: () => voi
     <div className="flex h-full flex-col">
       <div className="flex h-14 items-center justify-between px-5 border-b border-gray-100">
         <Link href="/dashboard" className="flex items-center gap-2" onClick={onClose}>
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-600 text-white font-bold text-xs">C</div>
+          <img src="/favicon.png" alt="Conforva" className="h-7 w-7 object-contain" />
           <span className="font-bold text-gray-900">Conforva</span>
         </Link>
         {onClose && (
