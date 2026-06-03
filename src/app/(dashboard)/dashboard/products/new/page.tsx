@@ -10,11 +10,19 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Package, ArrowRight, ArrowLeft } from "lucide-react"
+import { Loader2, Package, ArrowRight, ArrowLeft, Lock, Zap } from "lucide-react"
+import Link from "next/link"
 import type { CategoryRow } from "@/types/supabase"
+import { PLAN_LIMITS, type Plan } from "@/types/supabase"
 import { EU_COUNTRIES } from "@/lib/utils"
 
-const MARKET_OPTIONS = EU_COUNTRIES.map(c => c.code)
+const PLAN_LABELS: Record<Plan, string> = {
+  free: "Gratuit",
+  starter: "Starter",
+  growth: "Growth",
+  pro: "Pro",
+  enterprise: "Enterprise",
+}
 
 export default function NewProductPage() {
   const router = useRouter()
@@ -22,6 +30,13 @@ export default function NewProductPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [categories, setCategories] = useState<CategoryRow[]>([])
+
+  // Plan limit state
+  const [checkingAccess, setCheckingAccess] = useState(true)
+  const [limitReached, setLimitReached] = useState(false)
+  const [userPlan, setUserPlan] = useState<Plan>("free")
+  const [productCount, setProductCount] = useState(0)
+
   const [form, setForm] = useState({
     name: "",
     reference: "",
@@ -36,8 +51,39 @@ export default function NewProductPage() {
   })
 
   useEffect(() => {
-    createClient().from("product_categories").select("*").order("sort_order")
-      .then(({ data }) => { if (data) setCategories(data) })
+    async function init() {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const [{ data: userData }, { data: org }, { data: cats }] = await Promise.all([
+        supabase.from("users").select("plan").eq("id", user.id).single() as any,
+        supabase.from("organizations").select("id").eq("owner_id", user.id).single() as any,
+        supabase.from("product_categories").select("*").order("sort_order"),
+      ])
+
+      if (cats) setCategories(cats)
+
+      if (userData && org) {
+        const plan = (userData.plan ?? "free") as Plan
+        setUserPlan(plan)
+
+        const { count } = await supabase
+          .from("products")
+          .select("id", { count: "exact", head: true })
+          .eq("org_id", org.id)
+
+        const current = count ?? 0
+        setProductCount(current)
+
+        if (current >= PLAN_LIMITS[plan]) {
+          setLimitReached(true)
+        }
+      }
+
+      setCheckingAccess(false)
+    }
+    init()
   }, [])
 
   function update(key: string, value: string) {
@@ -85,6 +131,54 @@ export default function NewProductPage() {
   }
 
   const selectedCategory = categories.find(c => c.id === form.category_id)
+
+  if (checkingAccess) {
+    return (
+      <div className="p-8 max-w-2xl mx-auto flex items-center justify-center py-20">
+        <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+      </div>
+    )
+  }
+
+  if (limitReached) {
+    const limit = PLAN_LIMITS[userPlan]
+    const nextPlan = userPlan === "free" ? "Starter" : userPlan === "starter" ? "Growth" : "Pro"
+    return (
+      <div className="p-8 max-w-2xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Nouveau produit</h1>
+        </div>
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="py-10 text-center space-y-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 mx-auto">
+              <Lock className="h-6 w-6 text-amber-600" />
+            </div>
+            <div className="space-y-1.5">
+              <p className="text-lg font-semibold text-gray-900">Limite atteinte</p>
+              <p className="text-sm text-gray-600">
+                Votre plan <strong>{PLAN_LABELS[userPlan]}</strong> inclut {limit === 1 ? "1 produit" : `${limit} produits`}.
+                Vous avez déjà {productCount} produit{productCount > 1 ? "s" : ""}.
+              </p>
+              <p className="text-sm text-gray-500">
+                Passez au plan <strong>{nextPlan}</strong> pour ajouter davantage de produits.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+              <Link href="/dashboard/billing">
+                <Button className="gap-2">
+                  <Zap className="h-4 w-4" />
+                  Passer au plan supérieur
+                </Button>
+              </Link>
+              <Link href="/dashboard/products">
+                <Button variant="outline">Voir mes produits</Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="p-8 max-w-2xl mx-auto space-y-6">

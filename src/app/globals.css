@@ -10,6 +10,10 @@ body {
   color: var(--foreground);
 }
 
+html {
+  background-color: #ffffff;
+}
+
 * {
   box-sizing: border-box;
 }

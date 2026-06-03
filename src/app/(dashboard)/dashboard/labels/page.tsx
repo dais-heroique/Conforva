@@ -4,8 +4,9 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Tag, Download, Eye, AlertTriangle } from "lucide-react"
-import { SUPPORTED_LANGUAGES, formatDate } from "@/lib/utils"
+import { Tag, Download, Eye, AlertTriangle, Lock, Zap } from "lucide-react"
+import { SUPPORTED_LANGUAGES, PLAN_LANGUAGES } from "@/lib/utils"
+import type { Plan } from "@/types/supabase"
 
 export default async function LabelsPage() {
   const supabase = await createClient()
@@ -15,6 +16,10 @@ export default async function LabelsPage() {
   const { data: org } = await supabase.from("organizations").select("id").eq("owner_id", user.id).single()
   if (!org) redirect("/onboarding")
 
+  const { data: userData } = await supabase.from("users").select("plan").eq("id", user.id).single() as any
+  const plan = (userData?.plan ?? "free") as Plan
+  const availableLangs = PLAN_LANGUAGES[plan] ?? ['fr', 'en']
+
   const productIds = (await supabase.from("products").select("id").eq("org_id", org.id)).data?.map(p => p.id) ?? []
 
   const { data: labels } = await supabase
@@ -23,7 +28,6 @@ export default async function LabelsPage() {
     .in("product_id", productIds)
     .order("created_at", { ascending: false })
 
-  // Group by product
   const byProduct = labels?.reduce((acc, label) => {
     const pid = label.product_id
     if (!acc[pid]) acc[pid] = { product: label.products, labels: [] }
@@ -35,7 +39,9 @@ export default async function LabelsPage() {
     <div className="p-8 space-y-6 max-w-5xl mx-auto">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Étiquettes multilingues</h1>
-        <p className="text-sm text-gray-500 mt-1">Avertissements de sécurité générés en FR, EN, DE, IT, ES</p>
+        <p className="text-sm text-gray-500 mt-1">
+          Avertissements de sécurité GPSR — {availableLangs.length} langue{availableLangs.length > 1 ? "s" : ""} incluse{availableLangs.length > 1 ? "s" : ""} dans votre plan
+        </p>
       </div>
 
       {Object.keys(byProduct).length === 0 ? (
@@ -69,8 +75,30 @@ export default async function LabelsPage() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {SUPPORTED_LANGUAGES.map(lang => {
                     const label = productLabels?.find(l => l.language === lang.code)
+                    const isAvailable = availableLangs.includes(lang.code as any)
+
+                    if (!isAvailable) {
+                      return (
+                        <div key={lang.code} className="rounded-xl border border-gray-100 bg-gray-50 p-4 space-y-3 opacity-60">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="text-lg">{lang.flag}</span>
+                              <span className="font-medium text-sm text-gray-400">{lang.label}</span>
+                            </div>
+                            <Lock className="h-3.5 w-3.5 text-gray-400" />
+                          </div>
+                          <Link href="/dashboard/billing">
+                            <button className="flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 transition-colors">
+                              <Zap className="h-3 w-3" />
+                              Plan supérieur requis
+                            </button>
+                          </Link>
+                        </div>
+                      )
+                    }
+
                     return (
-                      <div key={lang.code} className={`rounded-xl border p-4 space-y-3 ${label ? "" : "opacity-40"}`}>
+                      <div key={lang.code} className={`rounded-xl border p-4 space-y-3 ${label ? "" : "opacity-50"}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <span className="text-lg">{lang.flag}</span>
@@ -79,7 +107,7 @@ export default async function LabelsPage() {
                           {label ? (
                             <Badge variant="success" className="text-xs">Généré</Badge>
                           ) : (
-                            <Badge variant="secondary" className="text-xs">N/A</Badge>
+                            <Badge variant="secondary" className="text-xs">À générer</Badge>
                           )}
                         </div>
 
@@ -87,7 +115,7 @@ export default async function LabelsPage() {
                           <>
                             {(label.warnings ?? []).length > 0 && (
                               <div className="space-y-1">
-                                {(label.warnings ?? []).slice(0, 3).map((w, i) => (
+                                {(label.warnings ?? []).slice(0, 3).map((w: string, i: number) => (
                                   <div key={i} className="flex items-start gap-1.5 text-xs text-gray-600">
                                     <AlertTriangle className="h-3 w-3 text-amber-500 shrink-0 mt-0.5" />
                                     <span className="line-clamp-1">{w}</span>
