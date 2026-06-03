@@ -165,7 +165,9 @@ export default async function DashboardPage() {
                 return (
                   <Link key={product.id} href={`/dashboard/products/${product.id}`}>
                     <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/30 transition-colors cursor-pointer">
-                      <div className="text-2xl">{cat?.icon ?? "📦"}</div>
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+                        <Package className="h-4 w-4 text-gray-500" />
+                      </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-900 truncate">{product.name}</p>
                         <p className="text-xs text-gray-500">

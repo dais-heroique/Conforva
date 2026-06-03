@@ -176,7 +176,7 @@ export default function ExportPage({ params }: PageProps) {
                 return (
                   <div key={lang.code} className="flex items-center justify-between rounded-lg border p-3">
                     <div className="flex items-center gap-2">
-                      <span>{lang.flag}</span>
+                      <span className="text-xs font-mono bg-gray-100 rounded px-1.5 py-0.5 text-gray-600">{lang.code.toUpperCase()}</span>
                       <div>
                         <p className="font-medium text-sm">{lang.label}</p>
                         <p className="text-xs text-gray-500">

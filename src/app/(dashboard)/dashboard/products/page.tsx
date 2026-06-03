@@ -83,7 +83,9 @@ export default async function ProductsPage() {
                 <Card className="hover:shadow-md transition-shadow cursor-pointer">
                   <CardContent className="py-4 px-6">
                     <div className="flex items-center gap-4">
-                      <div className="text-3xl">{cat?.icon ?? "📦"}</div>
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+                        <Package className="h-5 w-5 text-gray-500" />
+                      </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-gray-900">{product.name}</p>
                         <p className="text-sm text-gray-500">

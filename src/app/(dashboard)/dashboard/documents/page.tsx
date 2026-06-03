@@ -57,7 +57,9 @@ export default async function DocumentsPage() {
                 const product = file.products as any
                 return (
                   <div key={file.id} className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-gray-200">
-                    <div className="text-2xl">{product?.product_categories?.icon ?? "📦"}</div>
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+                      <Package className="h-4 w-4 text-gray-500" />
+                    </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-gray-900">{product?.name ?? "Produit inconnu"}</p>
                       <p className="text-xs text-gray-500">
@@ -105,7 +107,9 @@ export default async function DocumentsPage() {
                 const product = ra.products as any
                 return (
                   <div key={ra.id} className="flex items-center gap-4 p-4 rounded-xl border border-gray-100">
-                    <div className="text-2xl">{product?.product_categories?.icon ?? "📦"}</div>
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+                      <Package className="h-4 w-4 text-gray-500" />
+                    </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-gray-900">{product?.name ?? "Produit inconnu"}</p>
                       <p className="text-xs text-gray-500">

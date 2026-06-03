@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Tag, Download, Eye, AlertTriangle, Lock, Zap } from "lucide-react"
+import { Tag, Download, Eye, AlertTriangle, Lock, Zap, Package } from "lucide-react"
 import { SUPPORTED_LANGUAGES, PLAN_LANGUAGES } from "@/lib/utils"
 import type { Plan } from "@/types/supabase"
 import { getLocale, getDictionary } from "@/lib/i18n"
@@ -66,7 +66,9 @@ export default async function LabelsPage() {
             <Card key={productId}>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-3">
-                  <span className="text-2xl">{product?.product_categories?.icon ?? "📦"}</span>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
+                    <Package className="h-4 w-4 text-gray-500" />
+                  </div>
                   <div>
                     <p className="text-base font-semibold">{product?.name}</p>
                     <p className="text-xs text-gray-500 font-normal">
@@ -87,7 +89,7 @@ export default async function LabelsPage() {
                         <div key={lang.code} className="rounded-xl border border-gray-100 bg-gray-50 p-4 space-y-3 opacity-60">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              <span className="text-lg">{lang.flag}</span>
+                              <span className="text-xs font-mono bg-gray-100 rounded px-1.5 py-0.5 text-gray-600">{lang.code.toUpperCase()}</span>
                               <span className="font-medium text-sm text-gray-400">{lang.label}</span>
                             </div>
                             <Lock className="h-3.5 w-3.5 text-gray-400" />
@@ -106,7 +108,7 @@ export default async function LabelsPage() {
                       <div key={lang.code} className={`rounded-xl border p-4 space-y-3 ${label ? "" : "opacity-50"}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <span className="text-lg">{lang.flag}</span>
+                            <span className="text-xs font-mono bg-gray-100 rounded px-1.5 py-0.5 text-gray-600">{lang.code.toUpperCase()}</span>
                             <span className="font-medium text-sm">{lang.label}</span>
                           </div>
                           {label ? (

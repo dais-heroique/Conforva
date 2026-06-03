@@ -157,7 +157,7 @@ export default function SettingsPage() {
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 {SUPPORTED_LANGUAGES.map(l => (
-                  <SelectItem key={l.code} value={l.code}>{l.flag} {l.label}</SelectItem>
+                  <SelectItem key={l.code} value={l.code}>{l.code.toUpperCase()} — {l.label}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

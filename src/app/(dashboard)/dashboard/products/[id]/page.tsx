@@ -15,7 +15,7 @@ import { DisclaimerBanner } from "@/components/layout/disclaimer-banner"
 import { useToast } from "@/hooks/use-toast"
 import {
   Loader2, AlertTriangle, CheckCircle2, ShieldCheck, FileText,
-  Tag, ArrowLeft, RefreshCw, Download, Edit
+  Tag, ArrowLeft, RefreshCw, Download, Edit, Package
 } from "lucide-react"
 import type {
   ProductRow, CategoryRow, RiskAssessmentRow, TechnicalFileRow,
@@ -153,7 +153,9 @@ export default function ProductDetailPage({ params }: PageProps) {
         </Link>
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <span className="text-3xl">{category?.icon ?? "📦"}</span>
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 shrink-0">
+              <Package className="h-5 w-5 text-gray-500" />
+            </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
               <p className="text-sm text-gray-500">
@@ -462,7 +464,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                   <Card key={label.id}>
                     <CardHeader className="pb-2">
                       <CardTitle className="text-base flex items-center gap-2">
-                        <span>{lang?.flag}</span>{lang?.label}
+                        <span className="text-xs font-mono bg-gray-100 rounded px-1.5 py-0.5 text-gray-600">{lang?.code?.toUpperCase()}</span>{lang?.label}
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
