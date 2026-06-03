@@ -56,7 +56,6 @@ export default async function ProductsPage() {
     <div className="min-h-screen bg-[#f8f9fb]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-5">
 
-        {/* Header */}
         <div className="flex items-center justify-between gap-4">
           <div>
             <h1 className="text-xl font-bold text-gray-900">Mes produits</h1>
@@ -80,7 +79,6 @@ export default async function ProductsPage() {
           </div>
         </div>
 
-        {/* Empty state */}
         {count === 0 ? (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center py-20 px-6 text-center">
             <div className="h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-5">
@@ -105,7 +103,6 @@ export default async function ProductsPage() {
           </div>
         ) : (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            {/* Table header — desktop only */}
             <div className="hidden sm:grid grid-cols-[1fr_auto_auto] items-center gap-4 px-5 py-2.5 border-b border-gray-100 bg-gray-50/70">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">Produit</span>
               <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400 w-24 text-center">Score</span>
@@ -124,10 +121,9 @@ export default async function ProductsPage() {
                   <Link key={product.id} href={`/dashboard/products/${product.id}`}>
                     <div className="grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_auto_auto] items-center gap-3 sm:gap-4 px-4 sm:px-5 py-4 hover:bg-gray-50/70 transition-colors group cursor-pointer">
 
-                      {/* Left: icon + info */}
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="h-10 w-10 shrink-0 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-lg">
-                          {cat?.icon ?? "📦"}
+                        <div className="h-10 w-10 shrink-0 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center">
+                          <Package className="h-4 w-4 text-gray-400" />
                         </div>
                         <div className="min-w-0">
                           <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-blue-700 transition-colors leading-snug">
@@ -141,7 +137,6 @@ export default async function ProductsPage() {
                         </div>
                       </div>
 
-                      {/* Center: score bar — hidden on mobile, shown sm+ */}
                       <div className="hidden sm:flex flex-col items-center gap-1 w-24">
                         <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
                           <div
@@ -152,7 +147,6 @@ export default async function ProductsPage() {
                         <span className="text-[11px] font-semibold text-gray-500 tabular-nums">{score}%</span>
                       </div>
 
-                      {/* Right: status pill */}
                       <div className="flex items-center justify-end w-auto sm:w-24">
                         <StatusPill score={score} status={status} />
                       </div>
@@ -163,7 +157,6 @@ export default async function ProductsPage() {
               })}
             </div>
 
-            {/* Footer */}
             <div className="flex items-center justify-between px-5 py-3 border-t border-gray-50 bg-gray-50/50">
               <span className="text-xs text-gray-400">{count} produit{count !== 1 ? "s" : ""} au total</span>
               <Link href="/dashboard/products/new">

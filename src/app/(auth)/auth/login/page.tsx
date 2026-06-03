@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Mail, Loader2, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
+import { useT } from "@/components/providers/locale-provider"
 
 function GoogleIcon() {
   return (
@@ -21,6 +22,7 @@ function GoogleIcon() {
 }
 
 export default function LoginPage() {
+  const t = useT()
   const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
@@ -64,17 +66,18 @@ export default function LoginPage() {
     setLoading(false)
   }
 
+  const tLogin = t.auth.login
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-sm space-y-6">
 
-        {/* Logo */}
         <div className="text-center">
           <Link href="/">
             <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white font-bold text-xl mb-4 hover:bg-blue-700 transition-colors">C</div>
           </Link>
-          <h1 className="text-xl font-bold text-gray-900">Accéder à Conforva</h1>
-          <p className="text-gray-500 text-sm mt-1">Dossiers de conformité GPSR</p>
+          <h1 className="text-xl font-bold text-gray-900">Conforva</h1>
+          <p className="text-gray-500 text-sm mt-1">{tLogin.subtitle}</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-4">
@@ -87,13 +90,16 @@ export default function LoginPage() {
                 </div>
               </div>
               <div>
-                <p className="font-semibold text-gray-900">Vérifiez votre boîte mail</p>
-                <p className="text-sm text-gray-500 mt-1">
-                  Lien envoyé à <strong>{email}</strong>
-                </p>
+                <p className="font-semibold text-gray-900">{tLogin.successTitle}</p>
+                <p
+                  className="text-sm text-gray-500 mt-1"
+                  dangerouslySetInnerHTML={{
+                    __html: tLogin.successDesc.replace('{{email}}', `<strong>${email}</strong>`),
+                  }}
+                />
               </div>
               <Button variant="outline" size="sm" className="w-full" onClick={() => setSent(false)}>
-                Changer d'adresse
+                {tLogin.changeEmail}
               </Button>
             </div>
           ) : (
@@ -104,7 +110,6 @@ export default function LoginPage() {
                 </Alert>
               )}
 
-              {/* Google */}
               <Button
                 type="button"
                 variant="outline"
@@ -116,24 +121,22 @@ export default function LoginPage() {
                   ? <Loader2 className="h-4 w-4 animate-spin" />
                   : <GoogleIcon />
                 }
-                Continuer avec Google
+                {tLogin.continueWithGoogle}
               </Button>
 
-              {/* Divider */}
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-px bg-gray-200" />
-                <span className="text-xs text-gray-400">ou par email</span>
+                <span className="text-xs text-gray-400">{tLogin.orEmail}</span>
                 <div className="flex-1 h-px bg-gray-200" />
               </div>
 
-              {/* Magic link */}
               <form onSubmit={handleMagicLink} className="space-y-3">
                 <div className="space-y-1.5">
-                  <Label htmlFor="email" className="text-sm">Adresse email</Label>
+                  <Label htmlFor="email" className="text-sm">{tLogin.emailLabel}</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="votre@email.com"
+                    placeholder={tLogin.emailPlaceholder}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -143,8 +146,8 @@ export default function LoginPage() {
                 </div>
                 <Button type="submit" className="w-full h-11" disabled={loading || googleLoading}>
                   {loading
-                    ? <><Loader2 className="h-4 w-4 animate-spin" />Envoi en cours…</>
-                    : <><Mail className="h-4 w-4" />Recevoir le lien de connexion</>
+                    ? <><Loader2 className="h-4 w-4 animate-spin" />{tLogin.sending}</>
+                    : <><Mail className="h-4 w-4" />{tLogin.submitButton}</>
                   }
                 </Button>
               </form>
@@ -153,10 +156,10 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-xs text-gray-400 leading-relaxed">
-          En continuant, vous acceptez nos{" "}
-          <Link href="/cgu" className="underline hover:text-gray-600">CGU</Link>{" "}
-          et notre{" "}
-          <Link href="/privacy" className="underline hover:text-gray-600">politique de confidentialité</Link>.
+          {tLogin.termsText}{" "}
+          <Link href="/cgu" className="underline hover:text-gray-600">{tLogin.termsLink}</Link>{" "}
+          {tLogin.andText}{" "}
+          <Link href="/privacy" className="underline hover:text-gray-600">{tLogin.privacyLink}</Link>.
         </p>
 
       </div>

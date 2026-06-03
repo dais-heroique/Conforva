@@ -4,8 +4,10 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Tag, Download, Eye, AlertTriangle, Package } from "lucide-react"
-import { SUPPORTED_LANGUAGES, formatDate } from "@/lib/utils"
+import { Tag, Download, Eye, AlertTriangle, Lock, Zap, Package } from "lucide-react"
+import { SUPPORTED_LANGUAGES, PLAN_LANGUAGES } from "@/lib/utils"
+import type { Plan } from "@/types/supabase"
+import { getLocale, getDictionary } from "@/lib/i18n"
 
 export default async function LabelsPage() {
   const supabase = await createClient()
@@ -15,6 +17,10 @@ export default async function LabelsPage() {
   const { data: org } = await supabase.from("organizations").select("id").eq("owner_id", user.id).single()
   if (!org) redirect("/onboarding")
 
+  const { data: userData } = await supabase.from("users").select("plan").eq("id", user.id).single() as any
+  const plan = (userData?.plan ?? "free") as Plan
+  const availableLangs = PLAN_LANGUAGES[plan] ?? ['fr', 'en']
+
   const productIds = (await supabase.from("products").select("id").eq("org_id", org.id)).data?.map(p => p.id) ?? []
 
   const { data: labels } = await supabase
@@ -23,7 +29,6 @@ export default async function LabelsPage() {
     .in("product_id", productIds)
     .order("created_at", { ascending: false })
 
-  // Group by product
   const byProduct = labels?.reduce((acc, label) => {
     const pid = label.product_id
     if (!acc[pid]) acc[pid] = { product: label.products, labels: [] }
@@ -31,21 +36,27 @@ export default async function LabelsPage() {
     return acc
   }, {} as Record<string, { product: any; labels: typeof labels }>) ?? {}
 
+  const locale = await getLocale()
+  const dict = await getDictionary(locale)
+  const t = dict.dashboard.labels
+
   return (
     <div className="p-4 md:p-8 space-y-6 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Étiquettes multilingues</h1>
-        <p className="text-sm text-gray-500 mt-1">Avertissements de sécurité générés en FR, EN, DE, IT, ES</p>
+        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
+        <p className="text-sm text-gray-500 mt-1">
+          {t.subtitle.replace('{{count}}', String(availableLangs.length))}
+        </p>
       </div>
 
       {Object.keys(byProduct).length === 0 ? (
         <Card>
           <CardContent className="py-16 text-center space-y-3">
             <Tag className="h-16 w-16 text-gray-200 mx-auto" />
-            <p className="text-lg font-medium text-gray-900">Aucune étiquette</p>
-            <p className="text-sm text-gray-500">Les étiquettes sont générées automatiquement lors de la génération IA.</p>
+            <p className="text-lg font-medium text-gray-900">{t.empty.title}</p>
+            <p className="text-sm text-gray-500">{t.empty.desc}</p>
             <Link href="/dashboard/products">
-              <Button size="sm">Voir mes produits</Button>
+              <Button size="sm">{t.empty.viewProducts}</Button>
             </Link>
           </CardContent>
         </Card>
@@ -71,17 +82,39 @@ export default async function LabelsPage() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {SUPPORTED_LANGUAGES.map(lang => {
                     const label = productLabels?.find(l => l.language === lang.code)
+                    const isAvailable = availableLangs.includes(lang.code as any)
+
+                    if (!isAvailable) {
+                      return (
+                        <div key={lang.code} className="rounded-xl border border-gray-100 bg-gray-50 p-4 space-y-3 opacity-60">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-mono bg-gray-100 rounded px-1.5 py-0.5 text-gray-600">{lang.code.toUpperCase()}</span>
+                              <span className="font-medium text-sm text-gray-400">{lang.label}</span>
+                            </div>
+                            <Lock className="h-3.5 w-3.5 text-gray-400" />
+                          </div>
+                          <Link href="/dashboard/billing">
+                            <button className="flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 transition-colors">
+                              <Zap className="h-3 w-3" />
+                              {t.upgradePlan}
+                            </button>
+                          </Link>
+                        </div>
+                      )
+                    }
+
                     return (
-                      <div key={lang.code} className={`rounded-xl border p-4 space-y-3 ${label ? "" : "opacity-40"}`}>
+                      <div key={lang.code} className={`rounded-xl border p-4 space-y-3 ${label ? "" : "opacity-50"}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-mono bg-gray-100 rounded px-1.5 py-0.5">{lang.short}</span>
+                            <span className="text-xs font-mono bg-gray-100 rounded px-1.5 py-0.5 text-gray-600">{lang.code.toUpperCase()}</span>
                             <span className="font-medium text-sm">{lang.label}</span>
                           </div>
                           {label ? (
-                            <Badge variant="success" className="text-xs">Généré</Badge>
+                            <Badge variant="success" className="text-xs">{t.generated}</Badge>
                           ) : (
-                            <Badge variant="secondary" className="text-xs">N/A</Badge>
+                            <Badge variant="secondary" className="text-xs">{t.toGenerate}</Badge>
                           )}
                         </div>
 
@@ -89,26 +122,28 @@ export default async function LabelsPage() {
                           <>
                             {(label.warnings ?? []).length > 0 && (
                               <div className="space-y-1">
-                                {(label.warnings ?? []).slice(0, 3).map((w, i) => (
+                                {(label.warnings ?? []).slice(0, 3).map((w: string, i: number) => (
                                   <div key={i} className="flex items-start gap-1.5 text-xs text-gray-600">
                                     <AlertTriangle className="h-3 w-3 text-amber-500 shrink-0 mt-0.5" />
                                     <span className="line-clamp-1">{w}</span>
                                   </div>
                                 ))}
                                 {(label.warnings ?? []).length > 3 && (
-                                  <p className="text-xs text-gray-400">+ {(label.warnings ?? []).length - 3} autres</p>
+                                  <p className="text-xs text-gray-400">
+                                    {t.moreWarnings.replace('{{count}}', String((label.warnings ?? []).length - 3))}
+                                  </p>
                                 )}
                               </div>
                             )}
                             <div className="flex gap-2">
                               <Link href={`/dashboard/products/${productId}`} className="flex-1">
                                 <Button variant="ghost" size="sm" className="w-full gap-1">
-                                  <Eye className="h-3 w-3" />Voir
+                                  <Eye className="h-3 w-3" />{t.view}
                                 </Button>
                               </Link>
                               <Link href={`/dashboard/products/${productId}/export`} className="flex-1">
                                 <Button variant="outline" size="sm" className="w-full gap-1">
-                                  <Download className="h-3 w-3" />PDF
+                                  <Download className="h-3 w-3" />{t.pdf}
                                 </Button>
                               </Link>
                             </div>

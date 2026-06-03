@@ -15,6 +15,10 @@ html {
   overflow-x: hidden;
 }
 
+html {
+  background-color: #ffffff;
+}
+
 * {
   box-sizing: border-box;
 }

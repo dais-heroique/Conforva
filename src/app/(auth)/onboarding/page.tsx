@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, Building2, Globe, ShoppingBag, ChevronRight } from "lucide-react"
 import { EU_COUNTRIES } from "@/lib/utils"
+import { useT } from "@/components/providers/locale-provider"
 
 const SELLING_PLATFORMS = [
   "Shopify", "WooCommerce", "Prestashop", "Amazon", "Etsy",
@@ -18,6 +19,7 @@ const SELLING_PLATFORMS = [
 ]
 
 export default function OnboardingPage() {
+  const t = useT()
   const router = useRouter()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -63,13 +65,15 @@ export default function OnboardingPage() {
     router.push("/dashboard")
   }
 
+  const tOnboard = t.auth.onboarding
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-4">
       <div className="w-full max-w-lg space-y-6">
         <div className="text-center">
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white font-bold text-2xl mb-4">C</div>
-          <h1 className="text-2xl font-bold text-gray-900">Bienvenue sur Conforva</h1>
-          <p className="text-gray-500 mt-1">Configurons votre espace en 2 étapes</p>
+          <h1 className="text-2xl font-bold text-gray-900">{tOnboard.title}</h1>
+          <p className="text-gray-500 mt-1">{tOnboard.subtitle}</p>
         </div>
 
         {/* Progress */}
@@ -82,22 +86,22 @@ export default function OnboardingPage() {
         {step === 1 && (
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Building2 className="h-5 w-5 text-blue-600" />Votre organisation</CardTitle>
-              <CardDescription>Votre nom, votre boutique ou votre entreprise</CardDescription>
+              <CardTitle className="flex items-center gap-2"><Building2 className="h-5 w-5 text-blue-600" />{tOnboard.step1.title}</CardTitle>
+              <CardDescription>{tOnboard.step1.desc}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
               <div className="space-y-2">
-                <Label htmlFor="orgName">Votre nom, boutique ou entreprise *</Label>
+                <Label htmlFor="orgName">{tOnboard.step1.orgName}</Label>
                 <Input
                   id="orgName"
-                  placeholder="ex : Jean Dupont, Ma Boutique, Société XYZ"
+                  placeholder={tOnboard.step1.orgNamePlaceholder}
                   value={form.orgName}
                   onChange={e => update("orgName", e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Pays de votre entreprise *</Label>
+                <Label>{tOnboard.step1.country}</Label>
                 <Select value={form.country} onValueChange={v => update("country", v)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -108,10 +112,10 @@ export default function OnboardingPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="vatNumber">Numéro TVA intracommunautaire (optionnel)</Label>
+                <Label htmlFor="vatNumber">{tOnboard.step1.vatNumber}</Label>
                 <Input
                   id="vatNumber"
-                  placeholder="FR12345678901"
+                  placeholder={tOnboard.step1.vatPlaceholder}
                   value={form.vatNumber}
                   onChange={e => update("vatNumber", e.target.value)}
                 />
@@ -121,7 +125,7 @@ export default function OnboardingPage() {
                 onClick={() => setStep(2)}
                 disabled={!form.orgName || !form.country}
               >
-                Continuer <ChevronRight className="h-4 w-4" />
+                {tOnboard.step1.continue} <ChevronRight className="h-4 w-4" />
               </Button>
             </CardContent>
           </Card>
@@ -130,15 +134,15 @@ export default function OnboardingPage() {
         {step === 2 && (
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><ShoppingBag className="h-5 w-5 text-blue-600" />Votre activité e-commerce</CardTitle>
-              <CardDescription>Votre plateforme de vente et préférences</CardDescription>
+              <CardTitle className="flex items-center gap-2"><ShoppingBag className="h-5 w-5 text-blue-600" />{tOnboard.step2.title}</CardTitle>
+              <CardDescription>{tOnboard.step2.desc}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
               <div className="space-y-2">
-                <Label>Plateforme de vente principale</Label>
+                <Label>{tOnboard.step2.platform}</Label>
                 <Select value={form.platform} onValueChange={v => update("platform", v)}>
-                  <SelectTrigger><SelectValue placeholder="Sélectionnez..." /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder={tOnboard.step2.platformPlaceholder} /></SelectTrigger>
                   <SelectContent>
                     {SELLING_PLATFORMS.map(p => (
                       <SelectItem key={p} value={p}>{p}</SelectItem>
@@ -147,7 +151,7 @@ export default function OnboardingPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label><Globe className="inline h-4 w-4 mr-1" />Langue de l'interface</Label>
+                <Label><Globe className="inline h-4 w-4 mr-1" />{tOnboard.step2.language}</Label>
                 <Select value={form.locale} onValueChange={v => update("locale", v)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -160,9 +164,9 @@ export default function OnboardingPage() {
                 </Select>
               </div>
               <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setStep(1)} className="flex-1">Retour</Button>
+                <Button variant="outline" onClick={() => setStep(1)} className="flex-1">{tOnboard.step2.back}</Button>
                 <Button onClick={handleSubmit} disabled={loading} className="flex-1">
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Accéder au dashboard"}
+                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : tOnboard.step2.submit}
                 </Button>
               </div>
             </CardContent>

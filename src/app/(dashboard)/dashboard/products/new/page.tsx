@@ -10,44 +10,36 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Package, ArrowRight, ArrowLeft, Link2, Download, CheckCircle2, X } from "lucide-react"
+import { Loader2, Package, ArrowRight, ArrowLeft, Lock, Zap } from "lucide-react"
+import Link from "next/link"
 import type { CategoryRow } from "@/types/supabase"
-import { WORLD_MARKETS, WORLD_MARKET_REGIONS } from "@/lib/utils"
+import { PLAN_LIMITS, type Plan } from "@/types/supabase"
+import { EU_COUNTRIES } from "@/lib/utils"
+import { useT } from "@/components/providers/locale-provider"
 
-type ImporterType = "shopify" | "woocommerce" | null
-
-interface ImportedData {
-  name?: string
-  description?: string
-  reference?: string
-  price?: string | null
-  imageUrl?: string | null
-  category_hint?: string | null
-  materials_hint?: string | null
+const PLAN_LABELS: Record<Plan, string> = {
+  free: "Gratuit",
+  starter: "Starter",
+  growth: "Growth",
+  pro: "Pro",
+  enterprise: "Enterprise",
 }
 
 export default function NewProductPage() {
+  const t = useT()
   const router = useRouter()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [categories, setCategories] = useState<CategoryRow[]>([])
 
-  // Importer state
-  const [activeImporter, setActiveImporter] = useState<ImporterType>(null)
-  const [importLoading, setImportLoading] = useState(false)
-  const [importError, setImportError] = useState("")
-  const [importSuccess, setImportSuccess] = useState(false)
+  // Plan limit state
+  const [checkingAccess, setCheckingAccess] = useState(true)
+  const [limitReached, setLimitReached] = useState(false)
+  const [userPlan, setUserPlan] = useState<Plan>("free")
+  const [productCount, setProductCount] = useState(0)
 
-  // Shopify importer fields
-  const [shopifyUrl, setShopifyUrl] = useState("")
 
-  // WooCommerce importer fields
-  const [wooSiteUrl, setWooSiteUrl] = useState("")
-  const [wooKey, setWooKey] = useState("")
-  const [wooSecret, setWooSecret] = useState("")
-  const [wooProductId, setWooProductId] = useState("")
-  const [wooProducts, setWooProducts] = useState<ImportedData[]>([])
   const [form, setForm] = useState({
     name: "",
     reference: "",
@@ -63,8 +55,39 @@ export default function NewProductPage() {
   })
 
   useEffect(() => {
-    createClient().from("product_categories").select("*").order("sort_order")
-      .then(({ data }) => { if (data) setCategories(data) })
+    async function init() {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const [{ data: userData }, { data: org }, { data: cats }] = await Promise.all([
+        supabase.from("users").select("plan").eq("id", user.id).single() as any,
+        supabase.from("organizations").select("id").eq("owner_id", user.id).single() as any,
+        supabase.from("product_categories").select("*").order("sort_order"),
+      ])
+
+      if (cats) setCategories(cats)
+
+      if (userData && org) {
+        const plan = (userData.plan ?? "free") as Plan
+        setUserPlan(plan)
+
+        const { count } = await supabase
+          .from("products")
+          .select("id", { count: "exact", head: true })
+          .eq("org_id", org.id)
+
+        const current = count ?? 0
+        setProductCount(current)
+
+        if (current >= PLAN_LIMITS[plan]) {
+          setLimitReached(true)
+        }
+      }
+
+      setCheckingAccess(false)
+    }
+    init()
   }, [])
 
   function update(key: string, value: string) {
@@ -194,12 +217,69 @@ export default function NewProductPage() {
   }
 
   const selectedCategory = categories.find(c => c.id === form.category_id)
+  const tNp = t.dashboard.newProduct
+
+  if (checkingAccess) {
+    return (
+      <div className="p-8 max-w-2xl mx-auto flex items-center justify-center py-20">
+        <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+      </div>
+    )
+  }
+
+  if (limitReached) {
+    const limit = PLAN_LIMITS[userPlan]
+    const nextPlan = userPlan === "free" ? "Starter" : userPlan === "starter" ? "Growth" : "Pro"
+    return (
+      <div className="p-8 max-w-2xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{tNp.title}</h1>
+        </div>
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="py-10 text-center space-y-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 mx-auto">
+              <Lock className="h-6 w-6 text-amber-600" />
+            </div>
+            <div className="space-y-1.5">
+              <p className="text-lg font-semibold text-gray-900">{tNp.limitReached.title}</p>
+              <p
+                className="text-sm text-gray-600"
+                dangerouslySetInnerHTML={{
+                  __html: tNp.limitReached.desc
+                    .replace('{{plan}}', PLAN_LABELS[userPlan])
+                    .replace('{{limit}}', limit === 1 ? '1 produit' : `${limit} produits`)
+                    .replace('{{count}}', String(productCount)),
+                }}
+              />
+              <p
+                className="text-sm text-gray-500"
+                dangerouslySetInnerHTML={{
+                  __html: tNp.limitReached.nextPlan.replace('{{plan}}', nextPlan),
+                }}
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+              <Link href="/dashboard/billing">
+                <Button className="gap-2">
+                  <Zap className="h-4 w-4" />
+                  {tNp.limitReached.upgrade}
+                </Button>
+              </Link>
+              <Link href="/dashboard/products">
+                <Button variant="outline">{tNp.limitReached.viewProducts}</Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="p-4 md:p-8 max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Nouveau produit</h1>
-        <p className="text-sm text-gray-500 mt-1">Étape {step} sur 2</p>
+        <h1 className="text-2xl font-bold text-gray-900">{tNp.title}</h1>
+        <p className="text-sm text-gray-500 mt-1">{tNp.stepOf.replace('{{step}}', String(step))}</p>
       </div>
 
       {/* Importer */}
@@ -369,38 +449,24 @@ export default function NewProductPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Package className="h-5 w-5 text-blue-600" />
-              Informations générales
+              {tNp.step1.title}
             </CardTitle>
-            <CardDescription>Identifiez votre produit et sélectionnez sa catégorie GPSR.</CardDescription>
+            <CardDescription>{tNp.step1.desc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="name">Nom du produit *</Label>
-              <Input id="name" placeholder="ex: Bougie parfumée Vanille 200g" value={form.name} onChange={e => update("name", e.target.value)} />
+              <Label htmlFor="name">{tNp.step1.productName}</Label>
+              <Input id="name" placeholder={tNp.step1.productNamePlaceholder} value={form.name} onChange={e => update("name", e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="reference">Référence / SKU</Label>
-              <Input id="reference" placeholder="ex: BOU-VANI-200" value={form.reference} onChange={e => update("reference", e.target.value)} />
+              <Label htmlFor="reference">{tNp.step1.reference}</Label>
+              <Input id="reference" placeholder={tNp.step1.referencePlaceholder} value={form.reference} onChange={e => update("reference", e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="product_url" className="flex items-center gap-1.5">
-                <Link2 className="h-3.5 w-3.5" />
-                URL de la page produit
-                <span className="text-xs text-gray-400 font-normal ml-1">— l'IA ira lire la page pour enrichir l'analyse</span>
-              </Label>
-              <Input
-                id="product_url"
-                type="url"
-                placeholder="https://votreboutique.com/produit/..."
-                value={form.product_url}
-                onChange={e => update("product_url", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Catégorie de produit *</Label>
+              <Label>{tNp.step1.category}</Label>
               <Select value={form.category_id} onValueChange={v => update("category_id", v)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Sélectionnez une catégorie..." />
+                  <SelectValue placeholder={tNp.step1.categoryPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map(cat => (
@@ -415,7 +481,7 @@ export default function NewProductPage() {
                   <p className="font-medium text-blue-900">{selectedCategory.name_fr}</p>
                   <p className="text-blue-700">{selectedCategory.description}</p>
                   <p className="text-xs text-blue-600">
-                    Normes : {selectedCategory.applicable_standards?.join(", ")}
+                    {tNp.step1.standards} : {selectedCategory.applicable_standards?.join(", ")}
                   </p>
                 </div>
               )}
@@ -425,7 +491,7 @@ export default function NewProductPage() {
               onClick={() => setStep(2)}
               disabled={!form.name || !form.category_id}
             >
-              Continuer <ArrowRight className="h-4 w-4" />
+              {tNp.step1.continue} <ArrowRight className="h-4 w-4" />
             </Button>
           </CardContent>
         </Card>
@@ -434,64 +500,53 @@ export default function NewProductPage() {
       {step === 2 && (
         <Card>
           <CardHeader>
-            <CardTitle>Caractéristiques physiques</CardTitle>
-            <CardDescription>Ces informations enrichissent l'analyse de risque.</CardDescription>
+            <CardTitle>{tNp.step2.title}</CardTitle>
+            <CardDescription>{tNp.step2.desc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="intended_use">Usage prévu</Label>
-              <Textarea id="intended_use" placeholder="ex: Bougie décorative pour usage intérieur en espace adulte" value={form.intended_use} onChange={e => update("intended_use", e.target.value)} rows={2} />
+              <Label htmlFor="intended_use">{tNp.step2.intendedUse}</Label>
+              <Textarea id="intended_use" placeholder={tNp.step2.intendedUsePlaceholder} value={form.intended_use} onChange={e => update("intended_use", e.target.value)} rows={2} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="materials">Matériaux principaux (séparés par des virgules)</Label>
-              <Input id="materials" placeholder="ex: cire de soja, mèche coton, verre" value={form.materials} onChange={e => update("materials", e.target.value)} />
+              <Label htmlFor="materials">{tNp.step2.materials}</Label>
+              <Input id="materials" placeholder={tNp.step2.materialsPlaceholder} value={form.materials} onChange={e => update("materials", e.target.value)} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="weight_g">Poids (g)</Label>
+                <Label htmlFor="weight_g">{tNp.step2.weight}</Label>
                 <Input id="weight_g" type="number" placeholder="200" value={form.weight_g} onChange={e => update("weight_g", e.target.value)} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="length_mm">Longueur (mm)</Label>
+                <Label htmlFor="length_mm">{tNp.step2.length}</Label>
                 <Input id="length_mm" type="number" placeholder="80" value={form.length_mm} onChange={e => update("length_mm", e.target.value)} />
               </div>
             </div>
             <div>
-              <Label className="mb-2 block">Marchés cibles</Label>
-              <div className="space-y-3">
-                {WORLD_MARKET_REGIONS.map(region => {
-                  const regionLabels: Record<string, string> = { EU: 'Union Européenne', Europe: 'Europe (hors UE)', Americas: 'Amériques', 'Asia-Pacific': 'Asie-Pacifique', MEA: 'Moyen-Orient & Afrique' }
-                  const countries = WORLD_MARKETS.filter(c => c.region === region)
-                  return (
-                    <div key={region}>
-                      <p className="text-xs font-medium text-gray-500 mb-1.5">{regionLabels[region]}</p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {countries.map(country => (
-                          <button
-                            key={country.code}
-                            type="button"
-                            onClick={() => toggleMarket(country.code)}
-                            className={`rounded-full px-2.5 py-1 text-xs font-medium border transition-colors ${
-                              form.target_markets.includes(country.code)
-                                ? "bg-blue-600 text-white border-blue-600"
-                                : "bg-white text-gray-600 border-gray-200 hover:border-blue-300"
-                            }`}
-                          >
-                            {country.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )
-                })}
+              <Label className="mb-2 block">{tNp.step2.targetMarkets}</Label>
+              <div className="flex flex-wrap gap-2">
+                {EU_COUNTRIES.slice(0, 12).map(country => (
+                  <button
+                    key={country.code}
+                    type="button"
+                    onClick={() => toggleMarket(country.code)}
+                    className={`rounded-full px-3 py-1 text-xs font-medium border transition-colors ${
+                      form.target_markets.includes(country.code)
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "bg-white text-gray-600 border-gray-200 hover:border-blue-300"
+                    }`}
+                  >
+                    {country.label}
+                  </button>
+                ))}
               </div>
             </div>
             <div className="flex gap-3">
               <Button variant="outline" onClick={() => setStep(1)} className="flex-1 gap-2">
-                <ArrowLeft className="h-4 w-4" /> Retour
+                <ArrowLeft className="h-4 w-4" /> {tNp.step2.back}
               </Button>
               <Button onClick={handleSubmit} disabled={loading} className="flex-1 gap-2">
-                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Créer et remplir le questionnaire <ArrowRight className="h-4 w-4" /></>}
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <>{tNp.step2.submit} <ArrowRight className="h-4 w-4" /></>}
               </Button>
             </div>
           </CardContent>

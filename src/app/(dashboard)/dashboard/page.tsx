@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button"
 import {
   Package, Plus, CheckCircle2, Clock, AlertCircle,
   TrendingUp, FileText, Shield, Tag, Zap, Activity,
-  BarChart3, ArrowRight, TriangleAlert, CircleCheck,
+  ArrowRight, TriangleAlert, CircleCheck,
 } from "lucide-react"
 import { getComplianceBg, formatDate } from "@/lib/utils"
-import type { Plan } from "@/types/supabase"
+import { getLocale, getDictionary } from "@/lib/i18n"
 
 const ACTION_LABELS: Record<string, string> = {
   generate_risk_assessment: "Analyse de risque générée",
@@ -23,7 +23,6 @@ export default async function DashboardPage() {
   const { data: { user: authUser } } = await supabase.auth.getUser()
   if (!authUser) redirect("/auth/login")
 
-  // Extract first name from OAuth metadata or leave empty
   const rawName: string = authUser.user_metadata?.full_name ?? authUser.user_metadata?.name ?? ""
   const firstName = rawName.trim().split(/\s+/)[0] ?? ""
 
@@ -65,7 +64,6 @@ export default async function DashboardPage() {
 
   const complianceMap = Object.fromEntries((complianceList ?? []).map(c => [c.product_id, c]))
 
-  // Compliance stats
   const total = products?.length ?? 0
   const compliant = (products ?? []).filter(p => (complianceMap[p.id]?.score ?? 0) >= 80).length
   const inProgress = (products ?? []).filter(p => {
@@ -80,7 +78,6 @@ export default async function DashboardPage() {
 
   const hasResponsiblePerson = (responsiblePersons?.length ?? 0) > 0
 
-  // Build required actions list
   const requiredActions: { label: string; href: string; critical: boolean }[] = []
   if (!hasResponsiblePerson) {
     requiredActions.push({
@@ -111,7 +108,6 @@ export default async function DashboardPage() {
     })
   }
 
-  // Products sorted: urgent first, then in progress, then compliant
   const sortedProducts = [...(products ?? [])].sort((a, b) => {
     const sa = complianceMap[a.id]?.score ?? -1
     const sb = complianceMap[b.id]?.score ?? -1
@@ -125,11 +121,14 @@ export default async function DashboardPage() {
   const allProductsCompliant = total > 0 && compliant === total
   const allCompliant = allProductsCompliant && hasResponsiblePerson
 
+  const locale = await getLocale()
+  const dict = await getDictionary(locale)
+  const t = dict.dashboard.home
+
   return (
     <div className="min-h-screen bg-[#f8f9fb]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-5">
 
-        {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-xl font-bold text-gray-900">{greeting}</h1>
@@ -146,7 +145,6 @@ export default async function DashboardPage() {
           </Link>
         </div>
 
-        {/* ── GPSR Compliance overview ── */}
         <div className={`rounded-2xl border p-5 ${allProductsCompliant ? "border-emerald-200 bg-emerald-50" : "border-blue-100 bg-white shadow-sm"}`}>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex-1 min-w-0">
@@ -186,7 +184,6 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* ── Required actions ── */}
         {requiredActions.length > 0 && (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="flex items-center gap-2 px-5 py-3.5 border-b border-gray-50">
@@ -209,7 +206,6 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        {/* ── GPSR Checklist (collapsed when all done) ── */}
         {!allCompliant && total > 0 && (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="px-5 py-3.5 border-b border-gray-50">
@@ -217,30 +213,10 @@ export default async function DashboardPage() {
             </div>
             <div className="divide-y divide-gray-50">
               {[
-                {
-                  art: "Art. 22",
-                  label: "Dossier technique complet (description, tests, normes, traçabilité)",
-                  done: allProductsCompliant,
-                  href: "/dashboard/products",
-                },
-                {
-                  art: "Art. 24",
-                  label: "Déclaration UE de conformité signée pour chaque produit",
-                  done: allProductsCompliant,
-                  href: "/dashboard/documents",
-                },
-                {
-                  art: "Art. 9",
-                  label: "Étiquetage sécurité multilingue (avertissements, fabricant, contact)",
-                  done: allProductsCompliant,
-                  href: "/dashboard/labels",
-                },
-                {
-                  art: "Art. 16",
-                  label: "Personne Responsable EU désignée (obligatoire pour fabricants hors UE)",
-                  done: hasResponsiblePerson,
-                  href: "/dashboard/responsible-person",
-                },
+                { art: "Art. 22", label: "Dossier technique complet (description, tests, normes, traçabilité)", done: allProductsCompliant, href: "/dashboard/products" },
+                { art: "Art. 24", label: "Déclaration UE de conformité signée pour chaque produit", done: allProductsCompliant, href: "/dashboard/documents" },
+                { art: "Art. 9", label: "Étiquetage sécurité multilingue (avertissements, fabricant, contact)", done: allProductsCompliant, href: "/dashboard/labels" },
+                { art: "Art. 16", label: "Personne Responsable EU désignée (obligatoire pour fabricants hors UE)", done: hasResponsiblePerson, href: "/dashboard/responsible-person" },
               ].map(item => (
                 <Link key={item.art} href={item.href}>
                   <div className="flex items-center gap-4 px-5 py-3.5 hover:bg-gray-50/60 transition-colors cursor-pointer group">
@@ -262,10 +238,8 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        {/* ── Products + Activity ── */}
         <div className="grid lg:grid-cols-5 gap-4">
 
-          {/* Products — sorted by urgency */}
           <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-50">
               <h2 className="text-sm font-semibold text-gray-900">Produits</h2>
@@ -295,14 +269,13 @@ export default async function DashboardPage() {
                   const cs = complianceMap[product.id]
                   const score = cs?.score ?? 0
                   const status = cs?.status ?? "incomplete"
-                  const cat = (product as any).product_categories
                   const barColor = score >= 80 ? "bg-emerald-400" : score >= 40 ? "bg-amber-400" : "bg-red-400"
                   const notStarted = !cs
                   return (
                     <Link key={product.id} href={`/dashboard/products/${product.id}`}>
                       <div className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50/70 transition-colors group cursor-pointer">
-                        <div className="h-9 w-9 shrink-0 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-base">
-                          {cat?.icon ?? "📦"}
+                        <div className="h-9 w-9 shrink-0 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center">
+                          <Package className="h-4 w-4 text-gray-400" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-900 truncate group-hover:text-blue-700 transition-colors">
@@ -310,7 +283,7 @@ export default async function DashboardPage() {
                           </p>
                           <div className="flex items-center gap-2 mt-1">
                             {notStarted ? (
-                              <span className="text-[10px] text-gray-400 italic">Non démarré — générer l'analyse</span>
+                              <span className="text-[10px] text-gray-400 italic">Non démarré — générer l&apos;analyse</span>
                             ) : (
                               <>
                                 <div className="w-16 h-1 bg-gray-100 rounded-full overflow-hidden shrink-0">
@@ -344,10 +317,8 @@ export default async function DashboardPage() {
             )}
           </div>
 
-          {/* Right column */}
           <div className="lg:col-span-2 flex flex-col gap-4">
 
-            {/* Quick access — desktop only */}
             <div className="hidden lg:block bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
               <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Accès rapide</p>
               <div className="space-y-0.5">
@@ -368,7 +339,6 @@ export default async function DashboardPage() {
               </div>
             </div>
 
-            {/* Activity */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex-1">
               <div className="px-5 py-4 border-b border-gray-50">
                 <h2 className="text-sm font-semibold text-gray-900">Activité récente</h2>
@@ -410,7 +380,6 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* ── Upsell ── */}
         {userData?.plan === "free" && (
           <div className="bg-white rounded-2xl border border-blue-100 px-5 py-4 shadow-sm">
             <div className="flex items-center justify-between gap-4">
@@ -419,13 +388,13 @@ export default async function DashboardPage() {
                   <TrendingUp className="h-4 w-4 text-blue-600" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-gray-900">Plan Gratuit — 1 référence incluse</p>
-                  <p className="text-xs text-gray-500 truncate">Starter : 5 références · PDF sans watermark · 5 langues — 29€/mois</p>
+                  <p className="text-sm font-semibold text-gray-900">{t.upsell.title}</p>
+                  <p className="text-xs text-gray-500 truncate">{t.upsell.desc}</p>
                 </div>
               </div>
               <Link href="/dashboard/billing" className="shrink-0">
                 <Button size="sm" variant="outline" className="text-blue-700 border-blue-200 hover:bg-blue-50 whitespace-nowrap">
-                  Voir les plans
+                  {t.upsell.upgrade}
                 </Button>
               </Link>
             </div>

@@ -1,0 +1,422 @@
+{
+  "nav": {
+    "features": "Funktionen",
+    "categories": "Kategorien",
+    "pricing": "Preise",
+    "login": "Anmelden",
+    "freeTrial": "Kostenlos testen"
+  },
+  "landing": {
+    "hero": {
+      "badge": "GPSR-Verordnung EU 2023/988 — In Kraft seit Dezember 2024",
+      "title1": "Ihre GPSR-Konformität",
+      "title2": "in wenigen Minuten",
+      "subtitle": "Generieren Sie Ihre technische Dokumentation, Risikobewertung und mehrsprachige Kennzeichnung für <strong>jedes physische Produkt</strong>, das in der EU verkauft wird.",
+      "cta": "Kostenlos starten",
+      "noCard": "Keine Kreditkarte erforderlich · 1 Produkt dauerhaft kostenlos"
+    },
+    "disclaimer": {
+      "text": "<strong>Wichtig:</strong> Conforva ist ein Konformitäts-Hilfswerkzeug, keine rechtliche Garantie. Jede generierte Akte muss vor der EU-Markteinführung von einem Experten validiert werden."
+    },
+    "categories": {
+      "title": "Für alle Ihre physischen Produkte",
+      "subtitle": "Unabhängig von Ihrer Branche passt Conforva die Analyse an die geltenden Normen an.",
+      "items": {
+        "candles": "Kerzen",
+        "toys": "Spielzeug",
+        "textiles": "Textilien",
+        "cosmetics": "Kosmetik",
+        "electronics": "Elektronik",
+        "baby": "Baby & Kinderprodukte",
+        "decor": "Heimdekoration",
+        "furniture": "Möbel",
+        "food_contact": "Lebensmittelkontakt",
+        "sports": "Sport & Freizeit",
+        "more": "& vieles mehr..."
+      }
+    },
+    "features": {
+      "title": "Alles, was Sie für die GPSR-Konformität benötigen",
+      "items": {
+        "risk_analysis": {
+          "title": "KI-Risikobewertung",
+          "desc": "Kategorienspezifische GPSR-Risikobewertung, KI-generiert auf Basis anwendbarer EU-Normen (EN 71, EN 15493, ISO usw.)."
+        },
+        "technical_file": {
+          "title": "Technische Dokumentation PDF",
+          "desc": "Automatische Erstellung der vollständigen technischen Dokumentation: Produktbeschreibung, identifizierte Risiken, Minderungsmaßnahmen, referenzierte Normen."
+        },
+        "multilingual_labels": {
+          "title": "Mehrsprachige Kennzeichnung",
+          "desc": "Sicherheitshinweise übersetzt in FR, EN, DE, IT, ES. CLP-Angaben für Allergene, anwendbare EN-Piktogramme."
+        },
+        "responsible_person": {
+          "title": "EU-Verantwortliche Person",
+          "desc": "Verwaltung Ihrer Kontaktdaten der EU-Verantwortlichen Person, Pflichtangabe für alle in der Europäischen Union verkauften Produkte."
+        },
+        "catalog_import": {
+          "title": "Katalogimport",
+          "desc": "CSV-Import oder Shopify/WooCommerce-Connector für die Massenverarbeitung mehrerer Referenzen."
+        },
+        "dynamic_questionnaire": {
+          "title": "Dynamischer Fragebogen",
+          "desc": "Auf Ihre Produktkategorie zugeschnittene Fragen: Kerzen, Spielzeug und Kosmetik haben unterschiedliche Anforderungen."
+        }
+      }
+    },
+    "how_it_works": {
+      "title": "Wie funktioniert es?",
+      "steps": {
+        "step1": {
+          "title": "Kategorie auswählen",
+          "desc": "Kerzen, Spielzeug, Kosmetik, Elektronik… Über 10 Kategorien abgedeckt."
+        },
+        "step2": {
+          "title": "Fragebogen ausfüllen",
+          "desc": "Auf Ihre Kategorie zugeschnittene Fragen. Maximal 5 bis 10 Minuten."
+        },
+        "step3": {
+          "title": "KI erstellt die Dokumentation",
+          "desc": "Risikobewertung + technische Dokumentation auf Basis von EU-Normen."
+        },
+        "step4": {
+          "title": "Validieren und exportieren",
+          "desc": "Obligatorische menschliche Validierung, mehrsprachiger PDF-Export."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Einfache, transparente Preise",
+      "subtitle": "Bezahlen Sie entsprechend der Anzahl der von Ihnen verwalteten Produktreferenzen.",
+      "mostPopular": "Beliebteste",
+      "plans": {
+        "free": {
+          "name": "Kostenlos",
+          "products": "1 Referenz",
+          "features": ["1 Risikobewertung", "Technische Dokumentation mit Wasserzeichen", "PDF-Export"],
+          "cta": "Kostenlos starten"
+        },
+        "starter": {
+          "name": "Starter",
+          "products": "5 Referenzen",
+          "features": ["5 vollständige Dokumentationen", "Mehrsprachige Etiketten", "Menschliche Validierung", "E-Mail-Support"],
+          "cta": "Starten"
+        },
+        "growth": {
+          "name": "Growth",
+          "products": "30 Referenzen",
+          "features": ["30 vollständige Dokumentationen", "CSV-Import", "Shopify-Connector", "Normenänderungs-Benachrichtigungen", "Prioritäts-Support"],
+          "cta": "Growth wählen"
+        },
+        "pro": {
+          "name": "Pro",
+          "products": "150 Referenzen",
+          "features": ["150 Dokumentationen", "WooCommerce", "EU Verantwortliche Person", "API-Zugang", "Dedizierter Support"],
+          "cta": "Pro wählen"
+        }
+      }
+    },
+    "cta": {
+      "title": "Starten Sie Ihre erste GPSR-Dokumentation",
+      "subtitle": "Kostenlos für 1 Produkt. Keine Kreditkarte erforderlich.",
+      "button": "Kostenloses Konto erstellen"
+    },
+    "footer": {
+      "disclaimer": "Konformitätshilfe — kein Rechtsgutachten",
+      "cgu": "Nutzungsbedingungen",
+      "privacy": "Datenschutz"
+    }
+  },
+  "auth": {
+    "login": {
+      "subtitle": "GPSR-Konformität für EU-Händler",
+      "continueWithGoogle": "Mit Google fortfahren",
+      "orEmail": "oder per E-Mail",
+      "cardTitle": "Anmelden / Registrieren",
+      "cardDesc": "Geben Sie Ihre E-Mail-Adresse ein, um einen sicheren Anmeldelink zu erhalten.",
+      "emailLabel": "E-Mail-Adresse",
+      "emailPlaceholder": "sie@ihrshop.de",
+      "submitButton": "Anmeldelink erhalten",
+      "sending": "Wird gesendet...",
+      "successTitle": "Prüfen Sie Ihr Postfach!",
+      "successDesc": "Ein Anmeldelink wurde an <strong>{{email}}</strong> gesendet. Klicken Sie darauf, um auf Ihr Konto zuzugreifen.",
+      "changeEmail": "E-Mail ändern",
+      "termsText": "Mit dem Fortfahren stimmen Sie unseren",
+      "termsLink": "Nutzungsbedingungen",
+      "andText": "und unserer",
+      "privacyLink": "Datenschutzerklärung",
+      "disclaimer": "Conforva ist ein GPSR-Konformitäts-Hilfswerkzeug. Generierte Dokumente stellen keine Rechtsberatung dar und garantieren nicht die Produktkonformität. Eine Validierung durch einen Rechtsexperten oder eine benannte Stelle bleibt vor jeder EU-Markteinführung unerlässlich."
+    },
+    "onboarding": {
+      "title": "Willkommen bei Conforva",
+      "subtitle": "Richten wir Ihren Bereich in 2 Schritten ein",
+      "step1": {
+        "title": "Ihre Organisation",
+        "desc": "Informationen über Ihren Shop / Ihr Unternehmen",
+        "orgName": "Name Ihres Shops / Unternehmens *",
+        "orgNamePlaceholder": "Mein Shop GmbH",
+        "country": "Land Ihres Unternehmens *",
+        "vatNumber": "Umsatzsteuer-Identifikationsnummer (optional)",
+        "vatPlaceholder": "DE123456789",
+        "continue": "Weiter"
+      },
+      "step2": {
+        "title": "Ihre E-Commerce-Aktivität",
+        "desc": "Ihre Verkaufsplattform und Präferenzen",
+        "platform": "Hauptverkaufsplattform",
+        "platformPlaceholder": "Auswählen...",
+        "language": "Oberflächensprache",
+        "back": "Zurück",
+        "submit": "Zum Dashboard"
+      }
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "products": "Meine Produkte",
+      "documents": "Dokumente",
+      "labels": "Etiketten",
+      "responsiblePerson": "Verantwortliche Person",
+      "settings": "Einstellungen",
+      "organisation": "Organisation",
+      "signOut": "Abmelden"
+    },
+    "home": {
+      "title": "Dashboard",
+      "welcome": "Willkommen, {{name}}",
+      "newProduct": "Neues Produkt",
+      "stats": {
+        "products": "Produkte",
+        "compliant": "Konform",
+        "inProgress": "In Bearbeitung",
+        "incomplete": "Unvollständig"
+      },
+      "quickActions": {
+        "newProduct": "Neues Produkt",
+        "newProductDesc": "Produkt erstellen oder importieren",
+        "documents": "Meine Dokumente",
+        "documentsDesc": "Generierte technische Dokumentationen",
+        "responsiblePerson": "Verantwortliche Person",
+        "responsiblePersonDesc": "Pflicht-EU-Kontaktdaten"
+      },
+      "productsList": {
+        "title": "Meine Produkte",
+        "viewAll": "Alle anzeigen",
+        "empty": "Noch keine Produkte.",
+        "createFirst": "Mein erstes Produkt erstellen",
+        "unknownCategory": "Unbekannte Kategorie",
+        "ref": "Ref"
+      },
+      "status": {
+        "compliant": "Konform",
+        "inProgress": "In Bearbeitung",
+        "incomplete": "Unvollständig"
+      },
+      "upsell": {
+        "title": "Kostenlosplan — 1 Referenz enthalten",
+        "desc": "Wechseln Sie zu Starter, um bis zu 5 Referenzen ohne Wasserzeichen zu verwalten.",
+        "upgrade": "Upgraden"
+      }
+    },
+    "products": {
+      "title": "Meine Produkte",
+      "count": "Produkt(e)",
+      "import": "Importieren",
+      "newProduct": "Neues Produkt",
+      "empty": {
+        "title": "Keine Produkte",
+        "desc": "Erstellen Sie Ihr erstes Produkt, um mit Ihrer GPSR-Dokumentation zu beginnen.",
+        "importCsv": "CSV importieren",
+        "createManually": "Manuell erstellen"
+      },
+      "status": {
+        "compliant": "Konform",
+        "inProgress": "In Bearbeitung",
+        "incomplete": "Unvollständig"
+      },
+      "complete": "vollständig",
+      "uncategorized": "Nicht kategorisiert"
+    },
+    "newProduct": {
+      "title": "Neues Produkt",
+      "stepOf": "Schritt {{step}} von 2",
+      "limitReached": {
+        "title": "Limit erreicht",
+        "desc": "Ihr <strong>{{plan}}</strong>-Plan beinhaltet {{limit}}. Sie haben bereits {{count}} Produkt(e).",
+        "upgrade": "Plan upgraden",
+        "viewProducts": "Meine Produkte anzeigen",
+        "nextPlan": "Wechseln Sie zu <strong>{{plan}}</strong>, um weitere Produkte hinzuzufügen."
+      },
+      "step1": {
+        "title": "Allgemeine Informationen",
+        "desc": "Identifizieren Sie Ihr Produkt und wählen Sie seine GPSR-Kategorie.",
+        "productName": "Produktname *",
+        "productNamePlaceholder": "z.B. Vanille-Duftkerze 200g",
+        "reference": "Referenz / SKU",
+        "referencePlaceholder": "z.B. KER-VAN-200",
+        "category": "Produktkategorie *",
+        "categoryPlaceholder": "Kategorie auswählen...",
+        "standards": "Normen",
+        "continue": "Weiter"
+      },
+      "step2": {
+        "title": "Physikalische Eigenschaften",
+        "desc": "Diese Informationen bereichern die Risikobewertung.",
+        "intendedUse": "Vorgesehene Verwendung",
+        "intendedUsePlaceholder": "z.B. Dekorationskerze für den Innenbereich, für Erwachsene",
+        "materials": "Hauptmaterialien (kommagetrennt)",
+        "materialsPlaceholder": "z.B. Sojawachs, Baumwolldocht, Glas",
+        "weight": "Gewicht (g)",
+        "length": "Länge (mm)",
+        "targetMarkets": "EU-Zielmärkte",
+        "back": "Zurück",
+        "submit": "Erstellen und Fragebogen ausfüllen"
+      }
+    },
+    "billing": {
+      "title": "Abrechnung",
+      "subtitle": "Verwalten Sie Ihr Conforva-Abonnement",
+      "currentPlan": "Aktueller Plan",
+      "referencesUsed": "{{used}} / {{max}} Referenzen verwendet",
+      "manageSubscription": "Abonnement verwalten",
+      "choosePlan": "Plan auswählen",
+      "mostPopular": "Beliebteste",
+      "currentPlanBadge": "Aktueller Plan",
+      "reference": "Referenz",
+      "references": "Referenzen",
+      "currentPlanButton": "Aktueller Plan",
+      "freeButton": "Kostenlos",
+      "choosePlanButton": "{{name}} wählen",
+      "enterprise": {
+        "title": "Enterprise — 150+ Referenzen",
+        "desc": "Individuelle Preisgestaltung · API-Zugang · SLA · Dedizierter Account-Manager",
+        "contact": "Kontaktieren Sie uns"
+      },
+      "plans": {
+        "free": {
+          "features": ["1 Produktreferenz", "KI-Risikobewertung", "PDF-Dokumentation mit Wasserzeichen", "Dynamischer Fragebogen"]
+        },
+        "starter": {
+          "features": ["5 Produktreferenzen", "Dokumentationen ohne Wasserzeichen", "Mehrsprachige Etiketten (5 Sprachen)", "Rückverfolgbare menschliche Validierung", "PDF-Export", "E-Mail-Support"]
+        },
+        "growth": {
+          "features": ["30 Produktreferenzen", "CSV-Import", "Shopify-Connector", "Normenänderungs-Benachrichtigungen", "EU Verantwortliche Person", "Prioritäts-Support"]
+        },
+        "pro": {
+          "features": ["150 Produktreferenzen", "WooCommerce-Connector", "API-Zugang", "Individuelle Berichte", "Dedizierter Account-Manager"]
+        }
+      }
+    },
+    "settings": {
+      "title": "Einstellungen",
+      "subtitle": "Verwalten Sie Ihre Organisation und Präferenzen",
+      "org": {
+        "title": "Organisation",
+        "desc": "Informationen über Ihren Shop / Ihr Unternehmen",
+        "name": "Organisationsname",
+        "country": "Land",
+        "vatNumber": "USt-IdNr.",
+        "website": "Website",
+        "websitePlaceholder": "https://meinshop.de",
+        "saved": "Organisation gespeichert.",
+        "save": "Speichern"
+      },
+      "preferences": {
+        "title": "Präferenzen",
+        "language": "Oberflächensprache",
+        "email": "Konto-E-Mail",
+        "emailNote": "Die E-Mail-Adresse kann hier nicht geändert werden.",
+        "saved": "Präferenzen gespeichert.",
+        "save": "Speichern"
+      },
+      "compliance": {
+        "title": "Konformität & Nutzungsbedingungen",
+        "desc": "Conforva ist ein GPSR-Konformitäts-Hilfswerkzeug (EU 2023/988). Generierte Dokumente stellen keine Rechtsberatung dar und garantieren nicht die regulatorische Konformität Ihrer Produkte.",
+        "cgu": "Nutzungsbedingungen",
+        "privacy": "Datenschutzerklärung"
+      }
+    },
+    "responsiblePerson": {
+      "title": "EU-Verantwortliche Person",
+      "subtitle": "Pflichtangabe für alle auf dem europäischen Markt in Verkehr gebrachten Produkte (GPSR Art. 4)",
+      "infoTitle": "Was ist die Verantwortliche Person?",
+      "infoDesc": "Die Verordnung über die allgemeine Produktsicherheit verlangt, dass für jedes auf dem Markt bereitgestellte Produkt ein in der EU ansässiger Hersteller, Importeur oder Bevollmächtigter benannt wird. Diese Person ist für die Konformitätspflichten und die Kommunikation mit den Behörden verantwortlich.",
+      "cardTitle": "Kontaktdaten der verantwortlichen Person",
+      "cardDesc": "Diese Informationen erscheinen auf allen Ihren technischen Dokumentationen und Etiketten.",
+      "type": "Art der verantwortlichen Person *",
+      "types": {
+        "manufacturer": "Hersteller (in der EU ansässig)",
+        "importer": "EU-Importeur",
+        "authorized_rep": "EU-Bevollmächtigter"
+      },
+      "companyName": "Unternehmensname *",
+      "companyNamePlaceholder": "Meine Firma GmbH",
+      "addressLine": "Adresse *",
+      "addressLinePlaceholder": "Musterstraße 123",
+      "postalCode": "Postleitzahl *",
+      "postalCodePlaceholder": "10115",
+      "city": "Stadt *",
+      "cityPlaceholder": "Berlin",
+      "country": "Land (EU) *",
+      "email": "Kontakt-E-Mail *",
+      "emailPlaceholder": "kontakt@meinefirma.de",
+      "phone": "Telefon",
+      "phonePlaceholder": "+49 30 12345678",
+      "save": "Speichern",
+      "savedSuccess": "Informationen erfolgreich gespeichert.",
+      "statusActive": "Aktiv",
+      "statusInactive": "Inaktiv"
+    },
+    "labels": {
+      "title": "Mehrsprachige Etiketten",
+      "subtitle": "GPSR-Sicherheitshinweise — {{count}} Sprache(n) in Ihrem Plan enthalten",
+      "empty": {
+        "title": "Keine Etiketten",
+        "desc": "Etiketten werden automatisch bei der KI-Generierung erstellt.",
+        "viewProducts": "Meine Produkte anzeigen"
+      },
+      "generated": "Generiert",
+      "toGenerate": "Zu generieren",
+      "upgradePlan": "Höherer Plan erforderlich",
+      "view": "Anzeigen",
+      "pdf": "PDF",
+      "moreWarnings": "+ {{count}} weitere"
+    }
+  },
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "loading": "Wird geladen...",
+    "back": "Zurück",
+    "continue": "Weiter",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "confirm": "Bestätigen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "create": "Erstellen",
+    "update": "Aktualisieren",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "export": "Exportieren",
+    "import": "Importieren",
+    "download": "Herunterladen",
+    "upload": "Hochladen",
+    "view": "Anzeigen",
+    "add": "Hinzufügen",
+    "remove": "Entfernen",
+    "yes": "Ja",
+    "no": "Nein",
+    "optional": "optional",
+    "required": "erforderlich",
+    "languages": {
+      "fr": "Français",
+      "en": "English",
+      "de": "Deutsch",
+      "it": "Italiano",
+      "es": "Español"
+    }
+  }
+}

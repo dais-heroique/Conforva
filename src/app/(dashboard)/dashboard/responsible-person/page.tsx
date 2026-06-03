@@ -12,8 +12,10 @@ import { Badge } from "@/components/ui/badge"
 import { Loader2, Shield, Save, CheckCircle2, Info } from "lucide-react"
 import { EU_COUNTRIES } from "@/lib/utils"
 import type { ResponsiblePersonRow } from "@/types/supabase"
+import { useT } from "@/components/providers/locale-provider"
 
 export default function ResponsiblePersonPage() {
+  const t = useT()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -90,6 +92,8 @@ export default function ResponsiblePersonPage() {
     setSaving(false)
   }
 
+  const tRp = t.dashboard.responsiblePerson
+
   if (loading) return (
     <div className="flex items-center justify-center py-20">
       <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
@@ -99,21 +103,15 @@ export default function ResponsiblePersonPage() {
   return (
     <div className="p-4 md:p-8 max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Personne Responsable UE</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Obligatoire pour tous les produits mis sur le marché européen (GPSR Art. 4)
-        </p>
+        <h1 className="text-2xl font-bold text-gray-900">{tRp.title}</h1>
+        <p className="text-sm text-gray-500 mt-1">{tRp.subtitle}</p>
       </div>
 
       <div className="flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 px-5 py-4 text-sm text-blue-800">
         <Info className="h-5 w-5 shrink-0 mt-0.5 text-blue-600" />
         <div>
-          <p className="font-medium">Qu'est-ce que la Personne Responsable ?</p>
-          <p className="mt-1">
-            Le GPSR exige qu'un fabricant, importateur ou représentant autorisé établi dans l'UE soit
-            désigné pour chaque produit mis sur le marché. Cette personne est responsable des obligations
-            de conformité et de la communication avec les autorités.
-          </p>
+          <p className="font-medium">{tRp.infoTitle}</p>
+          <p className="mt-1">{tRp.infoDesc}</p>
         </div>
       </div>
 
@@ -121,7 +119,7 @@ export default function ResponsiblePersonPage() {
       {saved && (
         <Alert variant="success">
           <CheckCircle2 className="h-4 w-4" />
-          <AlertDescription>Informations sauvegardées avec succès.</AlertDescription>
+          <AlertDescription>{tRp.savedSuccess}</AlertDescription>
         </Alert>
       )}
 
@@ -130,54 +128,52 @@ export default function ResponsiblePersonPage() {
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-blue-600" />
-              Coordonnées de la personne responsable
+              {tRp.cardTitle}
             </CardTitle>
             {rp && (
               <Badge variant={rp.status === "active" ? "success" : "warning"}>
-                {rp.status === "active" ? "Active" : "Inactive"}
+                {rp.status === "active" ? tRp.statusActive : tRp.statusInactive}
               </Badge>
             )}
           </div>
-          <CardDescription>
-            Ces informations apparaîtront sur tous vos dossiers techniques et étiquettes.
-          </CardDescription>
+          <CardDescription>{tRp.cardDesc}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="space-y-2">
-            <Label>Type de responsable *</Label>
+            <Label>{tRp.type}</Label>
             <Select value={form.type} onValueChange={v => update("type", v)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="manufacturer">Fabricant (établi dans l'UE)</SelectItem>
-                <SelectItem value="importer">Importateur UE</SelectItem>
-                <SelectItem value="authorized_rep">Représentant autorisé UE</SelectItem>
+                <SelectItem value="manufacturer">{tRp.types.manufacturer}</SelectItem>
+                <SelectItem value="importer">{tRp.types.importer}</SelectItem>
+                <SelectItem value="authorized_rep">{tRp.types.authorized_rep}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="company_name">Nom de la société *</Label>
-            <Input id="company_name" value={form.company_name} onChange={e => update("company_name", e.target.value)} placeholder="Ma Société SAS" />
+            <Label htmlFor="company_name">{tRp.companyName}</Label>
+            <Input id="company_name" value={form.company_name} onChange={e => update("company_name", e.target.value)} placeholder={tRp.companyNamePlaceholder} />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="address_line">Adresse *</Label>
-            <Input id="address_line" value={form.address_line} onChange={e => update("address_line", e.target.value)} placeholder="123 Rue de la République" />
+            <Label htmlFor="address_line">{tRp.addressLine}</Label>
+            <Input id="address_line" value={form.address_line} onChange={e => update("address_line", e.target.value)} placeholder={tRp.addressLinePlaceholder} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="postal_code">Code postal *</Label>
-              <Input id="postal_code" value={form.postal_code} onChange={e => update("postal_code", e.target.value)} placeholder="75001" />
+              <Label htmlFor="postal_code">{tRp.postalCode}</Label>
+              <Input id="postal_code" value={form.postal_code} onChange={e => update("postal_code", e.target.value)} placeholder={tRp.postalCodePlaceholder} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="city">Ville *</Label>
-              <Input id="city" value={form.city} onChange={e => update("city", e.target.value)} placeholder="Paris" />
+              <Label htmlFor="city">{tRp.city}</Label>
+              <Input id="city" value={form.city} onChange={e => update("city", e.target.value)} placeholder={tRp.cityPlaceholder} />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label>Pays (UE) *</Label>
+            <Label>{tRp.country}</Label>
             <Select value={form.country_eu} onValueChange={v => update("country_eu", v)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -190,18 +186,18 @@ export default function ResponsiblePersonPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email de contact *</Label>
-              <Input id="email" type="email" value={form.email} onChange={e => update("email", e.target.value)} placeholder="contact@masociete.com" />
+              <Label htmlFor="email">{tRp.email}</Label>
+              <Input id="email" type="email" value={form.email} onChange={e => update("email", e.target.value)} placeholder={tRp.emailPlaceholder} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Téléphone</Label>
-              <Input id="phone" value={form.phone} onChange={e => update("phone", e.target.value)} placeholder="+33 1 23 45 67 89" />
+              <Label htmlFor="phone">{tRp.phone}</Label>
+              <Input id="phone" value={form.phone} onChange={e => update("phone", e.target.value)} placeholder={tRp.phonePlaceholder} />
             </div>
           </div>
 
           <Button onClick={handleSave} disabled={saving || !form.company_name || !form.address_line || !form.email} className="w-full gap-2">
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-            Sauvegarder
+            {tRp.save}
           </Button>
         </CardContent>
       </Card>

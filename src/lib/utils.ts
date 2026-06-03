@@ -38,13 +38,11 @@ export function getComplianceBg(score: number): string {
 }
 
 export const SUPPORTED_LANGUAGES = [
-  { code: 'fr', label: 'Français', short: 'FR' },
-  { code: 'en', label: 'English', short: 'EN' },
-  { code: 'de', label: 'Deutsch', short: 'DE' },
-  { code: 'it', label: 'Italiano', short: 'IT' },
-  { code: 'es', label: 'Español', short: 'ES' },
-  { code: 'zh', label: '中文', short: 'ZH' },
-  { code: 'ja', label: '日本語', short: 'JA' },
+  { code: 'fr', label: 'Français' },
+  { code: 'en', label: 'English' },
+  { code: 'de', label: 'Deutsch' },
+  { code: 'it', label: 'Italiano' },
+  { code: 'es', label: 'Español' },
 ] as const
 
 export type LangCode = typeof SUPPORTED_LANGUAGES[number]['code']
@@ -52,9 +50,9 @@ export type LangCode = typeof SUPPORTED_LANGUAGES[number]['code']
 export const PLAN_LANGUAGES: Record<string, LangCode[]> = {
   free:       ['fr', 'en'],
   starter:    ['fr', 'en', 'de', 'it', 'es'],
-  growth:     ['fr', 'en', 'de', 'it', 'es', 'zh', 'ja'],
-  pro:        ['fr', 'en', 'de', 'it', 'es', 'zh', 'ja'],
-  enterprise: ['fr', 'en', 'de', 'it', 'es', 'zh', 'ja'],
+  growth:     ['fr', 'en', 'de', 'it', 'es'],
+  pro:        ['fr', 'en', 'de', 'it', 'es'],
+  enterprise: ['fr', 'en', 'de', 'it', 'es'],
 }
 
 export const EU_COUNTRIES = [
