@@ -126,8 +126,13 @@ const STEPS = [
 
 const CATEGORIES = [
   "Bougies & parfums", "Jouets", "Textiles & vêtements", "Cosmétiques",
-  "Électronique", "Puériculture", "Décoration intérieure", "Mobilier",
-  "Sport & loisirs", "Contact alimentaire", "Éclairage", "Outillage",
+  "Électronique grand public", "Puériculture", "Décoration intérieure", "Mobilier",
+  "Sport & loisirs", "Contact alimentaire", "Éclairage", "Outillage & bricolage",
+  "Bijoux & montres", "Maroquinerie & sacs", "Chaussures", "Jardin & outdoor",
+  "Cuisine & ustensiles", "Literie & linge de maison", "Animalerie", "Auto & moto (accessoires)",
+  "Santé & bien-être", "Optique & lunettes", "Hygiène & soins", "Jeux de société",
+  "Gaming & high-tech", "Camping & randonnée", "Piscine & spa", "Instruments de musique",
+  "Artisanat & loisirs créatifs", "Photographie", "Papeterie & fournitures",
 ]
 
 export default function LandingPage() {
@@ -170,9 +175,9 @@ export default function LandingPage() {
 
         <div className="relative max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
-            className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3.5 py-1.5 text-xs font-medium text-blue-700 mb-6">
-            <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
-            GPSR (UE) 2023/988 — en vigueur depuis décembre 2024
+            className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-red-50 px-3.5 py-1.5 text-xs font-medium text-red-700 mb-6">
+            <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
+            GPSR (UE) 2023/988 — obligatoire depuis décembre 2024
           </motion.div>
 
           <motion.h1 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.07 }}
@@ -183,7 +188,11 @@ export default function LandingPage() {
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.18 }}
             className="mt-6 text-lg text-gray-500 leading-relaxed max-w-xl mx-auto">
             Analyse de risque, dossier technique 15 sections et déclaration de conformité UE —
-            structurés selon le règlement (UE) 2023/988, pour tout vendeur ou fabricant dans l'UE.
+            structurés selon le règlement (UE) 2023/988. Pour tout vendeur ou fabricant dont les produits arrivent chez des consommateurs européens.
+          </motion.p>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.24 }}
+            className="mt-3 text-sm text-gray-400 max-w-lg mx-auto">
+            Sans dossier conforme : annonce suspendue, blocage douanier, responsabilité engagée.
           </motion.p>
 
           <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.28 }}

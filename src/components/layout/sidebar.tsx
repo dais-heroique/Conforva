@@ -40,9 +40,8 @@ function NavContent({ user, org, onClose }: SidebarProps & { onClose?: () => voi
   return (
     <div className="flex h-full flex-col">
       <div className="flex h-14 items-center justify-between px-5 border-b border-gray-100">
-        <Link href="/dashboard" className="flex items-center gap-2.5" onClick={onClose}>
-          <img src="/favicon.png" alt="Conforva" className="h-8 w-8 object-contain flex-shrink-0" />
-          <span className="font-bold text-gray-900">Conforva</span>
+        <Link href="/dashboard" className="flex items-center" onClick={onClose}>
+          <span className="font-bold text-gray-900 text-base">Conforva</span>
         </Link>
         {onClose && (
           <button onClick={onClose} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 transition-colors">
@@ -118,8 +117,7 @@ export function Sidebar({ user, org }: SidebarProps) {
         >
           <Menu className="h-5 w-5" />
         </button>
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <img src="/favicon.png" alt="Conforva" className="h-7 w-7 object-contain" />
+        <Link href="/dashboard">
           <span className="font-bold text-gray-900 text-sm">Conforva</span>
         </Link>
         <div className="w-9" />

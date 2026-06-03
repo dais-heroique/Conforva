@@ -122,7 +122,8 @@ export default async function DashboardPage() {
   const timeGreeting = hour < 12 ? "Bonjour" : hour < 18 ? "Bon après-midi" : "Bonsoir"
   const greeting = firstName ? `${timeGreeting}, ${firstName}` : timeGreeting
 
-  const allCompliant = total > 0 && compliant === total && hasResponsiblePerson
+  const allProductsCompliant = total > 0 && compliant === total
+  const allCompliant = allProductsCompliant && hasResponsiblePerson
 
   return (
     <div className="min-h-screen bg-[#f8f9fb]">
@@ -146,17 +147,17 @@ export default async function DashboardPage() {
         </div>
 
         {/* ── GPSR Compliance overview ── */}
-        <div className={`rounded-2xl border p-5 ${allCompliant ? "border-emerald-200 bg-emerald-50" : "border-blue-100 bg-white shadow-sm"}`}>
+        <div className={`rounded-2xl border p-5 ${allProductsCompliant ? "border-emerald-200 bg-emerald-50" : "border-blue-100 bg-white shadow-sm"}`}>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                {allCompliant
+                {allProductsCompliant
                   ? <CircleCheck className="h-4 w-4 text-emerald-600 shrink-0" />
                   : <TriangleAlert className="h-4 w-4 text-amber-500 shrink-0" />
                 }
                 <p className="text-sm font-semibold text-gray-900">
-                  {allCompliant
-                    ? "Catalogue conforme au règlement GPSR"
+                  {allProductsCompliant
+                    ? "Tous vos produits sont conformes"
                     : `${compliant} / ${total} produit${total !== 1 ? "s" : ""} conformes (score ≥ 80%)`
                   }
                 </p>
@@ -165,7 +166,7 @@ export default async function DashboardPage() {
                 <>
                   <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-2">
                     <div
-                      className={`h-full rounded-full transition-all ${allCompliant ? "bg-emerald-500" : "bg-blue-500"}`}
+                      className={`h-full rounded-full transition-all ${allProductsCompliant ? "bg-emerald-500" : "bg-blue-500"}`}
                       style={{ width: `${total > 0 ? Math.round((compliant / total) * 100) : 0}%` }}
                     />
                   </div>
@@ -209,7 +210,7 @@ export default async function DashboardPage() {
         )}
 
         {/* ── GPSR Checklist (collapsed when all done) ── */}
-        {!allCompliant && (
+        {!allCompliant && total > 0 && (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="px-5 py-3.5 border-b border-gray-50">
               <h2 className="text-sm font-semibold text-gray-900">Checklist GPSR — Ce que le règlement exige</h2>
@@ -219,19 +220,19 @@ export default async function DashboardPage() {
                 {
                   art: "Art. 22",
                   label: "Dossier technique complet (description, tests, normes, traçabilité)",
-                  done: compliant === total && total > 0,
+                  done: allProductsCompliant,
                   href: "/dashboard/products",
                 },
                 {
                   art: "Art. 24",
                   label: "Déclaration UE de conformité signée pour chaque produit",
-                  done: compliant === total && total > 0,
+                  done: allProductsCompliant,
                   href: "/dashboard/documents",
                 },
                 {
                   art: "Art. 9",
                   label: "Étiquetage sécurité multilingue (avertissements, fabricant, contact)",
-                  done: compliant === total && total > 0,
+                  done: allProductsCompliant,
                   href: "/dashboard/labels",
                 },
                 {
