@@ -198,15 +198,15 @@ export default async function DashboardPage() {
           {/* Right column — 2 col */}
           <div className="lg:col-span-2 flex flex-col gap-4">
 
-            {/* Quick links */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+            {/* Quick links — desktop only (mobile has hamburger) */}
+            <div className="hidden lg:block bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Accès rapide</p>
               <div className="space-y-1">
                 {[
                   { href: "/dashboard/documents", icon: FileText, label: "Documents" },
                   { href: "/dashboard/responsible-person", icon: Shield, label: "Personne Responsable EU" },
                   { href: "/dashboard/labels", icon: Tag, label: "Étiquettes" },
-                  { href: "/dashboard/billing", icon: TrendingUp, label: "Facturation" },
+                  { href: "/dashboard/settings", icon: TrendingUp, label: "Paramètres & Facturation" },
                 ].map(({ href, icon: Icon, label }) => (
                   <Link key={href} href={href}>
                     <div className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-gray-50 transition-colors cursor-pointer group">
@@ -273,7 +273,7 @@ export default async function DashboardPage() {
                   <p className="text-xs text-gray-500 truncate">Starter : 5 références · PDF sans watermark · 5 langues à 29€/mois</p>
                 </div>
               </div>
-              <Link href="/dashboard/billing" className="shrink-0">
+              <Link href="/dashboard/settings" className="shrink-0">
                 <Button size="sm" variant="outline" className="text-blue-700 border-blue-200 hover:bg-blue-50 whitespace-nowrap">
                   Voir les plans
                 </Button>

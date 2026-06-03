@@ -43,7 +43,7 @@ const PLANS = [
     price: "199€",
     period: "/mois",
     products: 150,
-    features: ["150 références produits", "Connecteur WooCommerce", "API access", "Rapports personnalisés", "Support prioritaire"],
+    features: ["150 références produits", "Connecteur WooCommerce", "Rapports personnalisés", "Support prioritaire"],
     priceId: process.env.STRIPE_PRICE_PRO,
   },
 ]

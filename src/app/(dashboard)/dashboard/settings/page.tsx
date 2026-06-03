@@ -9,9 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
-import { Loader2, Save, CheckCircle2, Building2, Globe, Shield } from "lucide-react"
-import { EU_COUNTRIES, SUPPORTED_LANGUAGES } from "@/lib/utils"
+import { Loader2, Save, CheckCircle2, Building2, Globe, Shield, CreditCard, Zap } from "lucide-react"
+import { EU_COUNTRIES, SUPPORTED_LANGUAGES, getPlanLabel } from "@/lib/utils"
 import type { OrgRow, UserRow } from "@/types/supabase"
+import type { Plan } from "@/types/supabase"
 import Link from "next/link"
 
 export default function SettingsPage() {
@@ -169,9 +170,45 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
+      {/* Billing */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CreditCard className="h-5 w-5 text-blue-600" />
+            Facturation
+          </CardTitle>
+          <CardDescription>Votre abonnement Conforva</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center gap-4 rounded-xl bg-blue-50 border border-blue-100 px-4 py-3">
+            <div className="h-9 w-9 rounded-xl bg-blue-600 flex items-center justify-center shrink-0">
+              <Zap className="h-4 w-4 text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-blue-900">Plan {getPlanLabel((user?.plan ?? "free") as Plan)}</p>
+              <p className="text-xs text-blue-600 mt-0.5">
+                {user?.subscription_status === "active" ? "Abonnement actif" : "Plan gratuit"}
+              </p>
+            </div>
+            {user?.stripe_subscription_id && (
+              <form action="/api/billing/portal" method="POST">
+                <Button type="submit" size="sm" variant="outline" className="shrink-0">
+                  Gérer
+                </Button>
+              </form>
+            )}
+          </div>
+          <div className="flex gap-3">
+            <Link href="/dashboard/billing">
+              <Button variant="outline" size="sm">Changer de plan</Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+
       <Separator />
 
-      {/* Account */}
+      {/* Legal */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
