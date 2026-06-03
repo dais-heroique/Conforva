@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { motion, useInView } from "framer-motion"
-import { useRef } from "react"
+import { useRef, useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import {
   CheckCircle2, ArrowRight, ChevronRight,
@@ -138,6 +138,31 @@ const CATEGORIES = [
 ]
 
 export default function LandingPage() {
+  const [navVisible, setNavVisible] = useState(true)
+  const lastScrollY = useRef(0)
+  const ticking = useRef(false)
+
+  useEffect(() => {
+    function onScroll() {
+      if (ticking.current) return
+      ticking.current = true
+      requestAnimationFrame(() => {
+        const current = window.scrollY
+        if (current < 80) {
+          setNavVisible(true)
+        } else if (current > lastScrollY.current + 4) {
+          setNavVisible(false)
+        } else if (current < lastScrollY.current - 4) {
+          setNavVisible(true)
+        }
+        lastScrollY.current = current
+        ticking.current = false
+      })
+    }
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden w-full">
 
@@ -145,7 +170,9 @@ export default function LandingPage() {
       <motion.header
         initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur-sm"
+        className={`fixed top-0 left-0 right-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur-sm transition-transform duration-300 ${
+          navVisible ? "translate-y-0" : "-translate-y-full"
+        }`}
       >
         <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
@@ -170,7 +197,7 @@ export default function LandingPage() {
       </motion.header>
 
       {/* ─── HERO ─── */}
-      <section className="relative overflow-hidden px-5 pt-20 pb-16 sm:pt-32 sm:pb-24 text-center">
+      <section className="relative overflow-hidden px-5 pt-36 pb-16 sm:pt-44 sm:pb-24 text-center">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-[560px] w-[900px] bg-gradient-to-b from-blue-50/80 to-transparent blur-3xl rounded-full" />
         </div>

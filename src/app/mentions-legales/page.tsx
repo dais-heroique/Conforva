@@ -22,7 +22,7 @@ export default function MentionsLegalesPage() {
 
           <div>
             <h2 className="text-base font-bold text-gray-900 mb-3">1. Éditeur du site</h2>
-            <p className="whitespace-pre-line">{`Le site conforva.com (également accessible à l'adresse daisconforva.vercel.app) est édité par :
+            <p className="whitespace-pre-line">{`Le site conforva.com est édité par :
 
 Conforva SAS
 Forme juridique : Société par actions simplifiée (SAS)

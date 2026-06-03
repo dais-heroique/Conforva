@@ -1,31 +1,71 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ChevronRight } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 
 export function PublicNav() {
+  const [visible, setVisible] = useState(true)
+  const lastScrollY = useRef(0)
+  const ticking = useRef(false)
+
+  useEffect(() => {
+    function onScroll() {
+      if (ticking.current) return
+      ticking.current = true
+      requestAnimationFrame(() => {
+        const current = window.scrollY
+        // Always show at top of page
+        if (current < 80) {
+          setVisible(true)
+        } else if (current > lastScrollY.current + 4) {
+          // Scrolling down
+          setVisible(false)
+        } else if (current < lastScrollY.current - 4) {
+          // Scrolling up
+          setVisible(true)
+        }
+        lastScrollY.current = current
+        ticking.current = false
+      })
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur-sm">
-      <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5">
-          <img src="/favicon.png" alt="Conforva" className="h-8 w-8 object-contain" />
-          <span className="font-bold text-gray-900">Conforva</span>
-        </Link>
-        <nav className="hidden md:flex items-center gap-6 text-sm text-gray-500">
-          <Link href="/#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</Link>
-          <Link href="/#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</Link>
-          <Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link>
-          <Link href="/contact" className="hover:text-gray-900 transition-colors">Contact</Link>
-        </nav>
-        <div className="flex items-center gap-2">
-          <Link href="/auth/login" className="hidden sm:block text-sm text-gray-500 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
-            Connexion
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur-sm transition-transform duration-300 ${
+          visible ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5">
+            <img src="/favicon.png" alt="Conforva" className="h-8 w-8 object-contain" />
+            <span className="font-bold text-gray-900">Conforva</span>
           </Link>
-          <Link href="/auth/login">
-            <Button size="sm" className="gap-1.5">Essai gratuit <ChevronRight className="h-3.5 w-3.5" /></Button>
-          </Link>
+          <nav className="hidden md:flex items-center gap-6 text-sm text-gray-500">
+            <Link href="/#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</Link>
+            <Link href="/#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</Link>
+            <Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link>
+            <Link href="/contact" className="hover:text-gray-900 transition-colors">Contact</Link>
+          </nav>
+          <div className="flex items-center gap-2">
+            <Link href="/auth/login" className="hidden sm:block text-sm text-gray-500 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
+              Connexion
+            </Link>
+            <Link href="/auth/login">
+              <Button size="sm" className="gap-1.5">Essai gratuit <ChevronRight className="h-3.5 w-3.5" /></Button>
+            </Link>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      {/* Spacer to offset fixed header */}
+      <div className="h-16" />
+    </>
   )
 }
 
