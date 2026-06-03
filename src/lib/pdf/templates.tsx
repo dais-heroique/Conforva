@@ -505,6 +505,7 @@ export function TechnicalFilePDF({
   const standards: string[] = ra.referenced_standards ?? []
   const requiredTests: any[] = ra.required_tests ?? []
   const residualRisks: any[] = ra.residual_risks ?? []
+  const bomComponents: any[] = tf.bom_components ?? []
   // AI-generated technical file sections
   const aiSections: any[] = tf.technical_file_sections ?? ra.technical_file_sections ?? tf.sections ?? []
 
@@ -721,6 +722,51 @@ export function TechnicalFilePDF({
             <Text style={base.body}>{ra.product_description}</Text>
           </>
         )}
+
+        {/* Section 1.2 — BOM */}
+        <View style={{ marginTop: 14 }} wrap={false}>
+          <H2>1.2 Nomenclature (BOM) — Liste des composants</H2>
+          {bomComponents.length > 0 ? (
+            <View style={base.tbl}>
+              <View style={base.tblHeaderRow}>
+                <View style={[base.tblHeaderCell, { flex: 2 }]}>
+                  <Text style={base.tblHeaderText}>Composant</Text>
+                </View>
+                <View style={[base.tblHeaderCell, { flex: 1.5 }]}>
+                  <Text style={base.tblHeaderText}>Matériau</Text>
+                </View>
+                <View style={[base.tblHeaderCell, { flex: 1.5 }]}>
+                  <Text style={base.tblHeaderText}>Fournisseur</Text>
+                </View>
+                <View style={[base.tblHeaderCell, { flex: 1, borderRight: 0 }]}>
+                  <Text style={base.tblHeaderText}>Réf. pièce</Text>
+                </View>
+              </View>
+              {bomComponents.map((bom: any, i: number) => (
+                <View key={i} style={base.tblRow} wrap={false}>
+                  <View style={[base.tblCell, { flex: 2 }]}>
+                    <Text style={[base.tblCellText, { fontFamily: "Helvetica-Bold", color: DARK }]}>{bom.component ?? "—"}</Text>
+                  </View>
+                  <View style={[base.tblCell, { flex: 1.5 }]}>
+                    <Text style={base.tblCellText}>{bom.material || "N/A"}</Text>
+                  </View>
+                  <View style={[base.tblCell, { flex: 1.5 }]}>
+                    <Text style={base.tblCellText}>{bom.supplier || "N/A"}</Text>
+                  </View>
+                  <View style={[base.tblCell, { flex: 1, borderRight: 0 }]}>
+                    <Text style={base.tblCellText}>{bom.part_number || "N/A"}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <View style={base.infoBox}>
+              <Text style={base.infoBoxText}>
+                Nomenclature non renseignée. Complétez le questionnaire produit (étape Nomenclature) pour faire apparaître la liste détaillée des composants dans ce dossier.
+              </Text>
+            </View>
+          )}
+        </View>
 
         {/* Section 2 */}
         <View style={{ marginTop: 18 }}>

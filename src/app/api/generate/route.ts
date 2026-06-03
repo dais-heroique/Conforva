@@ -102,6 +102,10 @@ export async function POST(req: NextRequest) {
   const productUrl = (product as any).product_url as string | null
   const webContent = productUrl ? await fetchProductPageText(productUrl) : ""
 
+  // Extract BOM from questionnaire answers
+  const bomComponents: Array<{ component: string; material: string; supplier: string; part_number: string }> =
+    (qr?.answers as any)?.bom_components ?? []
+
   const category = (product as any).product_categories
   const standardsText = standards?.map(s =>
     `Norme ${s.code} — ${s.title}: ${s.summary}\nExigences: ${JSON.stringify(s.requirements)}`
@@ -145,6 +149,12 @@ TES PRINCIPES FONDAMENTAUX:
 - Catégorie: ${category?.name_fr ?? "Divers"} (code: ${category?.code ?? "other"})
 - Usage prévu: ${product.intended_use ?? "Non spécifié"}
 - Matériaux / Composants: ${(product as any).materials?.join(", ") ?? "Non spécifiés"}
+
+${bomComponents.length > 0 ? `=== NOMENCLATURE (BOM) — LISTE DES COMPOSANTS ===
+${bomComponents.map((c, i) => `${i + 1}. Composant: "${c.component}" | Matériau: ${c.material || "N/A"} | Fournisseur: ${c.supplier || "N/A"} | Réf. pièce: ${c.part_number || "N/A"}`).join("\n")}
+
+Utilise cette nomenclature pour l'évaluation REACH/RoHS (substances dans les matériaux listés) et pour identifier les dangers spécifiques à chaque composant.
+` : ""}
 - Poids: ${(product as any).weight_g ? `${(product as any).weight_g}g` : "Non spécifié"}
 - Marchés cibles: ${(product as any).target_markets?.join(", ") ?? "EU"} — Marchés actifs détectés: ${activeMarkets}
 - Organisation fabricant/importateur: ${org?.name ?? "Non spécifiée"} (pays: ${org?.country ?? "EU"})
@@ -460,6 +470,7 @@ Retourne UNIQUEMENT le JSON suivant, sans aucun texte avant ou après, sans bali
         market_specific_requirements: analysisData.market_specific_requirements ?? {},
         declaration_of_conformity: analysisData.declaration_of_conformity_content ?? {},
         traceability: analysisData.traceability_requirements ?? {},
+        bom_components: bomComponents,
       },
       status: "draft",
       watermarked: true,

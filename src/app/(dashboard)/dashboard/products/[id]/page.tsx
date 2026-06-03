@@ -441,6 +441,43 @@ export default function ProductDetailPage({ params }: PageProps) {
                 </Link>
               </div>
 
+              {/* BOM section */}
+              {(technicalFile.content_json as any)?.bom_components?.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Package className="h-4 w-4 text-blue-600" />
+                      1.2 Nomenclature (BOM)
+                    </CardTitle>
+                    <CardDescription>Liste des composants du produit</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b border-gray-100">
+                            <th className="text-left py-2 pr-4 text-xs font-medium text-gray-500">Composant</th>
+                            <th className="text-left py-2 pr-4 text-xs font-medium text-gray-500">Matériau</th>
+                            <th className="text-left py-2 pr-4 text-xs font-medium text-gray-500">Fournisseur</th>
+                            <th className="text-left py-2 text-xs font-medium text-gray-500">Réf. pièce</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {(technicalFile.content_json as any).bom_components.map((b: any, i: number) => (
+                            <tr key={i} className="border-b border-gray-50 last:border-0">
+                              <td className="py-2 pr-4 font-medium text-gray-900">{b.component}</td>
+                              <td className="py-2 pr-4 text-gray-600">{b.material || "—"}</td>
+                              <td className="py-2 pr-4 text-gray-600">{b.supplier || "—"}</td>
+                              <td className="py-2 text-gray-500 font-mono text-xs">{b.part_number || "—"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
               {(technicalFile.content_json as any)?.sections?.map((section: any, i: number) => (
                 <Card key={i}>
                   <CardHeader>
@@ -459,9 +496,24 @@ export default function ProductDetailPage({ params }: PageProps) {
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2">
-                      {(technicalFile.content_json as any).analysis.required_tests.map((t: string, i: number) => (
-                        <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
-                          <CheckCircle2 className="h-4 w-4 text-blue-400 shrink-0" />{t}
+                      {(technicalFile.content_json as any).analysis.required_tests.map((t: any, i: number) => (
+                        <li key={i} className="rounded-lg border border-blue-100 bg-blue-50/50 px-3 py-2">
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
+                            <div className="min-w-0">
+                              <span className="text-sm font-medium text-gray-900">
+                                {typeof t === "string" ? t : (t.test ?? t.name ?? `Test ${i + 1}`)}
+                              </span>
+                              {typeof t !== "string" && t.standard && (
+                                <span className="block text-xs text-blue-600 mt-0.5">Norme : {t.standard}</span>
+                              )}
+                              {typeof t !== "string" && t.mandatory !== undefined && (
+                                <span className={`text-xs font-medium mt-0.5 ${t.mandatory ? "text-blue-700" : "text-gray-400"}`}>
+                                  {t.mandatory ? " · Obligatoire" : " · Recommandé"}
+                                </span>
+                              )}
+                            </div>
+                          </div>
                         </li>
                       ))}
                     </ul>
