@@ -15,7 +15,7 @@ import { DisclaimerBanner } from "@/components/layout/disclaimer-banner"
 import { useToast } from "@/hooks/use-toast"
 import {
   Loader2, AlertTriangle, CheckCircle2, ShieldCheck, FileText,
-  Tag, ArrowLeft, RefreshCw, Download, Edit, Package,
+  Tag, ArrowLeft, RefreshCw, Download, Edit, Package, ExternalLink,
 } from "lucide-react"
 import type {
   ProductRow, CategoryRow, RiskAssessmentRow, TechnicalFileRow,
@@ -557,7 +557,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                       )
                     }}
                   />
-                  <span className="text-xs font-bold text-gray-500 w-6">{lang.short}</span>
+                  <span className="text-xs font-bold text-gray-500 w-6">{lang.code.toUpperCase()}</span>
                   <span className="text-sm font-medium text-gray-800">{lang.label}</span>
                   {!available && <span className="ml-auto text-[10px] text-gray-400">Plan supérieur</span>}
                 </label>
