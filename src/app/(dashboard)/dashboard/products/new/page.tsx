@@ -15,6 +15,7 @@ import Link from "next/link"
 import type { CategoryRow } from "@/types/supabase"
 import { PLAN_LIMITS, type Plan } from "@/types/supabase"
 import { EU_COUNTRIES } from "@/lib/utils"
+import { useT } from "@/components/providers/locale-provider"
 
 const PLAN_LABELS: Record<Plan, string> = {
   free: "Gratuit",
@@ -25,6 +26,7 @@ const PLAN_LABELS: Record<Plan, string> = {
 }
 
 export default function NewProductPage() {
+  const t = useT()
   const router = useRouter()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -131,6 +133,7 @@ export default function NewProductPage() {
   }
 
   const selectedCategory = categories.find(c => c.id === form.category_id)
+  const tNp = t.dashboard.newProduct
 
   if (checkingAccess) {
     return (
@@ -146,7 +149,7 @@ export default function NewProductPage() {
     return (
       <div className="p-8 max-w-2xl mx-auto space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Nouveau produit</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{tNp.title}</h1>
         </div>
         <Card className="border-amber-200 bg-amber-50">
           <CardContent className="py-10 text-center space-y-4">
@@ -154,24 +157,32 @@ export default function NewProductPage() {
               <Lock className="h-6 w-6 text-amber-600" />
             </div>
             <div className="space-y-1.5">
-              <p className="text-lg font-semibold text-gray-900">Limite atteinte</p>
-              <p className="text-sm text-gray-600">
-                Votre plan <strong>{PLAN_LABELS[userPlan]}</strong> inclut {limit === 1 ? "1 produit" : `${limit} produits`}.
-                Vous avez déjà {productCount} produit{productCount > 1 ? "s" : ""}.
-              </p>
-              <p className="text-sm text-gray-500">
-                Passez au plan <strong>{nextPlan}</strong> pour ajouter davantage de produits.
-              </p>
+              <p className="text-lg font-semibold text-gray-900">{tNp.limitReached.title}</p>
+              <p
+                className="text-sm text-gray-600"
+                dangerouslySetInnerHTML={{
+                  __html: tNp.limitReached.desc
+                    .replace('{{plan}}', PLAN_LABELS[userPlan])
+                    .replace('{{limit}}', limit === 1 ? '1 produit' : `${limit} produits`)
+                    .replace('{{count}}', String(productCount)),
+                }}
+              />
+              <p
+                className="text-sm text-gray-500"
+                dangerouslySetInnerHTML={{
+                  __html: tNp.limitReached.nextPlan.replace('{{plan}}', nextPlan),
+                }}
+              />
             </div>
             <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
               <Link href="/dashboard/billing">
                 <Button className="gap-2">
                   <Zap className="h-4 w-4" />
-                  Passer au plan supérieur
+                  {tNp.limitReached.upgrade}
                 </Button>
               </Link>
               <Link href="/dashboard/products">
-                <Button variant="outline">Voir mes produits</Button>
+                <Button variant="outline">{tNp.limitReached.viewProducts}</Button>
               </Link>
             </div>
           </CardContent>
@@ -183,8 +194,8 @@ export default function NewProductPage() {
   return (
     <div className="p-8 max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Nouveau produit</h1>
-        <p className="text-sm text-gray-500 mt-1">Étape {step} sur 2</p>
+        <h1 className="text-2xl font-bold text-gray-900">{tNp.title}</h1>
+        <p className="text-sm text-gray-500 mt-1">{tNp.stepOf.replace('{{step}}', String(step))}</p>
       </div>
 
       {/* Progress */}
@@ -201,24 +212,24 @@ export default function NewProductPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Package className="h-5 w-5 text-blue-600" />
-              Informations générales
+              {tNp.step1.title}
             </CardTitle>
-            <CardDescription>Identifiez votre produit et sélectionnez sa catégorie GPSR.</CardDescription>
+            <CardDescription>{tNp.step1.desc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="name">Nom du produit *</Label>
-              <Input id="name" placeholder="ex: Bougie parfumée Vanille 200g" value={form.name} onChange={e => update("name", e.target.value)} />
+              <Label htmlFor="name">{tNp.step1.productName}</Label>
+              <Input id="name" placeholder={tNp.step1.productNamePlaceholder} value={form.name} onChange={e => update("name", e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="reference">Référence / SKU</Label>
-              <Input id="reference" placeholder="ex: BOU-VANI-200" value={form.reference} onChange={e => update("reference", e.target.value)} />
+              <Label htmlFor="reference">{tNp.step1.reference}</Label>
+              <Input id="reference" placeholder={tNp.step1.referencePlaceholder} value={form.reference} onChange={e => update("reference", e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label>Catégorie de produit *</Label>
+              <Label>{tNp.step1.category}</Label>
               <Select value={form.category_id} onValueChange={v => update("category_id", v)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Sélectionnez une catégorie..." />
+                  <SelectValue placeholder={tNp.step1.categoryPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map(cat => (
@@ -233,7 +244,7 @@ export default function NewProductPage() {
                   <p className="font-medium text-blue-900">{selectedCategory.icon} {selectedCategory.name_fr}</p>
                   <p className="text-blue-700">{selectedCategory.description}</p>
                   <p className="text-xs text-blue-600">
-                    Normes : {selectedCategory.applicable_standards?.join(", ")}
+                    {tNp.step1.standards} : {selectedCategory.applicable_standards?.join(", ")}
                   </p>
                 </div>
               )}
@@ -243,7 +254,7 @@ export default function NewProductPage() {
               onClick={() => setStep(2)}
               disabled={!form.name || !form.category_id}
             >
-              Continuer <ArrowRight className="h-4 w-4" />
+              {tNp.step1.continue} <ArrowRight className="h-4 w-4" />
             </Button>
           </CardContent>
         </Card>
@@ -252,30 +263,30 @@ export default function NewProductPage() {
       {step === 2 && (
         <Card>
           <CardHeader>
-            <CardTitle>Caractéristiques physiques</CardTitle>
-            <CardDescription>Ces informations enrichissent l'analyse de risque.</CardDescription>
+            <CardTitle>{tNp.step2.title}</CardTitle>
+            <CardDescription>{tNp.step2.desc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="intended_use">Usage prévu</Label>
-              <Textarea id="intended_use" placeholder="ex: Bougie décorative pour usage intérieur en espace adulte" value={form.intended_use} onChange={e => update("intended_use", e.target.value)} rows={2} />
+              <Label htmlFor="intended_use">{tNp.step2.intendedUse}</Label>
+              <Textarea id="intended_use" placeholder={tNp.step2.intendedUsePlaceholder} value={form.intended_use} onChange={e => update("intended_use", e.target.value)} rows={2} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="materials">Matériaux principaux (séparés par des virgules)</Label>
-              <Input id="materials" placeholder="ex: cire de soja, mèche coton, verre" value={form.materials} onChange={e => update("materials", e.target.value)} />
+              <Label htmlFor="materials">{tNp.step2.materials}</Label>
+              <Input id="materials" placeholder={tNp.step2.materialsPlaceholder} value={form.materials} onChange={e => update("materials", e.target.value)} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="weight_g">Poids (g)</Label>
+                <Label htmlFor="weight_g">{tNp.step2.weight}</Label>
                 <Input id="weight_g" type="number" placeholder="200" value={form.weight_g} onChange={e => update("weight_g", e.target.value)} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="length_mm">Longueur (mm)</Label>
+                <Label htmlFor="length_mm">{tNp.step2.length}</Label>
                 <Input id="length_mm" type="number" placeholder="80" value={form.length_mm} onChange={e => update("length_mm", e.target.value)} />
               </div>
             </div>
             <div>
-              <Label className="mb-2 block">Marchés cibles UE</Label>
+              <Label className="mb-2 block">{tNp.step2.targetMarkets}</Label>
               <div className="flex flex-wrap gap-2">
                 {EU_COUNTRIES.slice(0, 12).map(country => (
                   <button
@@ -295,10 +306,10 @@ export default function NewProductPage() {
             </div>
             <div className="flex gap-3">
               <Button variant="outline" onClick={() => setStep(1)} className="flex-1 gap-2">
-                <ArrowLeft className="h-4 w-4" /> Retour
+                <ArrowLeft className="h-4 w-4" /> {tNp.step2.back}
               </Button>
               <Button onClick={handleSubmit} disabled={loading} className="flex-1 gap-2">
-                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Créer et remplir le questionnaire <ArrowRight className="h-4 w-4" /></>}
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <>{tNp.step2.submit} <ArrowRight className="h-4 w-4" /></>}
               </Button>
             </div>
           </CardContent>

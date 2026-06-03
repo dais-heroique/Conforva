@@ -9,9 +9,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Mail, Loader2, Shield } from "lucide-react"
 import Link from "next/link"
-import { DISCLAIMER_TEXT } from "@/lib/utils"
+import { useT } from "@/components/providers/locale-provider"
 
 export default function LoginPage() {
+  const t = useT()
   const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
@@ -39,6 +40,8 @@ export default function LoginPage() {
     setLoading(false)
   }
 
+  const tLogin = t.auth.login
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-4">
       <div className="w-full max-w-md space-y-6">
@@ -46,15 +49,13 @@ export default function LoginPage() {
         <div className="text-center">
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white font-bold text-2xl mb-4">C</div>
           <h1 className="text-2xl font-bold text-gray-900">Conforva</h1>
-          <p className="text-gray-500 text-sm mt-1">Conformité GPSR pour e-commerçants EU</p>
+          <p className="text-gray-500 text-sm mt-1">{tLogin.subtitle}</p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Connexion / Inscription</CardTitle>
-            <CardDescription>
-              Entrez votre email pour recevoir un lien de connexion sécurisé.
-            </CardDescription>
+            <CardTitle>{tLogin.cardTitle}</CardTitle>
+            <CardDescription>{tLogin.cardDesc}</CardDescription>
           </CardHeader>
           <CardContent>
             {sent ? (
@@ -64,13 +65,15 @@ export default function LoginPage() {
                     <Mail className="h-6 w-6 text-green-600" />
                   </div>
                 </div>
-                <p className="font-medium text-gray-900">Vérifiez votre boîte mail !</p>
-                <p className="text-sm text-gray-500">
-                  Un lien de connexion a été envoyé à <strong>{email}</strong>.
-                  Cliquez dessus pour accéder à votre espace.
-                </p>
+                <p className="font-medium text-gray-900">{tLogin.successTitle}</p>
+                <p
+                  className="text-sm text-gray-500"
+                  dangerouslySetInnerHTML={{
+                    __html: tLogin.successDesc.replace('{{email}}', `<strong>${email}</strong>`),
+                  }}
+                />
                 <Button variant="outline" size="sm" onClick={() => setSent(false)}>
-                  Changer d'email
+                  {tLogin.changeEmail}
                 </Button>
               </div>
             ) : (
@@ -81,11 +84,11 @@ export default function LoginPage() {
                   </Alert>
                 )}
                 <div className="space-y-2">
-                  <Label htmlFor="email">Adresse email</Label>
+                  <Label htmlFor="email">{tLogin.emailLabel}</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="vous@boutique.com"
+                    placeholder={tLogin.emailPlaceholder}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -94,9 +97,9 @@ export default function LoginPage() {
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? (
-                    <><Loader2 className="h-4 w-4 animate-spin" />Envoi en cours...</>
+                    <><Loader2 className="h-4 w-4 animate-spin" />{tLogin.sending}</>
                   ) : (
-                    <><Mail className="h-4 w-4" />Recevoir mon lien de connexion</>
+                    <><Mail className="h-4 w-4" />{tLogin.submitButton}</>
                   )}
                 </Button>
               </form>
@@ -107,14 +110,14 @@ export default function LoginPage() {
         {/* Disclaimer */}
         <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-800">
           <Shield className="h-4 w-4 shrink-0 mt-0.5" />
-          <p>{DISCLAIMER_TEXT.fr}</p>
+          <p>{tLogin.disclaimer}</p>
         </div>
 
         <p className="text-center text-xs text-gray-400">
-          En continuant, vous acceptez nos{" "}
-          <Link href="/cgu" className="underline hover:text-gray-600">CGU</Link>{" "}
-          et notre{" "}
-          <Link href="/privacy" className="underline hover:text-gray-600">Politique de confidentialité</Link>.
+          {tLogin.termsText}{" "}
+          <Link href="/cgu" className="underline hover:text-gray-600">{tLogin.termsLink}</Link>{" "}
+          {tLogin.andText}{" "}
+          <Link href="/privacy" className="underline hover:text-gray-600">{tLogin.privacyLink}</Link>.
         </p>
       </div>
     </div>

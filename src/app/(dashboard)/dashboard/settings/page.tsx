@@ -13,8 +13,10 @@ import { Loader2, Save, CheckCircle2, Building2, Globe, Shield } from "lucide-re
 import { EU_COUNTRIES, SUPPORTED_LANGUAGES } from "@/lib/utils"
 import type { OrgRow, UserRow } from "@/types/supabase"
 import Link from "next/link"
+import { useT } from "@/components/providers/locale-provider"
 
 export default function SettingsPage() {
+  const t = useT()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState("")
@@ -72,6 +74,8 @@ export default function SettingsPage() {
     setTimeout(() => setSaved(""), 3000)
   }
 
+  const tSettings = t.dashboard.settings
+
   if (loading) return (
     <div className="flex items-center justify-center py-20">
       <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
@@ -81,8 +85,8 @@ export default function SettingsPage() {
   return (
     <div className="p-8 max-w-2xl mx-auto space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
-        <p className="text-sm text-gray-500 mt-1">Gérez votre organisation et vos préférences</p>
+        <h1 className="text-2xl font-bold text-gray-900">{tSettings.title}</h1>
+        <p className="text-sm text-gray-500 mt-1">{tSettings.subtitle}</p>
       </div>
 
       {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
@@ -92,23 +96,23 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Building2 className="h-5 w-5 text-blue-600" />
-            Organisation
+            {tSettings.org.title}
           </CardTitle>
-          <CardDescription>Informations de votre boutique / entreprise</CardDescription>
+          <CardDescription>{tSettings.org.desc}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           {saved === "org" && (
             <Alert variant="success">
               <CheckCircle2 className="h-4 w-4" />
-              <AlertDescription>Organisation sauvegardée.</AlertDescription>
+              <AlertDescription>{tSettings.org.saved}</AlertDescription>
             </Alert>
           )}
           <div className="space-y-2">
-            <Label>Nom de l'organisation</Label>
+            <Label>{tSettings.org.name}</Label>
             <Input value={orgForm.name} onChange={e => setOrgForm(f => ({ ...f, name: e.target.value }))} />
           </div>
           <div className="space-y-2">
-            <Label>Pays</Label>
+            <Label>{tSettings.org.country}</Label>
             <Select value={orgForm.country} onValueChange={v => setOrgForm(f => ({ ...f, country: v }))}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -118,16 +122,16 @@ export default function SettingsPage() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Numéro TVA</Label>
+              <Label>{tSettings.org.vatNumber}</Label>
               <Input value={orgForm.vat_number} onChange={e => setOrgForm(f => ({ ...f, vat_number: e.target.value }))} placeholder="FR12345678901" />
             </div>
             <div className="space-y-2">
-              <Label>Site web</Label>
-              <Input value={orgForm.website} onChange={e => setOrgForm(f => ({ ...f, website: e.target.value }))} placeholder="https://maboutique.com" />
+              <Label>{tSettings.org.website}</Label>
+              <Input value={orgForm.website} onChange={e => setOrgForm(f => ({ ...f, website: e.target.value }))} placeholder={tSettings.org.websitePlaceholder} />
             </div>
           </div>
           <Button onClick={saveOrg} disabled={saving} className="gap-2">
-            <Save className="h-4 w-4" />Sauvegarder
+            <Save className="h-4 w-4" />{tSettings.org.save}
           </Button>
         </CardContent>
       </Card>
@@ -137,18 +141,18 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Globe className="h-5 w-5 text-blue-600" />
-            Préférences
+            {tSettings.preferences.title}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           {saved === "user" && (
             <Alert variant="success">
               <CheckCircle2 className="h-4 w-4" />
-              <AlertDescription>Préférences sauvegardées.</AlertDescription>
+              <AlertDescription>{tSettings.preferences.saved}</AlertDescription>
             </Alert>
           )}
           <div className="space-y-2">
-            <Label>Langue de l'interface</Label>
+            <Label>{tSettings.preferences.language}</Label>
             <Select value={userForm.locale} onValueChange={v => setUserForm(f => ({ ...f, locale: v }))}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -159,12 +163,12 @@ export default function SettingsPage() {
             </Select>
           </div>
           <div className="space-y-1">
-            <Label>Email du compte</Label>
+            <Label>{tSettings.preferences.email}</Label>
             <Input value={user?.email ?? ""} disabled className="bg-gray-50" />
-            <p className="text-xs text-gray-400">L'email ne peut pas être modifié ici.</p>
+            <p className="text-xs text-gray-400">{tSettings.preferences.emailNote}</p>
           </div>
           <Button onClick={saveUser} disabled={saving} className="gap-2">
-            <Save className="h-4 w-4" />Sauvegarder
+            <Save className="h-4 w-4" />{tSettings.preferences.save}
           </Button>
         </CardContent>
       </Card>
@@ -176,20 +180,17 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-blue-600" />
-            Conformité & CGU
+            {tSettings.compliance.title}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <p className="text-sm text-gray-600">
-            Conforva est un outil d'aide à la conformité GPSR (UE 2023/988). Les documents générés ne constituent
-            pas un avis juridique et ne garantissent pas la conformité réglementaire de vos produits.
-          </p>
+          <p className="text-sm text-gray-600">{tSettings.compliance.desc}</p>
           <div className="flex gap-3">
             <Link href="/cgu">
-              <Button variant="outline" size="sm">CGU</Button>
+              <Button variant="outline" size="sm">{tSettings.compliance.cgu}</Button>
             </Link>
             <Link href="/privacy">
-              <Button variant="outline" size="sm">Politique de confidentialité</Button>
+              <Button variant="outline" size="sm">{tSettings.compliance.privacy}</Button>
             </Link>
           </div>
         </CardContent>

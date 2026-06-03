@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tag, Download, Eye, AlertTriangle, Lock, Zap } from "lucide-react"
 import { SUPPORTED_LANGUAGES, PLAN_LANGUAGES } from "@/lib/utils"
 import type { Plan } from "@/types/supabase"
+import { getLocale, getDictionary } from "@/lib/i18n"
 
 export default async function LabelsPage() {
   const supabase = await createClient()
@@ -35,12 +36,16 @@ export default async function LabelsPage() {
     return acc
   }, {} as Record<string, { product: any; labels: typeof labels }>) ?? {}
 
+  const locale = await getLocale()
+  const dict = await getDictionary(locale)
+  const t = dict.dashboard.labels
+
   return (
     <div className="p-8 space-y-6 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Étiquettes multilingues</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Avertissements de sécurité GPSR — {availableLangs.length} langue{availableLangs.length > 1 ? "s" : ""} incluse{availableLangs.length > 1 ? "s" : ""} dans votre plan
+          {t.subtitle.replace('{{count}}', String(availableLangs.length))}
         </p>
       </div>
 
@@ -48,10 +53,10 @@ export default async function LabelsPage() {
         <Card>
           <CardContent className="py-16 text-center space-y-3">
             <Tag className="h-16 w-16 text-gray-200 mx-auto" />
-            <p className="text-lg font-medium text-gray-900">Aucune étiquette</p>
-            <p className="text-sm text-gray-500">Les étiquettes sont générées automatiquement lors de la génération IA.</p>
+            <p className="text-lg font-medium text-gray-900">{t.empty.title}</p>
+            <p className="text-sm text-gray-500">{t.empty.desc}</p>
             <Link href="/dashboard/products">
-              <Button size="sm">Voir mes produits</Button>
+              <Button size="sm">{t.empty.viewProducts}</Button>
             </Link>
           </CardContent>
         </Card>
@@ -90,7 +95,7 @@ export default async function LabelsPage() {
                           <Link href="/dashboard/billing">
                             <button className="flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 transition-colors">
                               <Zap className="h-3 w-3" />
-                              Plan supérieur requis
+                              {t.upgradePlan}
                             </button>
                           </Link>
                         </div>
@@ -105,9 +110,9 @@ export default async function LabelsPage() {
                             <span className="font-medium text-sm">{lang.label}</span>
                           </div>
                           {label ? (
-                            <Badge variant="success" className="text-xs">Généré</Badge>
+                            <Badge variant="success" className="text-xs">{t.generated}</Badge>
                           ) : (
-                            <Badge variant="secondary" className="text-xs">À générer</Badge>
+                            <Badge variant="secondary" className="text-xs">{t.toGenerate}</Badge>
                           )}
                         </div>
 
@@ -122,19 +127,21 @@ export default async function LabelsPage() {
                                   </div>
                                 ))}
                                 {(label.warnings ?? []).length > 3 && (
-                                  <p className="text-xs text-gray-400">+ {(label.warnings ?? []).length - 3} autres</p>
+                                  <p className="text-xs text-gray-400">
+                                    {t.moreWarnings.replace('{{count}}', String((label.warnings ?? []).length - 3))}
+                                  </p>
                                 )}
                               </div>
                             )}
                             <div className="flex gap-2">
                               <Link href={`/dashboard/products/${productId}`} className="flex-1">
                                 <Button variant="ghost" size="sm" className="w-full gap-1">
-                                  <Eye className="h-3 w-3" />Voir
+                                  <Eye className="h-3 w-3" />{t.view}
                                 </Button>
                               </Link>
                               <Link href={`/dashboard/products/${productId}/export`} className="flex-1">
                                 <Button variant="outline" size="sm" className="w-full gap-1">
-                                  <Download className="h-3 w-3" />PDF
+                                  <Download className="h-3 w-3" />{t.pdf}
                                 </Button>
                               </Link>
                             </div>

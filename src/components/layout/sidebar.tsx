@@ -11,15 +11,8 @@ import {
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import type { UserRow, OrgRow } from "@/types/supabase"
-
-const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/dashboard/products", label: "Mes produits", icon: Package },
-  { href: "/dashboard/documents", label: "Documents", icon: FileText },
-  { href: "/dashboard/labels", label: "Étiquettes", icon: Tag },
-  { href: "/dashboard/responsible-person", label: "Personne Responsable", icon: Shield },
-  { href: "/dashboard/settings", label: "Paramètres", icon: Settings },
-]
+import { useT } from "@/components/providers/locale-provider"
+import { LanguageSwitcher } from "@/components/ui/language-switcher"
 
 interface SidebarProps {
   user: UserRow
@@ -27,8 +20,19 @@ interface SidebarProps {
 }
 
 function NavContent({ user, org, onClose }: SidebarProps & { onClose?: () => void }) {
+  const t = useT()
+  const tSidebar = t.dashboard.sidebar
   const pathname = usePathname()
   const router = useRouter()
+
+  const navItems = [
+    { href: "/dashboard", label: tSidebar.dashboard, icon: LayoutDashboard },
+    { href: "/dashboard/products", label: tSidebar.products, icon: Package },
+    { href: "/dashboard/documents", label: tSidebar.documents, icon: FileText },
+    { href: "/dashboard/labels", label: tSidebar.labels, icon: Tag },
+    { href: "/dashboard/responsible-person", label: tSidebar.responsiblePerson, icon: Shield },
+    { href: "/dashboard/settings", label: tSidebar.settings, icon: Settings },
+  ]
 
   async function handleSignOut() {
     const supabase = createClient()
@@ -52,7 +56,7 @@ function NavContent({ user, org, onClose }: SidebarProps & { onClose?: () => voi
 
       {org && (
         <div className="px-5 py-3 border-b border-gray-100">
-          <p className="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Organisation</p>
+          <p className="text-[11px] text-gray-400 uppercase tracking-wider font-medium">{tSidebar.organisation}</p>
           <p className="text-sm font-semibold text-gray-800 truncate mt-0.5">{org.name}</p>
         </div>
       )}
@@ -81,8 +85,11 @@ function NavContent({ user, org, onClose }: SidebarProps & { onClose?: () => voi
         })}
       </nav>
 
-      <div className="border-t border-gray-100 p-3">
-        <div className="flex items-center gap-3 px-3 py-2 rounded-lg mb-1">
+      <div className="border-t border-gray-100 p-3 space-y-1">
+        <div className="px-3 py-1">
+          <LanguageSwitcher className="w-full text-sm" />
+        </div>
+        <div className="flex items-center gap-3 px-3 py-2 rounded-lg">
           <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-bold">
             {user.email.charAt(0).toUpperCase()}
           </div>
@@ -96,7 +103,7 @@ function NavContent({ user, org, onClose }: SidebarProps & { onClose?: () => voi
           className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors"
         >
           <LogOut className="h-4 w-4" />
-          Déconnexion
+          {tSidebar.signOut}
         </button>
       </div>
     </div>

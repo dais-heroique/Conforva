@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Plus, Package, Upload } from "lucide-react"
 import { getComplianceBg, formatDate } from "@/lib/utils"
+import { getLocale, getDictionary } from "@/lib/i18n"
 
 export default async function ProductsPage() {
   const supabase = await createClient()
@@ -28,19 +29,23 @@ export default async function ProductsPage() {
     : { data: [] }
   const complianceMap = Object.fromEntries((complianceList ?? []).map(c => [c.product_id, c]))
 
+  const locale = await getLocale()
+  const dict = await getDictionary(locale)
+  const t = dict.dashboard.products
+
   return (
     <div className="p-8 space-y-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Mes produits</h1>
-          <p className="text-sm text-gray-500 mt-1">{products?.length ?? 0} produit(s)</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
+          <p className="text-sm text-gray-500 mt-1">{products?.length ?? 0} {t.count}</p>
         </div>
         <div className="flex gap-3">
           <Link href="/dashboard/products/import">
-            <Button variant="outline" className="gap-2"><Upload className="h-4 w-4" />Importer</Button>
+            <Button variant="outline" className="gap-2"><Upload className="h-4 w-4" />{t.import}</Button>
           </Link>
           <Link href="/dashboard/products/new">
-            <Button className="gap-2"><Plus className="h-4 w-4" />Nouveau produit</Button>
+            <Button className="gap-2"><Plus className="h-4 w-4" />{t.newProduct}</Button>
           </Link>
         </div>
       </div>
@@ -50,15 +55,15 @@ export default async function ProductsPage() {
           <CardContent className="py-20 text-center space-y-4">
             <Package className="h-16 w-16 text-gray-200 mx-auto" />
             <div>
-              <p className="text-lg font-medium text-gray-900">Aucun produit</p>
-              <p className="text-sm text-gray-500 mt-1">Créez votre premier produit pour commencer votre dossier GPSR.</p>
+              <p className="text-lg font-medium text-gray-900">{t.empty.title}</p>
+              <p className="text-sm text-gray-500 mt-1">{t.empty.desc}</p>
             </div>
             <div className="flex justify-center gap-3 pt-2">
               <Link href="/dashboard/products/import">
-                <Button variant="outline" className="gap-2"><Upload className="h-4 w-4" />Importer CSV</Button>
+                <Button variant="outline" className="gap-2"><Upload className="h-4 w-4" />{t.empty.importCsv}</Button>
               </Link>
               <Link href="/dashboard/products/new">
-                <Button className="gap-2"><Plus className="h-4 w-4" />Créer manuellement</Button>
+                <Button className="gap-2"><Plus className="h-4 w-4" />{t.empty.createManually}</Button>
               </Link>
             </div>
           </CardContent>
@@ -70,6 +75,9 @@ export default async function ProductsPage() {
             const score = cs?.score ?? 0
             const status = cs?.status ?? "incomplete"
             const cat = product.product_categories as any
+            const statusLabel = status === "compliant" ? t.status.compliant
+              : status === "in_progress" ? t.status.inProgress
+              : t.status.incomplete
             return (
               <Link key={product.id} href={`/dashboard/products/${product.id}`}>
                 <Card className="hover:shadow-md transition-shadow cursor-pointer">
@@ -79,7 +87,7 @@ export default async function ProductsPage() {
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-gray-900">{product.name}</p>
                         <p className="text-sm text-gray-500">
-                          {cat?.name_fr ?? "Non catégorisé"}
+                          {cat?.name_fr ?? t.uncategorized}
                           {product.reference && <> · <span className="font-mono text-xs">{product.reference}</span></>}
                           {" · "}{formatDate(product.created_at)}
                         </p>
@@ -87,10 +95,10 @@ export default async function ProductsPage() {
                       <div className="flex items-center gap-4">
                         <div className="hidden md:flex flex-col items-end gap-1 w-28">
                           <Progress value={score} className="h-1.5 w-full" />
-                          <span className="text-xs text-gray-500">{score}% complet</span>
+                          <span className="text-xs text-gray-500">{score}% {t.complete}</span>
                         </div>
                         <Badge variant="secondary" className={getComplianceBg(score)}>
-                          {status === "compliant" ? "Conforme" : status === "in_progress" ? "En cours" : "Incomplet"}
+                          {statusLabel}
                         </Badge>
                       </div>
                     </div>

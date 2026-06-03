@@ -11,6 +11,7 @@ import {
   TrendingUp, FileText, Tag, Shield,
 } from "lucide-react"
 import { getComplianceBg, formatDate } from "@/lib/utils"
+import { getLocale, getDictionary } from "@/lib/i18n"
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -45,15 +46,26 @@ export default async function DashboardPage() {
   const inProgressCount = products?.filter(p => complianceMap[p.id]?.status === "in_progress").length ?? 0
   const incompleteCount = totalProducts - compliantCount - inProgressCount
 
+  const locale = await getLocale()
+  const dict = await getDictionary(locale)
+  const t = dict.dashboard.home
+
+  const stats = [
+    { label: t.stats.products, value: totalProducts, icon: Package, color: "blue" },
+    { label: t.stats.compliant, value: compliantCount, icon: CheckCircle2, color: "green" },
+    { label: t.stats.inProgress, value: inProgressCount, icon: Clock, color: "amber" },
+    { label: t.stats.incomplete, value: incompleteCount, icon: AlertCircle, color: "red" },
+  ]
+
   return (
     <div className="p-8 space-y-8 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 text-sm mt-1">Bienvenue, {org.name}</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
+          <p className="text-gray-500 text-sm mt-1">{t.welcome.replace('{{name}}', org.name)}</p>
         </div>
         <Link href="/dashboard/products/new">
-          <Button className="gap-2"><Plus className="h-4 w-4" />Nouveau produit</Button>
+          <Button className="gap-2"><Plus className="h-4 w-4" />{t.newProduct}</Button>
         </Link>
       </div>
 
@@ -61,12 +73,7 @@ export default async function DashboardPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: "Produits", value: totalProducts, icon: Package, color: "blue" },
-          { label: "Conformes", value: compliantCount, icon: CheckCircle2, color: "green" },
-          { label: "En cours", value: inProgressCount, icon: Clock, color: "amber" },
-          { label: "Incomplets", value: incompleteCount, icon: AlertCircle, color: "red" },
-        ].map(({ label, value, icon: Icon, color }) => (
+        {stats.map(({ label, value, icon: Icon, color }) => (
           <Card key={label}>
             <CardContent className="pt-5">
               <div className="flex items-center gap-3">
@@ -93,8 +100,8 @@ export default async function DashboardPage() {
                   <Plus className="h-6 w-6 text-blue-600" />
                 </div>
               </div>
-              <p className="font-semibold text-gray-900">Nouveau produit</p>
-              <p className="text-xs text-gray-500">Créer ou importer un produit</p>
+              <p className="font-semibold text-gray-900">{t.quickActions.newProduct}</p>
+              <p className="text-xs text-gray-500">{t.quickActions.newProductDesc}</p>
             </CardContent>
           </Card>
         </Link>
@@ -106,8 +113,8 @@ export default async function DashboardPage() {
                   <FileText className="h-6 w-6 text-purple-600" />
                 </div>
               </div>
-              <p className="font-semibold text-gray-900">Mes documents</p>
-              <p className="text-xs text-gray-500">Dossiers techniques générés</p>
+              <p className="font-semibold text-gray-900">{t.quickActions.documents}</p>
+              <p className="text-xs text-gray-500">{t.quickActions.documentsDesc}</p>
             </CardContent>
           </Card>
         </Link>
@@ -119,8 +126,8 @@ export default async function DashboardPage() {
                   <Shield className="h-6 w-6 text-green-600" />
                 </div>
               </div>
-              <p className="font-semibold text-gray-900">Personne Responsable</p>
-              <p className="text-xs text-gray-500">Coordonnées EU obligatoires</p>
+              <p className="font-semibold text-gray-900">{t.quickActions.responsiblePerson}</p>
+              <p className="text-xs text-gray-500">{t.quickActions.responsiblePersonDesc}</p>
             </CardContent>
           </Card>
         </Link>
@@ -130,19 +137,19 @@ export default async function DashboardPage() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <Package className="h-5 w-5 text-blue-600" />Mes produits
+            <Package className="h-5 w-5 text-blue-600" />{t.productsList.title}
           </CardTitle>
           <Link href="/dashboard/products">
-            <Button variant="ghost" size="sm">Voir tout</Button>
+            <Button variant="ghost" size="sm">{t.productsList.viewAll}</Button>
           </Link>
         </CardHeader>
         <CardContent>
           {!products || products.length === 0 ? (
             <div className="text-center py-12 space-y-3">
               <Package className="h-12 w-12 text-gray-300 mx-auto" />
-              <p className="text-gray-500">Aucun produit pour l'instant.</p>
+              <p className="text-gray-500">{t.productsList.empty}</p>
               <Link href="/dashboard/products/new">
-                <Button size="sm">Créer mon premier produit</Button>
+                <Button size="sm">{t.productsList.createFirst}</Button>
               </Link>
             </div>
           ) : (
@@ -152,6 +159,9 @@ export default async function DashboardPage() {
                 const score = cs?.score ?? 0
                 const status = cs?.status ?? "incomplete"
                 const cat = product.product_categories as any
+                const statusLabel = status === "compliant" ? t.status.compliant
+                  : status === "in_progress" ? t.status.inProgress
+                  : t.status.incomplete
                 return (
                   <Link key={product.id} href={`/dashboard/products/${product.id}`}>
                     <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/30 transition-colors cursor-pointer">
@@ -159,8 +169,8 @@ export default async function DashboardPage() {
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-900 truncate">{product.name}</p>
                         <p className="text-xs text-gray-500">
-                          {cat?.name_fr ?? "Catégorie inconnue"}
-                          {product.reference && ` · Réf: ${product.reference}`}
+                          {cat?.name_fr ?? t.productsList.unknownCategory}
+                          {product.reference && ` · ${t.productsList.ref}: ${product.reference}`}
                           {" · "}{formatDate(product.created_at)}
                         </p>
                       </div>
@@ -170,7 +180,7 @@ export default async function DashboardPage() {
                           <p className="text-xs text-gray-500 mt-0.5 text-right">{score}%</p>
                         </div>
                         <Badge variant="secondary" className={getComplianceBg(score)}>
-                          {status === "compliant" ? "Conforme" : status === "in_progress" ? "En cours" : "Incomplet"}
+                          {statusLabel}
                         </Badge>
                       </div>
                     </div>
@@ -189,12 +199,12 @@ export default async function DashboardPage() {
               <div className="flex items-center gap-3">
                 <TrendingUp className="h-5 w-5 text-blue-600" />
                 <div>
-                  <p className="font-medium text-blue-900">Plan gratuit — 1 référence incluse</p>
-                  <p className="text-sm text-blue-700">Passez à Starter pour gérer jusqu'à 5 références sans watermark.</p>
+                  <p className="font-medium text-blue-900">{t.upsell.title}</p>
+                  <p className="text-sm text-blue-700">{t.upsell.desc}</p>
                 </div>
               </div>
               <Link href="/dashboard/billing">
-                <Button size="sm">Mettre à niveau</Button>
+                <Button size="sm">{t.upsell.upgrade}</Button>
               </Link>
             </div>
           </CardContent>

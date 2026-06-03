@@ -1,0 +1,420 @@
+{
+  "nav": {
+    "features": "Funzionalità",
+    "categories": "Categorie",
+    "pricing": "Prezzi",
+    "login": "Accedi",
+    "freeTrial": "Prova gratuita"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Regolamento GPSR UE 2023/988 — In vigore da dicembre 2024",
+      "title1": "La vostra conformità GPSR",
+      "title2": "in pochi minuti",
+      "subtitle": "Generate la vostra documentazione tecnica, valutazione del rischio ed etichettatura multilingue per <strong>qualsiasi prodotto fisico</strong> venduto nell'UE.",
+      "cta": "Inizia gratuitamente",
+      "noCard": "Nessuna carta di credito richiesta · 1 prodotto gratuito per sempre"
+    },
+    "disclaimer": {
+      "text": "<strong>Importante:</strong> Conforva è uno strumento di assistenza alla conformità, mai una garanzia legale. Ogni fascicolo generato deve essere validato da un esperto prima dell'immissione sul mercato UE."
+    },
+    "categories": {
+      "title": "Per tutti i vostri prodotti fisici",
+      "subtitle": "Qualunque sia il vostro settore, Conforva adatta l'analisi alle norme applicabili.",
+      "items": {
+        "candles": "Candele",
+        "toys": "Giocattoli",
+        "textiles": "Tessili",
+        "cosmetics": "Cosmetici",
+        "electronics": "Elettronica",
+        "baby": "Prodotti per bambini",
+        "decor": "Decorazione casa",
+        "furniture": "Arredamento",
+        "food_contact": "Contatto alimentare",
+        "sports": "Sport e tempo libero",
+        "more": "& molto altro..."
+      }
+    },
+    "features": {
+      "title": "Tutto ciò di cui avete bisogno per la conformità GPSR",
+      "items": {
+        "risk_analysis": {
+          "title": "Valutazione del rischio AI",
+          "desc": "Valutazione del rischio GPSR personalizzata per categoria, generata da AI sulla base delle norme UE applicabili (EN 71, EN 15493, ISO, ecc.)."
+        },
+        "technical_file": {
+          "title": "Fascicolo tecnico PDF",
+          "desc": "Generazione automatica del fascicolo tecnico completo: descrizione del prodotto, rischi identificati, misure di mitigazione, norme di riferimento."
+        },
+        "multilingual_labels": {
+          "title": "Etichettatura multilingue",
+          "desc": "Avvertenze di sicurezza tradotte in FR, EN, DE, IT, ES. Indicazioni CLP per allergeni, pittogrammi EN applicabili."
+        },
+        "responsible_person": {
+          "title": "Persona Responsabile UE",
+          "desc": "Gestione dei dati di contatto della Persona Responsabile UE, obbligatoria per tutti i prodotti venduti nell'Unione Europea."
+        },
+        "catalog_import": {
+          "title": "Importazione catalogo",
+          "desc": "Importazione CSV o connettore Shopify/WooCommerce per elaborare più referenze in blocco."
+        },
+        "dynamic_questionnaire": {
+          "title": "Questionario dinamico",
+          "desc": "Domande adattate alla vostra categoria di prodotto: candele, giocattoli e cosmetici hanno requisiti diversi."
+        }
+      }
+    },
+    "how_it_works": {
+      "title": "Come funziona?",
+      "steps": {
+        "step1": {
+          "title": "Scegliete la categoria",
+          "desc": "Candele, giocattoli, cosmetici, elettronica… Oltre 10 categorie coperte."
+        },
+        "step2": {
+          "title": "Compilate il questionario",
+          "desc": "Domande adattate alla vostra categoria. Massimo da 5 a 10 minuti."
+        },
+        "step3": {
+          "title": "L'AI genera il fascicolo",
+          "desc": "Valutazione del rischio + fascicolo tecnico basati sulle norme UE."
+        },
+        "step4": {
+          "title": "Validate ed esportate",
+          "desc": "Validazione umana obbligatoria, esportazione PDF multilingue."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Prezzi semplici e trasparenti",
+      "subtitle": "Pagate in base al numero di referenze che gestite.",
+      "mostPopular": "Più popolare",
+      "plans": {
+        "free": {
+          "name": "Gratuito",
+          "products": "1 referenza",
+          "features": ["1 valutazione del rischio", "Fascicolo tecnico con filigrana", "Esportazione PDF"],
+          "cta": "Inizia gratuitamente"
+        },
+        "starter": {
+          "name": "Starter",
+          "products": "5 referenze",
+          "features": ["5 fascicoli completi", "Etichette multilingue", "Validazione umana", "Supporto email"],
+          "cta": "Inizia"
+        },
+        "growth": {
+          "name": "Growth",
+          "products": "30 referenze",
+          "features": ["30 fascicoli completi", "Importazione CSV", "Connettore Shopify", "Avvisi norme", "Supporto prioritario"],
+          "cta": "Scegli Growth"
+        },
+        "pro": {
+          "name": "Pro",
+          "products": "150 referenze",
+          "features": ["150 fascicoli", "WooCommerce", "Persona Responsabile EU", "Accesso API", "Supporto dedicato"],
+          "cta": "Scegli Pro"
+        }
+      }
+    },
+    "cta": {
+      "title": "Iniziate il vostro primo fascicolo GPSR",
+      "subtitle": "Gratuito per 1 prodotto. Nessuna carta di credito richiesta.",
+      "button": "Crea il mio account gratuito"
+    },
+    "footer": {
+      "disclaimer": "Assistenza alla conformità — non consulenza legale",
+      "cgu": "Termini di utilizzo",
+      "privacy": "Privacy"
+    }
+  },
+  "auth": {
+    "login": {
+      "subtitle": "Conformità GPSR per e-commerce UE",
+      "cardTitle": "Accedi / Registrati",
+      "cardDesc": "Inserite il vostro indirizzo email per ricevere un link di accesso sicuro.",
+      "emailLabel": "Indirizzo email",
+      "emailPlaceholder": "voi@negozio.it",
+      "submitButton": "Ricevi il mio link di accesso",
+      "sending": "Invio in corso...",
+      "successTitle": "Controllate la vostra casella di posta!",
+      "successDesc": "Un link di accesso è stato inviato a <strong>{{email}}</strong>. Cliccatelo per accedere al vostro spazio.",
+      "changeEmail": "Cambia email",
+      "termsText": "Continuando, accettate i nostri",
+      "termsLink": "Termini di utilizzo",
+      "andText": "e la nostra",
+      "privacyLink": "Informativa sulla privacy",
+      "disclaimer": "Conforva è uno strumento di assistenza alla conformità GPSR. I documenti generati non costituiscono consulenza legale e non garantiscono la conformità del prodotto. La validazione da parte di un esperto legale o di un organismo notificato rimane indispensabile prima di qualsiasi immissione sul mercato UE."
+    },
+    "onboarding": {
+      "title": "Benvenuti su Conforva",
+      "subtitle": "Configuriamo il vostro spazio in 2 fasi",
+      "step1": {
+        "title": "La vostra organizzazione",
+        "desc": "Informazioni sul vostro negozio / azienda",
+        "orgName": "Nome del vostro negozio / azienda *",
+        "orgNamePlaceholder": "Il Mio Negozio Srl",
+        "country": "Paese della vostra azienda *",
+        "vatNumber": "Numero di partita IVA (opzionale)",
+        "vatPlaceholder": "IT12345678901",
+        "continue": "Continua"
+      },
+      "step2": {
+        "title": "La vostra attività e-commerce",
+        "desc": "La vostra piattaforma di vendita e preferenze",
+        "platform": "Principale piattaforma di vendita",
+        "platformPlaceholder": "Seleziona...",
+        "language": "Lingua dell'interfaccia",
+        "back": "Indietro",
+        "submit": "Accedi alla dashboard"
+      }
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "products": "I miei prodotti",
+      "documents": "Documenti",
+      "labels": "Etichette",
+      "responsiblePerson": "Persona Responsabile",
+      "settings": "Impostazioni",
+      "organisation": "Organizzazione",
+      "signOut": "Disconnetti"
+    },
+    "home": {
+      "title": "Dashboard",
+      "welcome": "Benvenuto, {{name}}",
+      "newProduct": "Nuovo prodotto",
+      "stats": {
+        "products": "Prodotti",
+        "compliant": "Conformi",
+        "inProgress": "In corso",
+        "incomplete": "Incompleti"
+      },
+      "quickActions": {
+        "newProduct": "Nuovo prodotto",
+        "newProductDesc": "Crea o importa un prodotto",
+        "documents": "I miei documenti",
+        "documentsDesc": "Fascicoli tecnici generati",
+        "responsiblePerson": "Persona Responsabile",
+        "responsiblePersonDesc": "Dati di contatto UE obbligatori"
+      },
+      "productsList": {
+        "title": "I miei prodotti",
+        "viewAll": "Vedi tutti",
+        "empty": "Nessun prodotto ancora.",
+        "createFirst": "Crea il mio primo prodotto",
+        "unknownCategory": "Categoria sconosciuta",
+        "ref": "Rif"
+      },
+      "status": {
+        "compliant": "Conforme",
+        "inProgress": "In corso",
+        "incomplete": "Incompleto"
+      },
+      "upsell": {
+        "title": "Piano gratuito — 1 referenza inclusa",
+        "desc": "Passa a Starter per gestire fino a 5 referenze senza filigrana.",
+        "upgrade": "Aggiorna piano"
+      }
+    },
+    "products": {
+      "title": "I miei prodotti",
+      "count": "prodotto/i",
+      "import": "Importa",
+      "newProduct": "Nuovo prodotto",
+      "empty": {
+        "title": "Nessun prodotto",
+        "desc": "Create il vostro primo prodotto per iniziare il vostro fascicolo GPSR.",
+        "importCsv": "Importa CSV",
+        "createManually": "Crea manualmente"
+      },
+      "status": {
+        "compliant": "Conforme",
+        "inProgress": "In corso",
+        "incomplete": "Incompleto"
+      },
+      "complete": "completo",
+      "uncategorized": "Non categorizzato"
+    },
+    "newProduct": {
+      "title": "Nuovo prodotto",
+      "stepOf": "Fase {{step}} di 2",
+      "limitReached": {
+        "title": "Limite raggiunto",
+        "desc": "Il vostro piano <strong>{{plan}}</strong> include {{limit}}. Avete già {{count}} prodotto/i.",
+        "upgrade": "Aggiorna piano",
+        "viewProducts": "Vedi i miei prodotti",
+        "nextPlan": "Passate al piano <strong>{{plan}}</strong> per aggiungere altri prodotti."
+      },
+      "step1": {
+        "title": "Informazioni generali",
+        "desc": "Identificate il vostro prodotto e selezionate la sua categoria GPSR.",
+        "productName": "Nome del prodotto *",
+        "productNamePlaceholder": "es: Candela profumata Vaniglia 200g",
+        "reference": "Referenza / SKU",
+        "referencePlaceholder": "es: CAN-VAN-200",
+        "category": "Categoria prodotto *",
+        "categoryPlaceholder": "Seleziona una categoria...",
+        "standards": "Norme",
+        "continue": "Continua"
+      },
+      "step2": {
+        "title": "Caratteristiche fisiche",
+        "desc": "Queste informazioni arricchiscono la valutazione del rischio.",
+        "intendedUse": "Uso previsto",
+        "intendedUsePlaceholder": "es: Candela decorativa per uso interno in spazio adulti",
+        "materials": "Materiali principali (separati da virgola)",
+        "materialsPlaceholder": "es: cera di soia, stoppino di cotone, vetro",
+        "weight": "Peso (g)",
+        "length": "Lunghezza (mm)",
+        "targetMarkets": "Mercati target UE",
+        "back": "Indietro",
+        "submit": "Crea e compila il questionario"
+      }
+    },
+    "billing": {
+      "title": "Fatturazione",
+      "subtitle": "Gestite il vostro abbonamento Conforva",
+      "currentPlan": "Piano attuale",
+      "referencesUsed": "{{used}} / {{max}} referenze utilizzate",
+      "manageSubscription": "Gestisci il mio abbonamento",
+      "choosePlan": "Scegli un piano",
+      "mostPopular": "Più popolare",
+      "currentPlanBadge": "Piano attuale",
+      "reference": "referenza",
+      "references": "referenze",
+      "currentPlanButton": "Piano attuale",
+      "freeButton": "Gratuito",
+      "choosePlanButton": "Scegli {{name}}",
+      "enterprise": {
+        "title": "Enterprise — 150+ referenze",
+        "desc": "Preventivo personalizzato · Accesso API · SLA · Account manager dedicato",
+        "contact": "Contattaci"
+      },
+      "plans": {
+        "free": {
+          "features": ["1 referenza prodotto", "Valutazione del rischio AI", "File PDF con filigrana", "Questionario dinamico"]
+        },
+        "starter": {
+          "features": ["5 referenze prodotto", "Fascicoli senza filigrana", "Etichette multilingue (5 lingue)", "Validazione umana tracciata", "Esportazione PDF", "Supporto email"]
+        },
+        "growth": {
+          "features": ["30 referenze prodotto", "Importazione CSV", "Connettore Shopify", "Avvisi modifiche norme", "Persona Responsabile EU", "Supporto prioritario"]
+        },
+        "pro": {
+          "features": ["150 referenze prodotto", "Connettore WooCommerce", "Accesso API", "Report personalizzati", "Account manager dedicato"]
+        }
+      }
+    },
+    "settings": {
+      "title": "Impostazioni",
+      "subtitle": "Gestite la vostra organizzazione e preferenze",
+      "org": {
+        "title": "Organizzazione",
+        "desc": "Informazioni sul vostro negozio / azienda",
+        "name": "Nome dell'organizzazione",
+        "country": "Paese",
+        "vatNumber": "Numero IVA",
+        "website": "Sito web",
+        "websitePlaceholder": "https://mionegozio.it",
+        "saved": "Organizzazione salvata.",
+        "save": "Salva"
+      },
+      "preferences": {
+        "title": "Preferenze",
+        "language": "Lingua dell'interfaccia",
+        "email": "Email dell'account",
+        "emailNote": "L'indirizzo email non può essere modificato qui.",
+        "saved": "Preferenze salvate.",
+        "save": "Salva"
+      },
+      "compliance": {
+        "title": "Conformità e Termini",
+        "desc": "Conforva è uno strumento di assistenza alla conformità GPSR (UE 2023/988). I documenti generati non costituiscono consulenza legale e non garantiscono la conformità normativa dei vostri prodotti.",
+        "cgu": "Termini di utilizzo",
+        "privacy": "Informativa sulla privacy"
+      }
+    },
+    "responsiblePerson": {
+      "title": "Persona Responsabile UE",
+      "subtitle": "Obbligatorio per tutti i prodotti immessi sul mercato europeo (GPSR Art. 4)",
+      "infoTitle": "Che cos'è la Persona Responsabile?",
+      "infoDesc": "Il Regolamento sulla sicurezza generale dei prodotti richiede che per ogni prodotto immesso sul mercato venga designato un produttore, importatore o rappresentante autorizzato stabilito nell'UE. Questa persona è responsabile degli obblighi di conformità e della comunicazione con le autorità.",
+      "cardTitle": "Dati di contatto della persona responsabile",
+      "cardDesc": "Queste informazioni appariranno su tutti i vostri fascicoli tecnici ed etichette.",
+      "type": "Tipo di responsabile *",
+      "types": {
+        "manufacturer": "Produttore (stabilito nell'UE)",
+        "importer": "Importatore UE",
+        "authorized_rep": "Rappresentante autorizzato UE"
+      },
+      "companyName": "Nome della società *",
+      "companyNamePlaceholder": "La Mia Società Srl",
+      "addressLine": "Indirizzo *",
+      "addressLinePlaceholder": "Via della Repubblica 123",
+      "postalCode": "CAP *",
+      "postalCodePlaceholder": "00100",
+      "city": "Città *",
+      "cityPlaceholder": "Roma",
+      "country": "Paese (UE) *",
+      "email": "Email di contatto *",
+      "emailPlaceholder": "contatto@miasocieta.it",
+      "phone": "Telefono",
+      "phonePlaceholder": "+39 06 12345678",
+      "save": "Salva",
+      "savedSuccess": "Informazioni salvate con successo.",
+      "statusActive": "Attiva",
+      "statusInactive": "Inattiva"
+    },
+    "labels": {
+      "title": "Etichette multilingue",
+      "subtitle": "Avvertenze di sicurezza GPSR — {{count}} lingua/e inclusa/e nel vostro piano",
+      "empty": {
+        "title": "Nessuna etichetta",
+        "desc": "Le etichette vengono generate automaticamente durante la generazione AI.",
+        "viewProducts": "Vedi i miei prodotti"
+      },
+      "generated": "Generato",
+      "toGenerate": "Da generare",
+      "upgradePlan": "Piano superiore richiesto",
+      "view": "Visualizza",
+      "pdf": "PDF",
+      "moreWarnings": "+ {{count}} altri"
+    }
+  },
+  "common": {
+    "save": "Salva",
+    "cancel": "Annulla",
+    "loading": "Caricamento...",
+    "back": "Indietro",
+    "continue": "Continua",
+    "error": "Errore",
+    "success": "Successo",
+    "confirm": "Conferma",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "close": "Chiudi",
+    "create": "Crea",
+    "update": "Aggiorna",
+    "search": "Cerca",
+    "filter": "Filtra",
+    "export": "Esporta",
+    "import": "Importa",
+    "download": "Scarica",
+    "upload": "Carica",
+    "view": "Visualizza",
+    "add": "Aggiungi",
+    "remove": "Rimuovi",
+    "yes": "Sì",
+    "no": "No",
+    "optional": "opzionale",
+    "required": "obbligatorio",
+    "languages": {
+      "fr": "Français",
+      "en": "English",
+      "de": "Deutsch",
+      "it": "Italiano",
+      "es": "Español"
+    }
+  }
+}
