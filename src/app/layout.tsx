@@ -15,9 +15,12 @@ export const metadata: Metadata = {
   description: "Générez votre dossier de conformité GPSR (UE 2023/988) en quelques minutes. Analyse de risque IA, dossier technique PDF, étiquetage multilingue.",
   keywords: ["GPSR", "conformité UE", "dossier technique", "analyse de risque", "étiquetage produit"],
   icons: {
-    icon: [{ url: "/favicon.png", type: "image/png" }],
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.png", type: "image/png" },
+    ],
     apple: [{ url: "/favicon.png", type: "image/png" }],
-    shortcut: "/favicon.png",
+    shortcut: "/favicon.svg",
   },
   openGraph: {
     title: "Conforva — Conformité GPSR simplifiée",
