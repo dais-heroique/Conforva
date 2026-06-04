@@ -50,8 +50,8 @@ export function PublicNav() {
           <nav className="hidden md:flex items-center gap-6 text-sm text-gray-500">
             <Link href="/#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</Link>
             <Link href="/#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</Link>
+            <Link href="/blog" className="hover:text-gray-900 transition-colors">Blog</Link>
             <Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link>
-            <Link href="/contact" className="hover:text-gray-900 transition-colors">Contact</Link>
           </nav>
           <div className="flex items-center gap-2">
             <Link href="/auth/login" className="hidden sm:block text-sm text-gray-500 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
@@ -89,6 +89,7 @@ export function PublicFooter() {
             <ul className="space-y-2 text-sm text-gray-500">
               <li><Link href="/#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</Link></li>
               <li><Link href="/#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</Link></li>
+              <li><Link href="/blog" className="hover:text-gray-900 transition-colors">Blog</Link></li>
               <li><Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link></li>
               <li><Link href="/status" className="hover:text-gray-900 transition-colors">Statut du service</Link></li>
             </ul>

@@ -185,8 +185,8 @@ export default function LandingPage() {
           </Link>
           <nav className="hidden md:flex items-center gap-7 text-sm text-gray-500">
             <a href="#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</a>
-            <a href="#comment" className="hover:text-gray-900 transition-colors">Comment ça marche</a>
             <a href="#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</a>
+            <Link href="/blog" className="hover:text-gray-900 transition-colors">Blog</Link>
             <Link href="/enterprise" className="hover:text-gray-900 transition-colors">Enterprise</Link>
             <Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link>
           </nav>
@@ -955,6 +955,7 @@ export default function LandingPage() {
               <ul className="space-y-2 text-sm text-gray-500">
                 <li><a href="#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</a></li>
                 <li><a href="#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</a></li>
+                <li><Link href="/blog" className="hover:text-gray-900 transition-colors">Blog</Link></li>
                 <li><Link href="/enterprise" className="hover:text-gray-900 transition-colors">Enterprise</Link></li>
                 <li><Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link></li>
                 <li><Link href="/status" className="hover:text-gray-900 transition-colors">Statut</Link></li>
