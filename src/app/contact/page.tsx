@@ -4,8 +4,21 @@ import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 import { Mail, Clock, MessageSquare, HelpCircle } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Contact | Conforva",
-  description: "Contactez Conforva pour toute question sur la conformité GPSR, la facturation ou le support technique.",
+  title: "Contact",
+  description: "Contactez Conforva pour toute question sur la conformité GPSR, la facturation ou le support technique. Réponse sous 24h.",
+  keywords: ["contact Conforva", "support GPSR", "aide conformité"],
+  openGraph: {
+    title: "Contacter Conforva",
+    description: "Une question sur la conformité GPSR, la facturation ou le support ? Contactez-nous — réponse sous 24h.",
+    url: "https://conforva.com/contact",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Contacter Conforva",
+    description: "Une question sur la conformité GPSR, la facturation ou le support ? Réponse sous 24h.",
+  },
+  alternates: { canonical: "https://conforva.com/contact" },
 }
 
 export default function ContactPage() {

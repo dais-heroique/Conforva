@@ -4,8 +4,24 @@ import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 import { ChevronDown } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "FAQ — Questions fréquentes | Conforva",
-  description: "Toutes les réponses aux questions fréquentes sur la conformité GPSR, le dossier technique, la déclaration de conformité et l'utilisation de Conforva.",
+  title: "FAQ — Questions fréquentes",
+  description: "Toutes les réponses sur la conformité GPSR : dossier technique obligatoire, analyse de risque, déclaration de conformité, étiquetage, personne responsable EU et utilisation de Conforva.",
+  keywords: [
+    "FAQ GPSR", "questions conformité GPSR", "dossier technique obligatoire",
+    "analyse de risque produit", "déclaration conformité UE", "personne responsable EU",
+  ],
+  openGraph: {
+    title: "FAQ — Questions fréquentes sur la conformité GPSR",
+    description: "Toutes les réponses sur le GPSR : dossier technique, analyse de risque, déclaration de conformité, étiquetage et personne responsable EU.",
+    url: "https://conforva.com/faq",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FAQ GPSR — Questions fréquentes",
+    description: "Toutes les réponses sur le GPSR : dossier technique, analyse de risque, déclaration de conformité.",
+  },
+  alternates: { canonical: "https://conforva.com/faq" },
 }
 
 const SECTIONS = [
@@ -103,9 +119,23 @@ const SECTIONS = [
   },
 ]
 
+const FAQ_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": SECTIONS.flatMap(s => s.questions).map(q => ({
+    "@type": "Question",
+    "name": q.q,
+    "acceptedAnswer": { "@type": "Answer", "text": q.a },
+  })),
+}
+
 export default function FAQPage() {
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }}
+      />
       <PublicNav />
 
       <main className="max-w-3xl mx-auto px-5 py-16">

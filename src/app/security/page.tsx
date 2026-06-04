@@ -4,8 +4,21 @@ import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 import { Shield, Lock, Server, CreditCard, Eye, Database, Bell } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Sécurité & Confidentialité | Conforva",
-  description: "Comment Conforva protège vos données : chiffrement, hébergement EU, conformité RGPD, gestion des accès et traitement des incidents.",
+  title: "Sécurité & Confidentialité",
+  description: "Comment Conforva protège vos données : chiffrement TLS, hébergement EU, conformité RGPD, Row Level Security et gestion des incidents sous 72h.",
+  keywords: ["sécurité Conforva", "protection données", "RGPD", "chiffrement", "hébergement EU"],
+  openGraph: {
+    title: "Sécurité & Confidentialité — Conforva",
+    description: "Chiffrement TLS, hébergement EU, conformité RGPD et Row Level Security. Découvrez comment Conforva protège vos données produits.",
+    url: "https://conforva.com/security",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Sécurité — Conforva",
+    description: "Chiffrement TLS, hébergement EU, conformité RGPD. Comment Conforva protège vos données.",
+  },
+  alternates: { canonical: "https://conforva.com/security" },
 }
 
 const SECTIONS = [

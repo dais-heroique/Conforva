@@ -10,10 +10,59 @@ const dmSans = DM_Sans({
   display: "swap",
 })
 
+const BASE_URL = "https://conforva.com"
+
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${BASE_URL}/#organization`,
+      "name": "Conforva",
+      "url": BASE_URL,
+      "logo": { "@type": "ImageObject", "url": `${BASE_URL}/favicon.png` },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "support@conforva.com",
+        "contactType": "customer support",
+        "availableLanguage": ["French", "English"],
+      },
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Conforva",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "url": BASE_URL,
+      "description": "SaaS de conformité GPSR (Règlement UE 2023/988) pour e-commerçants. Génération automatique de dossiers techniques, analyses de risque ISO 12100 et étiquetage multilingue.",
+      "offers": [
+        { "@type": "Offer", "name": "Gratuit", "price": "0", "priceCurrency": "EUR" },
+        { "@type": "Offer", "name": "Starter", "price": "29", "priceCurrency": "EUR" },
+        { "@type": "Offer", "name": "Growth", "price": "79", "priceCurrency": "EUR" },
+        { "@type": "Offer", "name": "Pro", "price": "199", "priceCurrency": "EUR" },
+      ],
+      "publisher": { "@id": `${BASE_URL}/#organization` },
+    },
+  ],
+}
+
 export const metadata: Metadata = {
-  title: "Conforva — Conformité GPSR pour e-commerçants EU",
-  description: "Générez votre dossier de conformité GPSR (UE 2023/988) en quelques minutes. Analyse de risque IA, dossier technique PDF, étiquetage multilingue.",
-  keywords: ["GPSR", "conformité UE", "dossier technique", "analyse de risque", "étiquetage produit"],
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "Conforva — Conformité GPSR pour e-commerçants EU",
+    template: "%s — Conforva",
+  },
+  description: "Générez votre dossier de conformité GPSR (UE 2023/988) en quelques minutes. Analyse de risque IA, dossier technique 15 sections, déclaration de conformité et étiquetage multilingue.",
+  keywords: [
+    "GPSR", "conformité GPSR", "dossier technique GPSR", "règlement UE 2023/988",
+    "analyse de risque ISO 12100", "déclaration de conformité UE", "étiquetage sécurité",
+    "conformité produit UE", "personne responsable EU", "e-commerce conformité",
+    "sécurité produit", "Amazon FBA conformité", "dossier technique",
+  ],
+  authors: [{ name: "Conforva", url: BASE_URL }],
+  creator: "Conforva",
+  publisher: "Conforva",
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -23,11 +72,19 @@ export const metadata: Metadata = {
     shortcut: "/favicon.svg",
   },
   openGraph: {
-    title: "Conforva — Conformité GPSR simplifiée",
-    description: "SaaS de conformité GPSR pour e-commerçants vendant dans l'UE",
     type: "website",
-    images: [{ url: "/favicon.png", width: 512, height: 512, alt: "Conforva" }],
+    siteName: "Conforva",
+    title: "Conforva — Conformité GPSR pour e-commerçants EU",
+    description: "Générez votre dossier de conformité GPSR en quelques minutes. Analyse de risque, dossier technique 15 sections, étiquetage multilingue.",
+    url: BASE_URL,
+    locale: "fr_FR",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Conforva — Conformité GPSR pour e-commerçants EU",
+    description: "Générez votre dossier de conformité GPSR en quelques minutes. Dossier technique, analyse de risque, étiquetage multilingue.",
+  },
+  alternates: { canonical: BASE_URL },
 }
 
 export const viewport: Viewport = {
@@ -43,6 +100,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+        />
+      </head>
       <body className={dmSans.className}>
         <LocaleProvider t={t} locale={locale}>
           {children}

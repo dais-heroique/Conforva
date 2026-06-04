@@ -5,8 +5,21 @@ import { Button } from "@/components/ui/button"
 import { CheckCircle2, ShieldCheck, Globe, FileText, ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "À propos — Conforva",
-  description: "Conforva simplifie la conformité GPSR pour les e-commerçants européens. Découvrez notre mission, notre technologie et nos engagements.",
+  title: "À propos",
+  description: "Conforva simplifie la conformité GPSR pour les e-commerçants et vendeurs en ligne. Découvrez notre mission : rendre la conformité (UE) 2023/988 accessible à tous.",
+  keywords: ["Conforva", "à propos", "conformité GPSR", "mission", "SaaS conformité"],
+  openGraph: {
+    title: "À propos de Conforva",
+    description: "Conforva simplifie la conformité GPSR pour les e-commerçants et vendeurs en ligne. Notre mission : rendre la conformité (UE) 2023/988 accessible à tous.",
+    url: "https://conforva.com/about",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "À propos de Conforva",
+    description: "Conforva simplifie la conformité GPSR pour les e-commerçants et vendeurs en ligne.",
+  },
+  alternates: { canonical: "https://conforva.com/about" },
 }
 
 const VALUES = [

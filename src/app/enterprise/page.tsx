@@ -8,8 +8,24 @@ import {
 } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Enterprise | Conforva — Conformité GPSR pour grands comptes",
-  description: "Solution Enterprise Conforva : tarification au volume, gestionnaire dédié, SLA garantis pour les grands e-commerçants gérant plus de 150 références.",
+  title: "Enterprise — Conformité GPSR pour grands comptes",
+  description: "Solution Enterprise Conforva : tarification dégroissive au volume, gestionnaire de compte dédié, SLA garantis. Pour les e-commerçants gérant plus de 150 références GPSR par mois.",
+  keywords: [
+    "Conforva Enterprise", "conformité GPSR grands comptes", "SaaS conformité volume",
+    "dossier technique en masse", "GPSR e-commerce", "conformité catalogue produit",
+  ],
+  openGraph: {
+    title: "Conforva Enterprise — Conformité GPSR pour grands comptes",
+    description: "Tarification dégroissive au volume, SLA garantis et gestionnaire dédié. Pour les catalogues de 150 à 10 000+ références.",
+    url: "https://conforva.com/enterprise",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Conforva Enterprise — GPSR pour grands comptes",
+    description: "Tarification dégroissive, SLA garantis, gestionnaire dédié. Pour 150 à 10 000+ références.",
+  },
+  alternates: { canonical: "https://conforva.com/enterprise" },
 }
 
 const VOLUME_TIERS = [

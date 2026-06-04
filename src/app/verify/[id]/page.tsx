@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import Link from "next/link"
+import type { Metadata } from "next"
 import {
   Shield,
   CheckCircle2,
@@ -13,6 +14,31 @@ import { CopyButton } from "@/components/verify/CopyButton"
 
 interface PageProps {
   params: Promise<{ id: string }>
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from("technical_files")
+    .select("content_json, products(name)")
+    .eq("id", id)
+    .single()
+
+  const productName = (data?.products as any)?.name ?? "Produit"
+  const title = `Vérification GPSR — ${productName}`
+  const description = `Dossier de conformité GPSR vérifié pour ${productName}. Analyse de risque, normes applicables et déclaration de conformité.`
+
+  return {
+    title,
+    description,
+    robots: { index: false, follow: false },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+    },
+  }
 }
 
 

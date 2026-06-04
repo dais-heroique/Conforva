@@ -3,7 +3,15 @@ import Link from "next/link"
 import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 
 export const metadata: Metadata = {
-  title: "Mentions légales | Conforva",
+  title: "Mentions légales",
+  description: "Mentions légales de Conforva — éditeur, hébergement, propriété intellectuelle et informations légales obligatoires.",
+  openGraph: {
+    title: "Mentions légales — Conforva",
+    description: "Mentions légales de Conforva : éditeur, hébergement Vercel, propriété intellectuelle.",
+    url: "https://conforva.com/mentions-legales",
+    type: "website",
+  },
+  alternates: { canonical: "https://conforva.com/mentions-legales" },
 }
 
 export default function MentionsLegalesPage() {

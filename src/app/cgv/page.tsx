@@ -2,8 +2,15 @@ import type { Metadata } from "next"
 import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 
 export const metadata: Metadata = {
-  title: "Conditions Générales de Vente | Conforva",
-  description: "Conditions Générales de Vente (CGV) de Conforva — abonnements, tarifs, droit de rétractation, résiliation.",
+  title: "Conditions Générales de Vente",
+  description: "Conditions Générales de Vente (CGV) de Conforva — abonnements, tarifs, modalités de paiement, droit de rétractation 14 jours et résiliation.",
+  openGraph: {
+    title: "CGV — Conditions Générales de Vente de Conforva",
+    description: "CGV de Conforva : abonnements, tarifs, droit de rétractation et résiliation.",
+    url: "https://conforva.com/cgv",
+    type: "website",
+  },
+  alternates: { canonical: "https://conforva.com/cgv" },
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

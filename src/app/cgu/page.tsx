@@ -3,7 +3,15 @@ import type { Metadata } from "next"
 import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 
 export const metadata: Metadata = {
-  title: "Conditions Générales d'Utilisation | Conforva",
+  title: "Conditions Générales d'Utilisation",
+  description: "Conditions Générales d'Utilisation (CGU) de Conforva — règles d'utilisation du service, limites de responsabilité, propriété intellectuelle, résiliation et droit applicable.",
+  openGraph: {
+    title: "CGU — Conditions Générales d'Utilisation de Conforva",
+    description: "Conditions Générales d'Utilisation de Conforva : règles d'utilisation, limites de responsabilité et droit applicable.",
+    url: "https://conforva.com/cgu",
+    type: "website",
+  },
+  alternates: { canonical: "https://conforva.com/cgu" },
 }
 
 export default function CGUPage() {

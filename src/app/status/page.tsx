@@ -4,8 +4,16 @@ import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 import { CheckCircle2, AlertTriangle } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Statut du service | Conforva",
-  description: "État en temps réel des services Conforva : application, API, génération IA, paiements et base de données.",
+  title: "Statut du service",
+  description: "État en temps réel des services Conforva : application web, génération IA, paiements Stripe et base de données.",
+  robots: { index: false, follow: false },
+  openGraph: {
+    title: "Statut des services Conforva",
+    description: "État en temps réel des services Conforva.",
+    url: "https://conforva.com/status",
+    type: "website",
+  },
+  alternates: { canonical: "https://conforva.com/status" },
 }
 
 const SERVICES = [
