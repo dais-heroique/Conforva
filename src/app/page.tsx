@@ -251,12 +251,16 @@ export default function LandingPage() {
 
       {/* ─── CATEGORIES STRIP ─── */}
       <div className="border-y border-gray-100 bg-gray-50/70 py-3.5 overflow-hidden">
-        <div className="flex gap-2 px-5 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-          {CATEGORIES.map(cat => (
-            <span key={cat} className="shrink-0 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs text-gray-500 whitespace-nowrap shadow-sm">{cat}</span>
+        <motion.div
+          className="flex gap-2"
+          style={{ width: "max-content" }}
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+        >
+          {[...CATEGORIES, "& bien d'autres…", ...CATEGORIES, "& bien d'autres…"].map((cat, i) => (
+            <span key={i} className="shrink-0 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs text-gray-500 whitespace-nowrap shadow-sm">{cat}</span>
           ))}
-          <span className="shrink-0 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs text-gray-400 whitespace-nowrap">& bien d'autres…</span>
-        </div>
+        </motion.div>
       </div>
 
       {/* ─── GPSR STAKES ─── */}

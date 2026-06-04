@@ -347,6 +347,387 @@ export const ARTICLES: BlogArticle[] = [
       href: "/auth/login",
     },
   },
+  {
+    slug: "gpsr-jouets-obligations-vendeurs",
+    title: "GPSR et jouets : obligations spécifiques et norme EN 71 expliquées",
+    description: "Les jouets sont l'une des catégories les plus réglementées sous le GPSR. Dossier technique, norme EN 71, marquage CE, restriction d'âge : tout ce que doit savoir un vendeur de jouets en UE.",
+    keywords: ["GPSR jouets", "norme EN 71 GPSR", "conformité jouets UE", "jouets sécurité Europe", "dossier technique jouets", "marquage CE jouets"],
+    publishedAt: "2025-04-20",
+    readingTime: 7,
+    category: "Réglementation",
+    intro: "Les jouets sont l'une des catégories de produits les plus encadrées au monde. En Europe, ils sont soumis à la fois à la directive jouets 2009/48/CE ET au règlement GPSR (UE) 2023/988 pour les aspects de sécurité générale. Si vous vendez des jouets sur Amazon EU, Shopify ou toute autre plateforme, voici exactement ce que vous devez faire.",
+    sections: [
+      {
+        heading: "Deux règlements applicables simultanément",
+        body: [
+          "La directive jouets 2009/48/CE s'applique spécifiquement aux jouets — c'est-à-dire aux produits conçus ou destinés à être utilisés par des enfants de moins de 14 ans pour jouer. Elle impose le marquage CE, des tests selon les normes EN 71, et une déclaration de conformité CE.",
+          "Le GPSR (UE) 2023/988 s'applique en plus comme cadre général de sécurité. Il ajoute les obligations de dossier technique (Article 22), d'analyse de risque documentée selon ISO 12100, et de Personne Responsable EU pour les fabricants hors UE.",
+          "En pratique, si vous respectez pleinement la directive jouets 2009/48/CE, vous couvrez une grande partie des exigences GPSR — mais pas toutes. La Personne Responsable EU et la documentation structurée selon l'Article 22 restent des obligations GPSR spécifiques.",
+        ],
+      },
+      {
+        heading: "La norme EN 71 : ce qu'elle couvre par partie",
+        body: [
+          "La norme EN 71 est la norme harmonisée de référence pour les jouets en Europe. Elle est composée de plusieurs parties, dont les plus fréquemment applicables sont :",
+          "**EN 71-1 — Propriétés mécaniques et physiques** : résistance aux chocs, taille des petites pièces (risque d'ingestion pour les enfants de moins de 3 ans), résistance à la traction des cordons et liens, bords et pointes dangereux.",
+          "**EN 71-2 — Inflammabilité** : comportement au feu des matériaux constitutifs du jouet — textiles, mousses, plastiques, papier. Chaque catégorie de matériau a ses propres limites.",
+          "**EN 71-3 — Migration des éléments chimiques** : limites de migration des métaux lourds (plomb, cadmium, arsenic, mercure, baryum, antimoine, chrome, sélénium) depuis les matériaux du jouet.",
+          "**EN 71-7 — Peintures au doigt** : composition et innocuité pour les jouets créatifs utilisant des peintures.",
+          "**EN 71-8 — Jeux d'activité pour usage domestique** : charges, résistance mécanique et sécurité pour les équipements de jeu d'intérieur (toboggans, balançoires).",
+          "Selon le type de jouet, différentes parties de la norme EN 71 s'appliquent. Des tests en laboratoire accrédité ISO 17025 sont généralement requis pour EN 71-1, EN 71-2 et EN 71-3.",
+        ],
+      },
+      {
+        heading: "Le marquage CE : obligatoire et réglementé",
+        body: [
+          "Tout jouet vendu dans l'UE doit porter le marquage CE. Ce marquage n'est pas une certification délivrée par un organisme tiers — c'est une déclaration du fabricant que le produit respecte les directives européennes applicables.",
+          "Sur un jouet, le marquage CE doit avoir une hauteur minimale de 5 mm et être apposé de manière visible, lisible et indélébile sur le jouet lui-même, sur son emballage, ou dans la notice d'instructions.",
+          "La falsification du marquage CE — apposer CE sur un produit non conforme — est une infraction pénale dans tous les États membres de l'UE. Ne pas confondre avec le marquage CE authentique le symbole \"China Export\" utilisé par certains fabricants chinois, qui ressemble visuellement au CE européen mais n'a aucune valeur réglementaire.",
+        ],
+      },
+      {
+        heading: "Avertissements d'âge et restrictions obligatoires",
+        body: [
+          "Certains avertissements sont obligatoires sur les emballages de jouets et doivent apparaître dans la langue du pays de vente :",
+          "**Pictogramme interdit aux moins de 3 ans** : obligatoire pour tout jouet contenant de petites pièces susceptibles d'être avalées ou inhalées par un enfant de moins de 3 ans. Ce pictogramme (petit enfant dans un cercle barré) est normalisé au niveau européen.",
+          "**Mention « Ne convient pas aux enfants de moins de X ans »** : pour les jouets avec des pièces petites mais destinés aux enfants de plus de 3 ans.",
+          "Ces mentions doivent figurer sur l'emballage du jouet, en texte lisible, et être répétées dans la notice d'instructions. Les oublier expose à des sanctions et à des suspensions d'annonces sur Amazon.",
+        ],
+      },
+      {
+        heading: "Amazon et les jouets : les exigences spécifiques",
+        body: [
+          "Amazon est particulièrement strict sur la catégorie Jouets & Jeux. Les ASINs peuvent être vérifiés proactivement ou suite à une plainte client.",
+          "Amazon peut demander : les rapports de tests EN 71 (EN 71-1, EN 71-2, EN 71-3 selon le produit), la déclaration de conformité CE, les coordonnées de la Personne Responsable EU, des photos du marquage CE et des avertissements d'âge sur l'emballage.",
+          "Sans cette documentation uploadée dans Seller Central, les nouvelles annonces dans la catégorie jouets peuvent être bloquées dès la création. Préparez toute la documentation avant de lister.",
+          "✓ Rapports de tests EN 71 par laboratoire accrédité ISO 17025",
+          "✓ Déclaration de conformité CE signée",
+          "✓ Dossier technique Art. 22 GPSR",
+          "✓ Personne Responsable EU documentée dans Seller Central",
+          "✓ Marquage CE visible sur emballage (hauteur ≥ 5 mm)",
+          "✓ Avertissements d'âge en français et dans les langues des pays de vente",
+        ],
+      },
+    ],
+    conclusion: "Les jouets sont soumis à une réglementation stricte en Europe. La combinaison directive jouets + GPSR crée un cadre exigeant mais cohérent : tests EN 71 appropriés, marquage CE correct, dossier technique structuré et Personne Responsable EU documentée vous permettent de vendre en toute sécurité sur tous les marchés européens et sur Amazon EU.",
+    cta: {
+      heading: "Générez votre dossier technique jouets",
+      text: "Conforva génère les 15 sections du dossier technique GPSR pour vos jouets, avec l'analyse de risque ISO 12100 et les étiquettes multilingues.",
+      button: "Créer mon dossier jouets",
+      href: "/auth/login",
+    },
+  },
+  {
+    slug: "declaration-conformite-ue-gpsr-guide",
+    title: "Déclaration UE de conformité GPSR (Article 24) : comment la rédiger",
+    description: "La déclaration UE de conformité est obligatoire pour chaque produit GPSR. Découvrez ce qu'elle doit contenir selon l'Article 24, qui peut la signer et comment la structurer correctement.",
+    keywords: ["déclaration conformité GPSR", "article 24 GPSR", "DoC GPSR", "rédiger déclaration conformité UE", "déclaration conformité produit"],
+    publishedAt: "2025-04-28",
+    readingTime: 6,
+    category: "Documentation",
+    intro: "La déclaration UE de conformité (souvent appelée DoC — Declaration of Conformity) est l'un des documents obligatoires du GPSR. Définie par l'Article 24 du règlement (UE) 2023/988, elle atteste formellement que le produit satisfait à toutes les exigences réglementaires applicables. Voici ce qu'elle doit contenir et comment la structurer.",
+    sections: [
+      {
+        heading: "Qu'est-ce que la déclaration UE de conformité ?",
+        body: [
+          "La déclaration UE de conformité est un document officiel par lequel le fabricant — ou son représentant légal EU — prend la responsabilité formelle de déclarer que le produit satisfait à toutes les exigences réglementaires applicables.",
+          "Important : ce n'est pas une certification délivrée par un organisme tiers. C'est une auto-déclaration du fabricant. Sa valeur juridique dépend donc entièrement de la qualité du dossier technique et des évaluations qui la sous-tendent.",
+          "La DoC doit accompagner le produit ou être accessible sur demande des autorités. Pour les ventes en ligne, il est recommandé de la mettre à disposition en téléchargement sur le site web ou de l'inclure dans la documentation PDF jointe à la commande.",
+        ],
+      },
+      {
+        heading: "Les informations obligatoires dans la déclaration de conformité",
+        body: [
+          "**Identification du produit** : nom commercial, référence, numéro de modèle, description succincte. Le produit doit être identifiable sans ambiguïté.",
+          "**Identification du fabricant** : raison sociale, adresse complète, pays. Si le fabricant est établi hors UE, ajouter les coordonnées de la Personne Responsable EU.",
+          "**Déclaration réglementaire** : liste exacte des règlements EU auxquels le produit est déclaré conforme. Pour un produit GPSR standard : « Règlement (UE) 2023/988 relatif à la sécurité générale des produits ». Si d'autres directives s'appliquent (directive jouets 2009/48/CE, RoHS 2011/65/UE, RED 2014/53/UE...), les lister également.",
+          "**Normes harmonisées appliquées** : liste des normes retenues pour démontrer la conformité. Exemple : « EN 15494:2019 — Bougies — Exigences de sécurité et d'information ».",
+          "**Date et lieu de délivrance** : date de signature de la déclaration.",
+          "**Signature** : nom, fonction et signature manuscrite (ou électronique qualifiée) du représentant légal habilité.",
+        ],
+      },
+      {
+        heading: "Qui peut signer la déclaration de conformité ?",
+        body: [
+          "La déclaration doit être signée par le fabricant ou son représentant légal EU autorisé à engager la responsabilité de la société. En pratique, il s'agit du dirigeant de l'entreprise, du directeur qualité, ou de toute personne disposant d'une délégation de pouvoir écrite.",
+          "Attention à la confusion fréquente : la Personne Responsable EU (Article 16 GPSR) n'est pas nécessairement le signataire de la déclaration de conformité. La PR EU vérifie et conserve la documentation — mais la déclaration reste sous la responsabilité du fabricant.",
+          "Pour les auto-entrepreneurs ou TPE, le dirigeant signe lui-même. Pour les sociétés plus importantes, une délégation de signature au responsable qualité est recommandée pour centraliser la gestion documentaire.",
+        ],
+      },
+      {
+        heading: "Mise à jour et versioning de la déclaration",
+        body: [
+          "La déclaration de conformité doit être mise à jour dès que le produit change de manière significative : modification des matériaux, de la conception, de l'emballage, ou lorsque les normes harmonisées référencées sont révisées.",
+          "Il est fortement recommandé de versionner les déclarations (v1.0, v1.1, v2.0...) et de conserver toutes les versions archivées dans le dossier technique. En cas de contrôle, les autorités peuvent demander l'historique complet.",
+          "La durée de conservation est de 10 ans à compter de la date de mise sur le marché du dernier exemplaire du produit — alignée sur la durée de conservation du dossier technique.",
+        ],
+      },
+      {
+        heading: "DoC et marquage CE : quelle différence ?",
+        body: [
+          "Pour les produits soumis à des directives sectorielles (jouets, électronique, machines...), la déclaration de conformité donne le droit d'apposer le marquage CE sur le produit. Pour les produits couverts uniquement par le GPSR sans directive sectorielle, il n'y a pas de marquage CE obligatoire — mais la déclaration de conformité reste requise.",
+          "Le marquage CE est donc la conséquence visible de la conformité, la déclaration de conformité en est la preuve documentaire. Les deux sont complémentaires mais distincts.",
+        ],
+      },
+    ],
+    conclusion: "La déclaration UE de conformité n'est pas une simple formalité. C'est le document qui engage formellement votre responsabilité sur la sécurité de votre produit. En cas d'accident ou de contrôle, elle prouve que vous avez agi de bonne foi et avec diligence. Un dossier technique solide est le seul fondement crédible d'une déclaration de conformité.",
+    cta: {
+      heading: "Générez votre déclaration de conformité",
+      text: "Conforva génère automatiquement la déclaration UE de conformité pré-remplie à partir de vos données produit. Prête à signer en quelques minutes.",
+      button: "Créer ma déclaration",
+      href: "/auth/login",
+    },
+  },
+  {
+    slug: "gpsr-shopify-boutique-conformite",
+    title: "Shopify et GPSR : comment mettre votre boutique en conformité (guide 2025)",
+    description: "Votre boutique Shopify vend en Europe ? Le GPSR s'applique. Découvrez les étapes concrètes pour mettre votre catalogue Shopify en conformité GPSR et éviter les contrôles DGCCRF.",
+    keywords: ["GPSR Shopify", "Shopify conformité GPSR", "boutique Shopify conformité UE", "Shopify GPSR 2025", "mise en conformité Shopify"],
+    publishedAt: "2025-05-10",
+    readingTime: 6,
+    category: "Cas d'usage",
+    intro: "Votre boutique Shopify génère des ventes vers la France, l'Allemagne, les Pays-Bas ou d'autres pays de l'UE ? Que vous soyez basé en Europe ou à l'étranger, le GPSR (UE) 2023/988 s'applique à votre activité. Contrairement à Amazon, Shopify ne vous enverra pas de notification de suspension — mais les autorités nationales peuvent contrôler votre boutique. Voici comment vous mettre en conformité.",
+    sections: [
+      {
+        heading: "Shopify et le GPSR : qui est responsable ?",
+        body: [
+          "Contrairement à Amazon, Shopify n'est pas une place de marché au sens du GPSR — c'est un prestataire technique. Shopify n'a donc pas d'obligation légale de vérifier la conformité de vos produits.",
+          "C'est vous, le marchand Shopify, qui êtes responsable à 100% de la conformité GPSR de ce que vous vendez. Si vous êtes basé dans l'UE, vous êtes soit fabricant (si vous marquez les produits à votre nom), soit importateur (si vous importez depuis hors UE), soit distributeur.",
+          "La DGCCRF en France, le Ministère de l'Économie en Allemagne, le NVWA aux Pays-Bas — chaque autorité nationale de surveillance peut contrôler les boutiques en ligne vendant à leurs consommateurs, y compris les boutiques Shopify étrangères. Les contrôles en ligne se sont intensifiés depuis 2024.",
+        ],
+      },
+      {
+        heading: "Les 5 étapes pour mettre son catalogue Shopify en conformité",
+        body: [
+          "**Étape 1 — Identifier vos marchés EU** : dans Shopify Analytics, identifiez les pays de livraison. Tous les pays de l'UE (France, Allemagne, Italie, Espagne, Pays-Bas, Belgique, etc.) sont soumis au GPSR.",
+          "**Étape 2 — Classer vos produits par risque** : produits pour enfants, électronique, cosmétiques, bougies, textiles avec produits chimiques = priorité haute. Décoration simple, papeterie, accessoires non électroniques = priorité moindre.",
+          "**Étape 3 — Constituer les dossiers techniques** : pour chaque référence vendue en EU, créez le dossier technique Art. 22 avec l'analyse de risque ISO 12100, la déclaration de conformité et les étiquettes multilingues.",
+          "**Étape 4 — Désigner une Personne Responsable EU** : si vous êtes basé hors UE, désignez votre PR EU et documentez ses coordonnées complètes.",
+          "**Étape 5 — Mettre à jour les fiches produits** : ajoutez les informations de sécurité, les avertissements dans la langue du pays de livraison, et la mention de la Personne Responsable EU dans vos fiches produits Shopify ou votre documentation.",
+        ],
+      },
+      {
+        heading: "L'import Shopify dans Conforva : générer les dossiers en masse",
+        body: [
+          "Conforva permet d'importer directement vos fiches produits Shopify pour pré-remplir les dossiers GPSR. Il suffit de coller l'URL de votre fiche produit Shopify — Conforva récupère automatiquement le nom, la description et les matériaux pour pré-remplir votre dossier.",
+          "Cette intégration est disponible sur les plans Growth et Pro. Pour un catalogue de plusieurs dizaines de références, elle réduit considérablement le temps de mise en conformité par rapport à une saisie manuelle.",
+          "Le flux de travail recommandé pour Shopify : exporter la liste de vos produits depuis Shopify, importer chaque référence dans Conforva, valider l'analyse de risque et les sections du dossier, puis exporter les PDFs pour archivage.",
+        ],
+      },
+      {
+        heading: "Ce qu'il faut afficher sur votre boutique Shopify",
+        body: [
+          "Outre la documentation interne (dossier technique), certaines informations doivent être visibles sur votre boutique ou vos emballages :",
+          "✓ Coordonnées du fabricant ou de la Personne Responsable EU sur chaque produit ou son emballage",
+          "✓ Avertissements de sécurité dans la langue du pays de livraison (boutique livrant en France → avertissements en français)",
+          "✓ Numéro de modèle ou référence permettant d'identifier le produit",
+          "✓ Restrictions d'âge le cas échéant (pictogramme ou mention textuelle)",
+          "✓ Instructions d'utilisation dans la langue du consommateur pour les produits complexes",
+        ],
+      },
+    ],
+    conclusion: "Contrairement à Amazon, Shopify ne vous suspend pas pour non-conformité GPSR. Mais les autorités nationales comme la DGCCRF ont la compétence pour contrôler votre boutique et peuvent imposer des mesures correctives coûteuses. La mise en conformité proactive protège à la fois votre activité et vos clients. Avec les bons outils, un catalogue Shopify peut être mis en conformité GPSR en quelques heures.",
+    cta: {
+      heading: "Importez votre catalogue Shopify dans Conforva",
+      text: "Collez l'URL d'une fiche produit Shopify — Conforva pré-remplit automatiquement votre dossier GPSR. Disponible sur les plans Growth et Pro.",
+      button: "Démarrer avec Shopify",
+      href: "/auth/login",
+    },
+  },
+  {
+    slug: "analyse-risque-gpsr-iso-12100",
+    title: "Analyse de risque GPSR : méthode ISO 12100 expliquée étape par étape",
+    description: "L'analyse de risque ISO 12100 est au cœur du dossier technique GPSR. Comprenez la méthode, les 6 étapes à suivre et ce qu'elle doit contenir pour satisfaire les autorités de surveillance.",
+    keywords: ["analyse risque GPSR", "ISO 12100 GPSR", "analyse risque ISO 12100", "évaluation risque produit GPSR", "dossier technique analyse risque", "méthode analyse risque GPSR"],
+    publishedAt: "2025-05-20",
+    readingTime: 8,
+    category: "Documentation",
+    intro: "L'analyse de risque est le document le plus important du dossier technique GPSR. C'est elle qui prouve que vous avez systématiquement identifié les dangers de votre produit et mis en place des mesures pour les réduire. La méthode reconnue par les autorités européennes est la norme ISO 12100:2010 — voici comment l'appliquer concrètement, même sans être ingénieur.",
+    sections: [
+      {
+        heading: "Pourquoi l'ISO 12100 est la méthode de référence pour le GPSR",
+        body: [
+          "L'ISO 12100:2010 « Sécurité des machines — Principes généraux de conception — Appréciation du risque et réduction du risque » est la norme internationale de référence pour l'évaluation des risques. Bien qu'initialement conçue pour les machines industrielles, sa méthodologie est désormais appliquée à tous types de produits de consommation dans le cadre du GPSR.",
+          "Le GPSR n'impose pas explicitement l'ISO 12100 — il exige une « évaluation des risques ». Cependant, l'ISO 12100 est la méthodologie reconnue par les autorités européennes et les organismes notifiés. L'utiliser démontre que vous avez adopté une approche systématique et professionnelle.",
+          "Une analyse de risque ISO 12100 bien documentée est votre meilleure protection légale : en cas de contrôle, d'accident ou de procédure de rappel, elle prouve que vous avez agi avec toute la diligence raisonnable.",
+        ],
+      },
+      {
+        heading: "Les 6 étapes de l'analyse de risque ISO 12100",
+        body: [
+          "**Étape 1 — Définition des limites du produit** : définissez l'usage prévu (à quoi sert le produit ?), la population cible (enfants, adultes, professionnels ?), le cycle de vie complet (production, transport, utilisation, maintenance, élimination) et l'environnement d'utilisation (intérieur, extérieur, eau, chaleur...).",
+          "**Étape 2 — Identification des dangers** : listez systématiquement tous les dangers potentiels selon les catégories ISO 12100 : mécaniques (coupure, écrasement, projection), thermiques (brûlure, incendie), électriques (électrocution, court-circuit), chimiques (toxicité, allergènes, SVHC REACH), biologiques, ergonomiques (effort excessif), liés à l'environnement (bruit, vibrations, rayonnements).",
+          "**Étape 3 — Estimation du risque** : pour chaque danger identifié, évaluez la probabilité d'occurrence (échelle 1 à 5) et la gravité des conséquences (1 à 5). Le niveau de risque (NR) = probabilité × gravité. NR ≥ 12 = risque critique. NR 6–11 = risque élevé. NR 1–5 = risque acceptable.",
+          "**Étape 4 — Évaluation du risque** : comparez le niveau de risque calculé au niveau tolérable pour la population cible. Pour les produits destinés aux enfants ou aux personnes vulnérables, les seuils sont beaucoup plus stricts que pour les adultes.",
+          "**Étape 5 — Réduction du risque** : pour chaque risque non tolérable, définissez les mesures de mitigation selon la hiérarchie ISO 12100 : élimination par la conception (solution prioritaire), protection par des dispositifs de sécurité, information de l'utilisateur (avertissements, étiquettes, instructions).",
+          "**Étape 6 — Documentation** : compilez toute l'analyse dans un tableau structuré dans le dossier technique. Documentez chaque danger, l'estimation initiale, la mesure de mitigation et la réévaluation du risque résiduel après mitigation.",
+        ],
+      },
+      {
+        heading: "Exemple concret : analyse de risque d'une bougie parfumée",
+        body: [
+          "Pour illustrer la méthode, voici comment s'applique l'ISO 12100 à une bougie parfumée en cire de soja :",
+          "**H1 — Incendie / flamme nue** : gravité = 4 (potentiellement grave), probabilité = 3 (possible), NR = 12. Risque critique → Mesure : avertissement obligatoire « Ne jamais laisser sans surveillance », instructions d'usage claires.",
+          "**H2 — Brûlure par contact avec cire chaude** : gravité = 3, probabilité = 2, NR = 6. Mesure : avertissement « Laisser refroidir avant manipulation ».",
+          "**H3 — Ingestion accidentelle (enfant < 3 ans)** : gravité = 4, probabilité = 1, NR = 4. Mesure : mention « Tenir hors de portée des enfants ».",
+          "**H4 — Émissions de COV en espace confiné** : gravité = 2, probabilité = 3, NR = 6. Mesure : instruction de ventiler la pièce, test qualité des fragrances.",
+          "Ce tableau est intégré dans la Section 5 du dossier technique. Il démontre une évaluation sérieuse et documentée.",
+        ],
+      },
+      {
+        heading: "L'analyse de risque pour les produits sans danger apparent",
+        body: [
+          "Même pour les produits qui semblent inoffensifs (décoration, papeterie, vêtements non chimiques), une analyse de risque documentée est nécessaire. L'absence de toute analyse est en soi une non-conformité GPSR.",
+          "Pour ces produits, l'analyse peut être plus courte et conclure que les risques identifiés sont tous au niveau acceptable (NR ≤ 5) sans mesures supplémentaires. Mais elle doit exister et être archivée dans le dossier technique.",
+          "L'objectif n'est pas de trouver à tout prix des dangers graves — c'est de prouver que vous avez systématiquement réfléchi à la sécurité de votre produit. Une analyse courte et honnête vaut infiniment mieux qu'une absence de documentation.",
+        ],
+      },
+    ],
+    conclusion: "L'analyse de risque ISO 12100 n'est pas réservée aux ingénieurs. Avec la bonne méthodologie et les bons outils, n'importe quel vendeur peut structurer une analyse solide pour ses produits. L'important est d'être systématique, documenté et honnête : identifier tous les dangers, estimer les risques de manière réaliste, et documenter les mesures mises en place.",
+    cta: {
+      heading: "Générez votre analyse de risque ISO 12100",
+      text: "Conforva structure automatiquement l'analyse de risque ISO 12100 pour votre produit, incluse dans le dossier technique complet.",
+      button: "Créer mon analyse de risque",
+      href: "/auth/login",
+    },
+  },
+  {
+    slug: "gpsr-vs-ancienne-directive-ce-qui-change",
+    title: "GPSR vs directive 2001/95/CE : les 7 changements clés pour les vendeurs",
+    description: "Le GPSR remplace la directive sécurité générale des produits de 2001. Ce qui change concrètement pour les e-commerçants : dossier technique obligatoire, places de marché, Personne Responsable EU et plus.",
+    keywords: ["GPSR changements 2025", "GPSR vs directive 2001/95", "nouveautés GPSR", "GPSR remplacement directive", "GPSR différences e-commerce"],
+    publishedAt: "2025-05-30",
+    readingTime: 7,
+    category: "Réglementation",
+    intro: "Le 13 décembre 2024, le règlement GPSR (UE) 2023/988 a officiellement remplacé la directive sur la sécurité générale des produits de 2001 (DSGP, 2001/95/CE). Après 23 ans d'application de l'ancienne directive, les changements sont importants — et certains surprennent même des vendeurs expérimentés. Voici les 7 points qui impactent directement les e-commerçants.",
+    sections: [
+      {
+        heading: "1. Des obligations documentaires précises et contraignantes",
+        body: [
+          "L'ancienne directive 2001/95/CE imposait aux fabricants de mettre sur le marché des produits sûrs — mais laissait une grande liberté sur la forme des preuves. Il n'y avait pas d'obligation explicite de constituer un « dossier technique » structuré.",
+          "Le GPSR est radicalement plus prescriptif : l'Article 22 définit exactement ce que le dossier technique doit contenir (15 sections), l'Article 24 définit le contenu de la déclaration de conformité, et l'Article 9 précise les informations obligatoires sur les produits.",
+          "En pratique, les approches informelles (un simple certificat de test sans analyse de risque documentée, une déclaration de conformité sans dossier technique) ne sont plus suffisantes.",
+        ],
+      },
+      {
+        heading: "2. La Personne Responsable EU : une obligation entièrement nouvelle",
+        body: [
+          "L'ancienne directive n'imposait pas explicitement la désignation d'un représentant EU pour les fabricants non-européens. Le GPSR crée cette obligation dans son Article 16.",
+          "Pour les vendeurs Amazon FBA sourcant depuis la Chine ou les États-Unis, c'est probablement le changement le plus impactant. Sans Personne Responsable EU désignée et documentée, votre produit ne peut légalement pas être mis sur le marché EU.",
+          "L'obligation est immédiate depuis le 13 décembre 2024 — il n'y a pas de période de grâce.",
+        ],
+      },
+      {
+        heading: "3. Les places de marché en ligne deviennent des acteurs de conformité",
+        body: [
+          "Sous l'ancienne directive, Amazon, Etsy ou Cdiscount n'avaient pas d'obligations directes concernant la conformité des vendeurs tiers. Le GPSR change fondamentalement la donne.",
+          "Le GPSR impose aux opérateurs de marché en ligne de s'assurer de la conformité des produits listés, de signaler les produits dangereux, et de coopérer avec les autorités nationales.",
+          "Concrètement : Amazon EU est maintenant légalement obligé de vérifier et suspendre les annonces non conformes — ce qui explique la vague de suspensions observée depuis début 2025.",
+        ],
+      },
+      {
+        heading: "4. Le e-commerce explicitement couvert",
+        body: [
+          "L'ancienne directive avait été rédigée en 2001, à une époque où le e-commerce était marginal. Elle ne mentionnait pas explicitement les ventes en ligne, créant des zones grises d'interprétation.",
+          "Le GPSR comble ce vide : il s'applique explicitement aux ventes en ligne, aux marketplaces, aux ventes transfrontalières, et aux produits vendus directement aux consommateurs sans intermédiaire physique.",
+          "Vendre depuis votre boutique Shopify aux Pays-Bas vers un consommateur allemand vous soumet au GPSR — sans aucune ambiguïté possible.",
+        ],
+      },
+      {
+        heading: "5. Des exigences d'étiquetage plus précises",
+        body: [
+          "Sous l'ancienne directive, l'étiquetage était surtout régi par les directives sectorielles. Pour les produits non couverts par une directive sectorielle, les exigences étaient vagues.",
+          "Le GPSR impose des exigences d'étiquetage précises pour tous les produits : identification du fabricant ou de la Personne Responsable EU sur le produit ou l'emballage, numéro de modèle ou référence, et avertissements de sécurité dans la langue du pays de vente.",
+          "Cette dernière exigence a des implications pratiques importantes : un produit vendu en France, en Allemagne et en Italie doit disposer d'avertissements dans ces trois langues.",
+        ],
+      },
+      {
+        heading: "6. La notification des accidents renforcée",
+        body: [
+          "L'ancienne directive imposait une notification aux autorités en cas de produit dangereux, mais les procédures variaient selon les États membres.",
+          "Le GPSR harmonise ces procédures à l'échelle EU et raccourcit les délais de notification. Le système Safety Gate (ex-RAPEX) est modernisé et directement interconnecté entre les autorités nationales.",
+          "Pour les vendeurs : en cas d'accident ou de plainte sérieuse concernant la sécurité d'un produit, vous avez des obligations de notification plus strictes et des délais plus courts. Ne pas notifier constitue une infraction supplémentaire.",
+        ],
+      },
+      {
+        heading: "7. Des sanctions harmonisées et renforcées",
+        body: [
+          "L'ancienne directive laissait aux États membres la liberté de fixer leurs propres sanctions. Les montants variaient très fortement d'un pays à l'autre.",
+          "Le GPSR impose aux États membres de prévoir des mesures « effectives, proportionnées et dissuasives » — un cadre qui encourage des sanctions plus sévères et plus cohérentes à travers l'UE.",
+          "En France, la loi prévoit des amendes administratives pouvant atteindre plusieurs dizaines de milliers d'euros pour les infractions aux règles de sécurité des produits, indépendamment des éventuelles poursuites pénales en cas d'accident.",
+        ],
+      },
+    ],
+    conclusion: "Le GPSR marque une rupture nette avec l'ère de la directive 2001/95/CE. Les obligations documentaires sont plus précises, les responsabilités plus clairement définies, et les acteurs comme Amazon sont désormais directement impliqués dans la conformité. Pour les e-commerçants qui n'ont pas encore mis à jour leurs pratiques, la mise en conformité ne peut plus attendre.",
+    cta: {
+      heading: "Mettez-vous en conformité avec le GPSR 2025",
+      text: "Conforva génère les dossiers techniques, déclarations de conformité et étiquettes multilingues conformes aux nouvelles exigences du GPSR.",
+      button: "Démarrer gratuitement",
+      href: "/auth/login",
+    },
+  },
+  {
+    slug: "sanctions-gpsr-france-europe",
+    title: "Sanctions GPSR en France et en Europe : amendes, rappels et responsabilités",
+    description: "Non-conformité au GPSR : quelles sanctions risquez-vous ? Suspensions Amazon, amendes DGCCRF, blocages douaniers, responsabilité civile et pénale — guide complet des risques réels.",
+    keywords: ["sanctions GPSR", "amende GPSR France", "non-conformité GPSR", "rappel produit GPSR", "risques GPSR e-commerce", "DGCCRF GPSR"],
+    publishedAt: "2025-06-01",
+    readingTime: 7,
+    category: "Réglementation",
+    intro: "Que risque concrètement un e-commerçant qui ne respecte pas le GPSR ? Au-delà du discours réglementaire abstrait, les conséquences sont à la fois commerciales, administratives et potentiellement pénales. Ce guide dresse un tableau réaliste des sanctions — des plus immédiates aux plus sévères.",
+    sections: [
+      {
+        heading: "Les suspensions de compte Amazon : la sanction la plus immédiate",
+        body: [
+          "Amazon EU est l'acteur dont les sanctions sont les plus immédiates et les plus impactantes pour les e-commerçants. Amazon peut suspendre un ASIN spécifique pour non-conformité GPSR, avec arrêt immédiat des ventes.",
+          "Dans les cas plus graves, Amazon peut placer un compte vendeur entier en révision si de nombreux ASINs présentent des non-conformités.",
+          "Les délais de réactivation après suspension GPSR varient de quelques jours à plusieurs semaines, pendant lesquels les ventes sont à l'arrêt. Pour un vendeur réalisant 80% de son chiffre sur Amazon EU, cela peut représenter des milliers d'euros de manque à gagner par semaine.",
+          "La prévention est de loin la stratégie la plus efficace. Constituer son dossier GPSR avant d'être contacté par Amazon est la seule approche raisonnable.",
+        ],
+      },
+      {
+        heading: "Les mesures administratives : DGCCRF et autorités nationales",
+        body: [
+          "La DGCCRF (Direction Générale de la Concurrence, de la Consommation et de la Répression des Fraudes) est l'autorité française de surveillance du marché. Elle a des pouvoirs renforcés sous le GPSR.",
+          "Les mesures qu'elle peut imposer : obligation de retrait du marché ou de rappel du produit aux frais du fabricant, interdiction de mise en vente, confiscation des stocks non conformes, obligation de modifier l'étiquetage.",
+          "Les amendes administratives pour infractions aux règles de sécurité des produits peuvent atteindre plusieurs dizaines de milliers d'euros en France. Dans les autres États membres, les montants varient mais le GPSR encourage des sanctions « effectives et dissuasives ».",
+          "Les contrôles DGCCRF sur les boutiques en ligne se sont intensifiés depuis 2024, notamment pour les produits vendus sur les marchés de Noël, les jouets, et les produits électroniques.",
+        ],
+      },
+      {
+        heading: "Le blocage douanier : immobilisation coûteuse des marchandises",
+        body: [
+          "Les douanes des États membres EU peuvent bloquer l'entrée de produits non conformes sur le territoire. Elles peuvent demander la présentation du dossier technique, de la déclaration de conformité, et des preuves de désignation de la Personne Responsable EU.",
+          "Un blocage douanier peut immobiliser votre stock pendant plusieurs semaines dans un entrepôt douanier, avec des frais de gardiennage qui s'accumulent, sans possibilité de récupérer les marchandises ou de les vendre.",
+          "Pour les vendeurs Amazon FBA qui expédient des containers depuis la Chine vers des centres de distribution EU, un blocage douanier peut être catastrophique — stock immobilisé, ruptures de stock sur Amazon, et frais logistiques supplémentaires.",
+        ],
+      },
+      {
+        heading: "La responsabilité civile : quand un consommateur est blessé",
+        body: [
+          "Si un consommateur est blessé par un produit que vous avez vendu, votre responsabilité civile est engagée. Le GPSR aggrave considérablement cette responsabilité en cas d'absence de documentation.",
+          "Sans dossier technique : impossible de prouver que vous avez évalué les risques du produit avant mise sur le marché. Les tribunaux civils considèrent l'absence de documentation GPSR comme une preuve de négligence.",
+          "Avec un dossier technique conforme : vous pouvez démontrer votre bonne foi et prouver que l'accident résulte d'un usage imprévisible, pas d'un défaut d'évaluation de votre part.",
+          "Les indemnités en responsabilité produit peuvent être très importantes, surtout pour des blessures graves : brûlures, intoxications, blessures d'enfants. L'assurance responsabilité civile professionnelle ne couvre pas toujours les situations de non-conformité délibérée.",
+        ],
+      },
+      {
+        heading: "La responsabilité pénale : l'extrémité du spectre",
+        body: [
+          "En France, la mise sur le marché d'un produit dangereux est une infraction pénale au titre du Code de la consommation (articles L. 421-1 et suivants). Les peines peuvent inclure des amendes pénales significatives et, dans les cas les plus graves, des peines d'emprisonnement.",
+          "La responsabilité pénale peut être engagée non seulement pour la mise en vente d'un produit dangereux, mais aussi pour l'absence délibérée de documentation GPSR — considérée comme une négligence caractérisée.",
+          "Les enquêtes pénales pour produits dangereux sont généralement déclenchées par des accidents graves signalés à la DGCCRF ou aux services de santé. Elles peuvent viser le fabricant, l'importateur, le distributeur, voire le dirigeant personnellement.",
+        ],
+      },
+    ],
+    conclusion: "Les risques liés à la non-conformité GPSR sont bien réels et variés : suspensions Amazon immédiates, amendes administratives, blocages douaniers, responsabilité civile et pénale. La prévention est de loin la stratégie la plus efficace et la moins coûteuse. Constituer les dossiers techniques GPSR pour ses produits représente un investissement modeste comparé aux conséquences potentielles.",
+    cta: {
+      heading: "Protégez votre activité avec des dossiers GPSR conformes",
+      text: "Générez les dossiers techniques, déclarations de conformité et étiquettes multilingues pour tous vos produits. Dès 0€ pour votre première référence.",
+      button: "Commencer gratuitement",
+      href: "/auth/login",
+    },
+  },
 ]
 
 export function getArticle(slug: string): BlogArticle | undefined {
