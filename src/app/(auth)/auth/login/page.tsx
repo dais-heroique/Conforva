@@ -74,7 +74,7 @@ export default function LoginPage() {
 
         <div className="text-center">
           <Link href="/">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white font-bold text-xl mb-4 hover:bg-blue-700 transition-colors">C</div>
+            <img src="/favicon.png" alt="Conforva" className="h-12 w-12 object-contain rounded-2xl mx-auto mb-4" />
           </Link>
           <h1 className="text-xl font-bold text-gray-900">Conforva</h1>
           <p className="text-gray-500 text-sm mt-1">{tLogin.subtitle}</p>
