@@ -183,6 +183,7 @@ export default function LandingPage() {
             <a href="#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</a>
             <a href="#comment" className="hover:text-gray-900 transition-colors">Comment ça marche</a>
             <a href="#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</a>
+            <Link href="/enterprise" className="hover:text-gray-900 transition-colors">Enterprise</Link>
             <Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link>
           </nav>
           <div className="flex items-center gap-2">
@@ -781,6 +782,53 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── SOCIAL PROOF ─── */}
+      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
+        <div className="max-w-5xl mx-auto">
+          <FadeIn className="text-center mb-12">
+            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Ce qu'en disent nos utilisateurs</p>
+            <h2 className="text-2xl sm:text-3xl font-bold">Ils ont mis leur catalogue en conformité</h2>
+          </FadeIn>
+          <div className="grid sm:grid-cols-3 gap-5">
+            {[
+              {
+                quote: "En moins d'une heure j'avais mes 12 références Amazon EU toutes documentées. Le dossier technique généré m'a été demandé lors d'un contrôle douanier — il a été accepté sans commentaire.",
+                name: "Vendeur Amazon FBA",
+                role: "Importateur de produits électroniques grand public",
+                stars: 5,
+              },
+              {
+                quote: "On avait un consultant externe à 800 € par référence. Avec Conforva on fait ça en interne, notre équipe maîtrise le process et on exporte en PDF en quelques minutes. Le ROI est immédiat sur 30 SKU.",
+                name: "Responsable conformité",
+                role: "Marque de puériculture, plan Growth",
+                stars: 5,
+              },
+              {
+                quote: "L'analyse de risque ISO 12100 générée par l'IA est vraiment solide. Je l'utilise comme base et je la complète avec nos données de tests — c'est exactement le format demandé par notre organisme notifié.",
+                name: "Directeur qualité",
+                role: "Fabricant de jouets & jeux de société",
+                stars: 5,
+              },
+            ].map((t, i) => (
+              <FadeIn key={i} delay={i * 0.07}>
+                <div className="flex flex-col h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <div className="flex gap-0.5 mb-4">
+                    {Array.from({ length: t.stars }).map((_, s) => (
+                      <svg key={s} className="h-4 w-4 text-amber-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    ))}
+                  </div>
+                  <p className="text-sm text-gray-700 leading-relaxed flex-1 italic">"{t.quote}"</p>
+                  <div className="mt-5 pt-4 border-t border-gray-100">
+                    <p className="text-sm font-semibold text-gray-900">{t.name}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{t.role}</p>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── COMPARISON ─── */}
       <section className="py-20 px-5">
         <div className="max-w-5xl mx-auto">
@@ -879,10 +927,24 @@ export default function LandingPage() {
           </div>
 
           <FadeIn>
-            <p className="mt-5 text-sm text-center text-gray-400">
-              Plus de 150 références ?{" "}
-              <Link href="/auth/login" className="underline underline-offset-2 text-gray-600 hover:text-gray-900 transition-colors">Contactez-nous</Link>
-            </p>
+            <div className="mt-5 rounded-2xl border border-gray-200 bg-white shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Enterprise</span>
+                  <span className="rounded-full bg-blue-100 text-blue-700 text-[10px] font-semibold px-2 py-0.5">Sur devis</span>
+                </div>
+                <p className="font-semibold text-gray-900 mb-1">Plus de 150 références ou besoin d'intégrations avancées ?</p>
+                <p className="text-sm text-gray-500 leading-relaxed">Tarification dégroissive au volume, API RESTful, connecteurs ERP/PIM, SLA garantis, gestionnaire de compte dédié et onboarding personnalisé.</p>
+              </div>
+              <div className="shrink-0 flex flex-col sm:flex-row gap-2">
+                <Link href="/enterprise">
+                  <Button variant="outline" className="whitespace-nowrap">Voir l'offre Enterprise</Button>
+                </Link>
+                <a href="mailto:enterprise@conforva.com">
+                  <Button className="whitespace-nowrap gap-2">Nous contacter</Button>
+                </a>
+              </div>
+            </div>
           </FadeIn>
         </div>
       </section>
@@ -920,6 +982,7 @@ export default function LandingPage() {
               <ul className="space-y-2 text-sm text-gray-500">
                 <li><a href="#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</a></li>
                 <li><a href="#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</a></li>
+                <li><Link href="/enterprise" className="hover:text-gray-900 transition-colors">Enterprise</Link></li>
                 <li><Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link></li>
                 <li><Link href="/status" className="hover:text-gray-900 transition-colors">Statut</Link></li>
               </ul>
