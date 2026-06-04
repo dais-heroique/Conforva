@@ -60,7 +60,7 @@ const PLANS = [
   {
     name: "Gratuit",
     price: "0",
-    sub: "1 référence",
+    sub: "1 référence / mois",
     highlight: false,
     features: [
       "1 dossier technique complet",
@@ -70,11 +70,12 @@ const PLANS = [
       "Déclaration de Conformité",
     ],
     cta: "Commencer gratuitement",
+    href: "/auth/login",
   },
   {
     name: "Starter",
     price: "29",
-    sub: "5 références",
+    sub: "jusqu'à 5 références / mois",
     highlight: false,
     features: [
       "5 dossiers techniques",
@@ -84,11 +85,12 @@ const PLANS = [
       "Support email",
     ],
     cta: "Démarrer",
+    href: "/auth/login",
   },
   {
     name: "Growth",
     price: "79",
-    sub: "30 références",
+    sub: "jusqu'à 30 références / mois",
     highlight: true,
     features: [
       "30 dossiers techniques",
@@ -100,11 +102,12 @@ const PLANS = [
       "Support prioritaire",
     ],
     cta: "Choisir Growth",
+    href: "/auth/login",
   },
   {
     name: "Pro",
     price: "199",
-    sub: "150 références",
+    sub: "jusqu'à 150 références / mois",
     highlight: false,
     features: [
       "150 dossiers techniques",
@@ -117,6 +120,7 @@ const PLANS = [
       "Support dédié",
     ],
     cta: "Choisir Pro",
+    href: "/auth/login",
   },
 ]
 
@@ -782,53 +786,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── SOCIAL PROOF ─── */}
-      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
-        <div className="max-w-5xl mx-auto">
-          <FadeIn className="text-center mb-12">
-            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Ce qu'en disent nos utilisateurs</p>
-            <h2 className="text-2xl sm:text-3xl font-bold">Ils ont mis leur catalogue en conformité</h2>
-          </FadeIn>
-          <div className="grid sm:grid-cols-3 gap-5">
-            {[
-              {
-                quote: "En moins d'une heure j'avais mes 12 références Amazon EU toutes documentées. Le dossier technique généré m'a été demandé lors d'un contrôle douanier — il a été accepté sans commentaire.",
-                name: "Vendeur Amazon FBA",
-                role: "Importateur de produits électroniques grand public",
-                stars: 5,
-              },
-              {
-                quote: "On avait un consultant externe à 800 € par référence. Avec Conforva on fait ça en interne, notre équipe maîtrise le process et on exporte en PDF en quelques minutes. Le ROI est immédiat sur 30 SKU.",
-                name: "Responsable conformité",
-                role: "Marque de puériculture, plan Growth",
-                stars: 5,
-              },
-              {
-                quote: "L'analyse de risque ISO 12100 générée par l'IA est vraiment solide. Je l'utilise comme base et je la complète avec nos données de tests — c'est exactement le format demandé par notre organisme notifié.",
-                name: "Directeur qualité",
-                role: "Fabricant de jouets & jeux de société",
-                stars: 5,
-              },
-            ].map((t, i) => (
-              <FadeIn key={i} delay={i * 0.07}>
-                <div className="flex flex-col h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <div className="flex gap-0.5 mb-4">
-                    {Array.from({ length: t.stars }).map((_, s) => (
-                      <svg key={s} className="h-4 w-4 text-amber-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    ))}
-                  </div>
-                  <p className="text-sm text-gray-700 leading-relaxed flex-1 italic">"{t.quote}"</p>
-                  <div className="mt-5 pt-4 border-t border-gray-100">
-                    <p className="text-sm font-semibold text-gray-900">{t.name}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{t.role}</p>
-                  </div>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ─── COMPARISON ─── */}
       <section className="py-20 px-5">
         <div className="max-w-5xl mx-auto">
@@ -918,7 +875,7 @@ export default function LandingPage() {
                     ))}
                   </ul>
 
-                  <Link href="/auth/login">
+                  <Link href={plan.href}>
                     <Button className="w-full text-sm" variant={plan.highlight ? "secondary" : "outline"}>{plan.cta}</Button>
                   </Link>
                 </div>
@@ -927,21 +884,37 @@ export default function LandingPage() {
           </div>
 
           <FadeIn>
-            <div className="mt-5 rounded-2xl border border-gray-200 bg-white shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            <div className="mt-5 rounded-2xl border-2 border-gray-900 bg-gray-950 text-white p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1.5">
+                <div className="flex items-center gap-2 mb-2">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Enterprise</span>
-                  <span className="rounded-full bg-blue-100 text-blue-700 text-[10px] font-semibold px-2 py-0.5">Sur devis</span>
+                  <span className="rounded-full bg-white/10 text-gray-200 text-[10px] font-semibold px-2 py-0.5">Sur devis</span>
                 </div>
-                <p className="font-semibold text-gray-900 mb-1">Plus de 150 références ou besoin d'intégrations avancées ?</p>
-                <p className="text-sm text-gray-500 leading-relaxed">Tarification dégroissive au volume, API RESTful, connecteurs ERP/PIM, SLA garantis, gestionnaire de compte dédié et onboarding personnalisé.</p>
+                <p className="text-2xl font-bold mb-0.5">Volume &amp; grands comptes</p>
+                <p className="text-sm text-gray-400 mb-4">Plus de 150 références / mois · Tarif dégressif selon volume</p>
+                <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5">
+                  {[
+                    "Références illimitées (selon palier)",
+                    "Étiquettes 7 langues sans restriction",
+                    "7 marchés couverts (EU, US, GB, CN…)",
+                    "Import Shopify, WooCommerce & CSV",
+                    "Veille réglementaire complète",
+                    "Rapports de conformité consolidés",
+                    "Gestionnaire de compte dédié",
+                    "Support prioritaire avec SLA",
+                  ].map(f => (
+                    <li key={f} className="flex items-center gap-2 text-sm text-gray-300">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />{f}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="shrink-0 flex flex-col sm:flex-row gap-2">
+              <div className="shrink-0 flex flex-col gap-2 min-w-[160px]">
                 <Link href="/enterprise">
-                  <Button variant="outline" className="whitespace-nowrap">Voir l'offre Enterprise</Button>
+                  <Button className="w-full bg-white text-gray-900 hover:bg-gray-100">Voir l'offre</Button>
                 </Link>
                 <a href="mailto:enterprise@conforva.com">
-                  <Button className="whitespace-nowrap gap-2">Nous contacter</Button>
+                  <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">Nous contacter</Button>
                 </a>
               </div>
             </div>
