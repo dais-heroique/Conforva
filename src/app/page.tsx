@@ -343,7 +343,7 @@ export default function LandingPage() {
             <h2 className="text-2xl sm:text-3xl font-bold mb-2">Votre profil de vendeur, vos obligations</h2>
             <p className="text-sm text-gray-500 max-w-xl leading-relaxed">Fabricant, importateur, distributeur ou revendeur — si un consommateur EU peut acheter votre produit, vous êtes concerné par le GPSR.</p>
           </FadeIn>
-          <div className="mt-10 grid sm:grid-cols-2 gap-4">
+          <div className="mt-10 divide-y divide-gray-200">
             {[
               {
                 Icon: Package,
@@ -375,16 +375,20 @@ export default function LandingPage() {
               },
             ].map((uc, i) => (
               <FadeIn key={uc.title} delay={i * 0.07}>
-                <div className="h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:border-blue-100 hover:bg-blue-50/20 transition-colors duration-150">
-                  <div className={`h-10 w-10 rounded-xl ${uc.color} flex items-center justify-center mb-4`}>
-                    <uc.Icon className="h-5 w-5 text-white" />
+                <div className="py-8 flex flex-col sm:flex-row gap-5 sm:gap-12">
+                  <div className="sm:w-52 shrink-0 flex items-start gap-3">
+                    <div className={`h-8 w-8 rounded-lg ${uc.color} flex items-center justify-center shrink-0 mt-0.5`}>
+                      <uc.Icon className="h-4 w-4 text-white" />
+                    </div>
+                    <h3 className="font-bold text-gray-900 leading-snug">{uc.title}</h3>
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">{uc.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed mb-4">{uc.desc}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {uc.tags.map(t => (
-                      <span key={t} className="rounded-full bg-blue-50 border border-blue-100 px-2.5 py-0.5 text-[11px] font-medium text-blue-700">{t}</span>
-                    ))}
+                  <div className="flex-1">
+                    <p className="text-sm text-gray-500 leading-relaxed mb-3">{uc.desc}</p>
+                    <div className="flex flex-wrap gap-x-5 gap-y-1">
+                      {uc.tags.map(t => (
+                        <span key={t} className="text-xs font-semibold text-blue-600">{t}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </FadeIn>
@@ -628,58 +632,46 @@ export default function LandingPage() {
             <h2 className="text-2xl sm:text-3xl font-bold mb-2">Ce que le GPSR exige — ce que Conforva génère</h2>
             <p className="text-sm text-gray-500 max-w-xl leading-relaxed">Chaque document produit par Conforva correspond à un article précis du règlement (UE) 2023/988.</p>
           </FadeIn>
-          <div className="mt-10 space-y-4">
+          <div className="mt-10 divide-y divide-gray-100">
             {[
               {
                 art: "Art. 9",
                 title: "Étiquetage et informations produit",
                 required: "Avertissements de sécurité dans la langue de chaque pays de vente. Identification du fabricant ou de son représentant EU. Numéro de modèle, référence ou lot permettant l'identification du produit.",
                 coverage: "Génération des étiquettes de sécurité adaptées à votre catégorie produit, dans jusqu'à 7 langues (FR, EN, DE, IT, ES, ZH, JA). Langues sélectionnées au moment de la génération selon votre plan.",
-                bg: "bg-rose-50",
-                border: "border-rose-200",
               },
               {
                 art: "Art. 16",
                 title: "Personne Responsable EU",
                 required: "Obligatoire pour tout fabricant établi hors de l'Union Européenne. Doit être un opérateur économique établi dans l'UE, pouvant être contacté par les autorités de surveillance du marché.",
                 coverage: "Section dédiée pour renseigner et documenter les coordonnées complètes de votre Personne Responsable EU. Documentation exportable pour les marketplaces et les autorités douanières.",
-                bg: "bg-violet-50",
-                border: "border-violet-200",
               },
               {
                 art: "Art. 22",
                 title: "Dossier technique",
                 required: "Document obligatoire regroupant : description du produit, dessins techniques, liste des normes appliquées, évaluation des risques, résultats de tests ou justifications alternatives, instructions d'utilisation. Conservation obligatoire pendant 10 ans.",
                 coverage: "15 sections générées automatiquement à partir de vos données produit. Analyse de risque structurée selon la méthodologie ISO 12100:2010. Export PDF complet, prêt pour un organisme notifié.",
-                bg: "bg-blue-50",
-                border: "border-blue-200",
               },
               {
                 art: "Art. 24",
                 title: "Déclaration UE de Conformité",
                 required: "Document officiel signé par le fabricant ou son représentant légal EU, attestant formellement que le produit satisfait à toutes les exigences applicables du règlement GPSR et des normes harmonisées retenues.",
                 coverage: "Génération de la Déclaration de Conformité pré-remplie : identification précise du produit, fabricant, réglementation applicable, normes harmonisées utilisées, date et signature prêtes à apposer.",
-                bg: "bg-emerald-50",
-                border: "border-emerald-200",
               },
             ].map((item, i) => (
               <FadeIn key={item.art} delay={i * 0.06}>
-                <div className={`rounded-2xl border ${item.border} ${item.bg} p-6`}>
-                  <div className="flex flex-col sm:flex-row gap-5">
-                    <div className="sm:w-44 shrink-0">
-                      <span className="inline-block rounded-full bg-white border border-gray-200 px-3 py-1 text-xs font-bold text-blue-700 mb-2">{item.art}</span>
-                      <h3 className="font-bold text-gray-900 text-sm leading-snug">{item.title}</h3>
-                    </div>
-                    <div className="flex-1 grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">Ce qu'exige le règlement</p>
-                        <p className="text-xs text-gray-700 leading-relaxed">{item.required}</p>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-bold uppercase tracking-wider text-blue-600 mb-1.5">Ce que Conforva génère</p>
-                        <p className="text-xs text-gray-700 leading-relaxed">{item.coverage}</p>
-                      </div>
-                    </div>
+                <div className="py-8 grid sm:grid-cols-[100px_1fr_1fr] gap-6 sm:gap-10">
+                  <div>
+                    <span className="inline-block rounded bg-gray-100 px-2 py-1 text-xs font-bold text-gray-700 mb-2">{item.art}</span>
+                    <p className="text-xs font-bold text-gray-900 leading-snug">{item.title}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Ce qu'exige le règlement</p>
+                    <p className="text-xs text-gray-600 leading-relaxed">{item.required}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-blue-500 mb-2">Ce que Conforva génère</p>
+                    <p className="text-xs text-gray-600 leading-relaxed">{item.coverage}</p>
                   </div>
                 </div>
               </FadeIn>
@@ -860,8 +852,10 @@ export default function LandingPage() {
                 <Link href="/enterprise">
                   <Button className="w-full bg-white text-gray-900 hover:bg-gray-100">Voir l'offre</Button>
                 </Link>
-                <Link href="/contact">
-                  <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">Nous contacter</Button>
+                <Link href="/contact" className="block w-full">
+                  <button className="w-full rounded-md border border-white/25 bg-transparent px-4 py-2.5 text-sm font-medium text-white hover:bg-white/10 transition-colors">
+                    Nous contacter
+                  </button>
                 </Link>
               </div>
             </div>
