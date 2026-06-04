@@ -109,11 +109,11 @@ export default function EnterprisePage() {
             à toutes les fonctionnalités et un accompagnement dédié.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
-            <a href="mailto:enterprise@conforva.com">
+            <Link href="/contact">
               <Button size="lg" className="gap-2">
                 Demander un devis <ArrowRight className="h-4 w-4" />
               </Button>
-            </a>
+            </Link>
             <Link href="/auth/login">
               <Button size="lg" variant="outline">
                 Essayer gratuitement
@@ -121,7 +121,7 @@ export default function EnterprisePage() {
             </Link>
           </div>
           <p className="mt-3 text-xs text-gray-400">
-            enterprise@conforva.com · Réponse sous 24h ouvrées
+            Réponse sous 24h ouvrées
           </p>
         </div>
       </section>
@@ -163,7 +163,7 @@ export default function EnterprisePage() {
                       {i === 0 ? (
                         <Link href="/auth/login" className="text-xs text-blue-600 hover:underline">Accéder au plan Pro →</Link>
                       ) : (
-                        <a href={`mailto:enterprise@conforva.com?subject=Devis ${tier.plan}`} className="text-xs text-blue-600 hover:underline">Demander un devis →</a>
+                        <Link href="/contact" className="text-xs text-blue-600 hover:underline">Demander un devis →</Link>
                       )}
                     </td>
                   </tr>
@@ -274,20 +274,17 @@ export default function EnterprisePage() {
               Nous vous préparons une proposition sous 24h.
             </p>
             <div className="relative flex flex-col sm:flex-row gap-3 justify-center">
-              <a href="mailto:enterprise@conforva.com?subject=Demande devis Enterprise">
+              <Link href="/contact">
                 <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100 gap-2">
                   Contacter l'équipe Enterprise <ArrowRight className="h-4 w-4" />
                 </Button>
-              </a>
+              </Link>
               <Link href="/auth/login">
                 <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
                   Essayer gratuitement
                 </Button>
               </Link>
             </div>
-            <p className="relative mt-4 text-xs text-gray-500">
-              enterprise@conforva.com
-            </p>
           </div>
         </div>
       </section>

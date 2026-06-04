@@ -733,59 +733,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── FAQ PREVIEW ─── */}
-      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
-        <div className="max-w-3xl mx-auto">
-          <FadeIn className="text-center mb-10">
-            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Questions fréquentes</p>
-            <h2 className="text-2xl sm:text-3xl font-bold">Ce que tout le monde demande</h2>
-          </FadeIn>
-          <div className="space-y-2.5">
-            {[
-              {
-                q: "Les documents générés sont-ils légalement valides ?",
-                a: "Conforva génère une base documentaire structurée et conforme au format requis par le GPSR. Ces documents doivent être relus, complétés avec vos données réelles (résultats de tests si requis, certificats) et signés. Ils ne constituent pas un avis juridique mais forment un dossier solide, prêt à être soumis ou présenté à des autorités.",
-              },
-              {
-                q: "Le GPSR s'applique-t-il si je vends depuis hors de l'UE ?",
-                a: "Oui. Dès que le consommateur final se trouve dans l'Union Européenne, le GPSR s'applique, quelle que soit l'origine géographique du vendeur. Les plateformes comme Amazon EU appliquent déjà ce règlement à toutes les annonces destinées aux marchés européens.",
-              },
-              {
-                q: "Faut-il obligatoirement des tests en laboratoire ?",
-                a: "Les tests ne sont pas systématiquement obligatoires pour tous les produits. L'analyse de risque peut s'appuyer sur les données techniques existantes et les normes harmonisées. Pour les produits à risque élevé (puériculture, jouets, électronique haute tension), les tests restent fortement recommandés et parfois requis par les normes applicables.",
-              },
-              {
-                q: "L'essai gratuit nécessite-t-il une carte bancaire ?",
-                a: "Non. Vous créez votre compte avec votre email ou votre compte Google, et vous pouvez générer un premier dossier complet — analyse de risque, dossier technique, déclaration de conformité — sans renseigner aucune information de paiement.",
-              },
-              {
-                q: "Combien de temps faut-il pour générer un dossier ?",
-                a: "En moyenne 5 à 10 minutes pour remplir le questionnaire produit. La génération IA prend ensuite 1 à 2 minutes. Le dossier est disponible en PDF immédiatement après validation.",
-              },
-            ].map(item => (
-              <FadeIn key={item.q}>
-                <details className="group rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm">
-                  <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer select-none list-none hover:bg-gray-50 transition-colors">
-                    <span className="font-medium text-sm text-gray-900">{item.q}</span>
-                    <ChevronRight className="h-4 w-4 text-gray-400 shrink-0 transition-transform group-open:rotate-90" />
-                  </summary>
-                  <div className="px-5 pb-5 pt-2 text-sm text-gray-600 leading-relaxed border-t border-gray-50">
-                    {item.a}
-                  </div>
-                </details>
-              </FadeIn>
-            ))}
-          </div>
-          <FadeIn>
-            <p className="mt-8 text-center">
-              <Link href="/faq" className="text-sm text-blue-600 font-medium hover:underline">
-                Voir toutes les questions fréquentes →
-              </Link>
-            </p>
-          </FadeIn>
-        </div>
-      </section>
-
       {/* ─── COMPARISON ─── */}
       <section className="py-20 px-5">
         <div className="max-w-5xl mx-auto">
@@ -890,7 +837,7 @@ export default function LandingPage() {
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Enterprise</span>
                   <span className="rounded-full bg-white/10 text-gray-200 text-[10px] font-semibold px-2 py-0.5">Sur devis</span>
                 </div>
-                <p className="text-2xl font-bold mb-0.5">Volume &amp; grands comptes</p>
+                <p className="text-2xl font-bold mb-0.5">Plan Enterprise — Sur mesure</p>
                 <p className="text-sm text-gray-400 mb-4">Plus de 150 références / mois · Tarif dégressif selon volume</p>
                 <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5">
                   {[
@@ -913,11 +860,64 @@ export default function LandingPage() {
                 <Link href="/enterprise">
                   <Button className="w-full bg-white text-gray-900 hover:bg-gray-100">Voir l'offre</Button>
                 </Link>
-                <a href="mailto:enterprise@conforva.com">
+                <Link href="/contact">
                   <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">Nous contacter</Button>
-                </a>
+                </Link>
               </div>
             </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ─── FAQ PREVIEW ─── */}
+      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
+        <div className="max-w-3xl mx-auto">
+          <FadeIn className="text-center mb-10">
+            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Questions fréquentes</p>
+            <h2 className="text-2xl sm:text-3xl font-bold">Ce que tout le monde demande</h2>
+          </FadeIn>
+          <div className="space-y-2.5">
+            {[
+              {
+                q: "Les documents générés sont-ils légalement valides ?",
+                a: "Conforva génère une base documentaire structurée et conforme au format requis par le GPSR. Ces documents doivent être relus, complétés avec vos données réelles (résultats de tests si requis, certificats) et signés. Ils ne constituent pas un avis juridique mais forment un dossier solide, prêt à être soumis ou présenté à des autorités.",
+              },
+              {
+                q: "Le GPSR s'applique-t-il si je vends depuis hors de l'UE ?",
+                a: "Oui. Dès que le consommateur final se trouve dans l'Union Européenne, le GPSR s'applique, quelle que soit l'origine géographique du vendeur. Les plateformes comme Amazon EU appliquent déjà ce règlement à toutes les annonces destinées aux marchés européens.",
+              },
+              {
+                q: "Faut-il obligatoirement des tests en laboratoire ?",
+                a: "Les tests ne sont pas systématiquement obligatoires pour tous les produits. L'analyse de risque peut s'appuyer sur les données techniques existantes et les normes harmonisées. Pour les produits à risque élevé (puériculture, jouets, électronique haute tension), les tests restent fortement recommandés et parfois requis par les normes applicables.",
+              },
+              {
+                q: "L'essai gratuit nécessite-t-il une carte bancaire ?",
+                a: "Non. Vous créez votre compte avec votre email ou votre compte Google, et vous pouvez générer un premier dossier complet — analyse de risque, dossier technique, déclaration de conformité — sans renseigner aucune information de paiement.",
+              },
+              {
+                q: "Combien de temps faut-il pour générer un dossier ?",
+                a: "En moyenne 5 à 10 minutes pour remplir le questionnaire produit. La génération IA prend ensuite 1 à 2 minutes. Le dossier est disponible en PDF immédiatement après validation.",
+              },
+            ].map(item => (
+              <FadeIn key={item.q}>
+                <details className="group rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm">
+                  <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer select-none list-none hover:bg-gray-50 transition-colors">
+                    <span className="font-medium text-sm text-gray-900">{item.q}</span>
+                    <ChevronRight className="h-4 w-4 text-gray-400 shrink-0 transition-transform group-open:rotate-90" />
+                  </summary>
+                  <div className="px-5 pb-5 pt-2 text-sm text-gray-600 leading-relaxed border-t border-gray-50">
+                    {item.a}
+                  </div>
+                </details>
+              </FadeIn>
+            ))}
+          </div>
+          <FadeIn>
+            <p className="mt-8 text-center">
+              <Link href="/faq" className="text-sm text-blue-600 font-medium hover:underline">
+                Voir toutes les questions fréquentes →
+              </Link>
+            </p>
           </FadeIn>
         </div>
       </section>
