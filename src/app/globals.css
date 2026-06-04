@@ -11,6 +11,10 @@ body {
   overflow-x: hidden;
 }
 
+.font-display {
+  font-family: var(--font-display, Georgia, serif);
+}
+
 html {
   overflow-x: hidden;
 }

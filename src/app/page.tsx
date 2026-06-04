@@ -168,7 +168,7 @@ export default function LandingPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden w-full">
+    <div className="min-h-screen bg-[#F9F8F5] text-gray-900 overflow-x-hidden w-full">
 
       {/* ─── NAV ─── */}
       <motion.header
@@ -202,50 +202,79 @@ export default function LandingPage() {
       </motion.header>
 
       {/* ─── HERO ─── */}
-      <section className="relative overflow-hidden px-5 pt-36 pb-16 sm:pt-44 sm:pb-24 text-center">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-[560px] w-[900px] bg-gradient-to-b from-blue-50/80 to-transparent blur-3xl rounded-full" />
-        </div>
+      <section className="relative px-5 pt-32 pb-20 sm:pt-44 sm:pb-28">
+        <div className="max-w-6xl mx-auto">
+          <div className="max-w-4xl">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
+              className="flex items-center gap-3 mb-8">
+              <div className="h-4 w-[3px] bg-red-600 shrink-0" />
+              <span className="text-[11px] font-semibold text-red-700 tracking-widest uppercase">
+                GPSR (UE) 2023/988 — En vigueur depuis décembre 2024
+              </span>
+            </motion.div>
 
-        <div className="relative max-w-3xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
-            className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-red-50 px-3.5 py-1.5 text-xs font-medium text-red-700 mb-6">
-            <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
-            GPSR (UE) 2023/988 — obligatoire depuis décembre 2024
+            <motion.h1
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.06 }}
+              className="font-display text-[clamp(2.8rem,7.5vw,5.5rem)] leading-[0.93] tracking-tight text-gray-950 mb-8"
+            >
+              Conformité GPSR<br />
+              <em className="italic font-light text-blue-700">générée</em> en<br />
+              quelques minutes.
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.22 }}
+              className="text-lg text-gray-500 leading-relaxed max-w-lg mb-10"
+            >
+              Analyse de risque ISO 12100, dossier technique 15 sections et déclaration de conformité UE —
+              structurés selon le règlement (UE) 2023/988.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.3 }}
+              className="flex flex-wrap gap-3"
+            >
+              <Link href="/auth/login">
+                <Button size="lg" className="gap-2">
+                  Créer un compte gratuit <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <a href="#comment">
+                <Button size="lg" variant="ghost" className="text-gray-600 hover:text-gray-900">
+                  Comment ça marche →
+                </Button>
+              </a>
+            </motion.div>
+
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.42 }}
+              className="mt-3 text-xs text-gray-400">
+              Gratuit pour 1 référence · Aucune carte bancaire requise
+            </motion.p>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.48 }}
+            className="mt-16 pt-8 border-t border-gray-300 grid grid-cols-3 max-w-xl"
+          >
+            {[
+              { n: "< 10 min", label: "par dossier complet" },
+              { n: "15", label: "sections Art. 22" },
+              { n: "7", label: "marchés couverts" },
+            ].map((s, i) => (
+              <div key={s.n} className={`${i > 0 ? "pl-6 sm:pl-8 border-l border-gray-300" : ""}`}>
+                <p className="font-display text-2xl sm:text-3xl font-bold text-gray-950 tabular-nums">{s.n}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+              </div>
+            ))}
           </motion.div>
-
-          <motion.h1 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.07 }}
-            className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-gray-900">
-            Dossiers de conformité GPSR, <span className="text-blue-600">générés en quelques minutes</span>
-          </motion.h1>
-
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.18 }}
-            className="mt-6 text-lg text-gray-500 leading-relaxed max-w-xl mx-auto">
-            Analyse de risque, dossier technique 15 sections et déclaration de conformité UE —
-            structurés selon le règlement (UE) 2023/988. Pour tout vendeur ou fabricant dont les produits arrivent chez des consommateurs européens.
-          </motion.p>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.24 }}
-            className="mt-3 text-sm text-gray-400 max-w-lg mx-auto">
-            Sans dossier conforme : annonce suspendue, blocage douanier, responsabilité engagée.
-          </motion.p>
-
-          <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.28 }}
-            className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/auth/login">
-              <Button size="lg" className="gap-2 shadow-sm">
-                Créer un compte gratuit <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <a href="#comment">
-              <Button size="lg" variant="outline">
-                Voir comment ça marche
-              </Button>
-            </a>
-          </motion.div>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.38 }}
-            className="mt-3 text-xs text-gray-400">
-            Gratuit pour 1 référence · Aucune carte bancaire requise
-          </motion.p>
         </div>
       </section>
 
@@ -264,77 +293,112 @@ export default function LandingPage() {
       </div>
 
       {/* ─── GPSR STAKES ─── */}
-      <section className="py-16 px-5">
+      <section className="py-20 px-5 bg-[#111110] text-white">
         <div className="max-w-5xl mx-auto">
           <FadeIn>
-            <p className="text-xs font-semibold uppercase tracking-widest text-red-500 mb-1">Pourquoi maintenant ?</p>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2">Le GPSR est en vigueur. Êtes-vous en conformité ?</h2>
-            <p className="text-sm text-gray-500 max-w-2xl leading-relaxed">Depuis le 13 décembre 2024, tout produit de consommation vendu dans l'Union Européenne doit respecter le règlement (UE) 2023/988 — sans exception, même si vous vendez depuis hors de l'UE.</p>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="h-4 w-[3px] bg-red-500 shrink-0" />
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-red-400">Pourquoi maintenant ?</p>
+            </div>
+            <h2 className="font-display text-3xl sm:text-5xl font-bold leading-tight mb-12">
+              Le GPSR est en vigueur.<br />
+              <em className="italic font-light text-gray-400">Êtes-vous en conformité ?</em>
+            </h2>
           </FadeIn>
-          <div className="mt-8 grid sm:grid-cols-3 gap-4">
-            {[
-              { n: "13 déc. 2024", label: "Date d'entrée en vigueur", sub: "Aucune période de grâce — le règlement s'applique immédiatement.", color: "border-red-200 bg-red-50" },
-              { n: "10 ans", label: "Conservation du dossier technique", sub: "L'Art. 22 impose de conserver le dossier technique 10 ans à compter de la mise sur le marché.", color: "border-amber-200 bg-amber-50" },
-              { n: "Toute vente EU", label: "Sans dérogation géographique", sub: "Vendeur américain, chinois, français — peu importe : si le consommateur est en UE, le GPSR s'applique.", color: "border-blue-200 bg-blue-50" },
-            ].map((s, i) => (
-              <FadeIn key={s.n} delay={i * 0.07}>
-                <div className={`rounded-2xl border ${s.color} p-5 h-full`}>
-                  <p className="text-2xl font-black text-gray-900 mb-1">{s.n}</p>
-                  <p className="text-sm font-semibold text-gray-800 mb-1">{s.label}</p>
-                  <p className="text-xs text-gray-500 leading-relaxed">{s.sub}</p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
+
           <FadeIn>
-            <div className="mt-5 rounded-2xl border border-gray-200 bg-white shadow-sm p-6">
-              <p className="text-sm font-semibold text-gray-900 mb-4">Ce que risquent les vendeurs non conformes</p>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {[
-                  { Icon: Ban, color: "bg-red-50 border-red-100 text-red-600", title: "Retrait du marché", desc: "Les autorités de surveillance peuvent imposer le rappel ou le retrait immédiat des produits non conformes." },
-                  { Icon: Plane, color: "bg-orange-50 border-orange-100 text-orange-600", title: "Blocage douanier", desc: "Les douanes EU peuvent bloquer vos marchandises à l'importation si la documentation est absente ou incomplète." },
-                  { Icon: ClipboardX, color: "bg-amber-50 border-amber-100 text-amber-600", title: "Suspension d'annonces", desc: "Amazon EU suspend les annonces sans Personne Responsable EU documentée (Art. 16)." },
-                  { Icon: Scale, color: "bg-rose-50 border-rose-100 text-rose-600", title: "Responsabilité aggravée", desc: "En cas d'accident, l'absence de dossier technique constitue une preuve d'imprudence en droit civil et pénal." },
-                ].map(r => (
-                  <div key={r.title} className="flex items-start gap-3 rounded-xl bg-gray-50 border border-gray-100 p-4">
-                    <div className={`h-8 w-8 rounded-lg border flex items-center justify-center shrink-0 mt-0.5 ${r.color}`}>
-                      <r.Icon className="h-4 w-4" />
+            <div className="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/10 border-y border-white/10 py-10 mb-12">
+              {[
+                { n: "13 déc.", sup: "2024", label: "Entrée en vigueur", desc: "Aucune période de grâce — le règlement s'applique immédiatement à tous les produits." },
+                { n: "10", sup: "ans", label: "Conservation obligatoire", desc: "L'Art. 22 impose de conserver le dossier technique 10 ans après la mise sur le marché." },
+                { n: "100%", sup: "ventes EU", label: "Aucune dérogation", desc: "Peu importe votre pays d'origine : si le consommateur est en UE, le GPSR s'applique." },
+              ].map((s, i) => (
+                <FadeIn key={s.n} delay={i * 0.08}>
+                  <div className={`py-6 sm:py-0 ${i > 0 ? "sm:pl-10" : ""} ${i < 2 ? "sm:pr-10" : ""}`}>
+                    <div className="flex items-baseline gap-1.5 mb-2">
+                      <span className="font-display text-5xl sm:text-6xl font-bold text-white tabular-nums">{s.n}</span>
+                      <span className="text-base text-gray-500 font-light">{s.sup}</span>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">{r.title}</p>
-                      <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{r.desc}</p>
-                    </div>
+                    <p className="text-xs font-semibold text-gray-300 mb-1 uppercase tracking-wider">{s.label}</p>
+                    <p className="text-xs text-gray-500 leading-relaxed">{s.desc}</p>
                   </div>
-                ))}
-              </div>
+                </FadeIn>
+              ))}
+            </div>
+          </FadeIn>
+
+          <FadeIn>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-600 mb-4">
+              Risques en cas de non-conformité
+            </p>
+            <div className="grid sm:grid-cols-2 gap-x-16">
+              {[
+                { Icon: Ban, color: "text-red-400", title: "Retrait du marché", desc: "Les autorités peuvent imposer le rappel ou le retrait immédiat des produits non conformes." },
+                { Icon: Plane, color: "text-orange-400", title: "Blocage douanier", desc: "Les douanes EU peuvent bloquer vos marchandises si la documentation est absente." },
+                { Icon: ClipboardX, color: "text-amber-400", title: "Suspension d'annonces Amazon", desc: "Amazon EU suspend les annonces sans Personne Responsable EU documentée (Art. 16)." },
+                { Icon: Scale, color: "text-rose-400", title: "Responsabilité aggravée", desc: "Sans dossier technique, l'absence constitue une preuve d'imprudence civile et pénale." },
+              ].map(r => (
+                <div key={r.title} className="flex items-start gap-3 py-4 border-b border-white/8 last:border-0">
+                  <r.Icon className={`h-4 w-4 shrink-0 mt-0.5 ${r.color}`} />
+                  <div>
+                    <p className="text-sm font-semibold text-gray-200">{r.title}</p>
+                    <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{r.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </FadeIn>
         </div>
       </section>
 
       {/* ─── FEATURES ─── */}
-      <section id="fonctionnalites" className="py-20 px-5">
+      <section id="fonctionnalites" className="py-20 px-5 bg-[#F9F8F5]">
         <div className="max-w-6xl mx-auto">
           <FadeIn>
-            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Ce que vous obtenez</p>
-            <h2 className="text-2xl sm:text-3xl font-bold">Tout ce qu'exige le règlement GPSR</h2>
-            <p className="mt-2 text-sm text-gray-500 max-w-xl">Chaque document est structuré selon les articles du règlement (UE) 2023/988 et les normes harmonisées applicables à votre catégorie.</p>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="h-4 w-[3px] bg-blue-600 shrink-0" />
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-blue-600">Ce que vous obtenez</p>
+            </div>
+            <h2 className="font-display text-2xl sm:text-4xl font-bold leading-tight mb-2">Tout ce qu'exige le règlement GPSR</h2>
+            <p className="text-sm text-gray-500 max-w-xl leading-relaxed">Chaque document est structuré selon les articles du règlement (UE) 2023/988 et les normes harmonisées applicables à votre catégorie.</p>
           </FadeIn>
-          <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FEATURES.map((f, i) => {
-              const Icon = f.icon
-              return (
-                <FadeIn key={f.title} delay={i * 0.05}>
-                  <div className="h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm hover:border-blue-100 hover:bg-blue-50/20 transition-colors duration-150">
-                    <div className={`h-10 w-10 rounded-xl ${f.color} flex items-center justify-center mb-4`}>
-                      <Icon className="h-5 w-5 text-white" />
+          <div className="mt-12 grid sm:grid-cols-2 sm:divide-x divide-gray-200">
+            <div className="sm:pr-12">
+              {FEATURES.slice(0, 3).map((f, i) => {
+                const Icon = f.icon
+                return (
+                  <FadeIn key={f.title} delay={i * 0.06}>
+                    <div className="flex gap-4 py-6 border-b border-gray-200 last:border-0">
+                      <div className={`h-8 w-8 rounded-sm ${f.color} flex items-center justify-center shrink-0 mt-0.5`}>
+                        <Icon className="h-4 w-4 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-sm text-gray-900 mb-1">{f.title}</h3>
+                        <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+                      </div>
                     </div>
-                    <h3 className="font-semibold text-sm text-gray-900 mb-1.5">{f.title}</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
-                  </div>
-                </FadeIn>
-              )
-            })}
+                  </FadeIn>
+                )
+              })}
+            </div>
+            <div className="sm:pl-12">
+              {FEATURES.slice(3).map((f, i) => {
+                const Icon = f.icon
+                return (
+                  <FadeIn key={f.title} delay={(i + 3) * 0.06}>
+                    <div className="flex gap-4 py-6 border-b border-gray-200 last:border-0">
+                      <div className={`h-8 w-8 rounded-sm ${f.color} flex items-center justify-center shrink-0 mt-0.5`}>
+                        <Icon className="h-4 w-4 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-sm text-gray-900 mb-1">{f.title}</h3>
+                        <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+                      </div>
+                    </div>
+                  </FadeIn>
+                )
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -483,7 +547,7 @@ export default function LandingPage() {
           <div className="grid lg:grid-cols-2 gap-5">
             {/* Technical file sections */}
             <FadeIn>
-              <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+              <div className="border border-gray-200 bg-white shadow-sm overflow-hidden">
                 <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
                   <FileText className="h-4 w-4 text-blue-600 shrink-0" />
                   <div className="flex-1 min-w-0">
@@ -522,7 +586,7 @@ export default function LandingPage() {
             <div className="space-y-5">
               {/* Risk assessment table */}
               <FadeIn delay={0.08}>
-                <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                <div className="border border-gray-200 bg-white shadow-sm overflow-hidden">
                   <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
                     <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
                     <p className="text-xs font-semibold text-gray-900">Analyse de risque — Extrait</p>
@@ -560,7 +624,7 @@ export default function LandingPage() {
 
               {/* Multilingual labels */}
               <FadeIn delay={0.14}>
-                <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                <div className="border border-gray-200 bg-white shadow-sm overflow-hidden">
                   <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
                     <Globe className="h-4 w-4 text-emerald-600 shrink-0" />
                     <p className="text-xs font-semibold text-gray-900">Étiquetage sécurité — Art. 9 GPSR</p>
@@ -585,7 +649,7 @@ export default function LandingPage() {
 
               {/* DoC header */}
               <FadeIn delay={0.2}>
-                <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                <div className="border border-gray-200 bg-white shadow-sm overflow-hidden">
                   <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
                     <ShieldCheck className="h-4 w-4 text-blue-600 shrink-0" />
                     <p className="text-xs font-semibold text-gray-900">Déclaration UE de Conformité — Art. 24</p>
@@ -691,22 +755,24 @@ export default function LandingPage() {
             <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Processus</p>
             <h2 className="text-2xl sm:text-3xl font-bold">De la fiche produit au dossier conforme</h2>
           </FadeIn>
-          <div className="mt-10 grid sm:grid-cols-3 gap-5">
+          <div className="mt-12 divide-y divide-gray-200">
             {STEPS.map((s, i) => (
               <FadeIn key={s.n} delay={i * 0.1}>
-                <div className="h-full rounded-2xl bg-white border border-gray-100 shadow-sm p-6">
-                  <span className="text-5xl font-black text-gray-100 leading-none select-none">{s.n}</span>
-                  <h3 className="font-semibold text-gray-900 mt-2 mb-2">{s.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+                <div className="flex gap-6 sm:gap-12 py-10">
+                  <span className="font-display text-[5rem] sm:text-[7rem] font-bold text-gray-200 leading-none select-none shrink-0 w-20 sm:w-28 -mt-2">{s.n}</span>
+                  <div className="flex-1 pt-3">
+                    <h3 className="font-semibold text-gray-900 text-lg mb-2">{s.title}</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+                  </div>
                 </div>
               </FadeIn>
             ))}
           </div>
 
-          <FadeIn className="mt-5">
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-              <p className="text-sm font-semibold text-gray-800 mb-5">Inclus dans chaque dossier</p>
-              <ul className="grid sm:grid-cols-2 gap-2.5">
+          <FadeIn className="mt-10">
+            <div className="border-t border-gray-200 pt-10">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-6">Inclus dans chaque dossier</p>
+              <ul className="grid sm:grid-cols-2 gap-x-12 gap-y-2.5">
                 {[
                   "Dossier technique 15 sections (Art. 22 GPSR)",
                   "Analyse de risque complète (ISO 12100)",
@@ -720,7 +786,7 @@ export default function LandingPage() {
                   "Veille réglementaire intégrée",
                 ].map(item => (
                   <li key={item} className="flex items-center gap-2.5 text-sm text-gray-600">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />{item}
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />{item}
                   </li>
                 ))}
               </ul>
@@ -738,7 +804,7 @@ export default function LandingPage() {
             <p className="text-sm text-gray-500 max-w-xl leading-relaxed">Toutes les voies mènent (ou ne mènent pas) à la conformité — pas au même coût ni dans le même délai.</p>
           </FadeIn>
           <FadeIn>
-            <div className="mt-8 overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
+            <div className="mt-8 overflow-x-auto border border-gray-200 shadow-sm">
               <table className="w-full text-sm min-w-[620px]">
                 <thead>
                   <tr className="border-b border-gray-200">
@@ -792,7 +858,7 @@ export default function LandingPage() {
           <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
             {PLANS.map((plan, i) => (
               <FadeIn key={plan.name} delay={i * 0.07}>
-                <div className={`relative flex flex-col rounded-2xl border p-6 gap-5 transition-colors duration-150 ${
+                <div className={`relative flex flex-col rounded-lg border p-6 gap-5 transition-colors duration-150 ${
                   plan.highlight ? "border-blue-600 bg-blue-600 text-white shadow-xl shadow-blue-200" : "border-gray-200 bg-white shadow-sm hover:shadow-md"
                 }`}>
                   {plan.highlight && (
@@ -827,7 +893,7 @@ export default function LandingPage() {
           </div>
 
           <FadeIn>
-            <div className="mt-5 rounded-2xl border-2 border-gray-900 bg-gray-950 text-white p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            <div className="mt-5 border-2 border-gray-900 bg-gray-950 text-white p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Enterprise</span>
@@ -922,7 +988,7 @@ export default function LandingPage() {
 
       {/* ─── CTA ─── */}
       <FadeIn>
-        <section className="mx-4 sm:mx-6 mb-14 rounded-2xl bg-blue-600 px-8 py-14 text-center text-white relative overflow-hidden">
+        <section className="mx-4 sm:mx-6 mb-14 bg-[#111110] px-8 py-16 text-center text-white relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at 70% 30%, white, transparent 50%)" }} />
           <h2 className="relative text-2xl sm:text-3xl font-bold mb-3">Commencez avec 1 produit, gratuitement</h2>
           <p className="relative text-blue-100 mb-8 text-sm">Aucune carte bancaire · Compte créé en 30 secondes · Premier dossier immédiat</p>

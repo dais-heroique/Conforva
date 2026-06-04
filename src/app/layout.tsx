@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { DM_Sans } from "next/font/google"
+import { DM_Sans, Fraunces } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { getLocale, getDictionary } from "@/lib/i18n"
@@ -8,6 +8,14 @@ import { LocaleProvider } from "@/components/providers/locale-provider"
 const dmSans = DM_Sans({
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-sans",
+})
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-display",
+  axes: ["opsz"],
 })
 
 const BASE_URL = "https://conforva.com"
@@ -106,7 +114,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
         />
       </head>
-      <body className={dmSans.className}>
+      <body className={`${dmSans.variable} ${fraunces.variable} font-[family-name:var(--font-sans)]`}>
         <LocaleProvider t={t} locale={locale}>
           {children}
         </LocaleProvider>
