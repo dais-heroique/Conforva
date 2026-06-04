@@ -226,7 +226,7 @@ export default function LandingPage() {
             transition={{ duration: 0.4, delay: 0.22 }}
             className="text-lg text-gray-500 leading-relaxed max-w-xl mx-auto mb-10"
           >
-            Analyse de risque ISO 12100, dossier technique 15 sections et déclaration de conformité UE —
+            Analyse de risque ISO 12100, dossier technique complet et déclaration de conformité UE —
             structurés selon le règlement (UE) 2023/988.
           </motion.p>
 
@@ -261,8 +261,8 @@ export default function LandingPage() {
           >
             {[
               { n: "< 10 min", label: "par dossier complet" },
-              { n: "15", label: "sections Art. 22" },
-              { n: "7", label: "marchés couverts" },
+              { n: "10 ans", label: "d'archivage légal" },
+              { n: "EU · US · UK", label: "marchés couverts" },
             ].map((s, i) => (
               <div key={s.n} className={`${i > 0 ? "pl-6 sm:pl-8 border-l border-gray-300" : ""}`}>
                 <p className="font-display text-2xl sm:text-3xl font-bold text-gray-950 tabular-nums">{s.n}</p>
@@ -467,7 +467,7 @@ export default function LandingPage() {
             {/* Markets */}
             <FadeIn>
               <p className="text-xs font-semibold uppercase tracking-widest text-blue-400 mb-2">Couverture internationale</p>
-              <h2 className="text-2xl font-bold mb-2">7 marchés, une seule plateforme</h2>
+              <h2 className="text-2xl font-bold mb-2">EU, US, UK, JP — une seule plateforme</h2>
               <p className="text-sm text-gray-400 mb-8">Conforva génère les documents conformes aux exigences réglementaires de chaque marché cible sélectionné.</p>
               <div className="space-y-2.5">
                 {MARKETS.map((m, i) => (
@@ -900,7 +900,7 @@ export default function LandingPage() {
                   {[
                     "Références illimitées (selon palier)",
                     "Étiquettes 7 langues sans restriction",
-                    "7 marchés couverts (EU, US, GB, CN…)",
+                    "EU, US, UK, JP et plus couverts",
                     "Import Shopify, WooCommerce & CSV",
                     "Veille réglementaire complète",
                     "Rapports de conformité consolidés",

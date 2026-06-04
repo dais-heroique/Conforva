@@ -4,6 +4,7 @@ import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { getLocale, getDictionary } from "@/lib/i18n"
 import { LocaleProvider } from "@/components/providers/locale-provider"
+import { AuthCallbackHandler } from "@/components/providers/auth-callback-handler"
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -118,6 +119,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <LocaleProvider t={t} locale={locale}>
           {children}
         </LocaleProvider>
+        <AuthCallbackHandler />
         <Toaster />
       </body>
     </html>
