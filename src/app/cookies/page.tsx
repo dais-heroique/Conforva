@@ -141,7 +141,7 @@ export default function CookiesPage() {
           <Section title="6. Contact">
             <p>
               Pour toute question relative aux cookies ou à la protection de vos données personnelles, contactez-nous à :{" "}
-              <a href="mailto:support@conforva.com" className="text-blue-600 hover:underline">support@conforva.com</a>
+              <a href="mailto:contact.conforva@gmail.com" className="text-blue-600 hover:underline">contact.conforva@gmail.com</a>
             </p>
             <p>
               Pour plus d'informations sur la gestion de vos données personnelles, consultez notre{" "}

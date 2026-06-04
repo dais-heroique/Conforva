@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const resend = new Resend(process.env.RESEND_API_KEY)
     await resend.emails.send({
       from: "Conforva Contact <noreply@conforva.com>",
-      to: ["support@conforva.com"],
+      to: ["contact.conforva@gmail.com"],
       replyTo: email,
       subject: `[Contact] ${subject} — ${name}`,
       text: `Nom : ${name}\nEmail : ${email}\nSujet : ${subject}\n\n${message}`,

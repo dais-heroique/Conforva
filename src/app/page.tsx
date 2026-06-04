@@ -186,9 +186,7 @@ export default function LandingPage() {
           <nav className="hidden md:flex items-center gap-7 text-sm text-gray-500">
             <a href="#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</a>
             <a href="#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</a>
-            <Link href="/blog" className="hover:text-gray-900 transition-colors">Blog</Link>
             <Link href="/enterprise" className="hover:text-gray-900 transition-colors">Enterprise</Link>
-            <Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link>
           </nav>
           <div className="flex items-center gap-2">
             <Link href="/auth/login" className="hidden sm:block text-sm text-gray-500 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
@@ -202,67 +200,64 @@ export default function LandingPage() {
       </motion.header>
 
       {/* ─── HERO ─── */}
-      <section className="relative px-5 pt-32 pb-20 sm:pt-44 sm:pb-28">
-        <div className="max-w-6xl mx-auto">
-          <div className="max-w-4xl">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
-              className="flex items-center gap-3 mb-8">
-              <div className="h-4 w-[3px] bg-red-600 shrink-0" />
-              <span className="text-[11px] font-semibold text-red-700 tracking-widest uppercase">
-                GPSR (UE) 2023/988 — En vigueur depuis décembre 2024
-              </span>
-            </motion.div>
+      <section className="relative px-5 pt-32 pb-20 sm:pt-44 sm:pb-28 text-center">
+        <div className="max-w-4xl mx-auto">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
+            className="inline-flex items-center gap-2 mb-8">
+            <span className="h-1.5 w-1.5 bg-red-600 rounded-full animate-pulse shrink-0" />
+            <span className="text-[11px] font-semibold text-red-700 tracking-widest uppercase">
+              GPSR (UE) 2023/988 — En vigueur depuis décembre 2024
+            </span>
+          </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.06 }}
-              className="font-display text-[clamp(2.8rem,7.5vw,5.5rem)] leading-[0.93] tracking-tight text-gray-950 mb-8"
-            >
-              Conformité GPSR<br />
-              <em className="italic font-light text-blue-700">générée</em> en<br />
-              quelques minutes.
-            </motion.h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.06 }}
+            className="font-display text-[clamp(2.8rem,7.5vw,5.8rem)] leading-[0.93] tracking-tight text-gray-950 mb-8"
+          >
+            Dossiers de conformité GPSR,<br />
+            <em className="italic font-light text-blue-700">générés en quelques minutes.</em>
+          </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.22 }}
-              className="text-lg text-gray-500 leading-relaxed max-w-lg mb-10"
-            >
-              Analyse de risque ISO 12100, dossier technique 15 sections et déclaration de conformité UE —
-              structurés selon le règlement (UE) 2023/988.
-            </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.22 }}
+            className="text-lg text-gray-500 leading-relaxed max-w-xl mx-auto mb-10"
+          >
+            Analyse de risque ISO 12100, dossier technique 15 sections et déclaration de conformité UE —
+            structurés selon le règlement (UE) 2023/988.
+          </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.3 }}
-              className="flex flex-wrap gap-3"
-            >
-              <Link href="/auth/login">
-                <Button size="lg" className="gap-2">
-                  Créer un compte gratuit <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-              <a href="#comment">
-                <Button size="lg" variant="ghost" className="text-gray-600 hover:text-gray-900">
-                  Comment ça marche →
-                </Button>
-              </a>
-            </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.3 }}
+            className="flex flex-wrap gap-3 justify-center"
+          >
+            <Link href="/auth/login">
+              <Button size="lg" className="gap-2">
+                Créer un compte gratuit <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <a href="#comment">
+              <Button size="lg" variant="ghost" className="text-gray-600 hover:text-gray-900">
+                Comment ça marche →
+              </Button>
+            </a>
+          </motion.div>
 
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.42 }}
-              className="mt-3 text-xs text-gray-400">
-              Gratuit pour 1 référence · Aucune carte bancaire requise
-            </motion.p>
-          </div>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.42 }}
+            className="mt-3 text-xs text-gray-400">
+            Gratuit pour 1 référence · Aucune carte bancaire requise
+          </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.48 }}
-            className="mt-16 pt-8 border-t border-gray-300 grid grid-cols-3 max-w-xl"
+            transition={{ duration: 0.4, delay: 0.5 }}
+            className="mt-16 pt-8 border-t border-gray-300 grid grid-cols-3 max-w-lg mx-auto"
           >
             {[
               { n: "< 10 min", label: "par dossier complet" },
@@ -284,7 +279,7 @@ export default function LandingPage() {
           className="flex gap-2"
           style={{ width: "max-content" }}
           animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+          transition={{ duration: 60, ease: "linear", repeat: Infinity }}
         >
           {[...CATEGORIES, "& bien d'autres…", ...CATEGORIES, "& bien d'autres…"].map((cat, i) => (
             <span key={i} className="shrink-0 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs text-gray-500 whitespace-nowrap shadow-sm">{cat}</span>
@@ -893,7 +888,7 @@ export default function LandingPage() {
           </div>
 
           <FadeIn>
-            <div className="mt-5 border-2 border-gray-900 bg-gray-950 text-white p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            <div className="mt-5 rounded-lg border-2 border-gray-900 bg-gray-950 text-white p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Enterprise</span>
@@ -988,7 +983,7 @@ export default function LandingPage() {
 
       {/* ─── CTA ─── */}
       <FadeIn>
-        <section className="mx-4 sm:mx-6 mb-14 bg-[#111110] px-8 py-16 text-center text-white relative overflow-hidden">
+        <section className="mb-14 bg-[#111110] px-8 py-16 text-center text-white relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at 70% 30%, white, transparent 50%)" }} />
           <h2 className="relative text-2xl sm:text-3xl font-bold mb-3">Commencez avec 1 produit, gratuitement</h2>
           <p className="relative text-blue-100 mb-8 text-sm">Aucune carte bancaire · Compte créé en 30 secondes · Premier dossier immédiat</p>
@@ -1012,16 +1007,14 @@ export default function LandingPage() {
               <p className="text-sm text-gray-500 leading-relaxed max-w-xs">
                 Conformité GPSR simplifiée pour les e-commerçants vendant dans l'Union Européenne.
               </p>
-              <p className="mt-3 text-xs text-gray-400">support@conforva.com</p>
+              <p className="mt-3 text-xs text-gray-400">contact.conforva@gmail.com</p>
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Produit</p>
               <ul className="space-y-2 text-sm text-gray-500">
                 <li><a href="#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</a></li>
                 <li><a href="#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</a></li>
-                <li><Link href="/blog" className="hover:text-gray-900 transition-colors">Blog</Link></li>
                 <li><Link href="/enterprise" className="hover:text-gray-900 transition-colors">Enterprise</Link></li>
-                <li><Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link></li>
                 <li><Link href="/status" className="hover:text-gray-900 transition-colors">Statut</Link></li>
               </ul>
             </div>

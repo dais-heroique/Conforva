@@ -96,7 +96,7 @@ const SECTIONS = [
       },
       {
         q: "Puis-je obtenir un remboursement ?",
-        a: "Conformément à l'article L. 221-18 du Code de la consommation, un droit de rétractation de 14 jours s'applique à partir de la souscription. Au-delà, aucun remboursement au prorata n'est accordé sauf défaut majeur du service. Contactez support@conforva.com avec votre numéro de commande.",
+        a: "Conformément à l'article L. 221-18 du Code de la consommation, un droit de rétractation de 14 jours s'applique à partir de la souscription. Au-delà, aucun remboursement au prorata n'est accordé sauf défaut majeur du service. Contactez contact.conforva@gmail.com avec votre numéro de commande.",
       },
     ],
   },
@@ -113,7 +113,7 @@ const SECTIONS = [
       },
       {
         q: "Conforva est-il conforme au RGPD ?",
-        a: "Oui. Conforva est conforme au Règlement Général sur la Protection des Données (RGPD / GDPR). Vous disposez d'un droit d'accès, de rectification, de suppression et de portabilité de vos données. Pour exercer ces droits, contactez-nous à support@conforva.com.",
+        a: "Oui. Conforva est conforme au Règlement Général sur la Protection des Données (RGPD / GDPR). Vous disposez d'un droit d'accès, de rectification, de suppression et de portabilité de vos données. Pour exercer ces droits, contactez-nous à contact.conforva@gmail.com.",
       },
     ],
   },
@@ -175,7 +175,7 @@ export default function FAQPage() {
 
         <div className="mt-14 rounded-2xl bg-blue-50 border border-blue-100 p-8 text-center">
           <h2 className="text-lg font-bold text-gray-900 mb-2">Vous avez une autre question ?</h2>
-          <p className="text-sm text-gray-500 mb-5">Envoyez un message à support@conforva.com.</p>
+          <p className="text-sm text-gray-500 mb-5">Envoyez un message à contact.conforva@gmail.com.</p>
           <Link href="/contact">
             <button className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
               Envoyer un message

@@ -120,7 +120,7 @@ export default function StatusPage() {
         <div className="mt-8 text-center text-sm text-gray-500">
           <p>
             Pour signaler un incident :{" "}
-            <a href="mailto:support@conforva.com" className="text-blue-600 hover:underline font-medium">support@conforva.com</a>
+            <a href="mailto:contact.conforva@gmail.com" className="text-blue-600 hover:underline font-medium">contact.conforva@gmail.com</a>
           </p>
         </div>
       </main>

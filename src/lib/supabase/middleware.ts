@@ -42,7 +42,9 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/cgv') ||
     request.nextUrl.pathname.startsWith('/cookies') ||
     request.nextUrl.pathname.startsWith('/api/webhooks') ||
-    request.nextUrl.pathname.startsWith('/api/contact')
+    request.nextUrl.pathname.startsWith('/api/contact') ||
+    request.nextUrl.pathname.startsWith('/enterprise') ||
+    request.nextUrl.pathname.startsWith('/blog')
 
   if (!user && !isAuthRoute && !isPublicRoute) {
     const url = request.nextUrl.clone()

@@ -50,8 +50,6 @@ export function PublicNav() {
           <nav className="hidden md:flex items-center gap-6 text-sm text-gray-500">
             <Link href="/#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</Link>
             <Link href="/#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</Link>
-            <Link href="/blog" className="hover:text-gray-900 transition-colors">Blog</Link>
-            <Link href="/faq" className="hover:text-gray-900 transition-colors">FAQ</Link>
           </nav>
           <div className="flex items-center gap-2">
             <Link href="/auth/login" className="hidden sm:block text-sm text-gray-500 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
@@ -82,7 +80,7 @@ export function PublicFooter() {
             <p className="text-sm text-gray-500 leading-relaxed max-w-xs">
               Conformité GPSR simplifiée pour les e-commerçants vendant dans l'Union Européenne.
             </p>
-            <p className="mt-3 text-xs text-gray-400">support@conforva.com</p>
+            <p className="mt-3 text-xs text-gray-400">contact.conforva@gmail.com</p>
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Produit</p>

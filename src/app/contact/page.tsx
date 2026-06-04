@@ -42,8 +42,8 @@ export default function ContactPage() {
               <p className="font-semibold text-gray-900">Email support</p>
             </div>
             <p className="text-sm text-gray-500 mb-2">Pour toute question, problème ou demande :</p>
-            <a href="mailto:support@conforva.com" className="text-sm font-medium text-blue-600 hover:underline break-all">
-              support@conforva.com
+            <a href="mailto:contact.conforva@gmail.com" className="text-sm font-medium text-blue-600 hover:underline break-all">
+              contact.conforva@gmail.com
             </a>
           </div>
 

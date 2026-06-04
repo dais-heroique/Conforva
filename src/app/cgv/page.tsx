@@ -123,7 +123,7 @@ export default function CGVPage() {
             </p>
             <p>
               Pour exercer ce droit, le Client doit notifier sa décision avant l'expiration du délai de 14 jours
-              à l'adresse : <a href="mailto:support@conforva.com" className="text-blue-600 hover:underline">support@conforva.com</a>.
+              à l'adresse : <a href="mailto:contact.conforva@gmail.com" className="text-blue-600 hover:underline">contact.conforva@gmail.com</a>.
             </p>
             <p>
               <strong>Exception :</strong> conformément à l'article L. 221-28 12° du Code de la consommation, le droit
@@ -198,7 +198,7 @@ export default function CGVPage() {
             </div>
             <p>
               Avant toute médiation, le Client doit avoir préalablement contacté le service client de Conforva
-              à l'adresse <a href="mailto:support@conforva.com" className="text-blue-600 hover:underline">support@conforva.com</a> et
+              à l'adresse <a href="mailto:contact.conforva@gmail.com" className="text-blue-600 hover:underline">contact.conforva@gmail.com</a> et
               ne pas avoir obtenu de réponse satisfaisante dans un délai de 60 jours.
             </p>
           </Section>

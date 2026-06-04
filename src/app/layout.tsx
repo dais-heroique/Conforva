@@ -31,7 +31,7 @@ const JSON_LD = {
       "logo": { "@type": "ImageObject", "url": `${BASE_URL}/favicon.png` },
       "contactPoint": {
         "@type": "ContactPoint",
-        "email": "support@conforva.com",
+        "email": "contact.conforva@gmail.com",
         "contactType": "customer support",
         "availableLanguage": ["French", "English"],
       },
