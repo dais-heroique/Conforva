@@ -728,6 +728,283 @@ export const ARTICLES: BlogArticle[] = [
       href: "/auth/login",
     },
   },
+  {
+    slug: "gpsr-bougies-obligations-etiquetage",
+    title: "GPSR et bougies : obligations, étiquetage CLP et normes EN 15494 expliquées",
+    description: "Vous fabriquez ou vendez des bougies en Europe ? GPSR, CLP, EN 15494, EN 15493 : découvrez toutes les obligations légales pour vendre vos bougies en conformité en France et dans l'UE.",
+    keywords: ["GPSR bougies", "étiquetage bougie GPSR", "norme EN 15494 bougie", "CLP bougies", "conformité bougies UE", "dossier technique bougie", "vendre bougies France"],
+    publishedAt: "2025-06-03",
+    readingTime: 8,
+    category: "Réglementation",
+    intro: "Les bougies sont l'un des produits les plus vendus en e-commerce artisanal et créatif — et l'une des catégories où la non-conformité est la plus répandue. GPSR, règlement CLP, norme EN 15494 : voici tout ce que vous devez savoir pour vendre vos bougies légalement en France et dans toute l'Union Européenne.",
+    sections: [
+      {
+        heading: "Quelles réglementations s'appliquent aux bougies ?",
+        body: [
+          "Les bougies sont soumises à plusieurs réglementations simultanément. Il ne suffit pas de respecter une seule loi — toutes s'appliquent en même temps :",
+          "**Le GPSR (UE) 2023/988** : le règlement général sur la sécurité des produits, applicable depuis le 13 décembre 2024. Il impose un dossier technique complet (Article 22), une analyse de risque ISO 12100, une déclaration de conformité (Article 24) et la désignation d'une Personne Responsable EU si vous êtes fabricant hors UE.",
+          "**Le règlement CLP (UE) 1272/2008** : classification, étiquetage et emballage des mélanges chimiques dangereux. Les fragrances synthétiques utilisées dans les bougies sont souvent des mélanges soumis au CLP. Si votre mélange de fragrance dépasse certains seuils de concentration, des pictogrammes de danger (GHS) et des phrases de risque (H/P) doivent figurer sur l'étiquette.",
+          "**La norme EN 15494:2019** : norme européenne spécifique aux bougies, qui définit les exigences d'étiquetage de sécurité. Elle précise quels avertissements doivent obligatoirement figurer sur l'étiquette d'une bougie.",
+          "**La norme EN 15493:2007** : spécifications de sécurité incendie pour les bougies. Elle définit des limites sur les caractéristiques de combustion pour réduire le risque d'incendie.",
+        ],
+      },
+      {
+        heading: "L'étiquetage obligatoire selon la norme EN 15494",
+        body: [
+          "La norme EN 15494:2019 impose les mentions de sécurité suivantes sur l'étiquette ou l'emballage de chaque bougie vendue dans l'UE :",
+          "✓ **Pictogramme flamme** ou mention « Danger — Flamme nue » (selon la norme)",
+          "✓ **« Ne jamais laisser une bougie allumée sans surveillance »**",
+          "✓ **« Tenir hors de portée des enfants et des animaux »**",
+          "✓ **« Poser sur une surface plane, résistante à la chaleur, protégée de tout courant d'air »**",
+          "✓ **« Arrêter l'utilisation lorsqu'il reste 1 cm de cire »** (pour les bougies en verre ou récipient)",
+          "✓ **Indication des coordonnées du fabricant** ou de la Personne Responsable EU",
+          "✓ **Numéro de référence ou de lot** permettant la traçabilité",
+          "Ces mentions doivent être rédigées dans la langue officielle du pays de vente. Pour une boutique vendant en France, Allemagne et Italie, vous avez besoin de versions FR, DE et IT de l'étiquette.",
+        ],
+      },
+      {
+        heading: "Le règlement CLP et les fragrances : ce qui change selon votre recette",
+        body: [
+          "C'est là que beaucoup de fabricants artisanaux se retrouvent en difficulté. Si votre fragrance contient certains allergènes ou substances sensibilisantes au-delà de seuils définis, le règlement CLP impose des mentions supplémentaires.",
+          "**Les allergènes IFRA** : depuis 2021, le règlement UE 2020/1378 impose la mention des allergènes aromatiques présents à plus de 0,01% dans les produits non rincés (dont les bougies). Les substances concernées incluent le limonène, le linalol, le cinnamal, l'eugénol et de nombreuses autres molécules aromatiques.",
+          "**Les pictogrammes GHS** : si votre fragrance est classifiée comme mélange dangereux (inflammable, irritant, sensibilisant), vous devez apposer les pictogrammes GHS correspondants sur l'étiquette de la bougie, en plus des avertissements EN 15494.",
+          "**Comment savoir si votre fragrance est concernée** : demandez à votre fournisseur de fragrance la FDS (Fiche de Données de Sécurité) au format REACH. Elle contient la classification CLP et la liste des allergènes. C'est le document de base pour rédiger votre étiquette CLP.",
+        ],
+      },
+      {
+        heading: "Le dossier technique GPSR pour une bougie : ce qu'il doit contenir",
+        body: [
+          "En plus de l'étiquetage, le GPSR impose un dossier technique complet pour chaque référence de bougie. Voici les éléments spécifiques aux bougies :",
+          "**Description technique** : type de cire (paraffine, soja, coco, beeswax...), type de mèche (coton, bois, zinc interdit depuis 2021), fragrance (nom INCI ou FDS), colorants, contenant (verre, céramique, métal).",
+          "**Analyse de risque ISO 12100** : pour une bougie, les dangers principaux à documenter sont l'incendie (flamme nue), les brûlures par contact avec la cire chaude, les émissions de COV (composés organiques volatils) en espace confiné, l'ingestion accidentelle par un enfant, et la fragmentation du contenant en verre lors d'une surchauffe.",
+          "**Résultats de tests** : il n'y a pas d'obligation de tests de laboratoire externe pour les bougies artisanales à faible risque — mais vous devez au minimum documenter vos propres tests de combustion (hauteur de flamme, température du contenant, comportement à l'extinction).",
+          "**Déclaration de conformité** : référençant le GPSR (UE) 2023/988 et les normes EN 15494 et EN 15493.",
+        ],
+      },
+      {
+        heading: "Les spécificités pour les bougies vendues sur Etsy, Amazon et Shopify",
+        body: [
+          "**Etsy** : les vendeurs de bougies sur Etsy EU sont tenus de respecter le GPSR et le CLP. Etsy peut demander la preuve de conformité pour certaines catégories. Assurez-vous que votre description produit mentionne les précautions d'utilisation.",
+          "**Amazon EU** : Amazon peut demander la documentation de conformité pour les bougies dans certaines catégories. Les fiches produit doivent mentionner les avertissements de sécurité dans la langue du marché (Amazon.fr → français, Amazon.de → allemand).",
+          "**Votre boutique Shopify** : vous êtes responsable de l'affichage des avertissements de sécurité sur les fiches produit. Ajoutez les mentions EN 15494 en bas de chaque fiche produit bougie, et assurez-vous que l'emballage livré inclut l'étiquette réglementaire.",
+        ],
+      },
+      {
+        heading: "Questions fréquentes sur la conformité des bougies",
+        body: [
+          "**Je fabrique des bougies chez moi et je vends sur Etsy. Suis-je vraiment concerné par le GPSR ?** Oui, dès que vous vendez à des consommateurs européens, que ce soit via Etsy, Instagram, votre propre site ou un marché artisanal, vous êtes soumis au GPSR. La taille de votre activité ne change rien aux obligations légales.",
+          "**Je vends des bougies en cire de soja sans fragrance. Ai-je quand même besoin du dossier GPSR ?** Oui. Même sans fragrance, une bougie est un produit comportant une flamme nue — ce qui la classe automatiquement parmi les produits nécessitant une évaluation de risque documentée.",
+          "**Mes étiquettes EN 15494 doivent-elles être en français si je vends uniquement en France ?** Oui. Les avertissements doivent être dans la langue officielle du pays de vente — donc en français pour les ventes en France.",
+          "**Est-ce que je dois envoyer mes bougies en laboratoire ?** Pas obligatoirement pour les petits volumes. Une auto-évaluation documentée peut suffire pour les bougies à faible risque — mais vous devez la mettre par écrit dans votre dossier technique.",
+        ],
+      },
+    ],
+    conclusion: "La conformité des bougies en Europe combine GPSR, CLP et norme EN 15494 — trois corpus réglementaires qu'il faut traiter simultanément. L'étiquetage est souvent le premier point de non-conformité observé lors des contrôles. Avec la bonne méthode et un dossier technique solide, même un petit producteur artisanal peut vendre en toute légalité dans toute l'UE.",
+    cta: {
+      heading: "Générez votre dossier de conformité bougie",
+      text: "Conforva génère le dossier technique GPSR complet pour vos bougies, incluant l'analyse de risque et les étiquettes multilingues avec les mentions EN 15494.",
+      button: "Créer mon dossier bougie",
+      href: "/auth/login",
+    },
+  },
+  {
+    slug: "gpsr-cosmetiques-obligations-vendeurs",
+    title: "GPSR et cosmétiques : ce qui change pour les fabricants et revendeurs en 2025",
+    description: "Les cosmétiques sont déjà soumis au règlement (UE) 1223/2009. Avec le GPSR, de nouvelles obligations s'ajoutent. Ce guide explique ce qui change concrètement pour les marques de cosmétiques vendant en UE.",
+    keywords: ["GPSR cosmétiques", "conformité cosmétiques UE", "règlement cosmétiques Europe", "dossier produit cosmétique GPSR", "CPNP cosmétiques", "RP cosmétiques EU"],
+    publishedAt: "2025-06-04",
+    readingTime: 7,
+    category: "Réglementation",
+    intro: "Si vous fabriquez ou revendez des cosmétiques — crèmes, sérums, shampoings, maquillage — vous êtes soumis à un double cadre réglementaire. Le règlement cosmétiques (CE) 1223/2009 s'applique depuis longtemps. Avec le GPSR (UE) 2023/988 entré en vigueur en décembre 2024, des obligations supplémentaires s'ajoutent. Voici ce que vous devez savoir.",
+    sections: [
+      {
+        heading: "Cosmétiques et GPSR : qui fait quoi ?",
+        body: [
+          "Le règlement cosmétiques (CE) 1223/2009 est la réglementation sectorielle principale qui s'applique aux produits cosmétiques dans l'UE. Il couvre l'évaluation de la sécurité, le dossier d'information sur le produit (DIP), la notification au CPNP, l'étiquetage INCI, et la Personne Responsable EU (déjà obligatoire sous le règlement cosmétiques).",
+          "Le GPSR (UE) 2023/988 s'applique en complément comme cadre général de sécurité. L'Article 2(3) du GPSR précise que les obligations du GPSR s'appliquent sauf si des dispositions spécifiques d'un autre acte législatif de l'UE s'appliquent.",
+          "Concrètement, pour les cosmétiques : les obligations de sécurité du produit sont couvertes par le règlement cosmétiques 1223/2009. Mais certaines nouvelles obligations du GPSR s'ajoutent, notamment pour les places de marché et les opérateurs de distribution.",
+        ],
+      },
+      {
+        heading: "Ce que le GPSR ajoute pour les cosmétiques",
+        body: [
+          "Même si le règlement cosmétiques 1223/2009 reste la référence principale, le GPSR apporte plusieurs nouveautés importantes :",
+          "**Obligations pour les places de marché** : si vous vendez vos cosmétiques sur Amazon, Etsy ou toute autre marketplace, ces plateformes sont désormais directement soumises au GPSR et peuvent exiger de vous une documentation complémentaire de conformité.",
+          "**Traçabilité renforcée** : le GPSR renforce les obligations de traçabilité — numéro de lot obligatoire, informations permettant d'identifier la chaîne d'approvisionnement.",
+          "**Notification des incidents** : le GPSR harmonise les procédures de notification des incidents graves à l'échelle EU. Si un de vos cosmétiques cause un incident sérieux (réaction allergique grave, contamination, etc.), vous avez des obligations de notification renforcées.",
+          "**Opérateurs d'exécution** : si vous utilisez Amazon FBA ou un 3PL pour stocker et expédier vos cosmétiques, ces opérateurs ont également des obligations sous le GPSR.",
+        ],
+      },
+      {
+        heading: "La Personne Responsable EU : pas de changement majeur",
+        body: [
+          "Bonne nouvelle pour les marques de cosmétiques : la Personne Responsable EU (PR EU) était déjà obligatoire sous le règlement cosmétiques 1223/2009. Si vous avez déjà désigné une PR EU pour vos cosmétiques, cette même personne peut couvrir vos obligations GPSR.",
+          "La PR EU pour les cosmétiques doit être établie dans l'UE et est responsable de la notification au CPNP (Cosmetic Products Notification Portal), de la conservation du DIP (Dossier d'Information sur le Produit) et de la disponibilité de ces informations pour les autorités.",
+          "Si vous êtes une marque basée hors UE et que vous n'avez pas encore de PR EU pour vos cosmétiques, vous devez désigner une PR EU à la fois pour les obligations du règlement cosmétiques et du GPSR.",
+        ],
+      },
+      {
+        heading: "Checklist de conformité cosmétiques 2025",
+        body: [
+          "Pour chaque référence cosmétique vendue dans l'UE :",
+          "✓ **Dossier d'Information Produit (DIP)** : évaluation de la sécurité par un évaluateur qualifié, rapport de sécurité, description du produit, méthode de fabrication, données sur les effets indésirables",
+          "✓ **Notification CPNP** : notification du produit au portail CPNP avant mise sur le marché",
+          "✓ **Étiquetage INCI** : liste des ingrédients selon la nomenclature INCI, mentions obligatoires (poids/volume, date d'utilisation, précautions)",
+          "✓ **Personne Responsable EU** : désignée et documentée, établie dans l'UE",
+          "✓ **Numéro de lot** : traçabilité obligatoire",
+          "✓ **Allégations cosmétiques** : conformes au règlement (UE) 655/2013",
+          "✓ **Documentation GPSR** : dossier technique complémentaire si la distribution passe par des places de marché",
+        ],
+      },
+      {
+        heading: "Amazon et les cosmétiques : ce qu'Amazon exige en 2025",
+        body: [
+          "Amazon EU a durci ses exigences pour les cosmétiques depuis l'entrée en vigueur du GPSR. Les vendeurs peuvent se voir demander :",
+          "La preuve de notification au CPNP (un numéro de notification ou une capture d'écran du portail).",
+          "Les coordonnées de la Personne Responsable EU dans Seller Central.",
+          "L'étiquetage complet et conforme au règlement 1223/2009 sur les photos produit.",
+          "Pour certaines catégories à risque (produits pour enfants, produits avec des allégations médicales), Amazon peut demander le rapport d'évaluation de sécurité complet.",
+          "Les cosmétiques vendus sans notification CPNP ou sans PR EU correctement documentée peuvent être suspendus sur Amazon EU.",
+        ],
+      },
+    ],
+    conclusion: "Les cosmétiques bénéficient d'un cadre réglementaire sectoriel solide (règlement 1223/2009) qui couvre l'essentiel. Le GPSR s'y ajoute en renforçant certaines obligations de traçabilité et en impliquant directement les places de marché. Pour les marques déjà conformes au règlement cosmétiques, la mise à niveau GPSR est généralement limitée — mais pour celles qui ne l'étaient pas encore, c'est l'occasion de régulariser l'ensemble.",
+    cta: {
+      heading: "Documentez vos cosmétiques avec Conforva",
+      text: "Générez le dossier technique GPSR complémentaire pour vos cosmétiques — analyse de risque, déclaration de conformité et étiquettes multilingues.",
+      button: "Démarrer gratuitement",
+      href: "/auth/login",
+    },
+  },
+  {
+    slug: "gpsr-etsy-guide-vendeurs",
+    title: "GPSR sur Etsy : guide complet pour les vendeurs artisanaux en Europe",
+    description: "Vous vendez sur Etsy et livrez en Europe ? Le GPSR s'applique à vous dès la première vente. Découvrez vos obligations réelles, les démarches simples et comment vous mettre en conformité sans expertise juridique.",
+    keywords: ["GPSR Etsy", "Etsy conformité UE", "GPSR vendeur Etsy", "Etsy règlement produit sécurité", "conformité artisanat EU", "GPSR créateurs Etsy"],
+    publishedAt: "2025-06-05",
+    readingTime: 6,
+    category: "Cas d'usage",
+    intro: "Si vous êtes créateur ou artisan sur Etsy et que vous livrez en France, en Belgique, en Allemagne ou dans tout autre pays de l'UE, le GPSR (UE) 2023/988 s'applique à vous — même si vous vendez à titre complémentaire, même si vous faites tout à la main chez vous. Ce guide vous explique vos obligations réelles et comment les remplir sans vous ruiner.",
+    sections: [
+      {
+        heading: "Le GPSR s'applique-t-il aux petits vendeurs Etsy ?",
+        body: [
+          "Oui — sans exception de taille ni de chiffre d'affaires. Le règlement GPSR ne prévoit pas de seuil minimal. Qu'il s'agisse d'un auto-entrepreneur vendant 10 bougies par mois ou d'une PME gérant des milliers de commandes, les obligations s'appliquent dès lors que des produits physiques sont vendus à des consommateurs de l'UE.",
+          "La réalité pratique : les contrôles de la DGCCRF (France) ou des autorités équivalentes ciblent en priorité les grandes plateformes et les produits à risque élevé. Un petit vendeur Etsy artisanal n'est pas la cible principale des autorités — mais il n'est pas exempt pour autant.",
+          "Surtout : Etsy peut vous demander une documentation de conformité pour certaines catégories de produits. Si vous ne pouvez pas la fournir, votre boutique risque une suspension de catégorie.",
+        ],
+      },
+      {
+        heading: "Ce qu'Etsy exige concrètement",
+        body: [
+          "Etsy est une marketplace soumise au GPSR en tant qu'opérateur de marché en ligne. Cela signifie qu'Etsy a l'obligation légale de vérifier la conformité des produits vendus sur sa plateforme pour les ventes vers l'UE.",
+          "En pratique, Etsy peut :",
+          "Vous envoyer des notifications vous demandant de confirmer que vos produits sont conformes au GPSR pour les catégories à risque.",
+          "Suspendre des annonces ou votre boutique entière si vous ne répondez pas aux demandes de conformité.",
+          "Vous demander de mettre à jour vos fiches produit pour inclure les avertissements de sécurité obligatoires.",
+          "Pour les catégories les plus contrôlées sur Etsy : jouets et jeux pour enfants, produits pour bébés, bougies et produits inflammables, bijoux et accessoires pour enfants, cosmétiques fait-maison.",
+        ],
+      },
+      {
+        heading: "Les 4 documents essentiels pour un vendeur Etsy",
+        body: [
+          "En tant que petit vendeur Etsy, vous n'avez pas besoin d'un cabinet juridique ou d'une agence de conformité. Voici les 4 documents de base que vous devez avoir pour chaque produit vendu en UE :",
+          "**1. Le dossier technique simplifié** : pour un produit artisanal simple, le dossier peut être court (2 à 5 pages) : description du produit, matériaux utilisés, usage prévu, évaluation des dangers principaux et mesures prises pour les réduire. L'essentiel est que ce document existe et soit archivé.",
+          "**2. L'analyse de risque** : identifiez les 2 à 4 dangers principaux de votre produit (coupure, ingestion, allergie, incendie...) et documentez ce que vous avez fait pour les réduire (matériaux sûrs, étiquettes d'avertissement, instructions d'usage).",
+          "**3. La déclaration de conformité** : un document d'une page signé par vous, indiquant que le produit est conforme au GPSR. Peut être généré facilement.",
+          "**4. L'étiquetage** : vos produits doivent porter vos coordonnées (nom, adresse ou email), une référence permettant d'identifier le produit, et les avertissements de sécurité pertinents dans la langue du pays de livraison.",
+        ],
+      },
+      {
+        heading: "Comment mettre à jour vos fiches Etsy pour la conformité",
+        body: [
+          "La conformité GPSR se voit également dans vos fiches produit Etsy. Voici ce qu'il faut ajouter :",
+          "**Dans la description produit** : mentionnez les matériaux utilisés, les précautions d'utilisation, et les restrictions d'âge le cas échéant (ex. : « Non adapté aux enfants de moins de 3 ans »).",
+          "**Dans la section « Informations légales »** : Etsy propose des champs pour les informations réglementaires. Renseignez les coordonnées de votre entreprise ou de votre Personne Responsable EU si applicable.",
+          "**Sur l'emballage physique** : incluez une étiquette ou une notice avec les avertissements de sécurité dans la langue du client. Pour les livraisons vers la France, l'Allemagne et le Royaume-Uni, vous aurez besoin de versions FR, DE et EN.",
+        ],
+      },
+      {
+        heading: "Le cas particulier des vendeurs Etsy basés hors UE",
+        body: [
+          "Si vous êtes basé aux États-Unis, au Canada, en Australie ou dans tout autre pays hors UE, et que vous livrez en Europe, vous devez désigner une Personne Responsable EU (Article 16 GPSR). C'est l'obligation qui surprend le plus les vendeurs Etsy internationaux.",
+          "Pour un petit vendeur avec quelques ventes EU par mois, il existe des solutions économiques : certains prestataires proposent le service de PR EU pour 100 à 200 €/an. Cette personne sert de point de contact légal en Europe sans que vous ayez à y ouvrir une structure.",
+          "Attention : si vous vendez uniquement au Royaume-Uni, vous n'avez pas besoin d'une PR EU — mais vous pouvez avoir besoin d'un UK Responsible Person sous la législation britannique (UK PSMB).",
+        ],
+      },
+    ],
+    conclusion: "Le GPSR s'applique à tous les vendeurs Etsy qui livrent en Europe — sans exception. La bonne nouvelle : pour les créateurs et artisans, la mise en conformité n'exige pas un budget considérable. Un dossier technique simplifié, une déclaration de conformité et un étiquetage correct suffisent pour la grande majorité des produits artisanaux. L'important est de le faire avant d'être contacté par Etsy ou les autorités.",
+    cta: {
+      heading: "Mettez votre boutique Etsy en conformité",
+      text: "Créez le dossier technique GPSR pour vos produits Etsy en quelques minutes. Gratuit pour votre première référence, sans expertise juridique requise.",
+      button: "Commencer gratuitement",
+      href: "/auth/login",
+    },
+  },
+  {
+    slug: "gpsr-faq-questions-frequentes",
+    title: "GPSR : les 20 questions les plus fréquentes des e-commerçants (FAQ 2025)",
+    description: "Tout ce que vous avez toujours voulu savoir sur le GPSR : suis-je concerné, quels documents, quel coût, Amazon, Etsy, dropshipping, bougies, jouets, cosmétiques. Réponses claires et directes.",
+    keywords: ["GPSR FAQ", "questions GPSR", "GPSR suis-je concerné", "GPSR obligation e-commerce", "GPSR comment se mettre en conformité", "GPSR expliqué simplement"],
+    publishedAt: "2025-06-05",
+    readingTime: 9,
+    category: "Réglementation",
+    intro: "Le GPSR suscite beaucoup de questions — et souvent de l'inquiétude. Suis-je vraiment concerné ? Qu'est-ce que je risque concrètement ? Combien ça coûte de se mettre en conformité ? Voici les réponses claires aux 20 questions que posent le plus souvent les e-commerçants.",
+    sections: [
+      {
+        heading: "Questions de base : suis-je concerné ?",
+        body: [
+          "**1. Je vends des produits fabriqués en Chine sur Amazon. Suis-je concerné par le GPSR ?** Oui, directement. En tant qu'importateur (vous mettez des produits fabriqués hors UE sur le marché européen), vous avez des obligations complètes : dossier technique, déclaration de conformité, désignation d'une Personne Responsable EU, étiquetage multilingue.",
+          "**2. Je fais du dropshipping et je ne touche jamais les produits. Dois-je me conformer au GPSR ?** Oui. Le fait de ne pas stocker les produits ne vous exempte pas. Dès que vous proposez un produit à un consommateur européen, vous êtes considéré comme distributeur au sens du GPSR. Si vous sourcez depuis des fournisseurs hors UE, vous pouvez même être qualifié d'importateur.",
+          "**3. Je vends uniquement en France. Quel règlement s'applique ?** Le GPSR est un règlement européen directement applicable dans tous les États membres, dont la France. Il n'y a pas de version française du GPSR — c'est le texte UE qui s'applique. La DGCCRF est l'autorité nationale française chargée de le faire respecter.",
+          "**4. Je vends à la fois en France et en dehors de l'UE. Le GPSR s'applique-t-il pour toutes mes ventes ?** Seulement pour les ventes vers les consommateurs de l'UE. Vos ventes aux États-Unis, au Royaume-Uni ou en Australie sont soumises à leurs propres réglementations locales, pas au GPSR.",
+          "**5. Mon produit est déjà certifié CE. Suis-je automatiquement conforme au GPSR ?** Pas nécessairement. Le marquage CE atteste la conformité à une ou plusieurs directives sectorielles (directive jouets, LVD, RED, etc.). Le GPSR ajoute des obligations supplémentaires — notamment le dossier technique Article 22, la Personne Responsable EU et les obligations des places de marché — qui ne sont pas couvertes par le simple marquage CE.",
+        ],
+      },
+      {
+        heading: "Questions sur les documents requis",
+        body: [
+          "**6. Quels documents dois-je avoir pour chaque produit ?** Au minimum : un dossier technique (15 sections, Art. 22), une analyse de risque ISO 12100, une déclaration UE de conformité (Art. 24), un étiquetage avec avertissements dans les langues des pays de vente, et pour les fabricants hors UE, la désignation d'une Personne Responsable EU.",
+          "**7. Combien de temps dois-je conserver le dossier technique ?** 10 ans à compter de la mise sur le marché du dernier exemplaire du produit. C'est une obligation légale, pas une recommandation.",
+          "**8. La déclaration de conformité doit-elle être traduite dans toutes les langues des pays de vente ?** Non. La déclaration de conformité peut être rédigée dans une seule langue (généralement français ou anglais). Ce qui doit être traduit, c'est l'étiquetage de sécurité sur le produit et les instructions d'utilisation.",
+          "**9. Est-ce que je dois faire des tests en laboratoire pour mon produit ?** Pas pour tous les produits. Les tests de laboratoire sont obligatoires pour certaines catégories spécifiques (jouets EN 71, électronique, produits pour enfants de moins de 3 ans). Pour les produits à faible risque (décoration, papeterie, textiles simples), une auto-évaluation documentée peut suffire.",
+        ],
+      },
+      {
+        heading: "Questions sur Amazon, Etsy et les plateformes",
+        body: [
+          "**10. Amazon a suspendu mon annonce pour non-conformité GPSR. Comment réactiver ?** Rassemblez les documents demandés (dossier technique, déclaration de conformité, coordonnées Personne Responsable EU) et soumettez-les via Seller Central dans la section Conformité. Les délais de traitement varient de quelques jours à plusieurs semaines.",
+          "**11. Etsy m'a envoyé une notification GPSR. Que dois-je faire ?** Répondez à la notification avec les documents demandés. Si vous n'avez pas encore de dossier technique, il est urgent d'en constituer un. Ignorer la notification peut entraîner une suspension de vos annonces concernées.",
+          "**12. Shopify vérifie-t-il la conformité GPSR de mes produits ?** Non, Shopify n'est pas une place de marché au sens du GPSR — c'est un prestataire technique. La vérification de votre conformité incombe aux autorités nationales (DGCCRF en France), pas à Shopify. Mais vous restez responsable.",
+        ],
+      },
+      {
+        heading: "Questions sur les coûts et la mise en pratique",
+        body: [
+          "**13. Combien coûte la mise en conformité GPSR ?** Cela dépend du produit et de la méthode. Faire appel à un consultant en conformité : 500 à 2 000 € par référence. Utiliser un outil comme Conforva : de 0 à quelques dizaines d'euros par référence. Les tests de laboratoire (quand obligatoires) : de 200 à 1 500 € selon la catégorie.",
+          "**14. Combien de temps prend la constitution d'un dossier technique ?** Avec un outil adapté : 15 à 30 minutes par référence. Manuellement, sans outil : 2 à 5 jours de travail pour quelqu'un qui ne connaît pas le GPSR.",
+          "**15. Je vends 50 références. Par où commencer ?** Priorisez par risque : commencez par les produits pour enfants, l'électronique et les produits avec des composants chimiques. Ensuite les produits à forte rotation. Enfin les références à faible risque.",
+          "**16. Est-ce que je peux utiliser le même dossier technique pour plusieurs variantes d'un même produit ?** Partiellement. Si les variantes (différentes couleurs, tailles) partagent la même conception et les mêmes matériaux, un seul dossier peut couvrir toutes les variantes avec des annexes spécifiques. Si les matériaux ou la construction diffèrent significativement, un dossier distinct est recommandé.",
+        ],
+      },
+      {
+        heading: "Questions sur les sanctions",
+        body: [
+          "**17. Qu'est-ce que je risque concrètement si je ne me conforme pas ?** Suspension des annonces sur Amazon EU et les autres places de marché (immédiate), contrôle et injonction de la DGCCRF (amendes administratives), blocage douanier de vos marchandises, et en cas d'accident causé par un produit non conforme, responsabilité civile et potentiellement pénale.",
+          "**18. La DGCCRF contrôle-t-elle vraiment les petits vendeurs en ligne ?** Les contrôles ciblent en priorité les produits à risque élevé et les grandes plateformes. Mais les petits vendeurs ne sont pas immunisés — surtout pour les catégories sensibles (jouets, bougies, électronique, produits enfants). Les contrôles en ligne se font aussi par des achats tests.",
+          "**19. Si je ne suis pas en conformité aujourd'hui, est-ce que je risque des sanctions rétroactives ?** Le GPSR n'est pas rétroactif pour les produits mis sur le marché avant décembre 2024. Mais pour les produits que vous continuez à vendre aujourd'hui, les obligations s'appliquent en temps réel.",
+          "**20. Un client a été blessé par mon produit. Que se passe-t-il ?** Si vous avez un dossier technique conforme, vous pouvez démontrer votre bonne foi. Sans dossier technique, l'absence de documentation est interprétée comme une négligence — ce qui aggrave votre responsabilité civile et peut ouvrir la voie à des poursuites pénales. C'est la raison principale pour laquelle la documentation GPSR est critique.",
+        ],
+      },
+    ],
+    conclusion: "Le GPSR n'est pas fait pour décourager les petits vendeurs — il est fait pour protéger les consommateurs. La plupart des obligations sont raisonnables et accessibles même sans expertise juridique. Ce qui compte, c'est d'agir : constituer les dossiers pour vos produits les plus à risque, puis élargir progressivement à l'ensemble de votre catalogue.",
+    cta: {
+      heading: "Passez à l'action : générez votre premier dossier GPSR",
+      text: "Conforva répond à toutes ces questions en vous générant directement les documents : dossier technique, analyse de risque, déclaration de conformité. Gratuit pour votre première référence.",
+      button: "Commencer gratuitement",
+      href: "/auth/login",
+    },
+  },
 ]
 
 export function getArticle(slug: string): BlogArticle | undefined {

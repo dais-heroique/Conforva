@@ -75,11 +75,12 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-96.png", type: "image/png", sizes: "96x96" },
       { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon.png", type: "image/png" },
     ],
-    apple: [{ url: "/favicon.png", type: "image/png" }],
-    shortcut: "/favicon.svg",
+    apple: [{ url: "/favicon-96.png", sizes: "96x96", type: "image/png" }],
+    shortcut: "/favicon.ico",
   },
   openGraph: {
     type: "website",
