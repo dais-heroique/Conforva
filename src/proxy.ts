@@ -6,26 +6,13 @@ type Locale = typeof LOCALES[number]
 const DEFAULT_LOCALE: Locale = 'fr'
 
 function detectLocale(request: NextRequest): Locale {
+  // Only honour an explicitly set cookie — never auto-detect from Accept-Language.
+  // The app is French-first; defaulting to the browser language causes the auth
+  // pages to appear in English for users with an English-language browser.
   const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value
   if (cookieLocale && LOCALES.includes(cookieLocale as Locale)) {
     return cookieLocale as Locale
   }
-
-  const acceptLanguage = request.headers.get('accept-language')
-  if (acceptLanguage) {
-    const langs = acceptLanguage
-      .split(',')
-      .map(part => {
-        const [lang, q] = part.trim().split(';q=')
-        return { lang: lang.trim().toLowerCase().split('-')[0], q: q ? parseFloat(q) : 1.0 }
-      })
-      .sort((a, b) => b.q - a.q)
-
-    for (const { lang } of langs) {
-      if (LOCALES.includes(lang as Locale)) return lang as Locale
-    }
-  }
-
   return DEFAULT_LOCALE
 }
 
