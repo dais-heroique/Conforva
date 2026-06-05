@@ -7,9 +7,8 @@ import type { Plan } from "@/types/supabase"
 const ACTIVE_STATUSES = ["active", "trialing", "past_due"]
 
 function periodEndISO(sub: Stripe.Subscription): string | null {
-  return sub.current_period_end
-    ? new Date(sub.current_period_end * 1000).toISOString()
-    : null
+  const ts = sub.billing_schedules?.[0]?.bill_until?.computed_timestamp ?? sub.cancel_at ?? null
+  return ts ? new Date(ts * 1000).toISOString() : null
 }
 
 export async function POST(req: NextRequest) {
