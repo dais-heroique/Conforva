@@ -44,7 +44,9 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/api/webhooks') ||
     request.nextUrl.pathname.startsWith('/api/contact') ||
     request.nextUrl.pathname.startsWith('/enterprise') ||
-    request.nextUrl.pathname.startsWith('/blog')
+    request.nextUrl.pathname.startsWith('/blog') ||
+    request.nextUrl.pathname === '/sitemap.xml' ||
+    request.nextUrl.pathname === '/robots.txt'
 
   if (!user && !isAuthRoute && !isPublicRoute) {
     const url = request.nextUrl.clone()

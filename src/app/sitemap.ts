@@ -1,16 +1,8 @@
 import type { MetadataRoute } from "next"
-import { ARTICLES } from "@/lib/blog/articles"
 
 const BASE = "https://conforva.com"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const blogArticles: MetadataRoute.Sitemap = ARTICLES.map(a => ({
-    url: `${BASE}/blog/${a.slug}`,
-    lastModified: new Date(a.updatedAt ?? a.publishedAt),
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }))
-
   return [
     {
       url: BASE,
@@ -19,13 +11,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
-      url: `${BASE}/enterprise`,
+      url: `${BASE}/pricing`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
-      url: `${BASE}/faq`,
+      url: `${BASE}/enterprise`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
@@ -49,12 +41,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
     {
-      url: `${BASE}/status`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.4,
-    },
-    {
       url: `${BASE}/cgu`,
       lastModified: new Date(),
       changeFrequency: "yearly",
@@ -73,23 +59,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
     {
-      url: `${BASE}/cookies`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.2,
-    },
-    {
       url: `${BASE}/mentions-legales`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.2,
     },
-    {
-      url: `${BASE}/blog`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    ...blogArticles,
   ]
 }
