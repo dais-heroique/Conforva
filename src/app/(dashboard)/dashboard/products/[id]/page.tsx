@@ -24,6 +24,7 @@ import type {
 import { getComplianceBg, getComplianceColor, SUPPORTED_LANGUAGES, PLAN_LANGUAGES, type LangCode } from "@/lib/utils"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import type { Plan } from "@/types/supabase"
+import { useT } from "@/components/providers/locale-provider"
 
 interface PageProps { params: Promise<{ id: string }> }
 
@@ -35,6 +36,9 @@ export default function ProductDetailPage({ params }: PageProps) {
   const { id } = use(params)
   const router = useRouter()
   const { toast } = useToast()
+  const t = useT()
+  const tDetail = t.dashboard.productDetail
+
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
   const [validating, setValidating] = useState(false)
@@ -98,11 +102,11 @@ export default function ProductDetailPage({ params }: PageProps) {
         body: JSON.stringify({ productId: id, languages: langs }),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error ?? "Erreur inconnue")
-      toast({ title: "Analyse générée", description: "Le dossier technique a été créé avec succès.", variant: "success" as any })
+      if (!res.ok) throw new Error(data.error ?? tDetail.toast.unknownError)
+      toast({ title: tDetail.toast.analysisGenerated, description: tDetail.toast.analysisGeneratedDesc, variant: "success" as any })
       await loadData()
     } catch (err) {
-      toast({ title: "Erreur", description: String(err), variant: "destructive" })
+      toast({ title: tDetail.toast.error, description: String(err), variant: "destructive" })
     } finally {
       setGenerating(false)
     }
@@ -144,10 +148,8 @@ export default function ProductDetailPage({ params }: PageProps) {
     await supabase.rpc("update_compliance_score", { p_product_id: id })
 
     toast({
-      title: "Dossier validé !",
-      description: userPlan === "free"
-        ? "Validé. Passez à un plan payant pour exporter sans watermark."
-        : "Le dossier est maintenant exportable sans watermark.",
+      title: tDetail.toast.fileValidated,
+      description: userPlan === "free" ? tDetail.toast.fileValidatedDescFree : tDetail.toast.fileValidatedDesc,
     })
     await loadData()
     setValidating(false)
@@ -165,6 +167,13 @@ export default function ProductDetailPage({ params }: PageProps) {
   const score = compliance?.score ?? 0
   const analysisData = riskAssessment?.content_json as any
 
+  const missingLabels: Record<string, string> = {
+    questionnaire: tDetail.missingItems.questionnaire,
+    risk_assessment: tDetail.missingItems.risk_assessment,
+    technical_file: tDetail.missingItems.technical_file,
+    labels: tDetail.missingItems.labels,
+  }
+
   return (
     <div className="p-4 md:p-8 space-y-6 max-w-5xl mx-auto">
       {/* Header */}
@@ -180,7 +189,7 @@ export default function ProductDetailPage({ params }: PageProps) {
             <div className="min-w-0">
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 truncate">{product.name}</h1>
               <p className="text-sm text-gray-500">
-                {category?.name_fr}{product.reference && ` · Réf: ${product.reference}`}
+                {category?.name_fr}{product.reference && ` · ${tDetail.ref} ${product.reference}`}
               </p>
             </div>
           </div>
@@ -191,12 +200,12 @@ export default function ProductDetailPage({ params }: PageProps) {
           </Badge>
           <Link href={`/verify/${id}`} target="_blank" rel="noopener noreferrer" className="hidden sm:block">
             <Button variant="outline" size="sm" className="gap-1">
-              <ExternalLink className="h-4 w-4" />Vérifier
+              <ExternalLink className="h-4 w-4" />{tDetail.verifyBtn}
             </Button>
           </Link>
           <Link href={`/dashboard/products/${id}/questionnaire`} className="hidden sm:block">
             <Button variant="outline" size="sm" className="gap-1">
-              <Edit className="h-4 w-4" />Questionnaire
+              <Edit className="h-4 w-4" />{tDetail.questionnaireBtn}
             </Button>
           </Link>
         </div>
@@ -208,16 +217,14 @@ export default function ProductDetailPage({ params }: PageProps) {
           <div className="flex items-center gap-4">
             <div className="flex-1">
               <div className="flex justify-between text-sm mb-1">
-                <span className="font-medium">Score de conformité</span>
+                <span className="font-medium">{tDetail.complianceScore}</span>
                 <span className={`font-bold ${getComplianceColor(score)}`}>{score}%</span>
               </div>
               <Progress value={score} className="h-2" />
             </div>
             {compliance?.missing && compliance.missing.length > 0 && (
               <div className="text-xs text-gray-500">
-                Manquants : {compliance.missing.map(m =>
-                  ({ questionnaire: "Questionnaire", risk_assessment: "Analyse de risque", technical_file: "Dossier", labels: "Étiquettes" }[m] ?? m)
-                ).join(", ")}
+                {tDetail.missing} {compliance.missing.map(m => missingLabels[m] ?? m).join(", ")}
               </div>
             )}
           </div>
@@ -230,16 +237,16 @@ export default function ProductDetailPage({ params }: PageProps) {
         <TabsList className="grid grid-cols-3 w-full">
           <TabsTrigger value="analysis" className="gap-1.5 text-xs sm:text-sm">
             <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
-            <span className="hidden sm:inline">Analyse de risque</span>
-            <span className="sm:hidden">Analyse</span>
+            <span className="hidden sm:inline">{tDetail.tabs.analysis}</span>
+            <span className="sm:hidden">{tDetail.tabs.analysisShort}</span>
           </TabsTrigger>
           <TabsTrigger value="technical" className="gap-1.5 text-xs sm:text-sm">
             <FileText className="h-3.5 w-3.5 shrink-0" />
-            <span className="hidden sm:inline">Dossier technique</span>
-            <span className="sm:hidden">Dossier</span>
+            <span className="hidden sm:inline">{tDetail.tabs.technical}</span>
+            <span className="sm:hidden">{tDetail.tabs.technicalShort}</span>
           </TabsTrigger>
           <TabsTrigger value="labels" className="gap-1.5 text-xs sm:text-sm">
-            <Tag className="h-3.5 w-3.5 shrink-0" />Étiquettes
+            <Tag className="h-3.5 w-3.5 shrink-0" />{tDetail.tabs.labels}
           </TabsTrigger>
         </TabsList>
 
@@ -248,11 +255,11 @@ export default function ProductDetailPage({ params }: PageProps) {
           {!qr?.completed && (
             <Alert variant="warning">
               <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Questionnaire incomplet</AlertTitle>
+              <AlertTitle>{tDetail.incompleteQuestionnaire.title}</AlertTitle>
               <AlertDescription>
-                Complétez le questionnaire produit avant de générer l'analyse.{" "}
+                {tDetail.incompleteQuestionnaire.desc}{" "}
                 <Link href={`/dashboard/products/${id}/questionnaire`} className="underline font-medium">
-                  Remplir maintenant
+                  {tDetail.incompleteQuestionnaire.fillNow}
                 </Link>
               </AlertDescription>
             </Alert>
@@ -263,14 +270,12 @@ export default function ProductDetailPage({ params }: PageProps) {
               <CardContent className="py-12 text-center space-y-4">
                 <ShieldCheck className="h-16 w-16 text-gray-200 mx-auto" />
                 <div>
-                  <p className="text-lg font-medium text-gray-900">Aucune analyse générée</p>
-                  <p className="text-sm text-gray-500 mt-1">
-                    L'IA va analyser votre produit et générer une analyse de risque GPSR complète.
-                  </p>
+                  <p className="text-lg font-medium text-gray-900">{tDetail.noAnalysis.title}</p>
+                  <p className="text-sm text-gray-500 mt-1">{tDetail.noAnalysis.desc}</p>
                 </div>
                 <Button onClick={handleGenerate} disabled={generating || !qr?.completed} className="gap-2">
                   {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
-                  {generating ? "Génération en cours..." : "Générer l'analyse de risque"}
+                  {generating ? tDetail.generatingBtn : tDetail.generateBtn}
                 </Button>
               </CardContent>
             </Card>
@@ -280,24 +285,18 @@ export default function ProductDetailPage({ params }: PageProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Badge variant={riskAssessment.validated_by_human ? "success" : "warning"}>
-                    {riskAssessment.validated_by_human ? "Validé" : "En attente de validation"}
+                    {riskAssessment.validated_by_human ? tDetail.status.validated : tDetail.status.pendingValidation}
                   </Badge>
-                  <span className="text-sm text-gray-500">Version {riskAssessment.version}</span>
+                  <span className="text-sm text-gray-500">{tDetail.version?.replace("{{v}}", String(riskAssessment.version)) ?? `Version ${riskAssessment.version}`}</span>
                 </div>
                 <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleGenerate}
-                    disabled={generating}
-                    className="gap-1"
-                  >
+                  <Button variant="outline" size="sm" onClick={handleGenerate} disabled={generating} className="gap-1">
                     {generating ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
-                    Regénérer
+                    {tDetail.regenerateBtn}
                   </Button>
                   <Link href={`/dashboard/products/${id}/export`}>
                     <Button size="sm" className="gap-1">
-                      <Download className="h-3 w-3" />Exporter PDF
+                      <Download className="h-3 w-3" />{tDetail.exportPdfBtn}
                     </Button>
                   </Link>
                 </div>
@@ -307,12 +306,12 @@ export default function ProductDetailPage({ params }: PageProps) {
               {analysisData?.summary && (
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-base">Résumé exécutif</CardTitle>
+                    <CardTitle className="text-base">{tDetail.summary.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-gray-700">{analysisData.summary}</p>
                     <div className="mt-3 flex items-center gap-2">
-                      <span className="text-xs text-gray-500">Sévérité globale :</span>
+                      <span className="text-xs text-gray-500">{tDetail.summary.severity}</span>
                       <Badge variant={
                         analysisData.overall_severity === "critical" ? "destructive" :
                         analysisData.overall_severity === "high" ? "destructive" :
@@ -329,7 +328,7 @@ export default function ProductDetailPage({ params }: PageProps) {
               {analysisData?.hazards && analysisData.hazards.length > 0 && (
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-base">Dangers identifiés ({analysisData.hazards.length})</CardTitle>
+                    <CardTitle className="text-base">{tDetail.hazards.title.replace("{{count}}", String(analysisData.hazards.length))}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     {analysisData.hazards.map((h: any, i: number) => (
@@ -360,7 +359,7 @@ export default function ProductDetailPage({ params }: PageProps) {
               {analysisData?.mitigation_measures && analysisData.mitigation_measures.length > 0 && (
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-base">Mesures de mitigation</CardTitle>
+                    <CardTitle className="text-base">{tDetail.mitigation.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     {analysisData.mitigation_measures.map((m: any, i: number) => (
@@ -380,11 +379,8 @@ export default function ProductDetailPage({ params }: PageProps) {
               {!riskAssessment.validated_by_human && (
                 <Card className="border-amber-200 bg-amber-50">
                   <CardHeader>
-                    <CardTitle className="text-base text-amber-900">Validation humaine obligatoire</CardTitle>
-                    <CardDescription className="text-amber-700">
-                      Conformément au GPSR, vous devez valider ce dossier avant toute utilisation officielle.
-                      Cette validation est horodatée et tracée dans le journal d'audit.
-                    </CardDescription>
+                    <CardTitle className="text-base text-amber-900">{tDetail.validation.title}</CardTitle>
+                    <CardDescription className="text-amber-700">{tDetail.validation.desc}</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <label className="flex items-start gap-3 cursor-pointer">
@@ -392,19 +388,11 @@ export default function ProductDetailPage({ params }: PageProps) {
                         checked={validationChecked}
                         onCheckedChange={(v) => setValidationChecked(v === true)}
                       />
-                      <span className="text-sm text-amber-800">
-                        Je certifie avoir lu et examiné cette analyse de risque. Je comprends qu'il s'agit d'une aide
-                        à la conformité et non d'un avis juridique. Je valide ce dossier sous ma responsabilité
-                        et m'engage à obtenir une validation supplémentaire d'un expert si nécessaire.
-                      </span>
+                      <span className="text-sm text-amber-800">{tDetail.validation.checkbox}</span>
                     </label>
-                    <Button
-                      onClick={handleValidate}
-                      disabled={!validationChecked || validating}
-                      className="gap-2"
-                    >
+                    <Button onClick={handleValidate} disabled={!validationChecked || validating} className="gap-2">
                       {validating ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
-                      Valider le dossier
+                      {tDetail.validateBtn}
                     </Button>
                   </CardContent>
                 </Card>
@@ -413,10 +401,9 @@ export default function ProductDetailPage({ params }: PageProps) {
               {riskAssessment.validated_by_human && (
                 <Alert variant="success">
                   <CheckCircle2 className="h-4 w-4" />
-                  <AlertTitle>Dossier validé</AlertTitle>
+                  <AlertTitle>{tDetail.validatedAlert.title}</AlertTitle>
                   <AlertDescription>
-                    Ce dossier a été validé le {riskAssessment.validated_at ? new Date(riskAssessment.validated_at).toLocaleDateString("fr-FR") : "date inconnue"}.
-                    L'export PDF sera généré sans watermark.
+                    {tDetail.validatedAlert.desc.replace("{{date}}", riskAssessment.validated_at ? new Date(riskAssessment.validated_at).toLocaleDateString() : "—")}
                   </AlertDescription>
                 </Alert>
               )}
@@ -430,18 +417,18 @@ export default function ProductDetailPage({ params }: PageProps) {
             <Card>
               <CardContent className="py-12 text-center">
                 <FileText className="h-16 w-16 text-gray-200 mx-auto mb-4" />
-                <p className="text-gray-500">Générez d'abord l'analyse de risque pour créer le dossier technique.</p>
+                <p className="text-gray-500">{tDetail.noTechnicalFile}</p>
               </CardContent>
             </Card>
           ) : (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <Badge variant={technicalFile.watermarked ? "warning" : "success"}>
-                  {technicalFile.watermarked ? "Non validé — watermark actif" : "Document validé"}
+                  {technicalFile.watermarked ? tDetail.technicalFileStatus.notValidated : tDetail.technicalFileStatus.validated}
                 </Badge>
                 <Link href={`/dashboard/products/${id}/export`}>
                   <Button size="sm" className="gap-1">
-                    <Download className="h-3 w-3" />Exporter PDF
+                    <Download className="h-3 w-3" />{tDetail.exportPdfBtn}
                   </Button>
                 </Link>
               </div>
@@ -452,19 +439,19 @@ export default function ProductDetailPage({ params }: PageProps) {
                   <CardHeader>
                     <CardTitle className="text-base flex items-center gap-2">
                       <Package className="h-4 w-4 text-blue-600" />
-                      1.2 Nomenclature (BOM)
+                      {tDetail.bom.title}
                     </CardTitle>
-                    <CardDescription>Liste des composants du produit</CardDescription>
+                    <CardDescription>{tDetail.bom.desc}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
                         <thead>
                           <tr className="border-b border-gray-100">
-                            <th className="text-left py-2 pr-4 text-xs font-medium text-gray-500">Composant</th>
-                            <th className="text-left py-2 pr-4 text-xs font-medium text-gray-500">Matériau</th>
-                            <th className="text-left py-2 pr-4 text-xs font-medium text-gray-500">Fournisseur</th>
-                            <th className="text-left py-2 text-xs font-medium text-gray-500">Réf. pièce</th>
+                            <th className="text-left py-2 pr-4 text-xs font-medium text-gray-500">{tDetail.bom.colComponent}</th>
+                            <th className="text-left py-2 pr-4 text-xs font-medium text-gray-500">{tDetail.bom.colMaterial}</th>
+                            <th className="text-left py-2 pr-4 text-xs font-medium text-gray-500">{tDetail.bom.colSupplier}</th>
+                            <th className="text-left py-2 text-xs font-medium text-gray-500">{tDetail.bom.colPartNumber}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -497,24 +484,24 @@ export default function ProductDetailPage({ params }: PageProps) {
               {(technicalFile.content_json as any)?.analysis?.required_tests?.length > 0 && (
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-base">Tests requis</CardTitle>
+                    <CardTitle className="text-base">{tDetail.tests.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2">
-                      {(technicalFile.content_json as any).analysis.required_tests.map((t: any, i: number) => (
+                      {(technicalFile.content_json as any).analysis.required_tests.map((test: any, i: number) => (
                         <li key={i} className="rounded-lg border border-blue-100 bg-blue-50/50 px-3 py-2">
                           <div className="flex items-start gap-2">
                             <CheckCircle2 className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
                             <div className="min-w-0">
                               <span className="text-sm font-medium text-gray-900">
-                                {typeof t === "string" ? t : (t.test ?? t.name ?? `Test ${i + 1}`)}
+                                {typeof test === "string" ? test : (test.test ?? test.name ?? `Test ${i + 1}`)}
                               </span>
-                              {typeof t !== "string" && t.standard && (
-                                <span className="block text-xs text-blue-600 mt-0.5">Norme : {t.standard}</span>
+                              {typeof test !== "string" && test.standard && (
+                                <span className="block text-xs text-blue-600 mt-0.5">{tDetail.tests.norm} {test.standard}</span>
                               )}
-                              {typeof t !== "string" && t.mandatory !== undefined && (
-                                <span className={`text-xs font-medium mt-0.5 ${t.mandatory ? "text-blue-700" : "text-gray-400"}`}>
-                                  {t.mandatory ? " · Obligatoire" : " · Recommandé"}
+                              {typeof test !== "string" && test.mandatory !== undefined && (
+                                <span className={`text-xs font-medium mt-0.5 ${test.mandatory ? "text-blue-700" : "text-gray-400"}`}>
+                                  {test.mandatory ? ` · ${tDetail.tests.mandatory}` : ` · ${tDetail.tests.recommended}`}
                                 </span>
                               )}
                             </div>
@@ -535,7 +522,7 @@ export default function ProductDetailPage({ params }: PageProps) {
             <Card>
               <CardContent className="py-12 text-center">
                 <Tag className="h-16 w-16 text-gray-200 mx-auto mb-4" />
-                <p className="text-gray-500">Les étiquettes sont générées automatiquement avec l'analyse de risque.</p>
+                <p className="text-gray-500">{tDetail.labels.empty}</p>
               </CardContent>
             </Card>
           ) : (
@@ -552,7 +539,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                     <CardContent className="space-y-3">
                       {(label.warnings ?? []).length > 0 && (
                         <div>
-                          <p className="text-xs font-medium text-gray-500 mb-1">Avertissements</p>
+                          <p className="text-xs font-medium text-gray-500 mb-1">{tDetail.labels.warnings}</p>
                           <ul className="space-y-1">
                             {(label.warnings ?? []).map((w, i) => (
                               <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
@@ -564,7 +551,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                       )}
                       {(label.pictograms ?? []).length > 0 && (
                         <div>
-                          <p className="text-xs font-medium text-gray-500 mb-1">Pictogrammes</p>
+                          <p className="text-xs font-medium text-gray-500 mb-1">{tDetail.labels.pictograms}</p>
                           <div className="flex flex-wrap gap-1">
                             {(label.pictograms ?? []).map((p, i) => (
                               <Badge key={i} variant="outline" className="text-xs">{p}</Badge>
@@ -585,11 +572,11 @@ export default function ProductDetailPage({ params }: PageProps) {
       <Dialog open={showLangPicker} onOpenChange={setShowLangPicker}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>Langues d'étiquetage</DialogTitle>
+            <DialogTitle>{tDetail.langPicker.title}</DialogTitle>
             <DialogDescription>
-              Choisissez les langues pour lesquelles générer les étiquettes de sécurité.
-              {userPlan === "free" && <span className="block mt-1 text-amber-600 text-xs">Plan Gratuit — FR et EN uniquement.</span>}
-              {userPlan === "starter" && <span className="block mt-1 text-blue-600 text-xs">Plan Starter — 5 langues disponibles.</span>}
+              {tDetail.langPicker.desc}
+              {userPlan === "free" && <span className="block mt-1 text-amber-600 text-xs">{tDetail.langPicker.freePlanNote}</span>}
+              {userPlan === "starter" && <span className="block mt-1 text-blue-600 text-xs">{tDetail.langPicker.starterNote}</span>}
             </DialogDescription>
           </DialogHeader>
           <div className="py-2 space-y-2">
@@ -616,16 +603,16 @@ export default function ProductDetailPage({ params }: PageProps) {
                   />
                   <span className="text-xs font-bold text-gray-500 w-6">{lang.code.toUpperCase()}</span>
                   <span className="text-sm font-medium text-gray-800">{lang.label}</span>
-                  {!available && <span className="ml-auto text-[10px] text-gray-400">Plan supérieur</span>}
+                  {!available && <span className="ml-auto text-[10px] text-gray-400">{tDetail.langPicker.upgradePlan}</span>}
                 </label>
               )
             })}
           </div>
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setShowLangPicker(false)}>Annuler</Button>
+            <Button variant="outline" onClick={() => setShowLangPicker(false)}>{tDetail.langPicker.cancel}</Button>
             <Button onClick={() => doGenerate(selectedLanguages)} disabled={selectedLanguages.length === 0} className="gap-2">
               {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
-              Générer ({selectedLanguages.length} langue{selectedLanguages.length > 1 ? "s" : ""})
+              {tDetail.langPicker.generate.replace("{{count}}", String(selectedLanguages.length)).replace("{{s}}", selectedLanguages.length > 1 ? "s" : "")}
             </Button>
           </DialogFooter>
         </DialogContent>

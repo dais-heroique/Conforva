@@ -11,12 +11,16 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, ArrowLeft, Download, FileText, Tag, Shield, AlertTriangle, ScrollText } from "lucide-react"
 import { SUPPORTED_LANGUAGES, formatDate } from "@/lib/utils"
 import type { ProductRow, CategoryRow, RiskAssessmentRow, TechnicalFileRow, LabelRow } from "@/types/supabase"
+import { useT } from "@/components/providers/locale-provider"
 
 interface PageProps { params: Promise<{ id: string }> }
 
 export default function ExportPage({ params }: PageProps) {
   const { id } = use(params)
   const router = useRouter()
+  const t = useT()
+  const tExport = t.dashboard.export
+
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState<string | null>(null)
   const [product, setProduct] = useState<ProductRow & { product_categories: CategoryRow | null } | null>(null)
@@ -64,7 +68,7 @@ export default function ExportPage({ params }: PageProps) {
       a.click()
       URL.revokeObjectURL(url)
     } catch (err) {
-      alert("Erreur lors de l'export : " + String(err))
+      alert(tExport.exportError + String(err))
     } finally {
       setGenerating(null)
     }
@@ -85,7 +89,7 @@ export default function ExportPage({ params }: PageProps) {
           <Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button>
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Exporter les documents</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{tExport.title}</h1>
           <p className="text-sm text-gray-500">{product?.name}</p>
         </div>
       </div>
@@ -94,8 +98,8 @@ export default function ExportPage({ params }: PageProps) {
         <div className="flex items-start gap-3 rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-800">
           <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
           <div>
-            <p className="font-semibold">Plan gratuit — watermark présent sur tous les PDF</p>
-            <p className="text-xs mt-0.5 text-amber-700">Passez à un plan payant (Starter, Growth ou Pro) pour exporter sans watermark.</p>
+            <p className="font-semibold">{tExport.freePlanWarning.title}</p>
+            <p className="text-xs mt-0.5 text-amber-700">{tExport.freePlanWarning.desc}</p>
           </div>
         </div>
       )}
@@ -103,16 +107,13 @@ export default function ExportPage({ params }: PageProps) {
       {!isValidated && userPlan !== "free" && (
         <Alert variant="warning">
           <AlertTriangle className="h-4 w-4" />
-          <AlertDescription>
-            Ce produit n'est pas encore validé. Les PDFs exportés porteront un <strong>watermark "PROJET — non validé"</strong>.
-            Validez le dossier dans l'onglet Analyse de risque pour supprimer le watermark.
-          </AlertDescription>
+          <AlertDescription>{tExport.notValidatedWarning}</AlertDescription>
         </Alert>
       )}
 
       <div className="flex items-center gap-2 rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-xs text-amber-800">
         <Shield className="h-4 w-4 shrink-0" />
-        <span>Ces documents sont générés à titre d'aide. Ils ne constituent pas un avis juridique et ne garantissent pas la conformité de votre produit.</span>
+        <span>{tExport.disclaimer}</span>
       </div>
 
       {/* Technical file */}
@@ -120,48 +121,37 @@ export default function ExportPage({ params }: PageProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-blue-600" />
-            Dossier technique GPSR
+            {tExport.technicalFile.title}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {!tf ? (
-            <p className="text-sm text-gray-500">Aucun dossier technique généré. Générez d'abord l'analyse de risque.</p>
+            <p className="text-sm text-gray-500">{tExport.technicalFile.noFile}</p>
           ) : (
             <>
               <div className="flex items-center gap-3">
                 <Badge variant={tf.watermarked ? "warning" : "success"}>
-                  {tf.watermarked ? "Non validé (watermark)" : "Validé"}
+                  {tf.watermarked ? tExport.technicalFile.notValidated : tExport.technicalFile.validated}
                 </Badge>
                 <span className="text-sm text-gray-500">Version {tf.version} · {formatDate(tf.created_at)}</span>
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center justify-between rounded-lg border p-3">
                   <div>
-                    <p className="font-medium text-sm">Dossier technique complet (FR)</p>
-                    <p className="text-xs text-gray-500">Analyse de risque + dossier + mentions légales</p>
+                    <p className="font-medium text-sm">{tExport.technicalFile.frTitle}</p>
+                    <p className="text-xs text-gray-500">{tExport.technicalFile.frDesc}</p>
                   </div>
-                  <Button
-                    size="sm"
-                    onClick={() => handleExportPDF("technical", "fr")}
-                    disabled={generating !== null}
-                    className="gap-1"
-                  >
+                  <Button size="sm" onClick={() => handleExportPDF("technical", "fr")} disabled={generating !== null} className="gap-1">
                     {generating === "technicalfr" ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
                     PDF FR
                   </Button>
                 </div>
                 <div className="flex items-center justify-between rounded-lg border p-3">
                   <div>
-                    <p className="font-medium text-sm">Technical file (EN)</p>
-                    <p className="text-xs text-gray-500">Risk assessment + technical dossier (English)</p>
+                    <p className="font-medium text-sm">{tExport.technicalFile.enTitle}</p>
+                    <p className="text-xs text-gray-500">{tExport.technicalFile.enDesc}</p>
                   </div>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleExportPDF("technical", "en")}
-                    disabled={generating !== null}
-                    className="gap-1"
-                  >
+                  <Button size="sm" variant="outline" onClick={() => handleExportPDF("technical", "en")} disabled={generating !== null} className="gap-1">
                     {generating === "technicalen" ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
                     PDF EN
                   </Button>
@@ -172,31 +162,26 @@ export default function ExportPage({ params }: PageProps) {
         </CardContent>
       </Card>
 
-      {/* Declaration of Conformity */}
+      {/* Declaration */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <ScrollText className="h-5 w-5 text-blue-600" />
-            Déclaration UE de Conformité (DoC)
+            {tExport.declaration.title}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {!tf ? (
-            <p className="text-sm text-gray-500">Générez d'abord l'analyse de risque pour obtenir la déclaration.</p>
+            <p className="text-sm text-gray-500">{tExport.declaration.noFile}</p>
           ) : (
             <>
-              <p className="text-sm text-gray-600">Document attestant la conformité au Règlement GPSR UE 2023/988. À signer par le fabricant ou la Personne Responsable.</p>
+              <p className="text-sm text-gray-600">{tExport.declaration.desc}</p>
               <div className="flex items-center justify-between rounded-lg border p-3">
                 <div>
-                  <p className="font-medium text-sm">Déclaration de Conformité (GPSR)</p>
-                  <p className="text-xs text-gray-500">Format UE standard — Article 24 du Règlement 2023/988</p>
+                  <p className="font-medium text-sm">{tExport.declaration.title2}</p>
+                  <p className="text-xs text-gray-500">{tExport.declaration.art24}</p>
                 </div>
-                <Button
-                  size="sm"
-                  onClick={() => handleExportPDF("declaration")}
-                  disabled={generating !== null}
-                  className="gap-1"
-                >
+                <Button size="sm" onClick={() => handleExportPDF("declaration")} disabled={generating !== null} className="gap-1">
                   {generating === "declaration" ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
                   PDF
                 </Button>
@@ -211,12 +196,12 @@ export default function ExportPage({ params }: PageProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Tag className="h-5 w-5 text-blue-600" />
-            Étiquettes multilingues
+            {tExport.labels.title}
           </CardTitle>
         </CardHeader>
         <CardContent>
           {labels.length === 0 ? (
-            <p className="text-sm text-gray-500">Aucune étiquette générée.</p>
+            <p className="text-sm text-gray-500">{tExport.labels.noLabels}</p>
           ) : (
             <div className="grid gap-3">
               {SUPPORTED_LANGUAGES.map(lang => {
@@ -228,18 +213,12 @@ export default function ExportPage({ params }: PageProps) {
                       <div>
                         <p className="font-medium text-sm">{lang.label}</p>
                         <p className="text-xs text-gray-500">
-                          {label ? `${(label.warnings ?? []).length} avertissements` : "Non généré"}
+                          {label ? tExport.labels.warnings.replace("{{count}}", String((label.warnings ?? []).length)) : tExport.labels.notGenerated}
                         </p>
                       </div>
                     </div>
                     {label && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleExportPDF("label", lang.code)}
-                        disabled={generating !== null}
-                        className="gap-1"
-                      >
+                      <Button size="sm" variant="outline" onClick={() => handleExportPDF("label", lang.code)} disabled={generating !== null} className="gap-1">
                         {generating === `label${lang.code}` ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
                         PDF
                       </Button>

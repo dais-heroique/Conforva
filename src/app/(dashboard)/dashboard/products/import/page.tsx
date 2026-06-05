@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ArrowLeft, Upload, FileSpreadsheet, CheckCircle2, Loader2, AlertTriangle } from "lucide-react"
 import Papa from "papaparse"
 import type { CategoryRow } from "@/types/supabase"
+import { useT } from "@/components/providers/locale-provider"
 
 const CSV_TEMPLATE = `name,reference,category_code,intended_use,materials,weight_g
 Bougie Vanille 200g,BOU-VANI-200,candle,Bougie décorative intérieur,"cire de soja,mèche coton",200
@@ -18,6 +19,8 @@ Jouet bois 3+,JOU-BOIS-001,toy,Jouet en bois pour enfants 3 ans et plus,"bois,pe
 export default function ImportPage() {
   const router = useRouter()
   const fileRef = useRef<HTMLInputElement>(null)
+  const t = useT()
+  const tImport = t.dashboard.import
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [preview, setPreview] = useState<any[]>([])
@@ -95,8 +98,8 @@ export default function ImportPage() {
           <Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button>
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Importer des produits</h1>
-          <p className="text-sm text-gray-500">Importez votre catalogue via CSV</p>
+          <h1 className="text-2xl font-bold text-gray-900">{tImport.title}</h1>
+          <p className="text-sm text-gray-500">{tImport.subtitle}</p>
         </div>
       </div>
 
@@ -104,7 +107,7 @@ export default function ImportPage() {
       {imported > 0 && (
         <Alert variant="success">
           <CheckCircle2 className="h-4 w-4" />
-          <AlertDescription>{imported} produit(s) importé(s) avec succès. Redirection...</AlertDescription>
+          <AlertDescription>{tImport.success.replace("{{count}}", String(imported))}</AlertDescription>
         </Alert>
       )}
 
@@ -113,19 +116,19 @@ export default function ImportPage() {
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <FileSpreadsheet className="h-5 w-5 text-blue-600" />
-            Modèle CSV
+            {tImport.template.title}
           </CardTitle>
-          <CardDescription>Téléchargez le modèle CSV et remplissez-le avec vos produits.</CardDescription>
+          <CardDescription>{tImport.template.desc}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="rounded-lg bg-gray-50 border border-gray-200 p-3 text-xs font-mono overflow-x-auto">
-            <p className="text-gray-500 mb-1"># Colonnes disponibles :</p>
+            <p className="text-gray-500 mb-1">{tImport.template.columns}</p>
             <p>name, reference, category_code, intended_use, materials, weight_g</p>
-            <p className="text-gray-500 mt-2"># Codes catégorie valides :</p>
+            <p className="text-gray-500 mt-2">{tImport.template.categoryCodes}</p>
             <p>{CATEGORY_CODES.join(", ")}</p>
           </div>
           <Button variant="outline" onClick={downloadTemplate} className="gap-2">
-            <FileSpreadsheet className="h-4 w-4" />Télécharger le modèle CSV
+            <FileSpreadsheet className="h-4 w-4" />{tImport.template.downloadBtn}
           </Button>
         </CardContent>
       </Card>
@@ -135,7 +138,7 @@ export default function ImportPage() {
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <Upload className="h-5 w-5 text-blue-600" />
-            Importer votre fichier
+            {tImport.upload.title}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -144,8 +147,8 @@ export default function ImportPage() {
             className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 p-10 cursor-pointer hover:border-blue-400 hover:bg-blue-50/30 transition-colors"
           >
             <Upload className="h-8 w-8 text-gray-400 mb-3" />
-            <p className="font-medium text-gray-700">Cliquez pour sélectionner un fichier CSV</p>
-            <p className="text-sm text-gray-400 mt-1">Format: .csv, UTF-8</p>
+            <p className="font-medium text-gray-700">{tImport.upload.click}</p>
+            <p className="text-sm text-gray-400 mt-1">{tImport.upload.format}</p>
           </div>
           <input ref={fileRef} type="file" accept=".csv" className="hidden" onChange={handleFile} />
 
@@ -153,7 +156,7 @@ export default function ImportPage() {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-green-500" />
-                <p className="text-sm font-medium">{preview.length} produit(s) détecté(s)</p>
+                <p className="text-sm font-medium">{tImport.upload.detected.replace("{{count}}", String(preview.length))}</p>
               </div>
               <div className="overflow-x-auto rounded-lg border border-gray-200">
                 <table className="w-full text-xs">
@@ -175,18 +178,16 @@ export default function ImportPage() {
                   </tbody>
                 </table>
                 {preview.length > 5 && (
-                  <p className="text-xs text-gray-400 text-center py-2">+ {preview.length - 5} lignes supplémentaires</p>
+                  <p className="text-xs text-gray-400 text-center py-2">{tImport.upload.moreRows.replace("{{count}}", String(preview.length - 5))}</p>
                 )}
               </div>
               <Alert variant="info">
                 <AlertTriangle className="h-4 w-4" />
-                <AlertDescription>
-                  Après l'import, vous devrez remplir le questionnaire pour chaque produit afin de générer l'analyse de risque.
-                </AlertDescription>
+                <AlertDescription>{tImport.upload.info}</AlertDescription>
               </Alert>
               <Button onClick={handleImport} disabled={loading} className="w-full gap-2">
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-                {loading ? "Import en cours..." : `Importer ${preview.length} produit(s)`}
+                {loading ? tImport.upload.importing : tImport.upload.importBtn.replace("{{count}}", String(preview.length))}
               </Button>
             </div>
           )}

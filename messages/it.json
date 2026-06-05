@@ -93,25 +93,46 @@
         "free": {
           "name": "Gratuito",
           "products": "1 referenza",
-          "features": ["1 valutazione del rischio", "Fascicolo tecnico con filigrana", "Esportazione PDF"],
+          "features": [
+            "1 valutazione del rischio",
+            "Fascicolo tecnico con filigrana",
+            "Esportazione PDF"
+          ],
           "cta": "Inizia gratuitamente"
         },
         "starter": {
           "name": "Starter",
           "products": "5 referenze",
-          "features": ["5 fascicoli completi", "Etichette multilingue", "Validazione umana", "Supporto email"],
+          "features": [
+            "5 fascicoli completi",
+            "Etichette multilingue",
+            "Validazione umana",
+            "Supporto email"
+          ],
           "cta": "Inizia"
         },
         "growth": {
           "name": "Growth",
           "products": "30 referenze",
-          "features": ["30 fascicoli completi", "Importazione CSV", "Connettore Shopify", "Avvisi norme", "Supporto prioritario"],
+          "features": [
+            "30 fascicoli completi",
+            "Importazione CSV",
+            "Connettore Shopify",
+            "Avvisi norme",
+            "Supporto prioritario"
+          ],
           "cta": "Scegli Growth"
         },
         "pro": {
           "name": "Pro",
           "products": "150 referenze",
-          "features": ["150 fascicoli", "WooCommerce", "Persona Responsabile EU", "Accesso API", "Supporto dedicato"],
+          "features": [
+            "150 fascicoli",
+            "WooCommerce",
+            "Persona Responsabile EU",
+            "Accesso API",
+            "Supporto dedicato"
+          ],
           "cta": "Scegli Pro"
         }
       }
@@ -191,7 +212,12 @@
         "products": "Prodotti",
         "compliant": "Conformi",
         "inProgress": "In corso",
-        "incomplete": "Incompleti"
+        "incomplete": "Incompleti",
+        "total": "Totale",
+        "critical": "Critici",
+        "score80": "punteggio ≥ 80 %",
+        "score4079": "40–79 %",
+        "toCover": "da gestire"
       },
       "quickActions": {
         "newProduct": "Nuovo prodotto",
@@ -207,7 +233,16 @@
         "empty": "Nessun prodotto ancora.",
         "createFirst": "Crea il mio primo prodotto",
         "unknownCategory": "Categoria sconosciuta",
-        "ref": "Rif"
+        "ref": "Rif",
+        "noProducts": "Nessun prodotto",
+        "noProductsDesc": "Aggiungete il vostro primo prodotto per generare il fascicolo GPSR.",
+        "firstProductBtn": "Primo prodotto",
+        "notStarted": "Analisi non avviata",
+        "moreProducts": "+{{count}} altri prodotti →",
+        "statusStart": "Avvia",
+        "statusCompliant": "Conforme",
+        "statusInProgress": "In corso",
+        "statusIncomplete": "Incompleto"
       },
       "status": {
         "compliant": "Conforme",
@@ -218,6 +253,54 @@
         "title": "Piano gratuito — 1 referenza inclusa",
         "desc": "Passa a Starter per gestire fino a 5 referenze senza filigrana.",
         "upgrade": "Aggiorna piano"
+      },
+      "timeGreeting": {
+        "morning": "Buongiorno",
+        "afternoon": "Buon pomeriggio",
+        "evening": "Buonasera"
+      },
+      "newProductShort": "Nuovo",
+      "scoreCard": {
+        "allCompliant": "Tutti i tuoi prodotti sono conformi",
+        "compliant": "conforme",
+        "compliantPlural": "conformi",
+        "inProgress": "in corso",
+        "critical": "critico",
+        "criticalPlural": "critici",
+        "notStarted": "non avviato",
+        "notStartedPlural": "non avviati"
+      },
+      "checklist": {
+        "title": "Checklist GPSR",
+        "technicalFile": "Fascicolo tecnico",
+        "declaration": "Dichiarazione di conformità",
+        "labeling": "Etichettatura multilingue",
+        "responsiblePerson": "Persona Responsabile UE"
+      },
+      "quickAccess": {
+        "title": "Accesso rapido",
+        "documents": "Documenti",
+        "responsiblePerson": "Persona Responsabile UE",
+        "labels": "Etichette multilingue"
+      },
+      "activity": {
+        "title": "Attività",
+        "empty": "Nessuna attività recente."
+      },
+      "actionLabels": {
+        "generate_risk_assessment": "Analisi del rischio generata",
+        "validate_risk_assessment": "Fascicolo validato",
+        "create_product": "Prodotto creato",
+        "update_product": "Prodotto aggiornato",
+        "export_pdf": "PDF esportato"
+      },
+      "actions": {
+        "required": "Azioni richieste",
+        "toFinalize": "Punti da finalizzare",
+        "noResponsiblePerson": "Designare una Persona Responsabile UE — Art. 16 obbligatorio",
+        "noAnalysis": "{{count}} prodotto{{s}} senza analisi del rischio",
+        "criticalScore": "{{count}} prodotto{{s}} con punteggio critico (< 40 %)",
+        "inProgressScore": "{{count}} prodotto{{s}} in corso — conformità non raggiunta"
       }
     },
     "products": {
@@ -237,7 +320,15 @@
         "incomplete": "Incompleto"
       },
       "complete": "completo",
-      "uncategorized": "Non categorizzato"
+      "uncategorized": "Non categorizzato",
+      "addProduct": "Aggiungi un prodotto",
+      "colProduct": "Prodotto",
+      "colScore": "Score",
+      "colStatus": "Stato",
+      "product": "prodotto",
+      "products": "prodotti",
+      "importBtn": "Importa",
+      "newBtn": "Nuovo"
     },
     "newProduct": {
       "title": "Nuovo prodotto",
@@ -292,22 +383,49 @@
       "enterprise": {
         "title": "Enterprise — 150+ referenze",
         "desc": "Preventivo personalizzato · Accesso API · SLA · Account manager dedicato",
-        "contact": "Contattaci"
+        "contact": "Contattaci",
+        "price": "Su preventivo"
       },
       "plans": {
         "free": {
-          "features": ["1 referenza prodotto", "Valutazione del rischio AI", "File PDF con filigrana", "Questionario dinamico"]
+          "features": [
+            "1 referenza prodotto",
+            "Valutazione del rischio AI",
+            "File PDF con filigrana",
+            "Questionario dinamico"
+          ]
         },
         "starter": {
-          "features": ["5 referenze prodotto", "Fascicoli senza filigrana", "Etichette multilingue (5 lingue)", "Validazione umana tracciata", "Esportazione PDF", "Supporto email"]
+          "features": [
+            "5 referenze prodotto",
+            "Fascicoli senza filigrana",
+            "Etichette multilingue (5 lingue)",
+            "Validazione umana tracciata",
+            "Esportazione PDF",
+            "Supporto email"
+          ]
         },
         "growth": {
-          "features": ["30 referenze prodotto", "Importazione CSV", "Connettore Shopify", "Avvisi modifiche norme", "Persona Responsabile EU", "Supporto prioritario"]
+          "features": [
+            "30 referenze prodotto",
+            "Importazione CSV",
+            "Connettore Shopify",
+            "Avvisi modifiche norme",
+            "Persona Responsabile EU",
+            "Supporto prioritario"
+          ]
         },
         "pro": {
-          "features": ["150 referenze prodotto", "Connettore WooCommerce", "Accesso API", "Report personalizzati", "Account manager dedicato"]
+          "features": [
+            "150 referenze prodotto",
+            "Connettore WooCommerce",
+            "Accesso API",
+            "Report personalizzati",
+            "Account manager dedicato"
+          ]
         }
-      }
+      },
+      "perMonth": "/mese"
     },
     "settings": {
       "title": "Impostazioni",
@@ -336,6 +454,15 @@
         "desc": "Conforva è uno strumento di assistenza alla conformità GPSR (UE 2023/988). I documenti generati non costituiscono consulenza legale e non garantiscono la conformità normativa dei vostri prodotti.",
         "cgu": "Termini di utilizzo",
         "privacy": "Informativa sulla privacy"
+      },
+      "subscription": {
+        "title": "Il tuo abbonamento Conforva",
+        "active": "Abbonamento attivo",
+        "free": "Piano gratuito",
+        "manage": "Gestisci",
+        "upgrade": "Cambia piano",
+        "planLabel": "Piano {{name}}",
+        "billingCardTitle": "Fatturazione"
       }
     },
     "responsiblePerson": {
@@ -383,6 +510,209 @@
       "view": "Visualizza",
       "pdf": "PDF",
       "moreWarnings": "+ {{count}} altri"
+    },
+    "documents": {
+      "title": "Documenti",
+      "subtitle": "Tutti i tuoi fascicoli tecnici e analisi del rischio",
+      "technicalFiles": {
+        "title": "Fascicoli tecnici",
+        "empty": "Nessun fascicolo tecnico generato.",
+        "createProduct": "Crea un prodotto"
+      },
+      "riskAssessments": {
+        "title": "Analisi del rischio",
+        "empty": "Nessuna analisi del rischio generata."
+      },
+      "status": {
+        "validated": "Validato",
+        "notValidated": "Non validato"
+      },
+      "unknownProduct": "Prodotto sconosciuto",
+      "pdfBtn": "PDF"
+    },
+    "productDetail": {
+      "tabs": {
+        "analysis": "Analisi del rischio",
+        "analysisShort": "Analisi",
+        "technical": "Fascicolo tecnico",
+        "technicalShort": "Fascicolo",
+        "labels": "Etichette"
+      },
+      "complianceScore": "Punteggio di conformità",
+      "missing": "Mancanti:",
+      "missingItems": {
+        "questionnaire": "Questionario",
+        "risk_assessment": "Analisi del rischio",
+        "technical_file": "Fascicolo",
+        "labels": "Etichette"
+      },
+      "incompleteQuestionnaire": {
+        "title": "Questionario incompleto",
+        "desc": "Completa il questionario prodotto prima di generare l'analisi.",
+        "fillNow": "Compila ora"
+      },
+      "noAnalysis": {
+        "title": "Nessuna analisi generata",
+        "desc": "L'IA analizzerà il tuo prodotto e genererà un'analisi del rischio GPSR completa."
+      },
+      "generateBtn": "Genera l'analisi del rischio",
+      "generatingBtn": "Generazione in corso...",
+      "regenerateBtn": "Rigenera",
+      "exportPdfBtn": "Esporta PDF",
+      "validateBtn": "Valida il fascicolo",
+      "verifyBtn": "Verifica",
+      "questionnaireBtn": "Questionario",
+      "ref": "Rif:",
+      "status": {
+        "validated": "Validato",
+        "pendingValidation": "In attesa di validazione"
+      },
+      "summary": {
+        "title": "Sommario esecutivo",
+        "severity": "Gravità complessiva:"
+      },
+      "hazards": {
+        "title": "Pericoli identificati ({{count}})"
+      },
+      "mitigation": {
+        "title": "Misure di mitigazione"
+      },
+      "validation": {
+        "title": "Validazione umana obbligatoria",
+        "desc": "Conformemente al GPSR, è necessario validare questo fascicolo prima di qualsiasi uso ufficiale. Questa validazione è marcata temporalmente e registrata nel registro di audit.",
+        "checkbox": "Certifico di aver letto ed esaminato questa analisi del rischio. Capisco che si tratta di un aiuto alla conformità e non di un parere legale. Valido questo fascicolo sotto la mia responsabilità e mi impegno a ottenere una validazione aggiuntiva da un esperto se necessario."
+      },
+      "validatedAlert": {
+        "title": "Fascicolo validato",
+        "desc": "Questo fascicolo è stato validato il {{date}}. L'esportazione PDF verrà generata senza filigrana."
+      },
+      "noTechnicalFile": "Genera prima l'analisi del rischio per creare il fascicolo tecnico.",
+      "technicalFileStatus": {
+        "notValidated": "Non validato — filigrana attiva",
+        "validated": "Documento validato"
+      },
+      "bom": {
+        "title": "1.2 Nomenclatura (BOM)",
+        "desc": "Elenco dei componenti del prodotto",
+        "colComponent": "Componente",
+        "colMaterial": "Materiale",
+        "colSupplier": "Fornitore",
+        "colPartNumber": "Rif. pezzo"
+      },
+      "tests": {
+        "title": "Test richiesti",
+        "mandatory": "Obbligatorio",
+        "recommended": "Consigliato",
+        "norm": "Norma:"
+      },
+      "labels": {
+        "empty": "Le etichette vengono generate automaticamente con l'analisi del rischio.",
+        "warnings": "Avvertenze",
+        "pictograms": "Pittogrammi"
+      },
+      "langPicker": {
+        "title": "Lingue di etichettatura",
+        "desc": "Scegli le lingue per cui generare le etichette di sicurezza.",
+        "freePlanNote": "Piano gratuito — solo FR e EN.",
+        "starterNote": "Piano Starter — 5 lingue disponibili.",
+        "upgradePlan": "Piano superiore",
+        "cancel": "Annulla",
+        "generate": "Genera ({{count}} lingua{{s}})"
+      },
+      "version": "Versione {{v}}",
+      "toast": {
+        "analysisGenerated": "Analisi generata",
+        "analysisGeneratedDesc": "Il fascicolo tecnico è stato creato con successo.",
+        "error": "Errore",
+        "fileValidated": "Fascicolo validato!",
+        "fileValidatedDescFree": "Validato. Passa a un piano a pagamento per esportare senza filigrana.",
+        "fileValidatedDesc": "Il fascicolo è ora esportabile senza filigrana.",
+        "unknownError": "Errore sconosciuto"
+      }
+    },
+    "export": {
+      "title": "Esporta documenti",
+      "freePlanWarning": {
+        "title": "Piano gratuito — filigrana su tutti i PDF",
+        "desc": "Passa a un piano a pagamento (Starter, Growth o Pro) per esportare senza filigrana."
+      },
+      "notValidatedWarning": "Questo prodotto non è ancora validato. I PDF esportati porteranno la filigrana \"BOZZA — non validato\". Valida il fascicolo nella scheda Analisi del rischio per rimuovere la filigrana.",
+      "disclaimer": "Questi documenti vengono generati solo come assistenza. Non costituiscono consulenza legale e non garantiscono la conformità del prodotto.",
+      "technicalFile": {
+        "title": "Fascicolo tecnico GPSR",
+        "noFile": "Nessun fascicolo tecnico generato. Genera prima l'analisi del rischio.",
+        "notValidated": "Non validato (filigrana)",
+        "validated": "Validato",
+        "frTitle": "Fascicolo tecnico completo (FR)",
+        "frDesc": "Analisi del rischio + fascicolo + note legali",
+        "enTitle": "Technical file (EN)",
+        "enDesc": "Risk assessment + technical dossier (English)"
+      },
+      "declaration": {
+        "title": "Dichiarazione UE di Conformità (DoC)",
+        "noFile": "Genera prima l'analisi del rischio per ottenere la dichiarazione.",
+        "desc": "Documento che attesta la conformità al Regolamento GPSR UE 2023/988. Da firmare dal fabbricante o dalla Persona Responsabile.",
+        "title2": "Dichiarazione di Conformità (GPSR)",
+        "art24": "Formato UE standard — Articolo 24 del Regolamento 2023/988"
+      },
+      "labels": {
+        "title": "Etichette multilingue",
+        "noLabels": "Nessuna etichetta generata.",
+        "warnings": "{{count}} avvertenze",
+        "notGenerated": "Non generato"
+      },
+      "exportError": "Errore di esportazione: "
+    },
+    "questionnaire": {
+      "title": "Questionario prodotto",
+      "step": "Passo {{step}} di {{total}}",
+      "bom": {
+        "title": "Nomenclatura (BOM)",
+        "desc": "Elenca i principali componenti del tuo prodotto. Queste informazioni sono richieste per il fascicolo tecnico GPSR (Articolo 6, Allegato I).",
+        "colComponent": "Componente *",
+        "colMaterial": "Materiale",
+        "colSupplier": "Fornitore",
+        "colPartNumber": "Rif. pezzo",
+        "addRow": "Aggiungi componente",
+        "componentPlaceholder": "es: Corpo principale",
+        "materialPlaceholder": "es: ABS",
+        "supplierPlaceholder": "es: Fornitore Srl",
+        "partNumberPlaceholder": "es: 123-456"
+      },
+      "continueBtn": "Continua",
+      "backBtn": "Indietro",
+      "finishBtn": "Termina",
+      "yesNo": {
+        "yes": "Sì",
+        "no": "No"
+      },
+      "selectPlaceholder": "Seleziona...",
+      "noFields": "Nessun campo per questa categoria. Clicca su Continua.",
+      "normsApplicable": "Norme applicabili:",
+      "step1Title": "Informazioni di conformità",
+      "stepGeneric": "Passo {{step}}"
+    },
+    "import": {
+      "title": "Importa prodotti",
+      "subtitle": "Importa il tuo catalogo tramite CSV",
+      "success": "{{count}} prodotto/i importato/i con successo. Reindirizzamento...",
+      "template": {
+        "title": "Modello CSV",
+        "desc": "Scarica il modello CSV e compilalo con i tuoi prodotti.",
+        "columns": "# Colonne disponibili:",
+        "categoryCodes": "# Codici categoria validi:",
+        "downloadBtn": "Scarica il modello CSV"
+      },
+      "upload": {
+        "title": "Importa il tuo file",
+        "click": "Clicca per selezionare un file CSV",
+        "format": "Formato: .csv, UTF-8",
+        "detected": "{{count}} prodotto/i rilevato/i",
+        "moreRows": "+ {{count}} righe aggiuntive",
+        "info": "Dopo l'importazione, dovrai compilare il questionario per ogni prodotto per generare l'analisi del rischio.",
+        "importBtn": "Importa {{count}} prodotto/i",
+        "importing": "Importazione in corso..."
+      }
     }
   },
   "common": {

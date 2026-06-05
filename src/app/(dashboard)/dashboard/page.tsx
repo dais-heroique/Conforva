@@ -10,14 +10,6 @@ import {
 import { formatDate } from "@/lib/utils"
 import { getLocale, getDictionary } from "@/lib/i18n"
 
-const ACTION_LABELS: Record<string, string> = {
-  generate_risk_assessment: "Analyse de risque générée",
-  validate_risk_assessment: "Dossier validé",
-  create_product: "Produit créé",
-  update_product: "Produit mis à jour",
-  export_pdf: "PDF exporté",
-}
-
 export default async function DashboardPage() {
   const supabase = await createClient()
   const { data: { user: authUser } } = await supabase.auth.getUser()
@@ -80,11 +72,15 @@ export default async function DashboardPage() {
   const allProductsCompliant = total > 0 && compliant === total
   const allCompliant = allProductsCompliant && hasResponsiblePerson
 
+  const locale = await getLocale()
+  const dict = await getDictionary(locale)
+  const t = dict.dashboard.home
+
   const requiredActions: { label: string; href: string; critical: boolean }[] = []
-  if (!hasResponsiblePerson) requiredActions.push({ label: "Désigner une Personne Responsable EU — Art. 16 obligatoire", href: "/dashboard/responsible-person", critical: true })
-  if (untouched > 0) requiredActions.push({ label: `${untouched} produit${untouched > 1 ? "s" : ""} sans analyse de risque`, href: "/dashboard/products", critical: true })
-  if (urgent > 0) requiredActions.push({ label: `${urgent} produit${urgent > 1 ? "s" : ""} avec score critique (< 40 %)`, href: "/dashboard/products", critical: true })
-  if (inProgress > 0) requiredActions.push({ label: `${inProgress} produit${inProgress > 1 ? "s" : ""} en cours — conformité non atteinte`, href: "/dashboard/products", critical: false })
+  if (!hasResponsiblePerson) requiredActions.push({ label: t.actions.noResponsiblePerson, href: "/dashboard/responsible-person", critical: true })
+  if (untouched > 0) requiredActions.push({ label: t.actions.noAnalysis.replace("{{count}}", String(untouched)).replace("{{s}}", untouched > 1 ? "s" : ""), href: "/dashboard/products", critical: true })
+  if (urgent > 0) requiredActions.push({ label: t.actions.criticalScore.replace("{{count}}", String(urgent)).replace("{{s}}", urgent > 1 ? "s" : ""), href: "/dashboard/products", critical: true })
+  if (inProgress > 0) requiredActions.push({ label: t.actions.inProgressScore.replace("{{count}}", String(inProgress)).replace("{{s}}", inProgress > 1 ? "s" : ""), href: "/dashboard/products", critical: false })
 
   const sortedProducts = [...(products ?? [])].sort((a, b) => {
     const sa = complianceMap[a.id]?.score ?? -1
@@ -93,12 +89,8 @@ export default async function DashboardPage() {
   })
 
   const hour = new Date().getHours()
-  const timeGreeting = hour < 12 ? "Bonjour" : hour < 18 ? "Bon après-midi" : "Bonsoir"
+  const timeGreeting = hour < 12 ? t.timeGreeting.morning : hour < 18 ? t.timeGreeting.afternoon : t.timeGreeting.evening
   const greeting = firstName ? `${timeGreeting}, ${firstName}` : timeGreeting
-
-  const locale = await getLocale()
-  const dict = await getDictionary(locale)
-  const t = dict.dashboard.home
 
   // SVG ring for avg score
   const r = 26
@@ -114,14 +106,14 @@ export default async function DashboardPage() {
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-gray-900">{greeting}</h1>
             <p className="text-sm text-gray-400 mt-0.5 capitalize">
-              {new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
+              {new Date().toLocaleDateString(locale + "-" + locale.toUpperCase(), { weekday: "long", day: "numeric", month: "long" })}
             </p>
           </div>
           <Link href="/dashboard/products/new">
             <Button size="sm" className="gap-2 shadow-sm">
               <Plus className="h-4 w-4" />
-              <span className="hidden sm:inline">Nouveau produit</span>
-              <span className="sm:hidden">Nouveau</span>
+              <span className="hidden sm:inline">{t.newProduct}</span>
+              <span className="sm:hidden">{t.newProductShort}</span>
             </Button>
           </Link>
         </div>
@@ -129,10 +121,10 @@ export default async function DashboardPage() {
         {/* Stats row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
-            { label: "Total", value: total, sub: "produit" + (total !== 1 ? "s" : ""), color: "text-gray-900" },
-            { label: "Conformes", value: compliant, sub: "score ≥ 80 %", color: "text-emerald-600" },
-            { label: "En cours", value: inProgress, sub: "40–79 %", color: "text-amber-600" },
-            { label: "Critiques", value: urgent + untouched, sub: "à traiter", color: "text-red-500" },
+            { label: t.stats.total, value: total, sub: total !== 1 ? t.stats.products : (t.stats as any).product ?? t.stats.products, color: "text-gray-900" },
+            { label: t.stats.compliant, value: compliant, sub: t.stats.score80, color: "text-emerald-600" },
+            { label: t.stats.inProgress, value: inProgress, sub: t.stats.score4079, color: "text-amber-600" },
+            { label: t.stats.critical, value: urgent + untouched, sub: t.stats.toCover, color: "text-red-500" },
           ].map(s => (
             <div key={s.label} className="bg-white rounded-2xl border border-gray-100 px-5 py-4 shadow-sm">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">{s.label}</p>
@@ -170,17 +162,17 @@ export default async function DashboardPage() {
               }
               <p className="text-sm font-semibold text-gray-900">
                 {allProductsCompliant
-                  ? "Tous vos produits sont conformes"
-                  : `${compliant} / ${total} produit${total !== 1 ? "s" : ""} conforme${compliant !== 1 ? "s" : ""}`
+                  ? t.scoreCard.allCompliant
+                  : `${compliant} / ${total} ${total !== 1 ? (t.scoreCard as any).products ?? t.stats.products : (t.scoreCard as any).product ?? t.stats.products} ${compliant !== 1 ? t.scoreCard.compliantPlural : t.scoreCard.compliant}`
                 }
               </p>
             </div>
             {total > 0 && (
               <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs">
-                {compliant > 0 && <span className="text-emerald-600 font-medium">{compliant} conforme{compliant > 1 ? "s" : ""}</span>}
-                {inProgress > 0 && <span className="text-amber-600 font-medium">{inProgress} en cours</span>}
-                {urgent > 0 && <span className="text-red-500 font-medium">{urgent} critique{urgent > 1 ? "s" : ""}</span>}
-                {untouched > 0 && <span className="text-gray-400">{untouched} non démarré{untouched > 1 ? "s" : ""}</span>}
+                {compliant > 0 && <span className="text-emerald-600 font-medium">{compliant} {compliant > 1 ? t.scoreCard.compliantPlural : t.scoreCard.compliant}</span>}
+                {inProgress > 0 && <span className="text-amber-600 font-medium">{inProgress} {t.scoreCard.inProgress}</span>}
+                {urgent > 0 && <span className="text-red-500 font-medium">{urgent} {urgent > 1 ? t.scoreCard.criticalPlural : t.scoreCard.critical}</span>}
+                {untouched > 0 && <span className="text-gray-400">{untouched} {untouched > 1 ? t.scoreCard.notStartedPlural : t.scoreCard.notStarted}</span>}
               </div>
             )}
           </div>
@@ -192,7 +184,7 @@ export default async function DashboardPage() {
             <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-gray-50 bg-amber-50/60">
               <AlertCircle className="h-4 w-4 text-amber-500 shrink-0" />
               <p className="text-sm font-semibold text-gray-800">
-                {requiredActions.filter(a => a.critical).length > 0 ? "Actions requises" : "Points à finaliser"}
+                {requiredActions.filter(a => a.critical).length > 0 ? t.actions.required : t.actions.toFinalize}
               </p>
               <span className="ml-auto text-[11px] font-medium text-amber-600 bg-amber-100 rounded-full px-2 py-0.5">
                 {requiredActions.length}
@@ -218,10 +210,10 @@ export default async function DashboardPage() {
           {/* Products list */}
           <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-50">
-              <h2 className="text-sm font-semibold text-gray-900">Produits</h2>
+              <h2 className="text-sm font-semibold text-gray-900">{t.productsList.title}</h2>
               {total > 0 && (
                 <Link href="/dashboard/products" className="text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors">
-                  Voir tout →
+                  {t.productsList.viewAll} →
                 </Link>
               )}
             </div>
@@ -231,13 +223,13 @@ export default async function DashboardPage() {
                 <div className="h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-4">
                   <Package className="h-6 w-6 text-blue-400" />
                 </div>
-                <p className="font-semibold text-gray-800 mb-1.5">Aucun produit</p>
+                <p className="font-semibold text-gray-800 mb-1.5">{t.productsList.noProducts}</p>
                 <p className="text-sm text-gray-400 mb-5 max-w-xs leading-relaxed">
-                  Ajoutez votre premier produit pour générer votre dossier GPSR.
+                  {t.productsList.noProductsDesc}
                 </p>
                 <Link href="/dashboard/products/new">
                   <Button size="sm" className="gap-2">
-                    <Plus className="h-3.5 w-3.5" />Premier produit
+                    <Plus className="h-3.5 w-3.5" />{t.productsList.firstProductBtn}
                   </Button>
                 </Link>
               </div>
@@ -249,7 +241,7 @@ export default async function DashboardPage() {
                   const notStarted = !cs
                   const scoreColor = score >= 80 ? "text-emerald-600" : score >= 40 ? "text-amber-600" : "text-red-500"
                   const barColor = score >= 80 ? "bg-emerald-400" : score >= 40 ? "bg-amber-400" : "bg-red-400"
-                  const statusLabel = notStarted ? "Démarrer" : score >= 80 ? "Conforme" : score >= 40 ? "En cours" : "Incomplet"
+                  const statusLabel = notStarted ? t.productsList.statusStart : score >= 80 ? t.productsList.statusCompliant : score >= 40 ? t.productsList.statusInProgress : t.productsList.statusIncomplete
                   const statusCls = notStarted
                     ? "bg-gray-100 text-gray-500"
                     : score >= 80 ? "bg-emerald-50 text-emerald-700"
@@ -274,7 +266,7 @@ export default async function DashboardPage() {
                             </div>
                           )}
                           {notStarted && (
-                            <p className="text-[11px] text-gray-400 mt-0.5 italic">Analyse non démarrée</p>
+                            <p className="text-[11px] text-gray-400 mt-0.5 italic">{t.productsList.notStarted}</p>
                           )}
                         </div>
                         <span className={`text-[11px] font-semibold rounded-full px-2.5 py-0.5 shrink-0 whitespace-nowrap ${statusCls}`}>
@@ -287,7 +279,7 @@ export default async function DashboardPage() {
                 {total > 7 && (
                   <Link href="/dashboard/products">
                     <div className="px-5 py-3 text-center text-xs text-blue-600 font-medium hover:bg-blue-50/40 transition-colors">
-                      +{total - 7} autres produits →
+                      {t.productsList.moreProducts.replace("{{count}}", String(total - 7))}
                     </div>
                   </Link>
                 )}
@@ -302,14 +294,14 @@ export default async function DashboardPage() {
             {!allCompliant && (
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="px-5 py-3.5 border-b border-gray-50">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest">Checklist GPSR</p>
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest">{t.checklist.title}</p>
                 </div>
                 <div className="divide-y divide-gray-50">
                   {[
-                    { art: "Art. 22", label: "Dossier technique", done: allProductsCompliant, href: "/dashboard/products" },
-                    { art: "Art. 24", label: "Déclaration de conformité", done: allProductsCompliant, href: "/dashboard/documents" },
-                    { art: "Art. 9", label: "Étiquetage multilingue", done: allProductsCompliant, href: "/dashboard/labels" },
-                    { art: "Art. 16", label: "Personne Responsable EU", done: hasResponsiblePerson, href: "/dashboard/responsible-person" },
+                    { art: "Art. 22", label: t.checklist.technicalFile, done: allProductsCompliant, href: "/dashboard/products" },
+                    { art: "Art. 24", label: t.checklist.declaration, done: allProductsCompliant, href: "/dashboard/documents" },
+                    { art: "Art. 9", label: t.checklist.labeling, done: allProductsCompliant, href: "/dashboard/labels" },
+                    { art: "Art. 16", label: t.checklist.responsiblePerson, done: hasResponsiblePerson, href: "/dashboard/responsible-person" },
                   ].map(item => (
                     <Link key={item.art} href={item.href}>
                       <div className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50/60 transition-colors cursor-pointer group">
@@ -330,12 +322,12 @@ export default async function DashboardPage() {
 
             {/* Quick access */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Accès rapide</p>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">{t.quickAccess.title}</p>
               <div className="space-y-0.5">
                 {[
-                  { href: "/dashboard/documents", icon: FileText, label: "Documents" },
-                  { href: "/dashboard/responsible-person", icon: Shield, label: "Personne Responsable EU", alert: !hasResponsiblePerson },
-                  { href: "/dashboard/labels", icon: Tag, label: "Étiquettes multilingues" },
+                  { href: "/dashboard/documents", icon: FileText, label: t.quickAccess.documents },
+                  { href: "/dashboard/responsible-person", icon: Shield, label: t.quickAccess.responsiblePerson, alert: !hasResponsiblePerson },
+                  { href: "/dashboard/labels", icon: Tag, label: t.quickAccess.labels },
                 ].map(({ href, icon: Icon, label, alert }) => (
                   <Link key={href} href={href}>
                     <div className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-gray-50 transition-colors cursor-pointer group">
@@ -351,15 +343,15 @@ export default async function DashboardPage() {
             {/* Activity */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex-1">
               <div className="px-5 py-3.5 border-b border-gray-50">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest">Activité</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest">{t.activity.title}</p>
               </div>
               <div className="px-5 py-4">
                 {!recentActivity || recentActivity.length === 0 ? (
-                  <p className="text-sm text-gray-400 text-center py-4">Aucune activité récente.</p>
+                  <p className="text-sm text-gray-400 text-center py-4">{t.activity.empty}</p>
                 ) : (
                   <div className="space-y-3.5">
                     {recentActivity.map((event, i) => {
-                      const label = ACTION_LABELS[event.action] ?? event.action
+                      const label = (t.actionLabels as any)[event.action] ?? event.action
                       const isValidate = event.action === "validate_risk_assessment"
                       const isGenerate = event.action === "generate_risk_assessment"
                       return (
@@ -378,7 +370,7 @@ export default async function DashboardPage() {
                             <p className="text-xs font-medium text-gray-700 leading-snug">{label}</p>
                             <p className="text-[10px] text-gray-400 mt-0.5 flex items-center gap-1">
                               <Clock className="h-2.5 w-2.5" />
-                              {new Date(event.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                              {new Date(event.created_at).toLocaleDateString(locale, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
                             </p>
                           </div>
                         </div>

@@ -93,25 +93,46 @@
         "free": {
           "name": "Free",
           "products": "1 reference",
-          "features": ["1 risk assessment", "Watermarked technical file", "PDF export"],
+          "features": [
+            "1 risk assessment",
+            "Watermarked technical file",
+            "PDF export"
+          ],
           "cta": "Get started for free"
         },
         "starter": {
           "name": "Starter",
           "products": "5 references",
-          "features": ["5 complete files", "Multilingual labels", "Human validation", "Email support"],
+          "features": [
+            "5 complete files",
+            "Multilingual labels",
+            "Human validation",
+            "Email support"
+          ],
           "cta": "Get started"
         },
         "growth": {
           "name": "Growth",
           "products": "30 references",
-          "features": ["30 complete files", "CSV import", "Shopify connector", "Standards alerts", "Priority support"],
+          "features": [
+            "30 complete files",
+            "CSV import",
+            "Shopify connector",
+            "Standards alerts",
+            "Priority support"
+          ],
           "cta": "Choose Growth"
         },
         "pro": {
           "name": "Pro",
           "products": "150 references",
-          "features": ["150 files", "WooCommerce", "EU Responsible Person", "API access", "Dedicated support"],
+          "features": [
+            "150 files",
+            "WooCommerce",
+            "EU Responsible Person",
+            "API access",
+            "Dedicated support"
+          ],
           "cta": "Choose Pro"
         }
       }
@@ -191,7 +212,12 @@
         "products": "Products",
         "compliant": "Compliant",
         "inProgress": "In progress",
-        "incomplete": "Incomplete"
+        "incomplete": "Incomplete",
+        "total": "Total",
+        "critical": "Critical",
+        "score80": "score ≥ 80%",
+        "score4079": "40–79%",
+        "toCover": "to address"
       },
       "quickActions": {
         "newProduct": "New product",
@@ -207,7 +233,16 @@
         "empty": "No products yet.",
         "createFirst": "Create my first product",
         "unknownCategory": "Unknown category",
-        "ref": "Ref"
+        "ref": "Ref",
+        "noProducts": "No products",
+        "noProductsDesc": "Add your first product to generate your GPSR file.",
+        "firstProductBtn": "First product",
+        "notStarted": "Analysis not started",
+        "moreProducts": "+{{count}} more products →",
+        "statusStart": "Start",
+        "statusCompliant": "Compliant",
+        "statusInProgress": "In progress",
+        "statusIncomplete": "Incomplete"
       },
       "status": {
         "compliant": "Compliant",
@@ -218,6 +253,54 @@
         "title": "Free plan — 1 reference included",
         "desc": "Upgrade to Starter to manage up to 5 references without watermark.",
         "upgrade": "Upgrade"
+      },
+      "timeGreeting": {
+        "morning": "Good morning",
+        "afternoon": "Good afternoon",
+        "evening": "Good evening"
+      },
+      "newProductShort": "New",
+      "scoreCard": {
+        "allCompliant": "All your products are compliant",
+        "compliant": "compliant",
+        "compliantPlural": "compliant",
+        "inProgress": "in progress",
+        "critical": "critical",
+        "criticalPlural": "critical",
+        "notStarted": "not started",
+        "notStartedPlural": "not started"
+      },
+      "checklist": {
+        "title": "GPSR Checklist",
+        "technicalFile": "Technical file",
+        "declaration": "Declaration of conformity",
+        "labeling": "Multilingual labeling",
+        "responsiblePerson": "EU Responsible Person"
+      },
+      "quickAccess": {
+        "title": "Quick access",
+        "documents": "Documents",
+        "responsiblePerson": "EU Responsible Person",
+        "labels": "Multilingual labels"
+      },
+      "activity": {
+        "title": "Activity",
+        "empty": "No recent activity."
+      },
+      "actionLabels": {
+        "generate_risk_assessment": "Risk assessment generated",
+        "validate_risk_assessment": "File validated",
+        "create_product": "Product created",
+        "update_product": "Product updated",
+        "export_pdf": "PDF exported"
+      },
+      "actions": {
+        "required": "Required actions",
+        "toFinalize": "Points to finalize",
+        "noResponsiblePerson": "Designate an EU Responsible Person — Art. 16 mandatory",
+        "noAnalysis": "{{count}} product{{s}} without risk assessment",
+        "criticalScore": "{{count}} product{{s}} with critical score (< 40%)",
+        "inProgressScore": "{{count}} product{{s}} in progress — compliance not achieved"
       }
     },
     "products": {
@@ -237,7 +320,15 @@
         "incomplete": "Incomplete"
       },
       "complete": "complete",
-      "uncategorized": "Uncategorized"
+      "uncategorized": "Uncategorized",
+      "addProduct": "Add a product",
+      "colProduct": "Product",
+      "colScore": "Score",
+      "colStatus": "Status",
+      "product": "product",
+      "products": "products",
+      "importBtn": "Import",
+      "newBtn": "New"
     },
     "newProduct": {
       "title": "New product",
@@ -292,22 +383,49 @@
       "enterprise": {
         "title": "Enterprise — 150+ references",
         "desc": "Custom quote · API access · SLA · Dedicated account manager",
-        "contact": "Contact us"
+        "contact": "Contact us",
+        "price": "Custom pricing"
       },
       "plans": {
         "free": {
-          "features": ["1 product reference", "AI risk assessment", "Watermarked PDF file", "Dynamic questionnaire"]
+          "features": [
+            "1 product reference",
+            "AI risk assessment",
+            "Watermarked PDF file",
+            "Dynamic questionnaire"
+          ]
         },
         "starter": {
-          "features": ["5 product references", "Files without watermark", "Multilingual labels (5 languages)", "Traced human validation", "PDF export", "Email support"]
+          "features": [
+            "5 product references",
+            "Files without watermark",
+            "Multilingual labels (5 languages)",
+            "Traced human validation",
+            "PDF export",
+            "Email support"
+          ]
         },
         "growth": {
-          "features": ["30 product references", "CSV import", "Shopify connector", "Standards change alerts", "EU Responsible Person", "Priority support"]
+          "features": [
+            "30 product references",
+            "CSV import",
+            "Shopify connector",
+            "Standards change alerts",
+            "EU Responsible Person",
+            "Priority support"
+          ]
         },
         "pro": {
-          "features": ["150 product references", "WooCommerce connector", "API access", "Custom reports", "Dedicated account manager"]
+          "features": [
+            "150 product references",
+            "WooCommerce connector",
+            "API access",
+            "Custom reports",
+            "Dedicated account manager"
+          ]
         }
-      }
+      },
+      "perMonth": "/mo"
     },
     "settings": {
       "title": "Settings",
@@ -336,6 +454,15 @@
         "desc": "Conforva is a GPSR compliance assistance tool (EU 2023/988). Generated documents do not constitute legal advice and do not guarantee the regulatory compliance of your products.",
         "cgu": "Terms of Use",
         "privacy": "Privacy Policy"
+      },
+      "subscription": {
+        "title": "Your Conforva subscription",
+        "active": "Active subscription",
+        "free": "Free plan",
+        "manage": "Manage",
+        "upgrade": "Change plan",
+        "planLabel": "Plan {{name}}",
+        "billingCardTitle": "Billing"
       }
     },
     "responsiblePerson": {
@@ -383,6 +510,209 @@
       "view": "View",
       "pdf": "PDF",
       "moreWarnings": "+ {{count}} more"
+    },
+    "documents": {
+      "title": "Documents",
+      "subtitle": "All your technical files and risk assessments",
+      "technicalFiles": {
+        "title": "Technical files",
+        "empty": "No technical file generated.",
+        "createProduct": "Create a product"
+      },
+      "riskAssessments": {
+        "title": "Risk assessments",
+        "empty": "No risk assessment generated."
+      },
+      "status": {
+        "validated": "Validated",
+        "notValidated": "Not validated"
+      },
+      "unknownProduct": "Unknown product",
+      "pdfBtn": "PDF"
+    },
+    "productDetail": {
+      "tabs": {
+        "analysis": "Risk assessment",
+        "analysisShort": "Analysis",
+        "technical": "Technical file",
+        "technicalShort": "File",
+        "labels": "Labels"
+      },
+      "complianceScore": "Compliance score",
+      "missing": "Missing:",
+      "missingItems": {
+        "questionnaire": "Questionnaire",
+        "risk_assessment": "Risk assessment",
+        "technical_file": "File",
+        "labels": "Labels"
+      },
+      "incompleteQuestionnaire": {
+        "title": "Incomplete questionnaire",
+        "desc": "Complete the product questionnaire before generating the analysis.",
+        "fillNow": "Fill now"
+      },
+      "noAnalysis": {
+        "title": "No analysis generated",
+        "desc": "The AI will analyze your product and generate a complete GPSR risk assessment."
+      },
+      "generateBtn": "Generate risk assessment",
+      "generatingBtn": "Generating...",
+      "regenerateBtn": "Regenerate",
+      "exportPdfBtn": "Export PDF",
+      "validateBtn": "Validate file",
+      "verifyBtn": "Verify",
+      "questionnaireBtn": "Questionnaire",
+      "ref": "Ref:",
+      "status": {
+        "validated": "Validated",
+        "pendingValidation": "Pending validation"
+      },
+      "summary": {
+        "title": "Executive summary",
+        "severity": "Overall severity:"
+      },
+      "hazards": {
+        "title": "Identified hazards ({{count}})"
+      },
+      "mitigation": {
+        "title": "Mitigation measures"
+      },
+      "validation": {
+        "title": "Mandatory human validation",
+        "desc": "In accordance with GPSR, you must validate this file before any official use. This validation is time-stamped and recorded in the audit log.",
+        "checkbox": "I certify that I have read and reviewed this risk assessment. I understand that this is a compliance aid and not legal advice. I validate this file under my responsibility and commit to obtaining additional validation from an expert if necessary."
+      },
+      "validatedAlert": {
+        "title": "File validated",
+        "desc": "This file was validated on {{date}}. The PDF export will be generated without watermark."
+      },
+      "noTechnicalFile": "Generate the risk assessment first to create the technical file.",
+      "technicalFileStatus": {
+        "notValidated": "Not validated — watermark active",
+        "validated": "Document validated"
+      },
+      "bom": {
+        "title": "1.2 Bill of Materials (BOM)",
+        "desc": "Product component list",
+        "colComponent": "Component",
+        "colMaterial": "Material",
+        "colSupplier": "Supplier",
+        "colPartNumber": "Part ref."
+      },
+      "tests": {
+        "title": "Required tests",
+        "mandatory": "Mandatory",
+        "recommended": "Recommended",
+        "norm": "Standard:"
+      },
+      "labels": {
+        "empty": "Labels are automatically generated with the risk assessment.",
+        "warnings": "Warnings",
+        "pictograms": "Pictograms"
+      },
+      "langPicker": {
+        "title": "Labeling languages",
+        "desc": "Choose the languages for which to generate safety labels.",
+        "freePlanNote": "Free plan — FR and EN only.",
+        "starterNote": "Starter plan — 5 languages available.",
+        "upgradePlan": "Higher plan",
+        "cancel": "Cancel",
+        "generate": "Generate ({{count}} language{{s}})"
+      },
+      "version": "Version {{v}}",
+      "toast": {
+        "analysisGenerated": "Analysis generated",
+        "analysisGeneratedDesc": "The technical file was successfully created.",
+        "error": "Error",
+        "fileValidated": "File validated!",
+        "fileValidatedDescFree": "Validated. Upgrade to a paid plan to export without watermark.",
+        "fileValidatedDesc": "The file is now exportable without watermark.",
+        "unknownError": "Unknown error"
+      }
+    },
+    "export": {
+      "title": "Export documents",
+      "freePlanWarning": {
+        "title": "Free plan — watermark on all PDFs",
+        "desc": "Upgrade to a paid plan (Starter, Growth or Pro) to export without watermark."
+      },
+      "notValidatedWarning": "This product is not yet validated. Exported PDFs will have a \"DRAFT — not validated\" watermark. Validate the file in the Risk Assessment tab to remove the watermark.",
+      "disclaimer": "These documents are generated as assistance only. They do not constitute legal advice and do not guarantee product compliance.",
+      "technicalFile": {
+        "title": "GPSR technical file",
+        "noFile": "No technical file generated. Generate the risk assessment first.",
+        "notValidated": "Not validated (watermark)",
+        "validated": "Validated",
+        "frTitle": "Complete technical file (FR)",
+        "frDesc": "Risk assessment + file + legal notices",
+        "enTitle": "Technical file (EN)",
+        "enDesc": "Risk assessment + technical dossier (English)"
+      },
+      "declaration": {
+        "title": "EU Declaration of Conformity (DoC)",
+        "noFile": "Generate the risk assessment first to obtain the declaration.",
+        "desc": "Document attesting conformity with EU GPSR Regulation 2023/988. To be signed by the manufacturer or the Responsible Person.",
+        "title2": "Declaration of Conformity (GPSR)",
+        "art24": "Standard EU format — Article 24 of Regulation 2023/988"
+      },
+      "labels": {
+        "title": "Multilingual labels",
+        "noLabels": "No labels generated.",
+        "warnings": "{{count}} warnings",
+        "notGenerated": "Not generated"
+      },
+      "exportError": "Export error: "
+    },
+    "questionnaire": {
+      "title": "Product questionnaire",
+      "step": "Step {{step}} of {{total}}",
+      "bom": {
+        "title": "Bill of Materials (BOM)",
+        "desc": "List the main components of your product. This information is required for the GPSR technical file (Article 6, Annex I).",
+        "colComponent": "Component *",
+        "colMaterial": "Material",
+        "colSupplier": "Supplier",
+        "colPartNumber": "Part ref.",
+        "addRow": "Add a component",
+        "componentPlaceholder": "e.g.: Main housing",
+        "materialPlaceholder": "e.g.: ABS",
+        "supplierPlaceholder": "e.g.: Supplier Ltd",
+        "partNumberPlaceholder": "e.g.: 123-456"
+      },
+      "continueBtn": "Continue",
+      "backBtn": "Back",
+      "finishBtn": "Finish",
+      "yesNo": {
+        "yes": "Yes",
+        "no": "No"
+      },
+      "selectPlaceholder": "Select...",
+      "noFields": "No fields for this category. Click Continue.",
+      "normsApplicable": "Applicable standards:",
+      "step1Title": "Compliance information",
+      "stepGeneric": "Step {{step}}"
+    },
+    "import": {
+      "title": "Import products",
+      "subtitle": "Import your catalog via CSV",
+      "success": "{{count}} product(s) imported successfully. Redirecting...",
+      "template": {
+        "title": "CSV template",
+        "desc": "Download the CSV template and fill it with your products.",
+        "columns": "# Available columns:",
+        "categoryCodes": "# Valid category codes:",
+        "downloadBtn": "Download CSV template"
+      },
+      "upload": {
+        "title": "Import your file",
+        "click": "Click to select a CSV file",
+        "format": "Format: .csv, UTF-8",
+        "detected": "{{count}} product(s) detected",
+        "moreRows": "+ {{count}} additional rows",
+        "info": "After import, you will need to fill in the questionnaire for each product to generate the risk assessment.",
+        "importBtn": "Import {{count}} product(s)",
+        "importing": "Importing..."
+      }
     }
   },
   "common": {

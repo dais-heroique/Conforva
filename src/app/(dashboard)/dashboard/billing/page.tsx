@@ -101,7 +101,7 @@ export default async function BillingPage() {
                   <CardTitle className="text-base">{getPlanLabel(planKey)}</CardTitle>
                   <div className="flex items-baseline gap-1">
                     <span className="text-2xl font-bold text-gray-900">{PLAN_PRICES[planKey]}</span>
-                    <span className="text-gray-400 text-sm">/mois</span>
+                    <span className="text-gray-400 text-sm">{t.perMonth}</span>
                   </div>
                   <p className="text-sm text-blue-600 font-medium">
                     {products} {products > 1 ? t.references : t.reference}

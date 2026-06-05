@@ -14,6 +14,7 @@ import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, ArrowRight, ArrowLeft, CheckCircle2, Plus, Trash2, Package2 } from "lucide-react"
 import type { QuestionnaireField, ProductRow, CategoryRow } from "@/types/supabase"
+import { useT } from "@/components/providers/locale-provider"
 
 interface PageProps { params: Promise<{ id: string }> }
 
@@ -30,6 +31,9 @@ const BOM_STEP = 0
 export default function QuestionnairePage({ params }: PageProps) {
   const { id } = use(params)
   const router = useRouter()
+  const t = useT()
+  const tQ = t.dashboard.questionnaire
+
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState("")
@@ -159,7 +163,7 @@ export default function QuestionnairePage({ params }: PageProps) {
   return (
     <div className="p-4 md:p-8 max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Questionnaire produit</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{tQ.title}</h1>
         <p className="text-sm text-gray-500 mt-1">
           {category?.name_fr} — {product?.name}
         </p>
@@ -168,7 +172,7 @@ export default function QuestionnairePage({ params }: PageProps) {
       {/* Progress */}
       <div className="space-y-2">
         <div className="flex justify-between text-xs text-gray-500">
-          <span>Étape {currentStepIndex + 1} sur {totalSteps}</span>
+          <span>{tQ.step.replace("{{step}}", String(currentStepIndex + 1)).replace("{{total}}", String(totalSteps))}</span>
           <span>{Math.round(progressPct)}%</span>
         </div>
         <Progress value={progressPct} />
@@ -191,84 +195,53 @@ export default function QuestionnairePage({ params }: PageProps) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Package2 className="h-5 w-5 text-blue-600" />
-              Nomenclature (BOM)
+              {tQ.bom.title}
             </CardTitle>
-            <CardDescription>
-              Listez les principaux composants de votre produit. Ces informations sont requises pour le dossier technique GPSR (Article 6, Annexe I).
-            </CardDescription>
+            <CardDescription>{tQ.bom.desc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* BOM table header */}
             <div className="hidden sm:grid grid-cols-[2fr_2fr_2fr_2fr_auto] gap-2 text-xs font-medium text-gray-500 px-1">
-              <span>Composant *</span>
-              <span>Matériau</span>
-              <span>Fournisseur</span>
-              <span>Réf. pièce</span>
+              <span>{tQ.bom.colComponent}</span>
+              <span>{tQ.bom.colMaterial}</span>
+              <span>{tQ.bom.colSupplier}</span>
+              <span>{tQ.bom.colPartNumber}</span>
               <span />
             </div>
 
             {bomRows.map((row, i) => (
               <div key={i} className="grid grid-cols-1 sm:grid-cols-[2fr_2fr_2fr_2fr_auto] gap-2 items-start p-3 sm:p-0 rounded-lg sm:rounded-none border sm:border-0 border-gray-100">
                 <div className="space-y-1">
-                  <Label className="sm:hidden text-xs text-gray-500">Composant *</Label>
-                  <Input
-                    value={row.component}
-                    onChange={e => updateBomRow(i, "component", e.target.value)}
-                    placeholder="ex: Boîtier principal"
-                    className="h-9"
-                  />
+                  <Label className="sm:hidden text-xs text-gray-500">{tQ.bom.colComponent}</Label>
+                  <Input value={row.component} onChange={e => updateBomRow(i, "component", e.target.value)} placeholder={tQ.bom.componentPlaceholder} className="h-9" />
                 </div>
                 <div className="space-y-1">
-                  <Label className="sm:hidden text-xs text-gray-500">Matériau</Label>
-                  <Input
-                    value={row.material}
-                    onChange={e => updateBomRow(i, "material", e.target.value)}
-                    placeholder="ex: ABS"
-                    className="h-9"
-                  />
+                  <Label className="sm:hidden text-xs text-gray-500">{tQ.bom.colMaterial}</Label>
+                  <Input value={row.material} onChange={e => updateBomRow(i, "material", e.target.value)} placeholder={tQ.bom.materialPlaceholder} className="h-9" />
                 </div>
                 <div className="space-y-1">
-                  <Label className="sm:hidden text-xs text-gray-500">Fournisseur</Label>
-                  <Input
-                    value={row.supplier}
-                    onChange={e => updateBomRow(i, "supplier", e.target.value)}
-                    placeholder="ex: Fournisseur SA"
-                    className="h-9"
-                  />
+                  <Label className="sm:hidden text-xs text-gray-500">{tQ.bom.colSupplier}</Label>
+                  <Input value={row.supplier} onChange={e => updateBomRow(i, "supplier", e.target.value)} placeholder={tQ.bom.supplierPlaceholder} className="h-9" />
                 </div>
                 <div className="space-y-1">
-                  <Label className="sm:hidden text-xs text-gray-500">Réf. pièce</Label>
-                  <Input
-                    value={row.part_number}
-                    onChange={e => updateBomRow(i, "part_number", e.target.value)}
-                    placeholder="ex: 123-456"
-                    className="h-9"
-                  />
+                  <Label className="sm:hidden text-xs text-gray-500">{tQ.bom.colPartNumber}</Label>
+                  <Input value={row.part_number} onChange={e => updateBomRow(i, "part_number", e.target.value)} placeholder={tQ.bom.partNumberPlaceholder} className="h-9" />
                 </div>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9 text-gray-400 hover:text-red-500 shrink-0 self-end"
-                  onClick={() => removeBomRow(i)}
-                  disabled={bomRows.length <= 1}
-                >
+                <Button type="button" variant="ghost" size="icon" className="h-9 w-9 text-gray-400 hover:text-red-500 shrink-0 self-end" onClick={() => removeBomRow(i)} disabled={bomRows.length <= 1}>
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
             ))}
 
             <Button type="button" variant="outline" size="sm" onClick={addBomRow} className="gap-2 text-gray-600">
-              <Plus className="h-4 w-4" />
-              Ajouter un composant
+              <Plus className="h-4 w-4" />{tQ.bom.addRow}
             </Button>
 
             <div className="flex gap-3 pt-2">
               <Button onClick={saveAndNext} disabled={saving} className="flex-1 gap-2">
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : (
                   isLastStep
-                    ? <><CheckCircle2 className="h-4 w-4" />Terminer</>
-                    : <>Continuer <ArrowRight className="h-4 w-4" /></>
+                    ? <><CheckCircle2 className="h-4 w-4" />{tQ.finishBtn}</>
+                    : <>{tQ.continueBtn} <ArrowRight className="h-4 w-4" /></>
                 )}
               </Button>
             </div>
@@ -281,17 +254,17 @@ export default function QuestionnairePage({ params }: PageProps) {
         <Card>
           <CardHeader>
             <CardTitle>
-              {currentStep === 1 ? "Informations de conformité" : `Étape ${currentStep}`}
+              {currentStep === 1 ? tQ.step1Title : tQ.stepGeneric.replace("{{step}}", String(currentStep))}
             </CardTitle>
             {category && (
               <CardDescription>
-                Normes applicables : {category.applicable_standards?.join(", ")}
+                {tQ.normsApplicable} {category.applicable_standards?.join(", ")}
               </CardDescription>
             )}
           </CardHeader>
           <CardContent className="space-y-6">
             {currentFields.length === 0 && (
-              <p className="text-gray-500 text-sm">Aucun champ pour cette catégorie. Cliquez sur Continuer.</p>
+              <p className="text-gray-500 text-sm">{tQ.noFields}</p>
             )}
             {currentFields.map(field => (
               <div key={field.key} className="space-y-2">
@@ -301,57 +274,27 @@ export default function QuestionnairePage({ params }: PageProps) {
                 </Label>
 
                 {field.type === "text" && (
-                  <Input
-                    id={field.key}
-                    value={(answers[field.key] as string) ?? ""}
-                    onChange={e => setAnswer(field.key, e.target.value)}
-                    placeholder={field.label_fr}
-                  />
+                  <Input id={field.key} value={(answers[field.key] as string) ?? ""} onChange={e => setAnswer(field.key, e.target.value)} placeholder={field.label_fr} />
                 )}
-
                 {field.type === "textarea" && (
-                  <Textarea
-                    id={field.key}
-                    value={(answers[field.key] as string) ?? ""}
-                    onChange={e => setAnswer(field.key, e.target.value)}
-                    placeholder={field.label_fr}
-                    rows={3}
-                  />
+                  <Textarea id={field.key} value={(answers[field.key] as string) ?? ""} onChange={e => setAnswer(field.key, e.target.value)} placeholder={field.label_fr} rows={3} />
                 )}
-
                 {field.type === "number" && (
-                  <Input
-                    id={field.key}
-                    type="number"
-                    value={(answers[field.key] as string) ?? ""}
-                    onChange={e => setAnswer(field.key, e.target.value)}
-                  />
+                  <Input id={field.key} type="number" value={(answers[field.key] as string) ?? ""} onChange={e => setAnswer(field.key, e.target.value)} />
                 )}
-
                 {field.type === "boolean" && (
                   <div className="flex items-center gap-3">
                     {["true", "false"].map(v => (
                       <label key={v} className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name={field.key}
-                          value={v}
-                          checked={String(answers[field.key]) === v}
-                          onChange={() => setAnswer(field.key, v === "true")}
-                          className="accent-blue-600"
-                        />
-                        <span className="text-sm">{v === "true" ? "Oui" : "Non"}</span>
+                        <input type="radio" name={field.key} value={v} checked={String(answers[field.key]) === v} onChange={() => setAnswer(field.key, v === "true")} className="accent-blue-600" />
+                        <span className="text-sm">{v === "true" ? tQ.yesNo.yes : tQ.yesNo.no}</span>
                       </label>
                     ))}
                   </div>
                 )}
-
                 {field.type === "select" && field.options && (
-                  <Select
-                    value={(answers[field.key] as string) ?? ""}
-                    onValueChange={v => setAnswer(field.key, v)}
-                  >
-                    <SelectTrigger><SelectValue placeholder="Sélectionnez..." /></SelectTrigger>
+                  <Select value={(answers[field.key] as string) ?? ""} onValueChange={v => setAnswer(field.key, v)}>
+                    <SelectTrigger><SelectValue placeholder={tQ.selectPlaceholder} /></SelectTrigger>
                     <SelectContent>
                       {field.options.map(opt => (
                         <SelectItem key={opt} value={opt}>{opt}</SelectItem>
@@ -359,17 +302,13 @@ export default function QuestionnairePage({ params }: PageProps) {
                     </SelectContent>
                   </Select>
                 )}
-
                 {field.type === "multiselect" && field.options && (
                   <div className="grid grid-cols-2 gap-2">
                     {field.options.map(opt => {
                       const selected = ((answers[field.key] as string[]) ?? []).includes(opt)
                       return (
                         <label key={opt} className="flex items-center gap-2 cursor-pointer">
-                          <Checkbox
-                            checked={selected}
-                            onCheckedChange={() => toggleMulti(field.key, opt)}
-                          />
+                          <Checkbox checked={selected} onCheckedChange={() => toggleMulti(field.key, opt)} />
                           <span className="text-sm">{opt}</span>
                         </label>
                       )
@@ -381,13 +320,13 @@ export default function QuestionnairePage({ params }: PageProps) {
 
             <div className="flex gap-3 pt-2">
               <Button variant="outline" onClick={goBack} className="flex-1 gap-2">
-                <ArrowLeft className="h-4 w-4" />Retour
+                <ArrowLeft className="h-4 w-4" />{tQ.backBtn}
               </Button>
               <Button onClick={saveAndNext} disabled={saving} className="flex-1 gap-2">
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : (
                   isLastStep
-                    ? <><CheckCircle2 className="h-4 w-4" />Terminer</>
-                    : <>Continuer <ArrowRight className="h-4 w-4" /></>
+                    ? <><CheckCircle2 className="h-4 w-4" />{tQ.finishBtn}</>
+                    : <>{tQ.continueBtn} <ArrowRight className="h-4 w-4" /></>
                 )}
               </Button>
             </div>

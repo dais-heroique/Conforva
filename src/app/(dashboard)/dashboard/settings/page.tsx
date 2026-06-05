@@ -179,9 +179,9 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CreditCard className="h-5 w-5 text-blue-600" />
-            Facturation
+            {tSettings.subscription.billingCardTitle}
           </CardTitle>
-          <CardDescription>Votre abonnement Conforva</CardDescription>
+          <CardDescription>{tSettings.subscription.title}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center gap-4 rounded-xl bg-blue-50 border border-blue-100 px-4 py-3">
@@ -189,22 +189,22 @@ export default function SettingsPage() {
               <Zap className="h-4 w-4 text-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-blue-900">Plan {getPlanLabel((user?.plan ?? "free") as Plan)}</p>
+              <p className="text-sm font-semibold text-blue-900">{tSettings.subscription.planLabel.replace("{{name}}", getPlanLabel((user?.plan ?? "free") as Plan))}</p>
               <p className="text-xs text-blue-600 mt-0.5">
-                {user?.subscription_status === "active" ? "Abonnement actif" : "Plan gratuit"}
+                {user?.subscription_status === "active" ? tSettings.subscription.active : tSettings.subscription.free}
               </p>
             </div>
             {user?.stripe_subscription_id && (
               <form action="/api/billing/portal" method="POST">
                 <Button type="submit" size="sm" variant="outline" className="shrink-0">
-                  Gérer
+                  {tSettings.subscription.manage}
                 </Button>
               </form>
             )}
           </div>
           <div className="flex gap-3">
             <Link href="/dashboard/billing">
-              <Button variant="outline" size="sm">Changer de plan</Button>
+              <Button variant="outline" size="sm">{tSettings.subscription.upgrade}</Button>
             </Link>
           </div>
         </CardContent>
