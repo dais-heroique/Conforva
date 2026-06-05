@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import OpenAI from "openai"
+import { PLAN_LANGUAGES } from "@/lib/utils"
 
 const GROQ_MODELS = [
   "llama-3.3-70b-versatile",
@@ -67,10 +68,30 @@ export async function POST(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
+  // Fetch user plan to enforce language limits
+  const { data: userData } = await supabase
+    .from("users")
+    .select("plan, subscription_status, subscription_period_end")
+    .eq("id", user.id)
+    .single()
+
+  const planStatus = userData?.subscription_status
+  const periodEnd = userData?.subscription_period_end
+  // Keep paid plan if active/trialing/past_due and period hasn't expired
+  const planIsActive =
+    planStatus == null ||
+    planStatus === "active" ||
+    planStatus === "trialing" ||
+    (planStatus === "past_due" && periodEnd != null && new Date(periodEnd) > new Date())
+  const effectivePlan = (planIsActive ? (userData?.plan ?? "free") : "free") as string
+  const allowedLangs = PLAN_LANGUAGES[effectivePlan] ?? ["fr", "en"]
+
   const body = await req.json()
   const { productId, languages } = body as { productId: string; languages?: string[] }
   if (!productId) return NextResponse.json({ error: "productId required" }, { status: 400 })
-  const requestedLanguages = languages && languages.length > 0 ? languages : ["fr", "en"]
+  const requested = languages && languages.length > 0 ? languages : ["fr", "en"]
+  const requestedLanguages = requested.filter(l => (allowedLangs as readonly string[]).includes(l))
+  if (requestedLanguages.length === 0) requestedLanguages.push("fr")
 
   // Load product with all related data
   const { data: product, error: pErr } = await supabase

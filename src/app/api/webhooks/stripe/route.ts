@@ -3,6 +3,15 @@ import Stripe from "stripe"
 import { createClient } from "@/lib/supabase/server"
 import type { Plan } from "@/types/supabase"
 
+// Statuses where the user keeps their paid plan (Stripe is still processing/retrying)
+const ACTIVE_STATUSES = ["active", "trialing", "past_due"]
+
+function periodEndISO(sub: Stripe.Subscription): string | null {
+  return sub.current_period_end
+    ? new Date(sub.current_period_end * 1000).toISOString()
+    : null
+}
+
 export async function POST(req: NextRequest) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: "2026-05-27.dahlia" })
   const PRICE_TO_PLAN: Record<string, Plan> = {
@@ -36,6 +45,7 @@ export async function POST(req: NextRequest) {
         plan,
         stripe_subscription_id: subscriptionId,
         subscription_status: "active",
+        subscription_period_end: periodEndISO(subscription),
       }).eq("id", userId)
     }
   }
@@ -45,6 +55,7 @@ export async function POST(req: NextRequest) {
     const customerId = sub.customer as string
     const priceId = sub.items.data[0].price.id
     const plan = PRICE_TO_PLAN[priceId] ?? "free"
+    const isActive = ACTIVE_STATUSES.includes(sub.status)
 
     const { data: userData } = await supabase
       .from("users")
@@ -54,8 +65,9 @@ export async function POST(req: NextRequest) {
 
     if (userData) {
       await supabase.from("users").update({
-        plan: sub.status === "active" ? plan : "free",
+        plan: isActive ? plan : "free",
         subscription_status: sub.status,
+        subscription_period_end: periodEndISO(sub),
       }).eq("id", userData.id)
     }
   }
@@ -75,6 +87,7 @@ export async function POST(req: NextRequest) {
         plan: "free",
         subscription_status: "cancelled",
         stripe_subscription_id: null,
+        subscription_period_end: null,
       }).eq("id", userData.id)
     }
   }
