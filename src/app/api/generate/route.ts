@@ -4,9 +4,10 @@ import OpenAI from "openai"
 import { PLAN_LANGUAGES } from "@/lib/utils"
 
 const GROQ_MODELS = [
+  "qwen3-32b",
+  "meta-llama/llama-4-scout-17b-16e-instruct",
   "llama-3.3-70b-versatile",
   "llama-3.1-8b-instant",
-  "mixtral-8x7b-32768",
 ]
 
 /** Strip HTML tags and collapse whitespace, return first maxChars chars */
@@ -412,7 +413,7 @@ Retourne UNIQUEMENT le JSON suivant, sans aucun texte avant ou après, sans bali
       try {
         response = await openai.chat.completions.create({
           model,
-          max_tokens: 8000,
+          max_tokens: 12000,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt },
