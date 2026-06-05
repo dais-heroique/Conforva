@@ -3,9 +3,9 @@ import { createClient } from "@/lib/supabase/server"
 import OpenAI from "openai"
 import { PLAN_LANGUAGES } from "@/lib/utils"
 
-const GROQ_MODELS = [
-  "llama-3.1-8b-instant",
-  "llama-3.3-70b-versatile",
+const GEMINI_MODELS = [
+  "gemini-2.5-flash",
+  "gemini-2.5-pro",
 ]
 
 /** Strip HTML tags and collapse whitespace, return first maxChars chars */
@@ -56,12 +56,12 @@ function detectMarkets(targetMarkets: string[] | null | undefined): {
 }
 
 export async function POST(req: NextRequest) {
-  if (!process.env.GROQ_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     return NextResponse.json({ error: "AI generation not configured" }, { status: 503 })
   }
   const openai = new OpenAI({
-    apiKey: process.env.GROQ_API_KEY,
-    baseURL: "https://api.groq.com/openai/v1",
+    apiKey: process.env.GEMINI_API_KEY,
+    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
   })
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -404,14 +404,14 @@ Retourne UNIQUEMENT le JSON suivant, sans aucun texte avant ou après, sans bali
 
   try {
     let response: Awaited<ReturnType<typeof openai.chat.completions.create>> | null = null
-    let usedModel = GROQ_MODELS[0]
+    let usedModel = GEMINI_MODELS[0]
     let lastError: unknown
 
-    for (const model of GROQ_MODELS) {
+    for (const model of GEMINI_MODELS) {
       try {
         response = await openai.chat.completions.create({
           model,
-          max_tokens: 12000,
+          max_tokens: 16000,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt },

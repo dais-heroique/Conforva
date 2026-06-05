@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server"
 import OpenAI from "openai"
 
 export async function POST(req: NextRequest) {
-  if (!process.env.GROQ_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     return new Response("Not configured", { status: 503 })
   }
 
@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
   const { messages, productContext } = await req.json()
 
   const openai = new OpenAI({
-    apiKey: process.env.GROQ_API_KEY,
-    baseURL: "https://api.groq.com/openai/v1",
+    apiKey: process.env.GEMINI_API_KEY,
+    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
   })
 
   const systemPrompt = `Tu es un expert en conformité réglementaire internationale, spécialisé dans :
@@ -39,7 +39,7 @@ Règles de comportement :
 - Tu utilises des listes à puces pour les étapes ou exigences multiples, pour une meilleure lisibilité`
 
   const stream = await openai.chat.completions.create({
-    model: "llama-3.3-70b-versatile",
+    model: "gemini-2.5-flash",
     stream: true,
     max_tokens: 600,
     messages: [
