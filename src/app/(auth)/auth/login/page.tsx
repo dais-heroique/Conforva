@@ -50,18 +50,16 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
     setError("")
-    const supabase = createClient()
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-        shouldCreateUser: true,
-      },
-    })
-    if (error) {
-      setError(error.message)
-    } else {
+    try {
+      const res = await fetch("/api/auth/otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+      if (!res.ok) throw new Error()
       setSent(true)
+    } catch {
+      setError(t.auth.login.genericError ?? "Une erreur est survenue. Réessayez.")
     }
     setLoading(false)
   }

@@ -145,7 +145,8 @@
       "termsLink": "Terms of Use",
       "andText": "and our",
       "privacyLink": "Privacy Policy",
-      "disclaimer": "Conforva is a GPSR compliance assistance tool. Generated documents do not constitute legal advice and do not guarantee product compliance. Validation by a legal expert or notified body remains essential before any EU market placement."
+      "disclaimer": "Conforva is a GPSR compliance assistance tool. Generated documents do not constitute legal advice and do not guarantee product compliance. Validation by a legal expert or notified body remains essential before any EU market placement.",
+      "genericError": "An error occurred. Please try again."
     },
     "onboarding": {
       "title": "Welcome to Conforva",

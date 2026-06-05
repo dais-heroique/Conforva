@@ -43,6 +43,7 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/cookies') ||
     request.nextUrl.pathname.startsWith('/api/webhooks') ||
     request.nextUrl.pathname.startsWith('/api/contact') ||
+    request.nextUrl.pathname.startsWith('/api/auth/otp') ||
     request.nextUrl.pathname.startsWith('/enterprise') ||
     request.nextUrl.pathname.startsWith('/blog') ||
     request.nextUrl.pathname === '/sitemap.xml' ||

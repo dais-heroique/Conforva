@@ -145,7 +145,8 @@
       "termsLink": "CGU",
       "andText": "et notre",
       "privacyLink": "Politique de confidentialité",
-      "disclaimer": "Conforva est un outil d'aide à la conformité GPSR. Les documents générés ne constituent pas un avis juridique et ne garantissent pas la conformité de votre produit. Une validation par un expert juridique ou un organisme notifié reste indispensable avant toute mise sur le marché UE."
+      "disclaimer": "Conforva est un outil d'aide à la conformité GPSR. Les documents générés ne constituent pas un avis juridique et ne garantissent pas la conformité de votre produit. Une validation par un expert juridique ou un organisme notifié reste indispensable avant toute mise sur le marché UE.",
+      "genericError": "Une erreur est survenue. Réessayez."
     },
     "onboarding": {
       "title": "Bienvenue sur Conforva",
