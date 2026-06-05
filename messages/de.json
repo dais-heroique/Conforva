@@ -135,7 +135,7 @@
       "cardTitle": "Anmelden / Registrieren",
       "cardDesc": "Geben Sie Ihre E-Mail-Adresse ein, um einen sicheren Anmeldelink zu erhalten.",
       "emailLabel": "E-Mail-Adresse",
-      "emailPlaceholder": "sie@ihrshop.de",
+      "emailPlaceholder": "max.mustermann@gmail.com",
       "submitButton": "Anmeldelink erhalten",
       "sending": "Wird gesendet...",
       "successTitle": "Prüfen Sie Ihr Postfach!",

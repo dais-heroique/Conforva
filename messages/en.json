@@ -135,7 +135,7 @@
       "cardTitle": "Login / Sign up",
       "cardDesc": "Enter your email to receive a secure login link.",
       "emailLabel": "Email address",
-      "emailPlaceholder": "you@yourstore.com",
+      "emailPlaceholder": "john.smith@gmail.com",
       "submitButton": "Receive my login link",
       "sending": "Sending...",
       "successTitle": "Check your inbox!",

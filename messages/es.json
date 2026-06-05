@@ -135,7 +135,7 @@
       "cardTitle": "Iniciar sesión / Registrarse",
       "cardDesc": "Introduzca su dirección de correo electrónico para recibir un enlace de acceso seguro.",
       "emailLabel": "Dirección de correo electrónico",
-      "emailPlaceholder": "usted@tienda.es",
+      "emailPlaceholder": "juan.garcia@gmail.com",
       "submitButton": "Recibir mi enlace de acceso",
       "sending": "Enviando...",
       "successTitle": "¡Revise su bandeja de entrada!",

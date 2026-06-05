@@ -135,7 +135,7 @@
       "cardTitle": "Connexion / Inscription",
       "cardDesc": "Entrez votre email pour recevoir un lien de connexion sécurisé.",
       "emailLabel": "Adresse email",
-      "emailPlaceholder": "vous@boutique.com",
+      "emailPlaceholder": "marie.dupont@gmail.com",
       "submitButton": "Recevoir mon lien de connexion",
       "sending": "Envoi en cours...",
       "successTitle": "Vérifiez votre boîte mail !",
