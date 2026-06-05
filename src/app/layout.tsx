@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { getLocale, getDictionary } from "@/lib/i18n"
 import { LocaleProvider } from "@/components/providers/locale-provider"
 import { AuthCallbackHandler } from "@/components/providers/auth-callback-handler"
+import { Analytics } from "@vercel/analytics/next"
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -121,6 +122,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </LocaleProvider>
         <AuthCallbackHandler />
         <Toaster />
+        <Analytics />
       </body>
     </html>
   )
