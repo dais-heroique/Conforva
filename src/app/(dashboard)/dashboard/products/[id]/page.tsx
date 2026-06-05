@@ -125,7 +125,7 @@ export default function ProductDetailPage({ params }: PageProps) {
     if (technicalFile) {
       await supabase.from("technical_files").update({
         status: "validated",
-        watermarked: false,
+        watermarked: userPlan === "free" ? true : false,
       }).eq("id", technicalFile.id)
     }
 
@@ -143,7 +143,12 @@ export default function ProductDetailPage({ params }: PageProps) {
 
     await supabase.rpc("update_compliance_score", { p_product_id: id })
 
-    toast({ title: "Validé !", description: "Le dossier est maintenant validé et exportable sans watermark." })
+    toast({
+      title: "Dossier validé !",
+      description: userPlan === "free"
+        ? "Validé. Passez à un plan payant pour exporter sans watermark."
+        : "Le dossier est maintenant exportable sans watermark.",
+    })
     await loadData()
     setValidating(false)
   }

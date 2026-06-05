@@ -23,21 +23,25 @@ export default function ExportPage({ params }: PageProps) {
   const [ra, setRa] = useState<RiskAssessmentRow | null>(null)
   const [tf, setTf] = useState<TechnicalFileRow | null>(null)
   const [labels, setLabels] = useState<LabelRow[]>([])
+  const [userPlan, setUserPlan] = useState<string>("free")
 
   useEffect(() => {
     async function load() {
       const supabase = createClient()
-      const [{ data: prod }, { data: raData }, { data: tfData }, { data: lbls }] = await Promise.all([
+      const { data: { user } } = await supabase.auth.getUser()
+      const [{ data: prod }, { data: raData }, { data: tfData }, { data: lbls }, { data: userData }] = await Promise.all([
         supabase.from("products").select("*, product_categories(*)").eq("id", id).single(),
         supabase.from("risk_assessments").select("*").eq("product_id", id).order("version", { ascending: false }).limit(1).single(),
         supabase.from("technical_files").select("*").eq("product_id", id).order("version", { ascending: false }).limit(1).single(),
         supabase.from("labels").select("*").eq("product_id", id),
+        user ? supabase.from("users").select("plan").eq("id", user.id).single() : Promise.resolve({ data: null }),
       ])
       if (!prod) { router.push("/dashboard/products"); return }
       setProduct(prod as any)
       setRa(raData)
       setTf(tfData)
       setLabels(lbls ?? [])
+      setUserPlan((userData as any)?.plan ?? "free")
       setLoading(false)
     }
     load()
@@ -86,7 +90,17 @@ export default function ExportPage({ params }: PageProps) {
         </div>
       </div>
 
-      {!isValidated && (
+      {userPlan === "free" && (
+        <div className="flex items-start gap-3 rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-800">
+          <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+          <div>
+            <p className="font-semibold">Plan gratuit — watermark présent sur tous les PDF</p>
+            <p className="text-xs mt-0.5 text-amber-700">Passez à un plan payant (Starter, Growth ou Pro) pour exporter sans watermark.</p>
+          </div>
+        </div>
+      )}
+
+      {!isValidated && userPlan !== "free" && (
         <Alert variant="warning">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>

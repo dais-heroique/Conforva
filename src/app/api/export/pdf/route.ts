@@ -24,6 +24,14 @@ export async function POST(req: NextRequest) {
     .eq("owner_id", user.id)
     .single()
 
+  const { data: userData } = await supabase
+    .from("users")
+    .select("plan")
+    .eq("id", user.id)
+    .single()
+
+  const isFree = !userData?.plan || userData.plan === "free"
+
   const { data: rp } = await supabase
     .from("responsible_persons")
     .select("*")
@@ -51,13 +59,14 @@ export async function POST(req: NextRequest) {
         .limit(1)
         .single()
 
+      const shouldWatermark = isFree || (tf?.watermarked ?? true)
       if (type === "declaration") {
         pdfBuffer = await renderToBuffer(
-          DeclarationOfConformityPDF({ product, org, rp, riskAssessment: ra, watermarked: tf?.watermarked ?? true })
+          DeclarationOfConformityPDF({ product, org, rp, riskAssessment: ra, watermarked: shouldWatermark })
         )
       } else {
         pdfBuffer = await renderToBuffer(
-          TechnicalFilePDF({ product, org, rp, riskAssessment: ra, technicalFile: tf, language, watermarked: tf?.watermarked ?? true })
+          TechnicalFilePDF({ product, org, rp, riskAssessment: ra, technicalFile: tf, language, watermarked: shouldWatermark })
         )
       }
     } else {
@@ -69,7 +78,7 @@ export async function POST(req: NextRequest) {
         .single()
 
       pdfBuffer = await renderToBuffer(
-        LabelPDF({ product, label, language, org, watermarked: !label })
+        LabelPDF({ product, label, language, org, watermarked: isFree || !label })
       )
     }
 
