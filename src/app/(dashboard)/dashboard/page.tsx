@@ -145,7 +145,7 @@ export default async function DashboardPage() {
         {/* Score banner */}
         <div className={`rounded-2xl border px-5 py-4 flex items-center gap-5 ${allProductsCompliant ? "bg-emerald-50 border-emerald-200" : "bg-white border-gray-100 shadow-sm"}`}>
           {/* Ring */}
-          <div className="shrink-0">
+          <div className="relative shrink-0 w-[68px] h-[68px]">
             <svg width="68" height="68" viewBox="0 0 68 68" className="-rotate-90">
               <circle cx="34" cy="34" r={r} fill="none" strokeWidth="6" stroke={allProductsCompliant ? "#d1fae5" : "#f1f5f9"} />
               <circle
@@ -156,9 +156,11 @@ export default async function DashboardPage() {
                 style={{ transition: "stroke-dasharray 0.8s ease" }}
               />
             </svg>
-            <p className="text-center text-sm font-black -mt-[46px] tabular-nums" style={{ lineHeight: "68px" }}>
-              {avgScore}<span className="text-xs font-bold text-gray-400">%</span>
-            </p>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <p className="text-sm font-black tabular-nums leading-none">
+                {avgScore}<span className="text-xs font-bold text-gray-400">%</span>
+              </p>
+            </div>
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">

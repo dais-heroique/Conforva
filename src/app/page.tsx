@@ -200,7 +200,7 @@ export default function LandingPage() {
       </motion.header>
 
       {/* ─── HERO ─── */}
-      <section className="relative px-5 pt-32 pb-20 sm:pt-44 sm:pb-28 text-center">
+      <section className="relative px-5 pt-20 pb-12 sm:pt-44 sm:pb-28 text-center">
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
             className="inline-flex items-center gap-2 mb-8">
@@ -214,7 +214,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.06 }}
-            className="font-display text-[clamp(2.8rem,7.5vw,5.8rem)] leading-[0.93] tracking-tight text-gray-950 mb-8"
+            className="font-display text-[clamp(1.9rem,7.5vw,5.8rem)] leading-[0.95] sm:leading-[0.93] tracking-tight text-gray-950 mb-6 sm:mb-8"
           >
             Dossiers de conformité GPSR,<br />
             <em className="italic font-light text-blue-700">générés en quelques minutes.</em>
@@ -224,7 +224,7 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.22 }}
-            className="text-lg text-gray-500 leading-relaxed max-w-xl mx-auto mb-10"
+            className="text-sm sm:text-lg text-gray-500 leading-relaxed max-w-xl mx-auto mb-8 sm:mb-10"
           >
             Analyse de risque ISO 12100, dossier technique complet et déclaration de conformité UE —
             structurés selon le règlement (UE) 2023/988.
@@ -257,16 +257,16 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.5 }}
-            className="mt-16 pt-8 border-t border-gray-300 grid grid-cols-3 max-w-lg mx-auto"
+            className="mt-10 sm:mt-16 pt-6 sm:pt-8 border-t border-gray-300 grid grid-cols-3 max-w-lg mx-auto"
           >
             {[
               { n: "< 10 min", label: "par dossier complet" },
               { n: "10 ans", label: "d'archivage légal" },
               { n: "EU · US · UK", label: "marchés couverts" },
             ].map((s, i) => (
-              <div key={s.n} className={`${i > 0 ? "pl-6 sm:pl-8 border-l border-gray-300" : ""}`}>
-                <p className="font-display text-2xl sm:text-3xl font-bold text-gray-950 tabular-nums">{s.n}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+              <div key={s.n} className={`${i > 0 ? "pl-3 sm:pl-8 border-l border-gray-300" : ""}`}>
+                <p className="font-display text-base sm:text-2xl lg:text-3xl font-bold text-gray-950 tabular-nums leading-tight">{s.n}</p>
+                <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">{s.label}</p>
               </div>
             ))}
           </motion.div>
@@ -288,7 +288,7 @@ export default function LandingPage() {
       </div>
 
       {/* ─── GPSR STAKES ─── */}
-      <section className="py-20 px-5 bg-[#111110] text-white">
+      <section className="py-12 sm:py-20 px-5 bg-[#111110] text-white">
         <div className="max-w-5xl mx-auto">
           <FadeIn>
             <div className="flex items-center gap-3 mb-8">
@@ -311,7 +311,7 @@ export default function LandingPage() {
                 <FadeIn key={s.n} delay={i * 0.08}>
                   <div className={`py-6 sm:py-0 ${i > 0 ? "sm:pl-10" : ""} ${i < 2 ? "sm:pr-10" : ""}`}>
                     <div className="flex items-baseline gap-1.5 mb-2">
-                      <span className="font-display text-5xl sm:text-6xl font-bold text-white tabular-nums">{s.n}</span>
+                      <span className="font-display text-4xl sm:text-6xl font-bold text-white tabular-nums">{s.n}</span>
                       <span className="text-base text-gray-500 font-light">{s.sup}</span>
                     </div>
                     <p className="text-xs font-semibold text-gray-300 mb-1 uppercase tracking-wider">{s.label}</p>
@@ -347,7 +347,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── FEATURES ─── */}
-      <section id="fonctionnalites" className="py-20 px-5 bg-[#F9F8F5]">
+      <section id="fonctionnalites" className="py-12 sm:py-20 px-5 bg-[#F9F8F5]">
         <div className="max-w-6xl mx-auto">
           <FadeIn>
             <div className="flex items-center gap-3 mb-2">
@@ -357,7 +357,7 @@ export default function LandingPage() {
             <h2 className="font-display text-2xl sm:text-4xl font-bold leading-tight mb-2">Tout ce qu'exige le règlement GPSR</h2>
             <p className="text-sm text-gray-500 max-w-xl leading-relaxed">Chaque document est structuré selon les articles du règlement (UE) 2023/988 et les normes harmonisées applicables à votre catégorie.</p>
           </FadeIn>
-          <div className="mt-12 grid sm:grid-cols-2 sm:divide-x divide-gray-200">
+          <div className="mt-8 sm:mt-12 grid sm:grid-cols-2 sm:divide-x divide-gray-200">
             <div className="sm:pr-12">
               {FEATURES.slice(0, 3).map((f, i) => {
                 const Icon = f.icon
@@ -399,7 +399,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── USE CASES ─── */}
-      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
+      <section className="py-12 sm:py-20 px-5 bg-gray-50 border-y border-gray-100">
         <div className="max-w-5xl mx-auto">
           <FadeIn>
             <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Pour qui ?</p>
@@ -461,7 +461,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── MARKETS + LANGUAGES ─── */}
-      <section className="py-20 px-5 bg-gray-950 text-white">
+      <section className="py-12 sm:py-20 px-5 bg-gray-950 text-white">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16">
             {/* Markets */}
@@ -531,7 +531,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── DOCUMENT PROOF ─── */}
-      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
+      <section className="py-12 sm:py-20 px-5 bg-gray-50 border-y border-gray-100">
         <div className="max-w-5xl mx-auto">
           <FadeIn>
             <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Ce que vous obtenez</p>
@@ -688,7 +688,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── ARTICLE BREAKDOWN ─── */}
-      <section className="py-20 px-5">
+      <section className="py-12 sm:py-20 px-5">
         <div className="max-w-5xl mx-auto">
           <FadeIn>
             <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Conformité article par article</p>
@@ -744,17 +744,17 @@ export default function LandingPage() {
       </section>
 
       {/* ─── HOW IT WORKS ─── */}
-      <section id="comment" className="py-20 px-5 bg-gray-50 border-y border-gray-100">
+      <section id="comment" className="py-12 sm:py-20 px-5 bg-gray-50 border-y border-gray-100">
         <div className="max-w-5xl mx-auto">
           <FadeIn>
             <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Processus</p>
             <h2 className="text-2xl sm:text-3xl font-bold">De la fiche produit au dossier conforme</h2>
           </FadeIn>
-          <div className="mt-12 divide-y divide-gray-200">
+          <div className="mt-8 sm:mt-12 divide-y divide-gray-200">
             {STEPS.map((s, i) => (
               <FadeIn key={s.n} delay={i * 0.1}>
-                <div className="flex gap-6 sm:gap-12 py-10">
-                  <span className="font-display text-[5rem] sm:text-[7rem] font-bold text-gray-200 leading-none select-none shrink-0 w-20 sm:w-28 -mt-2">{s.n}</span>
+                <div className="flex gap-4 sm:gap-12 py-7 sm:py-10">
+                  <span className="font-display text-[3rem] sm:text-[7rem] font-bold text-gray-200 leading-none select-none shrink-0 w-12 sm:w-28 -mt-1 sm:-mt-2">{s.n}</span>
                   <div className="flex-1 pt-3">
                     <h3 className="font-semibold text-gray-900 text-lg mb-2">{s.title}</h3>
                     <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
@@ -791,7 +791,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── COMPARISON ─── */}
-      <section className="py-20 px-5">
+      <section className="py-12 sm:py-20 px-5">
         <div className="max-w-5xl mx-auto">
           <FadeIn>
             <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Pourquoi Conforva ?</p>
@@ -842,7 +842,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── PRICING ─── */}
-      <section id="tarifs" className="py-20 px-5">
+      <section id="tarifs" className="py-12 sm:py-20 px-5">
         <div className="max-w-6xl mx-auto">
           <FadeIn>
             <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Tarifs</p>
@@ -929,7 +929,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── FAQ PREVIEW ─── */}
-      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
+      <section className="py-12 sm:py-20 px-5 bg-gray-50 border-y border-gray-100">
         <div className="max-w-3xl mx-auto">
           <FadeIn className="text-center mb-10">
             <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Questions fréquentes</p>
