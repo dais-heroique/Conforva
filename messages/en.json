@@ -494,7 +494,14 @@
       "save": "Save",
       "savedSuccess": "Information saved successfully.",
       "statusActive": "Active",
-      "statusInactive": "Inactive"
+      "statusInactive": "Inactive",
+      "addBtn": "Add",
+      "editTitle": "Edit responsible person",
+      "cancelBtn": "Cancel",
+      "deleteConfirm": "Delete this responsible person?",
+      "emptyTitle": "No responsible person configured",
+      "emptyDesc": "Add one to complete your technical files.",
+      "emptyBtn": "Add a responsible person"
     },
     "labels": {
       "title": "Multilingual labels",

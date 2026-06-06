@@ -494,7 +494,14 @@
       "save": "Guardar",
       "savedSuccess": "Información guardada con éxito.",
       "statusActive": "Activo",
-      "statusInactive": "Inactivo"
+      "statusInactive": "Inactivo",
+      "addBtn": "Agregar",
+      "editTitle": "Editar persona responsable",
+      "cancelBtn": "Cancelar",
+      "deleteConfirm": "¿Eliminar esta persona responsable?",
+      "emptyTitle": "Ninguna persona responsable configurada",
+      "emptyDesc": "Agregue una para completar sus expedientes técnicos.",
+      "emptyBtn": "Agregar una persona responsable"
     },
     "labels": {
       "title": "Etiquetas multilingüe",

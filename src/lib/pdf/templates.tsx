@@ -359,7 +359,7 @@ function PageHeader({ docRef, productName, branded = true }: { docRef: string; p
   return (
     <View style={base.pageHeader} fixed>
       <View style={base.pageHeaderLeft}>
-        {branded && <Text style={base.pageHeaderApp}>CONFORVA</Text>}
+        {branded ? <Text style={base.pageHeaderApp}>CONFORVA</Text> : null}
         <Text style={base.pageHeaderRef}>Réf. : {docRef}</Text>
       </View>
       <Text style={base.pageHeaderRight}>{productName}</Text>
@@ -374,7 +374,7 @@ function PageFooter({ language, branded = true }: { language: string; branded?: 
         <Text>{language === "en" ? DISCLAIMER_TEXT.en : DISCLAIMER_TEXT.fr}</Text>
       </View>
       <View style={base.footer} fixed>
-        {branded && <Text>Conforva — Aide à la conformité GPSR</Text>}
+        {branded ? <Text>Conforva — Aide à la conformité GPSR</Text> : <Text> </Text>}
         <Text render={({ pageNumber, totalPages }: { pageNumber: number; totalPages: number }) =>
           `Page ${pageNumber} / ${totalPages}`}
         />
@@ -923,9 +923,9 @@ export function TechnicalFilePDF({
         {ra.market_specific_requirements && (
           <>
             <H2>Exigences spécifiques par marché</H2>
-            {Object.entries(ra.market_specific_requirements).map(([market, req]: [string, any]) => {
-              if (!req?.applicable) return null
-              return (
+            {Object.entries(ra.market_specific_requirements)
+              .filter(([, req]: [string, any]) => req?.applicable)
+              .map(([market, req]: [string, any]) => (
                 <View key={market} style={{ marginBottom: 9 }} wrap={false}>
                   <Text style={{ fontSize: 9, fontFamily: "Helvetica-Bold", color: DARK, marginBottom: 3 }}>
                     {market} — {req.regulation}
@@ -937,8 +937,7 @@ export function TechnicalFilePDF({
                     </View>
                   ))}
                 </View>
-              )
-            })}
+              ))}
           </>
         )}
 
@@ -1654,7 +1653,7 @@ export function DeclarationOfConformityPDF({
         </View>
 
         <View style={base.footer} fixed>
-          {branded && <Text>Conforva — Aide à la conformité GPSR</Text>}
+          {branded ? <Text>Conforva — Aide à la conformité GPSR</Text> : <Text> </Text>}
           <Text>N° {docRef}</Text>
           <Text>{genDate}</Text>
         </View>
@@ -1790,7 +1789,7 @@ export function LabelPDF({
   return (
     <Document title={`Étiquette — ${product?.name} — ${language}`}>
       <Page size="A5" style={{ ...base.page, padding: 28, paddingBottom: 28 }}>
-        {watermarked && <Text style={{ ...base.watermark, fontSize: 34, top: "35%" }}>NON VALIDÉ</Text>}
+        {watermarked && <Text style={{ ...base.watermark, fontSize: 34, top: 170 }}>NON VALIDÉ</Text>}
 
         {/* Outer border box */}
         <View style={{ border: `2 solid ${BLUE}`, borderRadius: 7, padding: 16, flex: 1 }}>

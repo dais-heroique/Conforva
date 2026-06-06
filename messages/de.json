@@ -494,7 +494,14 @@
       "save": "Speichern",
       "savedSuccess": "Informationen erfolgreich gespeichert.",
       "statusActive": "Aktiv",
-      "statusInactive": "Inaktiv"
+      "statusInactive": "Inaktiv",
+      "addBtn": "Hinzufügen",
+      "editTitle": "Verantwortliche Person bearbeiten",
+      "cancelBtn": "Abbrechen",
+      "deleteConfirm": "Diese verantwortliche Person löschen?",
+      "emptyTitle": "Keine verantwortliche Person konfiguriert",
+      "emptyDesc": "Fügen Sie eine hinzu, um Ihre technischen Dokumentationen zu vervollständigen.",
+      "emptyBtn": "Verantwortliche Person hinzufügen"
     },
     "labels": {
       "title": "Mehrsprachige Etiketten",
