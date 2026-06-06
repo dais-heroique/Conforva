@@ -1,13 +1,52 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
-import OpenAI from "openai"
 import { jsonrepair } from "jsonrepair"
 import { PLAN_LANGUAGES } from "@/lib/utils"
 
-const GEMINI_MODELS = [
-  "gemini-2.5-flash",
-  "gemini-2.5-pro",
-]
+const GEMINI_MODELS = ["gemini-2.5-flash", "gemini-2.5-pro"]
+
+/**
+ * Call Gemini's native REST API with responseMimeType "application/json".
+ * Unlike the OpenAI-compat layer, this guarantees syntactically valid JSON
+ * output — even if the model hits the token limit it closes all brackets.
+ */
+async function callGemini(
+  model: string,
+  apiKey: string,
+  system: string,
+  user: string,
+): Promise<string> {
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: system }] },
+        contents: [{ role: "user", parts: [{ text: user }] }],
+        generationConfig: {
+          responseMimeType: "application/json",
+          maxOutputTokens: 65536,
+          temperature: 0.7,
+        },
+      }),
+      signal: AbortSignal.timeout(180_000), // 3 min — large response
+    }
+  )
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw Object.assign(
+      new Error(body?.error?.message ?? `Gemini error ${res.status}`),
+      { status: res.status }
+    )
+  }
+
+  const data = await res.json()
+  const text: string | undefined = data.candidates?.[0]?.content?.parts?.[0]?.text
+  if (!text) throw new Error("Empty response from Gemini")
+  return text
+}
 
 /** Strip HTML tags and collapse whitespace, return first maxChars chars */
 async function fetchProductPageText(url: string, maxChars = 3000): Promise<string> {
@@ -60,10 +99,6 @@ export async function POST(req: NextRequest) {
   if (!process.env.GEMINI_API_KEY) {
     return NextResponse.json({ error: "AI generation not configured" }, { status: 503 })
   }
-  const openai = new OpenAI({
-    apiKey: process.env.GEMINI_API_KEY,
-    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
-  })
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -404,21 +439,13 @@ Retourne UNIQUEMENT le JSON suivant, sans aucun texte avant ou après, sans bali
 }`
 
   try {
-    let response: Awaited<ReturnType<typeof openai.chat.completions.create>> | null = null
+    let rawJson = ""
     let usedModel = GEMINI_MODELS[0]
     let lastError: unknown
 
     for (const model of GEMINI_MODELS) {
       try {
-        response = await openai.chat.completions.create({
-          model,
-          max_tokens: 32768,
-          response_format: { type: "json_object" },
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt },
-          ],
-        })
+        rawJson = await callGemini(model, process.env.GEMINI_API_KEY!, systemPrompt, userPrompt)
         usedModel = model
         break
       } catch (err: unknown) {
@@ -431,24 +458,16 @@ Retourne UNIQUEMENT le JSON suivant, sans aucun texte avant ou après, sans bali
       }
     }
 
-    if (!response) throw lastError ?? new Error("All models unavailable")
+    if (!rawJson) throw lastError ?? new Error("All models unavailable")
 
-    const text = response.choices[0]?.message?.content
-    if (!text) throw new Error("Empty response from AI")
-
-    // Strip markdown code fences if the model wrapped the JSON
-    const stripped = text.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "").trim()
-    // Extract the outermost JSON object
-    const jsonMatch = stripped.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) throw new Error("No JSON in response")
-
+    // responseMimeType:"application/json" guarantees valid JSON from Gemini.
+    // jsonrepair is a last-resort safety net for unexpected edge cases.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let analysisData: any
     try {
-      analysisData = JSON.parse(jsonMatch[0])
+      analysisData = JSON.parse(rawJson)
     } catch {
-      // Attempt automatic repair of common issues (trailing commas, truncated arrays, etc.)
-      analysisData = JSON.parse(jsonrepair(jsonMatch[0]))
+      analysisData = JSON.parse(jsonrepair(rawJson))
     }
 
     // Merge detected market flags into market_specific_requirements so they reflect
