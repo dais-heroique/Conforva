@@ -89,7 +89,7 @@ const SECTIONS = [
       { label: "Détection d'incidents", val: "Monitoring en temps réel via Vercel et Supabase" },
       { label: "Délai de notification RGPD", val: "72h maximum après détection d'une violation" },
       { label: "Communication", val: "Notification par email aux utilisateurs affectés" },
-      { label: "Contact sécurité", val: "security@conforva.com" },
+      { label: "Contact sécurité", val: "contact.conforva@gmail.com" },
     ],
   },
 ]
@@ -192,8 +192,8 @@ export default function SecurityPage() {
           </p>
           <p className="text-sm text-gray-600">
             Pour exercer vos droits ou signaler un incident de sécurité :{" "}
-            <a href="mailto:privacy@conforva.com" className="text-blue-600 hover:underline font-medium">
-              privacy@conforva.com
+            <a href="mailto:contact.conforva@gmail.com" className="text-blue-600 hover:underline font-medium">
+              contact.conforva@gmail.com
             </a>
           </p>
         </div>

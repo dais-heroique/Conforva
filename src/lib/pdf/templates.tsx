@@ -37,12 +37,11 @@ const base = StyleSheet.create({
   // ---- watermark -----------------------------------------------------------
   watermark: {
     position: "absolute",
-    top: "38%",
-    left: "8%",
-    width: "84%",
-    fontSize: 58,
-    color: "#e5e7eb",
-    opacity: 0.35,
+    top: 270,
+    left: 30,
+    right: 30,
+    fontSize: 52,
+    color: "#d4d4d4",
     transform: "rotate(-30deg)",
     textAlign: "center",
     fontFamily: "Helvetica-Bold",
@@ -316,6 +315,7 @@ interface PDFProps {
   label?: any
   language?: string
   watermarked?: boolean
+  branded?: boolean  // true = show Conforva branding (free plan); false = clean document (paid)
 }
 
 // ---------------------------------------------------------------------------
@@ -355,11 +355,11 @@ function severityLabel(sev: string, lang: string): string {
 // ---------------------------------------------------------------------------
 // Shared sub-components
 // ---------------------------------------------------------------------------
-function PageHeader({ docRef, productName }: { docRef: string; productName: string }) {
+function PageHeader({ docRef, productName, branded = true }: { docRef: string; productName: string; branded?: boolean }) {
   return (
     <View style={base.pageHeader} fixed>
       <View style={base.pageHeaderLeft}>
-        <Text style={base.pageHeaderApp}>CONFORVA</Text>
+        {branded && <Text style={base.pageHeaderApp}>CONFORVA</Text>}
         <Text style={base.pageHeaderRef}>Réf. : {docRef}</Text>
       </View>
       <Text style={base.pageHeaderRight}>{productName}</Text>
@@ -367,14 +367,14 @@ function PageHeader({ docRef, productName }: { docRef: string; productName: stri
   )
 }
 
-function PageFooter({ language }: { language: string }) {
+function PageFooter({ language, branded = true }: { language: string; branded?: boolean }) {
   return (
     <>
       <View style={base.disclaimer} fixed>
         <Text>{language === "en" ? DISCLAIMER_TEXT.en : DISCLAIMER_TEXT.fr}</Text>
       </View>
       <View style={base.footer} fixed>
-        <Text>Conforva — Aide à la conformité GPSR</Text>
+        {branded && <Text>Conforva — Aide à la conformité GPSR</Text>}
         <Text render={({ pageNumber, totalPages }: { pageNumber: number; totalPages: number }) =>
           `Page ${pageNumber} / ${totalPages}`}
         />
@@ -492,6 +492,7 @@ export function TechnicalFilePDF({
   technicalFile,
   language = "fr",
   watermarked = true,
+  branded = true,
 }: PDFProps) {
   const ra = (riskAssessment?.content_json ?? {}) as any
   const tf = (technicalFile?.content_json ?? {}) as any
@@ -612,12 +613,14 @@ export function TechnicalFilePDF({
 
         {/* Blue top band */}
         <View style={base.coverTopBand}>
-          <View style={base.coverLogoRow}>
-            <View style={base.coverLogoBox}>
-              <Text style={base.coverLogoLetter}>C</Text>
+          {branded && (
+            <View style={base.coverLogoRow}>
+              <View style={base.coverLogoBox}>
+                <Text style={base.coverLogoLetter}>C</Text>
+              </View>
+              <Text style={base.coverAppName}>Conforva</Text>
             </View>
-            <Text style={base.coverAppName}>Conforva</Text>
-          </View>
+          )}
           <Text style={base.coverTitle}>{lbl.docTitle}</Text>
           <Text style={base.coverSubtitle}>{lbl.reg}</Text>
         </View>
@@ -700,7 +703,7 @@ export function TechnicalFilePDF({
           =================================================================== */}
       <Page size="A4" style={base.page}>
         {watermarked && <WatermarkText />}
-        <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} />
+        <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
 
         {/* Section 1 */}
         <H1>1. Description générale du produit</H1>
@@ -829,7 +832,7 @@ export function TechnicalFilePDF({
           )}
         </View>
 
-        <PageFooter language={language} />
+        <PageFooter language={language} branded={branded} />
       </Page>
 
       {/* ===================================================================
@@ -837,7 +840,7 @@ export function TechnicalFilePDF({
           =================================================================== */}
       <Page size="A4" style={base.page}>
         {watermarked && <WatermarkText />}
-        <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} />
+        <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
 
         <H1>4. Normes et réglementations applicables</H1>
         {aiSectionContent("norme") && (
@@ -939,7 +942,7 @@ export function TechnicalFilePDF({
           </>
         )}
 
-        <PageFooter language={language} />
+        <PageFooter language={language} branded={branded} />
       </Page>
 
       {/* ===================================================================
@@ -947,7 +950,7 @@ export function TechnicalFilePDF({
           =================================================================== */}
       <Page size="A4" style={base.page}>
         {watermarked && <WatermarkText />}
-        <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} />
+        <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
 
         {/* Section 5 */}
         <H1>5. Évaluation des risques — Méthodologie</H1>
@@ -1045,7 +1048,7 @@ export function TechnicalFilePDF({
           )}
         </View>
 
-        <PageFooter language={language} />
+        <PageFooter language={language} branded={branded} />
       </Page>
 
       {/* ===================================================================
@@ -1054,7 +1057,7 @@ export function TechnicalFilePDF({
       {hazards.length > 3 && (
         <Page size="A4" style={base.page}>
           {watermarked && <WatermarkText />}
-          <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} />
+          <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
           <H1>6. Dangers identifiés (suite)</H1>
           {hazards.slice(3).map((h: any, i: number) => (
             <View key={i} style={hazardCardStyle(h.severity)} wrap={false}>
@@ -1096,7 +1099,7 @@ export function TechnicalFilePDF({
               )}
             </View>
           ))}
-          <PageFooter language={language} />
+          <PageFooter language={language} branded={branded} />
         </Page>
       )}
 
@@ -1105,7 +1108,7 @@ export function TechnicalFilePDF({
           =================================================================== */}
       <Page size="A4" style={base.page}>
         {watermarked && <WatermarkText />}
-        <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} />
+        <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
 
         <H1>7. Mesures de mitigation</H1>
         {aiSectionContent("mitigation") && (
@@ -1189,7 +1192,7 @@ export function TechnicalFilePDF({
           )}
         </View>
 
-        <PageFooter language={language} />
+        <PageFooter language={language} branded={branded} />
       </Page>
 
       {/* ===================================================================
@@ -1197,7 +1200,7 @@ export function TechnicalFilePDF({
           =================================================================== */}
       <Page size="A4" style={base.page}>
         {watermarked && <WatermarkText />}
-        <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} />
+        <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
 
         <H1>9. Tests et essais requis</H1>
         {aiSectionContent("tests") && (
@@ -1272,7 +1275,7 @@ export function TechnicalFilePDF({
           )}
         </View>
 
-        <PageFooter language={language} />
+        <PageFooter language={language} branded={branded} />
       </Page>
 
       {/* ===================================================================
@@ -1280,7 +1283,7 @@ export function TechnicalFilePDF({
           =================================================================== */}
       <Page size="A4" style={base.page}>
         {watermarked && <WatermarkText />}
-        <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} />
+        <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
 
         {/* Section 12 */}
         <H1>12. Substances réglementées (REACH / CLP / RoHS)</H1>
@@ -1425,7 +1428,7 @@ export function TechnicalFilePDF({
           </View>
         </View>
 
-        <PageFooter language={language} />
+        <PageFooter language={language} branded={branded} />
       </Page>
 
       {/* ===================================================================
@@ -1434,7 +1437,7 @@ export function TechnicalFilePDF({
       {aiSections.length > 0 && (
         <Page size="A4" style={base.page}>
           {watermarked && <WatermarkText />}
-          <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} />
+          <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
           <H1>Annexe A — Contenu généré par analyse IA</H1>
           <Text style={[base.body, { marginBottom: 12 }]}>
             Les sections suivantes ont été générées automatiquement par l'analyse IA de Conforva sur la base des informations produit fournies. Elles doivent être relues, vérifiées et validées par un expert.
@@ -1447,7 +1450,7 @@ export function TechnicalFilePDF({
               <Text style={base.aiBlockContent}>{s.content ?? s.text ?? ""}</Text>
             </View>
           ))}
-          <PageFooter language={language} />
+          <PageFooter language={language} branded={branded} />
         </Page>
       )}
     </Document>
@@ -1463,6 +1466,7 @@ export function DeclarationOfConformityPDF({
   rp,
   riskAssessment,
   watermarked = true,
+  branded = true,
 }: PDFProps) {
   const ra = (riskAssessment?.content_json ?? {}) as any
   const doc = (ra.declaration_of_conformity_content ?? {}) as any
@@ -1495,12 +1499,14 @@ export function DeclarationOfConformityPDF({
         {/* Header */}
         <View style={base.docHeader}>
           <View>
-            <View style={base.docLogoRow}>
-              <View style={base.docLogoBox}>
-                <Text style={base.docLogoLetter}>C</Text>
+            {branded && (
+              <View style={base.docLogoRow}>
+                <View style={base.docLogoBox}>
+                  <Text style={base.docLogoLetter}>C</Text>
+                </View>
+                <Text style={base.docAppName}>Conforva</Text>
               </View>
-              <Text style={base.docAppName}>Conforva</Text>
-            </View>
+            )}
             <Text style={base.docTitle}>DÉCLARATION UE DE CONFORMITÉ</Text>
             <Text style={base.docSubtitle}>Conformément à l'Article 24 du Règlement (UE) 2023/988</Text>
           </View>
@@ -1643,12 +1649,12 @@ export function DeclarationOfConformityPDF({
         {/* Disclaimer */}
         <View style={{ marginTop: 14, borderTop: `1 solid ${AMBER_BORDER}`, paddingTop: 7, backgroundColor: AMBER_BG, padding: 7, borderRadius: 3 }}>
           <Text style={{ fontSize: 7, color: AMBER_TEXT }}>
-            Ce document a été généré par Conforva (aide à la conformité). Il doit être complété, relu et signé par le responsable légal avant tout usage officiel. Il ne constitue pas en lui-même un acte légal sans signature manuscrite ou électronique certifiée.
+            Ce document doit être complété, relu et signé par le responsable légal avant tout usage officiel. Il ne constitue pas en lui-même un acte légal sans signature manuscrite ou électronique certifiée.
           </Text>
         </View>
 
         <View style={base.footer} fixed>
-          <Text>Conforva — Aide à la conformité GPSR</Text>
+          {branded && <Text>Conforva — Aide à la conformité GPSR</Text>}
           <Text>N° {docRef}</Text>
           <Text>{genDate}</Text>
         </View>

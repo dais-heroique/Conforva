@@ -59,7 +59,10 @@ export default function ExportPage({ params }: PageProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId: id, type, language: lang }),
       })
-      if (!res.ok) throw new Error("Export failed")
+      if (!res.ok) {
+        const body = await res.json().catch(() => null)
+        throw new Error(body?.details ?? "Export failed")
+      }
       const blob = await res.blob()
       const url = URL.createObjectURL(blob)
       const a = document.createElement("a")

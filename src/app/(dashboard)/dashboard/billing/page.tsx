@@ -148,7 +148,7 @@ export default async function BillingPage() {
                 <p className="text-sm text-gray-500">{t.enterprise.desc}</p>
               </div>
             </div>
-            <a href="mailto:contact@conforva.com">
+            <a href="mailto:contact.conforva@gmail.com">
               <Button variant="outline">{t.enterprise.contact}</Button>
             </a>
           </div>

@@ -34,7 +34,7 @@ export default function PrivacyPage() {
 Conforva SAS
 Société par actions simplifiée en cours d'immatriculation au Registre du Commerce et des Sociétés
 Siège social : France
-Email : privacy@conforva.com
+Email : contact.conforva@gmail.com
 
 Pour toute question relative à vos données personnelles ou pour exercer vos droits, vous pouvez nous contacter à l'adresse électronique ci-dessus.`}</p>
           </div>
@@ -87,7 +87,7 @@ Obligation légale (art. 6.1.c RGPD)
 
 Consentement (art. 6.1.a RGPD)
 — Envoi de communications marketing et newsletters (uniquement si vous y avez expressément consenti)
-— Vous pouvez retirer votre consentement à tout moment en nous contactant à privacy@conforva.com`}</p>
+— Vous pouvez retirer votre consentement à tout moment en nous contactant à contact.conforva@gmail.com`}</p>
           </div>
 
           <div>
@@ -139,7 +139,7 @@ Aucune donnée n'est vendue, louée ou cédée à des tiers à des fins commerci
             <h2 className="text-base font-bold text-gray-900 mb-3">6. Transferts internationaux de données</h2>
             <p className="whitespace-pre-line">{`Certains de nos sous-traitants (Stripe, Groq, Resend, Vercel) sont établis aux États-Unis. Les transferts de données personnelles vers ces entités sont encadrés par les clauses contractuelles types (CCT/SCCs) adoptées par la Commission européenne conformément à l'article 46 du RGPD, assurant un niveau de protection adéquat.
 
-Vous pouvez obtenir une copie des garanties mises en place pour ces transferts en nous contactant à privacy@conforva.com.
+Vous pouvez obtenir une copie des garanties mises en place pour ces transferts en nous contactant à contact.conforva@gmail.com.
 
 S'agissant des utilisateurs établis hors de l'Union Européenne, les données peuvent également être soumises aux législations locales applicables dans leur pays de résidence. Conforva SAS s'engage à respecter les obligations spécifiques de chaque réglementation nationale applicable (voir sections 8 à 9 ci-après pour les droits spécifiques selon les pays).`}</p>
           </div>
@@ -162,7 +162,7 @@ Droit à la limitation du traitement (art. 18 RGPD) : demander la restriction du
 
 Droit au retrait du consentement : retirer à tout moment votre consentement pour les traitements qui en sont fondés, sans que cela n'affecte la licéité des traitements effectués avant ce retrait.
 
-Pour exercer vos droits, contactez-nous à : privacy@conforva.com. Nous répondrons à votre demande dans un délai maximum d'un (1) mois.
+Pour exercer vos droits, contactez-nous à : contact.conforva@gmail.com. Nous répondrons à votre demande dans un délai maximum d'un (1) mois.
 
 Droit d'introduire une réclamation : vous disposez du droit de déposer une plainte auprès de la Commission Nationale de l'Informatique et des Libertés (CNIL), autorité de contrôle française, à l'adresse : www.cnil.fr. Vous pouvez également vous adresser à l'autorité de contrôle de votre État membre de résidence.`}</p>
           </div>
@@ -183,7 +183,7 @@ Droit à la limitation de l'utilisation des données sensibles : dans la mesure 
 
 Droit à la non-discrimination : l'exercice de vos droits CCPA/CPRA ne donnera lieu à aucun traitement discriminatoire de notre part.
 
-Pour exercer vos droits CCPA/CPRA, contactez-nous à : privacy@conforva.com. Nous répondrons dans les 45 jours suivant réception de votre demande vérifiable.`}</p>
+Pour exercer vos droits CCPA/CPRA, contactez-nous à : contact.conforva@gmail.com. Nous répondrons dans les 45 jours suivant réception de votre demande vérifiable.`}</p>
           </div>
 
           <div>
@@ -195,9 +195,9 @@ Vous disposez des droits suivants :
 — Droit de correction des renseignements inexacts
 — Droit au retrait du consentement, sous réserve de contraintes légales ou contractuelles
 
-Pour exercer ces droits, contactez : privacy@conforva.com.
+Pour exercer ces droits, contactez : contact.conforva@gmail.com.
 
-Note pour les résidents de Chine continentale (PIPL) : Si vous résidez en République Populaire de Chine, vos données sont traitées dans le respect de la Loi sur la protection des informations personnelles (PIPL) entrée en vigueur en novembre 2021. Vous disposez notamment du droit d'accès, de correction, de suppression et de portabilité de vos données. Contactez privacy@conforva.com pour exercer ces droits.`}</p>
+Note pour les résidents de Chine continentale (PIPL) : Si vous résidez en République Populaire de Chine, vos données sont traitées dans le respect de la Loi sur la protection des informations personnelles (PIPL) entrée en vigueur en novembre 2021. Vous disposez notamment du droit d'accès, de correction, de suppression et de portabilité de vos données. Contactez contact.conforva@gmail.com pour exercer ces droits.`}</p>
           </div>
 
           <div>
@@ -213,7 +213,7 @@ Ces mesures comprennent notamment :
 
 En cas de violation de données susceptible d'engendrer un risque pour vos droits et libertés, nous nous engageons à notifier les autorités compétentes dans les 72 heures conformément à l'article 33 du RGPD, et à vous informer dans les meilleurs délais si le risque est élevé.
 
-Malgré ces mesures, aucun système de sécurité n'est infaillible. Si vous suspectez une compromission de votre compte, contactez-nous immédiatement à privacy@conforva.com.`}</p>
+Malgré ces mesures, aucun système de sécurité n'est infaillible. Si vous suspectez une compromission de votre compte, contactez-nous immédiatement à contact.conforva@gmail.com.`}</p>
           </div>
 
           <div>
@@ -242,7 +242,7 @@ La date de dernière mise à jour est indiquée en haut de la présente page. No
             <h2 className="text-base font-bold text-gray-900 mb-3">13. Contact</h2>
             <p className="whitespace-pre-line">{`Pour toute question, demande d'exercice de droits ou réclamation relative à la protection de vos données personnelles :
 
-Email : privacy@conforva.com
+Email : contact.conforva@gmail.com
 Autorité de contrôle compétente (UE) : Commission Nationale de l'Informatique et des Libertés (CNIL) — www.cnil.fr
 Autorité de contrôle compétente (autres pays) : l'autorité nationale de protection des données de votre pays de résidence.`}</p>
           </div>
