@@ -4,19 +4,22 @@ import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 import { Shield, Lock, Server, CreditCard, Eye, Database, Bell } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Sécurité & Confidentialité",
-  description: "Comment Conforva protège vos données : chiffrement TLS, hébergement EU, conformité RGPD, Row Level Security et gestion des incidents sous 72h.",
-  keywords: ["sécurité Conforva", "protection données", "RGPD", "chiffrement", "hébergement EU"],
+  title: "Sécurité & Protection des données — Conforva",
+  description: "Comment Conforva protège vos données : chiffrement TLS 1.3, hébergement UE (Supabase EU), Row Level Security, conformité RGPD et gestion des incidents de sécurité sous 72h.",
+  keywords: [
+    "sécurité Conforva", "protection données RGPD", "hébergement EU données", "chiffrement TLS",
+    "Row Level Security", "conformité RGPD SaaS", "sécurité dossier technique GPSR",
+  ],
   openGraph: {
-    title: "Sécurité & Confidentialité — Conforva",
-    description: "Chiffrement TLS, hébergement EU, conformité RGPD et Row Level Security. Découvrez comment Conforva protège vos données produits.",
+    title: "Sécurité & Protection des données — Conforva",
+    description: "Chiffrement TLS 1.3, hébergement UE, Row Level Security et conformité RGPD. Vos dossiers techniques GPSR sont protégés et accessibles uniquement par vous.",
     url: "https://conforva.com/security",
     type: "website",
   },
   twitter: {
-    card: "summary",
-    title: "Sécurité — Conforva",
-    description: "Chiffrement TLS, hébergement EU, conformité RGPD. Comment Conforva protège vos données.",
+    card: "summary_large_image",
+    title: "Sécurité des données — Conforva",
+    description: "Chiffrement TLS, hébergement EU, RGPD. Comment Conforva protège vos dossiers techniques GPSR.",
   },
   alternates: { canonical: "https://conforva.com/security" },
 }

@@ -59,15 +59,16 @@ const JSON_LD = {
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Conforva — Conformité GPSR pour e-commerçants EU",
+    default: "Conforva — Dossier technique GPSR en 10 minutes",
     template: "%s — Conforva",
   },
-  description: "Générez votre dossier de conformité GPSR (UE 2023/988) en quelques minutes. Analyse de risque IA, dossier technique 15 sections, déclaration de conformité et étiquetage multilingue.",
+  description: "Conforva génère votre dossier technique GPSR (UE 2023/988) en moins de 10 minutes : analyse de risque ISO 12100, 15 sections obligatoires, déclaration de conformité et étiquetage multilingue. Gratuit pour votre première référence.",
   keywords: [
-    "GPSR", "conformité GPSR", "dossier technique GPSR", "règlement UE 2023/988",
+    "Conforva", "GPSR", "conformité GPSR", "dossier technique GPSR", "règlement UE 2023/988",
     "analyse de risque ISO 12100", "déclaration de conformité UE", "étiquetage sécurité",
-    "conformité produit UE", "personne responsable EU", "e-commerce conformité",
-    "sécurité produit", "Amazon FBA conformité", "dossier technique",
+    "conformité produit UE", "personne responsable EU", "e-commerce conformité Europe",
+    "sécurité produit", "Amazon FBA conformité GPSR", "dossier technique Article 22",
+    "logiciel conformité GPSR", "SaaS conformité produit",
   ],
   authors: [{ name: "Conforva", url: BASE_URL }],
   creator: "Conforva",
@@ -85,15 +86,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Conforva",
-    title: "Conforva — Conformité GPSR pour e-commerçants EU",
-    description: "Générez votre dossier de conformité GPSR en quelques minutes. Analyse de risque, dossier technique 15 sections, étiquetage multilingue.",
+    title: "Conforva — Dossier technique GPSR en 10 minutes",
+    description: "Conforva génère votre dossier technique GPSR (UE 2023/988) en moins de 10 minutes : analyse de risque ISO 12100, déclaration de conformité et étiquetage multilingue. Gratuit pour votre première référence.",
     url: BASE_URL,
     locale: "fr_FR",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Conforva — Conformité GPSR pour e-commerçants EU",
-    description: "Générez votre dossier de conformité GPSR en quelques minutes. Dossier technique, analyse de risque, étiquetage multilingue.",
+    title: "Conforva — Dossier technique GPSR en 10 minutes",
+    description: "Analyse de risque ISO 12100, dossier 15 sections, déclaration de conformité et étiquetage multilingue. Gratuit pour votre première référence.",
   },
   alternates: { canonical: BASE_URL },
 }
