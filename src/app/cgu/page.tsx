@@ -69,7 +69,7 @@ Conforva SAS se réserve le droit de faire évoluer les fonctionnalités du Serv
 L'accès au Service nécessite la création d'un compte utilisateur en fournissant une adresse électronique valide et un mot de passe, ou en s'authentifiant via un fournisseur d'identité tiers (ex. : Google). L'utilisateur s'engage à fournir des informations exactes, complètes et à jour.
 
 3.2 Sécurité des identifiants
-L'utilisateur est seul responsable de la confidentialité de ses identifiants d'accès. Il s'engage à notifier immédiatement Conforva SAS de tout accès non autorisé à son compte à l'adresse legal@conforva.com. Conforva SAS ne saurait être tenu responsable des conséquences d'un accès frauduleux résultant d'une négligence de l'utilisateur.
+L'utilisateur est seul responsable de la confidentialité de ses identifiants d'accès. Il s'engage à notifier immédiatement Conforva SAS de tout accès non autorisé à son compte à l'adresse contact.conforva@gmail.com. Conforva SAS ne saurait être tenu responsable des conséquences d'un accès frauduleux résultant d'une négligence de l'utilisateur.
 
 3.3 Compte d'organisation
 L'utilisateur peut créer ou rejoindre un compte d'organisation. L'administrateur de l'organisation est responsable des accès accordés aux membres de son équipe et de l'utilisation du Service par ces derniers.
@@ -185,7 +185,7 @@ Les abonnements payants sont facturés de manière mensuelle ou annuelle selon l
 Les abonnements se renouvellent automatiquement à l'échéance de chaque période de facturation, sauf résiliation effectuée avant la date d'échéance dans les paramètres du compte. L'utilisateur sera informé du renouvellement par email.
 
 8.4 Droit de rétractation et remboursements
-Conformément à l'article L. 221-18 du Code de la consommation, l'utilisateur consommateur bénéficie d'un droit de rétractation de 14 jours à compter de la souscription d'un abonnement payant, sauf s'il a expressément demandé l'exécution immédiate du Service. La demande de remboursement doit être adressée à legal@conforva.com.
+Conformément à l'article L. 221-18 du Code de la consommation, l'utilisateur consommateur bénéficie d'un droit de rétractation de 14 jours à compter de la souscription d'un abonnement payant, sauf s'il a expressément demandé l'exécution immédiate du Service. La demande de remboursement doit être adressée à contact.conforva@gmail.com.
 
 Au-delà du délai de 14 jours, aucun remboursement prorata temporis ne sera accordé, sauf en cas de défaut majeur et documenté du Service imputable à Conforva SAS.`}</p>
           </div>
@@ -215,7 +215,7 @@ La résiliation du compte entraîne la perte d'accès aux fonctionnalités du Se
 
 Conforva SAS traite les données personnelles des utilisateurs en qualité de responsable du traitement, dans le respect du Règlement (UE) 2016/679 relatif à la protection des données personnelles (RGPD) et des lois nationales applicables.
 
-Pour toute question relative au traitement de vos données personnelles ou pour exercer vos droits, contactez : privacy@conforva.com.`}</p>
+Pour toute question relative au traitement de vos données personnelles ou pour exercer vos droits, contactez : contact.conforva@gmail.com.`}</p>
           </div>
 
           <div>
@@ -245,7 +245,7 @@ Conforva SAS se réserve le droit de céder tout ou partie de ses droits et obli
 Le fait pour Conforva SAS de ne pas se prévaloir à un moment donné de l'une quelconque des dispositions des présentes CGU ne peut être interprété comme une renonciation à s'en prévaloir ultérieurement.
 
 12.5 Contact
-Pour toute question relative aux présentes CGU : legal@conforva.com`}</p>
+Pour toute question relative aux présentes CGU : contact.conforva@gmail.com`}</p>
           </div>
 
         </div>

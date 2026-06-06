@@ -72,11 +72,11 @@ export async function POST(req: NextRequest) {
       const shouldWatermark = isFree || (tf?.watermarked ?? true)
       if (type === "declaration") {
         pdfBuffer = await renderToBuffer(
-          DeclarationOfConformityPDF({ product, org, rp, riskAssessment: ra, watermarked: shouldWatermark })
+          DeclarationOfConformityPDF({ product, org, rp, riskAssessment: ra, watermarked: shouldWatermark, branded: isFree })
         )
       } else {
         pdfBuffer = await renderToBuffer(
-          TechnicalFilePDF({ product, org, rp, riskAssessment: ra, technicalFile: tf, language, watermarked: shouldWatermark })
+          TechnicalFilePDF({ product, org, rp, riskAssessment: ra, technicalFile: tf, language, watermarked: shouldWatermark, branded: isFree })
         )
       }
     } else {
@@ -92,14 +92,15 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    return new NextResponse(new Uint8Array(pdfBuffer), {
+    return new NextResponse(pdfBuffer, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="conforva-${type}-${language}.pdf"`,
       },
     })
   } catch (err) {
-    console.error("PDF generation error:", err)
-    return NextResponse.json({ error: "PDF generation failed", details: String(err) }, { status: 500 })
+    const message = err instanceof Error ? err.message : String(err)
+    console.error("PDF generation error:", message, err)
+    return NextResponse.json({ error: "PDF generation failed", details: message }, { status: 500 })
   }
 }

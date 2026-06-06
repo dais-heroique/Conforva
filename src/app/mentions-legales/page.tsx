@@ -36,7 +36,7 @@ Conforva SAS
 Forme juridique : Société par actions simplifiée (SAS)
 Statut : en cours d'immatriculation au Registre du Commerce et des Sociétés
 Siège social : France
-Email : legal@conforva.com
+Email : contact.conforva@gmail.com
 
 Conforva SAS est une société de droit français soumise au droit commercial français.`}</p>
           </div>
@@ -47,7 +47,7 @@ Conforva SAS est une société de droit français soumise au droit commercial fr
 
 [Nom du fondateur — à compléter lors de l'immatriculation]
 
-Contact : legal@conforva.com`}</p>
+Contact : contact.conforva@gmail.com`}</p>
           </div>
 
           <div>
@@ -97,7 +97,7 @@ Les documents produits par l'utilisateur via le Service appartiennent à l'utili
 
 Conformément au Règlement (UE) 2016/679 (RGPD) et à la loi n° 78-17 du 6 janvier 1978 modifiée (Loi Informatique et Libertés), tout utilisateur dispose d'un droit d'accès, de rectification, d'effacement, de portabilité et d'opposition concernant les données le concernant.
 
-Pour exercer ces droits : privacy@conforva.com
+Pour exercer ces droits : contact.conforva@gmail.com
 Autorité de contrôle : Commission Nationale de l'Informatique et des Libertés (CNIL) — www.cnil.fr`}</p>
           </div>
 
@@ -138,7 +138,7 @@ Technologies utilisées : Next.js (Vercel), Supabase, Stripe, Groq, Resend, Tail
 
           <div className="border-t border-gray-100 pt-6">
             <p className="text-xs text-gray-400 text-center">
-              Pour toute question : <a href="mailto:legal@conforva.com" className="underline hover:text-gray-600 transition-colors">legal@conforva.com</a>
+              Pour toute question : <a href="mailto:contact.conforva@gmail.com" className="underline hover:text-gray-600 transition-colors">contact.conforva@gmail.com</a>
               {" · "}
               <Link href="/cgu" className="underline hover:text-gray-600 transition-colors">CGU</Link>
               {" · "}
