@@ -411,7 +411,8 @@ Retourne UNIQUEMENT le JSON suivant, sans aucun texte avant ou après, sans bali
       try {
         response = await openai.chat.completions.create({
           model,
-          max_tokens: 16000,
+          max_tokens: 32768,
+          response_format: { type: "json_object" },
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt },
