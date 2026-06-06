@@ -32,12 +32,22 @@ export async function POST(req: NextRequest) {
 
   const isFree = !userData?.plan || userData.plan === "free"
 
-  const { data: rp } = await supabase
-    .from("responsible_persons")
-    .select("*")
-    .eq("org_id", org?.id ?? "")
-    .eq("status", "active")
-    .single()
+  // Load the product's assigned RP if any, otherwise fall back to the first active RP
+  const productRpId = (product as any).responsible_person_id as string | null
+  let rp: any = null
+  if (productRpId) {
+    const { data } = await supabase.from("responsible_persons").select("*").eq("id", productRpId).single()
+    rp = data
+  } else if (org?.id) {
+    const { data } = await supabase
+      .from("responsible_persons")
+      .select("*")
+      .eq("org_id", org.id)
+      .eq("status", "active")
+      .limit(1)
+      .maybeSingle()
+    rp = data
+  }
 
   try {
     let pdfBuffer: Buffer
