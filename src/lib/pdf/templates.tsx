@@ -502,7 +502,10 @@ export function TechnicalFilePDF({
   // Data arrays
   const hazards: any[] = ra.hazards ?? []
   const mitigations: any[] = ra.mitigation_measures ?? []
-  const standards: string[] = ra.referenced_standards ?? []
+  const rawStds = ra.referenced_standards ?? []
+  const standards: string[] = rawStds.map((s: any) =>
+    typeof s === "string" ? s : `${s?.code ?? ""}${s?.title ? ` — ${s.title}` : ""}${s?.status ? ` [${s.status}]` : ""}`
+  )
   const requiredTests: any[] = ra.required_tests ?? []
   const residualRisks: any[] = ra.residual_risks ?? []
   const bomComponents: any[] = tf.bom_components ?? []
@@ -1463,7 +1466,10 @@ export function DeclarationOfConformityPDF({
 }: PDFProps) {
   const ra = (riskAssessment?.content_json ?? {}) as any
   const doc = (ra.declaration_of_conformity_content ?? {}) as any
-  const standards: string[] = ra.referenced_standards ?? []
+  const rawStds = ra.referenced_standards ?? []
+  const standards: string[] = rawStds.map((s: any) =>
+    typeof s === "string" ? s : `${s?.code ?? ""}${s?.title ? ` — ${s.title}` : ""}`
+  )
   const docRef = buildDocRef(product?.id ?? "", "DOC")
   const genDate = todayStr()
   const category = product?.product_categories
@@ -1577,12 +1583,14 @@ export function DeclarationOfConformityPDF({
         <View style={base.declSection}>
           <Text style={base.declH1}>5. NORMES HARMONISÉES ET AUTRES NORMES APPLIQUÉES</Text>
           {standards.length > 0 ? (
-            (doc.standards_complied ?? standards).map((s: string, i: number) => (
+            (doc.standards_complied ?? standards).map((s: any, i: number) => {
+              const label = typeof s === "string" ? s : `${s?.code ?? ""}${s?.title ? ` — ${s.title}` : ""}`
+              return (
               <View key={i} style={{ flexDirection: "row", marginBottom: 4 }}>
                 <Text style={{ width: 14, color: BLUE }}>•</Text>
-                <Text style={{ flex: 1, fontSize: 8.5 }}>{s}</Text>
+                <Text style={{ flex: 1, fontSize: 8.5 }}>{label}</Text>
               </View>
-            ))
+            )})
           ) : (
             <Text style={base.declBody}>
               Aucune norme harmonisée spécifique appliquée — conformité établie par évaluation directe aux exigences essentielles du Règlement (UE) 2023/988.
@@ -1633,8 +1641,8 @@ export function DeclarationOfConformityPDF({
         </View>
 
         {/* Disclaimer */}
-        <View style={[base.disclaimer, { position: "relative", bottom: "auto", left: "auto", right: "auto", marginTop: 14 }]}>
-          <Text>
+        <View style={{ marginTop: 14, borderTop: `1 solid ${AMBER_BORDER}`, paddingTop: 7, backgroundColor: AMBER_BG, padding: 7, borderRadius: 3 }}>
+          <Text style={{ fontSize: 7, color: AMBER_TEXT }}>
             Ce document a été généré par Conforva (aide à la conformité). Il doit être complété, relu et signé par le responsable légal avant tout usage officiel. Il ne constitue pas en lui-même un acte légal sans signature manuscrite ou électronique certifiée.
           </Text>
         </View>
