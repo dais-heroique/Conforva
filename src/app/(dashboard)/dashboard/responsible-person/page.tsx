@@ -14,12 +14,6 @@ import { EU_COUNTRIES } from "@/lib/utils"
 import type { ResponsiblePersonRow } from "@/types/supabase"
 import { useT } from "@/components/providers/locale-provider"
 
-const TYPE_LABELS: Record<string, string> = {
-  manufacturer: "Fabricant",
-  importer: "Importateur",
-  authorized_rep: "Représentant autorisé",
-}
-
 const EMPTY_FORM = {
   type: "manufacturer" as const,
   company_name: "",
@@ -123,7 +117,7 @@ export default function ResponsiblePersonPage() {
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Supprimer cette personne responsable ?")) return
+    if (!confirm(tRp.deleteConfirm)) return
     setDeleting(id)
     const supabase = createClient()
     const { error: err } = await supabase.from("responsible_persons").delete().eq("id", id)
@@ -150,7 +144,7 @@ export default function ResponsiblePersonPage() {
         {!showForm && (
           <Button onClick={startAdd} className="gap-2 shrink-0">
             <Plus className="h-4 w-4" />
-            Ajouter
+            {tRp.addBtn}
           </Button>
         )}
       </div>
@@ -189,7 +183,7 @@ export default function ResponsiblePersonPage() {
                           {rp.status === "active" ? tRp.statusActive : tRp.statusInactive}
                         </Badge>
                         <span className="text-xs text-gray-400 bg-gray-100 rounded px-1.5 py-0.5 shrink-0">
-                          {TYPE_LABELS[rp.type] ?? rp.type}
+                          {(tRp.types as Record<string, string>)[rp.type] ?? rp.type}
                         </span>
                       </div>
                       <p className="text-sm text-gray-500 mt-0.5">

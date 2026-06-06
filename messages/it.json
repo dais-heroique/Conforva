@@ -494,7 +494,14 @@
       "save": "Salva",
       "savedSuccess": "Informazioni salvate con successo.",
       "statusActive": "Attiva",
-      "statusInactive": "Inattiva"
+      "statusInactive": "Inattiva",
+      "addBtn": "Aggiungi",
+      "editTitle": "Modifica persona responsabile",
+      "cancelBtn": "Annulla",
+      "deleteConfirm": "Eliminare questa persona responsabile?",
+      "emptyTitle": "Nessuna persona responsabile configurata",
+      "emptyDesc": "Aggiungine una per completare i tuoi fascicoli tecnici.",
+      "emptyBtn": "Aggiungi una persona responsabile"
     },
     "labels": {
       "title": "Etichette multilingue",
