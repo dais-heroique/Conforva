@@ -154,6 +154,12 @@ export async function POST(req: NextRequest) {
     .eq("owner_id", user.id)
     .single()
 
+  // Load selected responsible person if assigned to this product
+  const rpId = (product as any).responsible_person_id as string | null
+  const { data: responsiblePerson } = rpId
+    ? await supabase.from("responsible_persons").select("*").eq("id", rpId).single()
+    : { data: null }
+
   // Fetch product page if URL provided
   const productUrl = (product as any).product_url as string | null
   const webContent = productUrl ? await fetchProductPageText(productUrl) : ""
@@ -163,6 +169,9 @@ export async function POST(req: NextRequest) {
     (qr?.answers as any)?.bom_components ?? []
 
   const category = (product as any).product_categories
+  const categoryDescription = (product as any).metadata_json?.category_description as string | null
+  const isOtherCategory = category?.code === "other"
+
   const standardsText = standards?.map(s =>
     `Norme ${s.code} — ${s.title}: ${s.summary}\nExigences: ${JSON.stringify(s.requirements)}`
   ).join("\n\n") ?? "Règlement GPSR 2023/988 applicable"
@@ -195,14 +204,44 @@ TES PRINCIPES FONDAMENTAUX:
 4. Tu fournis des recommandations concrètes, actionnables et hiérarchisées par priorité
 5. Tu génères des sorties JSON parfaitement structurées, sans troncature, sans commentaire hors JSON
 6. Tu fournis toujours une aide à la conformité, jamais une garantie juridique absolue — tu le rappelles en disclaimer
-7. Ton analyse est exhaustive, professionnelle, et immédiatement exploitable par un responsable conformité ou un organisme notifié`
+7. Ton analyse est exhaustive, professionnelle, et immédiatement exploitable par un responsable conformité ou un organisme notifié
+
+RÈGLES DE NUANCE ET DE PROPORTIONNALITÉ — applique-les systématiquement:
+
+LANGAGE: N'utilise jamais "OBLIGATOIRE" ou "sine qua non" de façon absolue. Utilise "applicable", "requis selon [norme/article]", "à vérifier", "recommandé". La conformité est une démarche, pas une sanction immédiate.
+
+HIÉRARCHIE DES NORMES — distingue impérativement:
+- Réglementations EU contraignantes: GPSR 2023/988, RED 2014/53/UE, CEM 2014/30/UE, RoHS 2011/65/UE, REACH 1907/2006 → ces textes créent des obligations légales directes
+- Normes harmonisées EN (présomption de conformité mais pas obligation d'utilisation): EN 60335, EN 62368, EN 71, etc.
+- Normes volontaires/industrielles: UL94 (classification matière au feu, norme UL américaine — NON une norme CE), ASTM, ISO génériques → à mentionner avec leur statut réel (advisory/optional)
+- NE PAS présenter UL94, UL 508, ANSI, etc. comme des exigences CE obligatoires — ce sont des standards industriels ou américains
+
+PROPORTIONNALITÉ DES RISQUES:
+- Pour les produits à basse tension (<12V), sans pièces mobiles dangereuses, sans substances toxiques: ne pas dramatiser. Niveau de risque "low" ou "medium" est souvent le plus honnête.
+- Pour les jouets/produits enfants, cosmétiques, appareils électriques >50V: appliquer une analyse plus stricte.
+- Le niveau de risque doit refléter la réalité du produit, pas générer de l'anxiété inutile.
+
+CHAMP D'APPLICATION:
+- N'applique RED que si le produit émet/reçoit des ondes radio
+- N'applique RoHS que si le produit contient des composants électriques/électroniques
+- N'applique REACH SVHC que si les matériaux mentionnés sont susceptibles de contenir des substances préoccupantes (≥0,1% poids)
+- Si le produit est simple (décoration, textile basique, accessoire mécanique): le dossier GPSR peut suffire sans toutes les directives sectorielles`
+
+  const rpBlock = responsiblePerson
+    ? `\n=== PERSONNE RESPONSABLE UE DÉSIGNÉE ===
+- Société: ${responsiblePerson.company_name}
+- Type: ${responsiblePerson.type}
+- Adresse: ${responsiblePerson.address_line}, ${responsiblePerson.postal_code} ${responsiblePerson.city}, ${responsiblePerson.country_eu}
+- Email: ${responsiblePerson.email}${responsiblePerson.phone ? `\n- Téléphone: ${responsiblePerson.phone}` : ""}
+Cette personne responsable doit figurer dans la Déclaration de Conformité et sur l'étiquetage du produit (GPSR Art. 16).\n`
+    : ""
 
   const userPrompt = `Génère une analyse de risque et un dossier technique international complets pour ce produit. Couvre TOUS les marchés détectés avec leurs exigences spécifiques.
 
 === DONNÉES PRODUIT ===
 - Nom: ${product.name}
 - Référence / SKU: ${product.reference ?? "N/A"}
-- Catégorie: ${category?.name_fr ?? "Divers"} (code: ${category?.code ?? "other"})
+- Catégorie: ${category?.name_fr ?? "Divers"} (code: ${category?.code ?? "other"})${isOtherCategory && categoryDescription ? `\n- Description détaillée du produit (catégorie "Autre" — utilise cette description comme base principale de l'analyse): ${categoryDescription}` : ""}
 - Usage prévu: ${product.intended_use ?? "Non spécifié"}
 - Matériaux / Composants: ${(product as any).materials?.join(", ") ?? "Non spécifiés"}
 
@@ -216,7 +255,7 @@ Utilise cette nomenclature pour l'évaluation REACH/RoHS (substances dans les ma
 - Organisation fabricant/importateur: ${org?.name ?? "Non spécifiée"} (pays: ${org?.country ?? "EU"})
 ${productUrl ? `- URL page produit: ${productUrl}` : ""}
 
-=== EXIGENCES PAR MARCHÉ DÉTECTÉ ===
+${rpBlock}=== EXIGENCES PAR MARCHÉ DÉTECTÉ ===
 ${marketGuidance || "- UE: GPSR UE 2023/988 applicable par défaut"}
 
 === RÉPONSES QUESTIONNAIRE DE CONFORMITÉ ===
@@ -331,13 +370,21 @@ Retourne UNIQUEMENT le JSON suivant, sans aucun texte avant ou après, sans bali
       "specific_requirements": ["..."]
     }
   },
-  "referenced_standards": ["Liste complète des normes citées dans l'analyse"],
+  "referenced_standards": [
+    {
+      "code": "Ex: EN 62368-1:2020",
+      "title": "Titre de la norme",
+      "status": "applicable|optional|advisory",
+      "status_note": "Ex: norme harmonisée RED — applicable si produit radio / norme volontaire ISO / standard industriel US non requis en UE"
+    }
+  ],
   "required_tests": [
     {
       "test": "Nom du test",
       "standard": "Norme de référence",
-      "mandatory": true,
-      "laboratory_accreditation": "ISO 17025 recommandé"
+      "status": "mandatory|recommended|advisory",
+      "status_justification": "Ex: requis par EN XXXXX pour conformité CE / recommandé pour démontrer conformité GPSR / standard industriel pour information",
+      "laboratory_accreditation": "ISO 17025 recommandé si mandatory"
     }
   ],
   "reach_svhc_assessment": "Évaluation REACH substances préoccupantes (SVHC) — pertinence et liste de substances à vérifier",
@@ -491,6 +538,12 @@ Retourne UNIQUEMENT le JSON suivant, sans aucun texte avant ou après, sans bali
 
     const version = (count ?? 0) + 1
 
+    // Normalize referenced_standards: accept both string[] and object[] formats
+    const rawStandards = analysisData.referenced_standards ?? []
+    const normalizedStandards: string[] = Array.isArray(rawStandards)
+      ? rawStandards.map((s: unknown) => (typeof s === "string" ? s : (s as any)?.code ?? String(s)))
+      : []
+
     const { data: ra, error: raErr } = await supabase
       .from("risk_assessments")
       .insert({
@@ -499,7 +552,7 @@ Retourne UNIQUEMENT le JSON suivant, sans aucun texte avant ou après, sans bali
         hazards: analysisData.hazards ?? [],
         severity: analysisData.overall_severity ?? "medium",
         mitigation: analysisData.mitigation_measures ?? [],
-        referenced_standards: analysisData.referenced_standards ?? [],
+        referenced_standards: normalizedStandards,
         status: "draft",
         validated_by_human: false,
         ai_model: usedModel,
