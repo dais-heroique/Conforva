@@ -5,19 +5,19 @@ import { Button } from "@/components/ui/button"
 import { CheckCircle2, ShieldCheck, Globe, FileText, ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "À propos",
-  description: "Conforva simplifie la conformité GPSR pour les e-commerçants et vendeurs en ligne. Découvrez notre mission : rendre la conformité (UE) 2023/988 accessible à tous.",
-  keywords: ["Conforva", "à propos", "conformité GPSR", "mission", "SaaS conformité"],
+  title: "À propos de Conforva — Notre mission GPSR",
+  description: "Conforva est un SaaS de conformité GPSR (UE 2023/988) qui génère dossiers techniques, analyses de risque ISO 12100 et étiquetage multilingue en moins de 10 minutes. Découvrez notre mission.",
+  keywords: ["Conforva", "à propos Conforva", "qui sommes nous", "conformité GPSR SaaS", "mission conformité produit", "logiciel conformité UE"],
   openGraph: {
-    title: "À propos de Conforva",
-    description: "Conforva simplifie la conformité GPSR pour les e-commerçants et vendeurs en ligne. Notre mission : rendre la conformité (UE) 2023/988 accessible à tous.",
+    title: "À propos de Conforva — SaaS de conformité GPSR",
+    description: "Conforva génère dossiers techniques GPSR, analyses de risque ISO 12100 et étiquetage multilingue en moins de 10 minutes. Notre mission : rendre la conformité accessible à tous les e-commerçants.",
     url: "https://conforva.com/about",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "À propos de Conforva",
-    description: "Conforva simplifie la conformité GPSR pour les e-commerçants et vendeurs en ligne.",
+    title: "À propos de Conforva — SaaS de conformité GPSR",
+    description: "Conforva génère dossiers techniques GPSR et analyses de risque ISO 12100 en moins de 10 minutes.",
   },
   alternates: { canonical: "https://conforva.com/about" },
 }

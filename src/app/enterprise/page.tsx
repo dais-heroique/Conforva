@@ -8,22 +8,23 @@ import {
 } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Enterprise — Conformité GPSR pour grands comptes",
-  description: "Solution Enterprise Conforva : tarification dégressive au volume, gestionnaire de compte dédié, SLA garantis. Pour les e-commerçants gérant plus de 150 références GPSR par mois.",
+  title: "Conforva Enterprise — Conformité GPSR pour catalogues 150+ références",
+  description: "Solution Enterprise Conforva : tarification dégressive au volume (à partir de 490 €/mois), gestionnaire de compte dédié, SLA 99,9 %, API access et workspace multi-utilisateurs. Pour catalogues de 150 à 10 000+ références.",
   keywords: [
     "Conforva Enterprise", "conformité GPSR grands comptes", "SaaS conformité volume",
-    "dossier technique en masse", "GPSR e-commerce", "conformité catalogue produit",
+    "dossier technique en masse", "GPSR catalogue produit", "conformité GPSR API",
+    "plateforme conformité e-commerce", "GPSR importateur volume", "compliance SaaS enterprise",
   ],
   openGraph: {
-    title: "Conforva Enterprise — Conformité GPSR pour grands comptes",
-    description: "Tarification dégressive au volume, SLA garantis et gestionnaire dédié. Pour les catalogues de 150 à 10 000+ références.",
+    title: "Conforva Enterprise — Conformité GPSR pour grands catalogues",
+    description: "Tarification dégressive au volume, SLA 99,9 %, API access et gestionnaire dédié. Pour catalogues GPSR de 150 à 10 000+ références.",
     url: "https://conforva.com/enterprise",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Conforva Enterprise — GPSR pour grands comptes",
-    description: "Tarification dégressive, SLA garantis, gestionnaire dédié. Pour 150 à 10 000+ références.",
+    title: "Conforva Enterprise — GPSR pour 150 à 10 000+ références",
+    description: "Tarification dégressive, SLA 99,9 %, API access, gestionnaire dédié. Solution Enterprise GPSR.",
   },
   alternates: { canonical: "https://conforva.com/enterprise" },
 }

@@ -4,22 +4,23 @@ import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 import { ChevronDown } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "FAQ — Questions fréquentes",
-  description: "Toutes les réponses sur la conformité GPSR : dossier technique obligatoire, analyse de risque, déclaration de conformité, étiquetage, personne responsable EU et utilisation de Conforva.",
+  title: "FAQ GPSR — Réponses à vos questions sur la conformité",
+  description: "Toutes les réponses aux questions sur le GPSR (UE 2023/988) : qui est concerné, quels documents, quel coût, Amazon, Etsy, Shopify, dropshipping, jouets, bougies, électronique. Clair et direct.",
   keywords: [
-    "FAQ GPSR", "questions conformité GPSR", "dossier technique obligatoire",
-    "analyse de risque produit", "déclaration conformité UE", "personne responsable EU",
+    "FAQ GPSR", "questions GPSR", "suis-je concerné GPSR", "dossier technique obligatoire",
+    "analyse de risque GPSR", "déclaration conformité UE", "personne responsable EU GPSR",
+    "GPSR Amazon", "GPSR Shopify", "GPSR Etsy", "coût conformité GPSR",
   ],
   openGraph: {
-    title: "FAQ — Questions fréquentes sur la conformité GPSR",
-    description: "Toutes les réponses sur le GPSR : dossier technique, analyse de risque, déclaration de conformité, étiquetage et personne responsable EU.",
+    title: "FAQ GPSR — Toutes les réponses sur la conformité (UE) 2023/988",
+    description: "Qui est concerné par le GPSR ? Quels documents ? Quel coût ? Amazon, Etsy, Shopify, dropshipping — réponses claires à toutes vos questions.",
     url: "https://conforva.com/faq",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "FAQ GPSR — Questions fréquentes",
-    description: "Toutes les réponses sur le GPSR : dossier technique, analyse de risque, déclaration de conformité.",
+    title: "FAQ GPSR — Vos questions, nos réponses",
+    description: "Qui est concerné, quels documents, quel coût, Amazon, Etsy — toutes les réponses sur la conformité GPSR.",
   },
   alternates: { canonical: "https://conforva.com/faq" },
 }
