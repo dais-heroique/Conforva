@@ -92,7 +92,8 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    return new NextResponse(pdfBuffer, {
+    const ab = pdfBuffer.buffer.slice(pdfBuffer.byteOffset, pdfBuffer.byteOffset + pdfBuffer.byteLength) as ArrayBuffer
+    return new NextResponse(new Blob([ab], { type: "application/pdf" }), {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="conforva-${type}-${language}.pdf"`,
