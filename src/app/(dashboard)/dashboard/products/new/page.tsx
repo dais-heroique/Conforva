@@ -10,9 +10,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Package, ArrowRight, ArrowLeft, Lock, Zap } from "lucide-react"
+import { Loader2, Package, ArrowRight, ArrowLeft, Lock, Zap, Shield } from "lucide-react"
 import Link from "next/link"
-import type { CategoryRow } from "@/types/supabase"
+import type { CategoryRow, ResponsiblePersonRow } from "@/types/supabase"
 import { PLAN_LIMITS, type Plan } from "@/types/supabase"
 import { EU_COUNTRIES } from "@/lib/utils"
 import { useT } from "@/components/providers/locale-provider"
@@ -32,6 +32,7 @@ export default function NewProductPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [categories, setCategories] = useState<CategoryRow[]>([])
+  const [responsiblePersons, setResponsiblePersons] = useState<ResponsiblePersonRow[]>([])
 
   // Plan limit state
   const [checkingAccess, setCheckingAccess] = useState(true)
@@ -39,11 +40,11 @@ export default function NewProductPage() {
   const [userPlan, setUserPlan] = useState<Plan>("free")
   const [productCount, setProductCount] = useState(0)
 
-
   const [form, setForm] = useState({
     name: "",
     reference: "",
     category_id: "",
+    category_description: "",
     product_url: "",
     intended_use: "",
     weight_g: "",
@@ -52,6 +53,7 @@ export default function NewProductPage() {
     height_mm: "",
     target_markets: ["FR"] as string[],
     materials: "",
+    responsible_person_id: "",
   })
 
   useEffect(() => {
@@ -72,13 +74,14 @@ export default function NewProductPage() {
         const plan = (userData.plan ?? "free") as Plan
         setUserPlan(plan)
 
-        const { count } = await supabase
-          .from("products")
-          .select("id", { count: "exact", head: true })
-          .eq("org_id", org.id)
+        const [{ count }, { data: rps }] = await Promise.all([
+          supabase.from("products").select("id", { count: "exact", head: true }).eq("org_id", org.id),
+          supabase.from("responsible_persons").select("*").eq("org_id", org.id).eq("status", "active"),
+        ])
 
         const current = count ?? 0
         setProductCount(current)
+        if (rps) setResponsiblePersons(rps)
 
         if (current >= PLAN_LIMITS[plan]) {
           setLimitReached(true)
@@ -113,6 +116,9 @@ export default function NewProductPage() {
     const { data: org } = await supabase.from("organizations").select("id").eq("owner_id", user.id).single()
     if (!org) return
 
+    const selectedCat = categories.find(c => c.id === form.category_id)
+    const isOther = selectedCat?.code === "other"
+
     const { data: product, error: err } = await supabase.from("products").insert({
       org_id: org.id,
       name: form.name,
@@ -128,6 +134,10 @@ export default function NewProductPage() {
       } : null,
       target_markets: form.target_markets,
       materials: form.materials ? form.materials.split(",").map(m => m.trim()).filter(Boolean) : [],
+      responsible_person_id: form.responsible_person_id || null,
+      metadata_json: isOther && form.category_description
+        ? { category_description: form.category_description }
+        : null,
     }).select().single()
 
     if (err) { setError(err.message); setLoading(false); return }
@@ -136,6 +146,7 @@ export default function NewProductPage() {
   }
 
   const selectedCategory = categories.find(c => c.id === form.category_id)
+  const isOtherCategory = selectedCategory?.code === "other"
   const tNp = t.dashboard.newProduct
 
   if (checkingAccess) {
@@ -230,7 +241,7 @@ export default function NewProductPage() {
             </div>
             <div className="space-y-2">
               <Label>{tNp.step1.category}</Label>
-              <Select value={form.category_id} onValueChange={v => update("category_id", v)}>
+              <Select value={form.category_id} onValueChange={v => { update("category_id", v); update("category_description", "") }}>
                 <SelectTrigger>
                   <SelectValue placeholder={tNp.step1.categoryPlaceholder} />
                 </SelectTrigger>
@@ -242,7 +253,7 @@ export default function NewProductPage() {
                   ))}
                 </SelectContent>
               </Select>
-              {selectedCategory && (
+              {selectedCategory && !isOtherCategory && (
                 <div className="rounded-lg bg-blue-50 border border-blue-100 p-3 text-sm space-y-1">
                   <p className="font-medium text-blue-900">{selectedCategory.name_fr}</p>
                   <p className="text-blue-700">{selectedCategory.description}</p>
@@ -251,11 +262,67 @@ export default function NewProductPage() {
                   </p>
                 </div>
               )}
+              {isOtherCategory && (
+                <div className="space-y-2">
+                  <Label htmlFor="category_description" className="text-sm font-medium">
+                    Décrivez votre produit <span className="text-red-500">*</span>
+                  </Label>
+                  <Textarea
+                    id="category_description"
+                    placeholder="Ex : Lampe de bureau LED rechargeable, plastique ABS, usage intérieur adultes..."
+                    value={form.category_description}
+                    onChange={e => update("category_description", e.target.value)}
+                    rows={3}
+                    className="text-sm"
+                  />
+                  <p className="text-xs text-gray-400">
+                    Cette description aide l'IA à identifier les normes et risques applicables à votre produit.
+                  </p>
+                </div>
+              )}
             </div>
+
+            {responsiblePersons.length > 0 && (
+              <div className="space-y-2">
+                <Label className="flex items-center gap-1.5">
+                  <Shield className="h-3.5 w-3.5 text-blue-600" />
+                  Personne Responsable UE
+                  <span className="text-xs text-gray-400 font-normal">(optionnel)</span>
+                </Label>
+                <Select value={form.responsible_person_id} onValueChange={v => update("responsible_person_id", v)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionner une personne responsable..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Aucune</SelectItem>
+                    {responsiblePersons.map(rp => (
+                      <SelectItem key={rp.id} value={rp.id}>
+                        {rp.company_name} — {rp.city}, {rp.country_eu}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-gray-400">
+                  Requis pour les importateurs hors UE (GPSR Art. 16).{" "}
+                  <Link href="/dashboard/responsible-person" className="underline hover:text-gray-600">Gérer mes personnes responsables →</Link>
+                </p>
+              </div>
+            )}
+
+            {responsiblePersons.length === 0 && (
+              <div className="rounded-lg border border-amber-100 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                <p className="font-medium">Personne Responsable UE non configurée</p>
+                <p className="text-xs mt-0.5">
+                  Si vous importez depuis hors UE, vous devez désigner une Personne Responsable (GPSR Art. 16).{" "}
+                  <Link href="/dashboard/responsible-person" className="underline hover:text-amber-900">Configurer maintenant →</Link>
+                </p>
+              </div>
+            )}
+
             <Button
               className="w-full gap-2"
               onClick={() => setStep(2)}
-              disabled={!form.name || !form.category_id}
+              disabled={!form.name || !form.category_id || (isOtherCategory && !form.category_description)}
             >
               {tNp.step1.continue} <ArrowRight className="h-4 w-4" />
             </Button>

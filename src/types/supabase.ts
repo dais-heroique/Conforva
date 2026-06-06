@@ -196,6 +196,7 @@ export type Database = {
           org_id: string
           product_url: string | null
           reference: string | null
+          responsible_person_id: string | null
           source: string | null
           source_id: string | null
           target_markets: string[] | null
@@ -214,6 +215,7 @@ export type Database = {
           name: string
           org_id: string
           reference?: string | null
+          responsible_person_id?: string | null
           source?: string | null
           source_id?: string | null
           target_markets?: string[] | null
@@ -232,6 +234,7 @@ export type Database = {
           org_id?: string
           product_url?: string | null
           reference?: string | null
+          responsible_person_id?: string | null
           source?: string | null
           source_id?: string | null
           target_markets?: string[] | null
