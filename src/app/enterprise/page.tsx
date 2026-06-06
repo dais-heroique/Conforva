@@ -9,21 +9,21 @@ import {
 
 export const metadata: Metadata = {
   title: "Enterprise — Conformité GPSR pour grands comptes",
-  description: "Solution Enterprise Conforva : tarification dégroissive au volume, gestionnaire de compte dédié, SLA garantis. Pour les e-commerçants gérant plus de 150 références GPSR par mois.",
+  description: "Solution Enterprise Conforva : tarification dégressive au volume, gestionnaire de compte dédié, SLA garantis. Pour les e-commerçants gérant plus de 150 références GPSR par mois.",
   keywords: [
     "Conforva Enterprise", "conformité GPSR grands comptes", "SaaS conformité volume",
     "dossier technique en masse", "GPSR e-commerce", "conformité catalogue produit",
   ],
   openGraph: {
     title: "Conforva Enterprise — Conformité GPSR pour grands comptes",
-    description: "Tarification dégroissive au volume, SLA garantis et gestionnaire dédié. Pour les catalogues de 150 à 10 000+ références.",
+    description: "Tarification dégressive au volume, SLA garantis et gestionnaire dédié. Pour les catalogues de 150 à 10 000+ références.",
     url: "https://conforva.com/enterprise",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Conforva Enterprise — GPSR pour grands comptes",
-    description: "Tarification dégroissive, SLA garantis, gestionnaire dédié. Pour 150 à 10 000+ références.",
+    description: "Tarification dégressive, SLA garantis, gestionnaire dédié. Pour 150 à 10 000+ références.",
   },
   alternates: { canonical: "https://conforva.com/enterprise" },
 }
@@ -105,7 +105,7 @@ export default function EnterprisePage() {
           </h1>
           <p className="text-lg text-gray-500 max-w-2xl leading-relaxed mb-8">
             Pour les e-commerçants gérant plus de 150 références par mois,
-            Conforva Enterprise offre une tarification dégroissive, un accès complet
+            Conforva Enterprise offre une tarification dégressive, un accès complet
             à toutes les fonctionnalités et un accompagnement dédié.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
