@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import OpenAI from "openai"
+import { jsonrepair } from "jsonrepair"
 import { PLAN_LANGUAGES } from "@/lib/utils"
 
 const GEMINI_MODELS = [
@@ -435,10 +436,20 @@ Retourne UNIQUEMENT le JSON suivant, sans aucun texte avant ou après, sans bali
     const text = response.choices[0]?.message?.content
     if (!text) throw new Error("Empty response from AI")
 
-    const jsonMatch = text.match(/\{[\s\S]*\}/)
+    // Strip markdown code fences if the model wrapped the JSON
+    const stripped = text.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "").trim()
+    // Extract the outermost JSON object
+    const jsonMatch = stripped.match(/\{[\s\S]*\}/)
     if (!jsonMatch) throw new Error("No JSON in response")
 
-    const analysisData = JSON.parse(jsonMatch[0])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let analysisData: any
+    try {
+      analysisData = JSON.parse(jsonMatch[0])
+    } catch {
+      // Attempt automatic repair of common issues (trailing commas, truncated arrays, etc.)
+      analysisData = JSON.parse(jsonrepair(jsonMatch[0]))
+    }
 
     // Merge detected market flags into market_specific_requirements so they reflect
     // the actual product configuration even if the AI overrode them
