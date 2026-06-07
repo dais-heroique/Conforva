@@ -10,6 +10,7 @@ import {
   BarChart3, X,
   Ban, Plane, ClipboardX, Scale,
   Package, ShoppingBag, Tag,
+  Download, Bell, Settings, LayoutDashboard, Plus, Sparkles,
 } from "lucide-react"
 
 function FadeIn({ children, className = "", delay = 0 }: {
@@ -787,6 +788,176 @@ export default function LandingPage() {
               </ul>
             </div>
           </FadeIn>
+        </div>
+      </section>
+
+      {/* ─── DASHBOARD PREVIEW ─── */}
+      <section className="py-12 sm:py-20 px-5 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <FadeIn>
+            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Le tableau de bord</p>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">Tout votre catalogue, en un seul endroit</h2>
+            <p className="text-sm text-gray-500 max-w-xl leading-relaxed">
+              Gérez toutes vos références, générez vos dossiers, exportez vos PDF — depuis une interface pensée pour les vendeurs, pas pour les juristes.
+            </p>
+          </FadeIn>
+
+          {/* Mock dashboard UI */}
+          <FadeIn delay={0.1} className="mt-10">
+            <div className="rounded-2xl border border-gray-200 shadow-xl overflow-hidden bg-white">
+              {/* Top bar */}
+              <div className="flex items-center gap-3 px-5 py-3 bg-gray-950 border-b border-white/10">
+                <div className="flex gap-1.5">
+                  <span className="h-3 w-3 rounded-full bg-red-500" />
+                  <span className="h-3 w-3 rounded-full bg-yellow-400" />
+                  <span className="h-3 w-3 rounded-full bg-emerald-400" />
+                </div>
+                <span className="text-xs text-gray-400 ml-2">conforva.com/dashboard</span>
+              </div>
+
+              <div className="flex min-h-[480px]">
+                {/* Sidebar */}
+                <div className="w-52 shrink-0 bg-gray-950 border-r border-white/10 flex flex-col py-4 px-3 gap-1 hidden sm:flex">
+                  <div className="flex items-center gap-2.5 px-3 py-2 mb-3">
+                    <div className="h-7 w-7 rounded-lg bg-blue-600 flex items-center justify-center">
+                      <ShieldCheck className="h-4 w-4 text-white" />
+                    </div>
+                    <span className="text-sm font-bold text-white">Conforva</span>
+                  </div>
+                  {[
+                    { icon: LayoutDashboard, label: "Tableau de bord", active: true },
+                    { icon: Package, label: "Mes produits", active: false },
+                    { icon: FileText, label: "Dossiers", active: false },
+                    { icon: Users, label: "Pers. Responsable", active: false },
+                    { icon: Globe, label: "Marchés", active: false },
+                    { icon: BarChart3, label: "Veille réglementaire", active: false },
+                    { icon: Settings, label: "Paramètres", active: false },
+                  ].map(item => (
+                    <div key={item.label} className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs cursor-default transition-colors ${item.active ? "bg-white/10 text-white font-medium" : "text-gray-400 hover:text-gray-200"}`}>
+                      <item.icon className="h-3.5 w-3.5 shrink-0" />
+                      {item.label}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Main content */}
+                <div className="flex-1 bg-gray-50 p-5 overflow-hidden">
+                  {/* Header row */}
+                  <div className="flex items-center justify-between mb-5">
+                    <div>
+                      <h3 className="font-bold text-gray-900 text-sm">Mes produits</h3>
+                      <p className="text-[11px] text-gray-400 mt-0.5">4 références — 3 conformes · 1 en cours</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 bg-blue-600 text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg cursor-default">
+                        <Plus className="h-3 w-3" />
+                        Nouveau produit
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Product cards */}
+                  <div className="space-y-2.5">
+                    {[
+                      { name: "Bougie parfumée — cire de soja", ref: "BG-SOY-200", status: "conforme", docs: 5, updated: "Il y a 2j" },
+                      { name: "Diffuseur huile essentielle", ref: "DIF-HE-100", status: "conforme", docs: 5, updated: "Il y a 5j" },
+                      { name: "Savon surgras karité", ref: "SAV-KRT-80", status: "conforme", docs: 5, updated: "Il y a 1 sem." },
+                      { name: "Baume lèvres naturel", ref: "BLV-NAT-15", status: "en cours", docs: 2, updated: "Aujourd'hui" },
+                    ].map((p, i) => (
+                      <motion.div
+                        key={p.ref}
+                        initial={{ opacity: 0, y: 8 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3, delay: 0.15 + i * 0.07 }}
+                        className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl px-4 py-3 hover:border-blue-200 hover:shadow-sm transition-all cursor-default"
+                      >
+                        <div className={`h-2 w-2 rounded-full shrink-0 ${p.status === "conforme" ? "bg-emerald-500" : "bg-amber-400"}`} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold text-gray-900 truncate">{p.name}</p>
+                          <p className="text-[10px] text-gray-400">{p.ref}</p>
+                        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${p.status === "conforme" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>
+                            {p.status === "conforme" ? "✓ Conforme" : "⏳ En cours"}
+                          </span>
+                          <span className="text-[10px] text-gray-400 hidden sm:block">{p.docs} docs</span>
+                          <span className="text-[10px] text-gray-300 hidden md:block">{p.updated}</span>
+                          <div className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-lg px-2 py-1 text-[10px] text-gray-500 font-medium">
+                            <Download className="h-2.5 w-2.5" />
+                            PDF
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* AI generation banner */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.5 }}
+                    className="mt-4 flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3"
+                  >
+                    <Sparkles className="h-4 w-4 text-blue-600 shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-blue-900">IA en cours de génération — Baume lèvres naturel</p>
+                      <div className="mt-1.5 h-1 bg-blue-200 rounded-full overflow-hidden">
+                        <motion.div
+                          className="h-full bg-blue-600 rounded-full"
+                          initial={{ width: "0%" }}
+                          whileInView={{ width: "72%" }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
+                        />
+                      </div>
+                    </div>
+                    <span className="text-[11px] font-bold text-blue-600 shrink-0">72%</span>
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+
+          {/* Feature callouts below the dashboard */}
+          <div className="mt-10 grid sm:grid-cols-3 gap-6">
+            {[
+              {
+                icon: Sparkles,
+                color: "text-blue-600",
+                bg: "bg-blue-50",
+                title: "Génération IA en 10 minutes",
+                desc: "L'IA structure l'analyse de risque, identifie les normes et génère les 15 sections du dossier technique à votre place.",
+              },
+              {
+                icon: Download,
+                color: "text-emerald-600",
+                bg: "bg-emerald-50",
+                title: "Export PDF immédiat",
+                desc: "Téléchargez votre dossier complet en un clic — prêt à soumettre à Amazon, aux autorités douanières ou à votre client B2B.",
+              },
+              {
+                icon: Bell,
+                color: "text-violet-600",
+                bg: "bg-violet-50",
+                title: "Alertes réglementaires",
+                desc: "Une norme change, un texte est mis à jour — vous êtes alerté et vos documents peuvent être régénérés.",
+              },
+            ].map((f, i) => (
+              <FadeIn key={f.title} delay={0.1 + i * 0.08}>
+                <div className="flex gap-4 p-5 rounded-xl border border-gray-100 bg-white hover:border-gray-200 hover:shadow-sm transition-all">
+                  <div className={`h-8 w-8 rounded-lg ${f.bg} flex items-center justify-center shrink-0 mt-0.5`}>
+                    <f.icon className={`h-4 w-4 ${f.color}`} />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm text-gray-900 mb-1">{f.title}</p>
+                    <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
         </div>
       </section>
 
