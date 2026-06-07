@@ -609,18 +609,18 @@ export function TechnicalFilePDF({
           PAGE 1 — COVER
           =================================================================== */}
       <Page size="A4" style={[base.page, { paddingTop: 0, paddingBottom: 0 }]}>
-        {watermarked && <WatermarkText />}
+        {watermarked ? <WatermarkText /> : null}
 
         {/* Blue top band */}
         <View style={base.coverTopBand}>
-          {branded && (
+          {branded ? (
             <View style={base.coverLogoRow}>
               <View style={base.coverLogoBox}>
                 <Text style={base.coverLogoLetter}>C</Text>
               </View>
               <Text style={base.coverAppName}>Conforva</Text>
             </View>
-          )}
+          ) : null}
           <Text style={base.coverTitle}>{lbl.docTitle}</Text>
           <Text style={base.coverSubtitle}>{lbl.reg}</Text>
         </View>
@@ -660,7 +660,7 @@ export function TechnicalFilePDF({
           </View>
 
           {/* Classification badge */}
-          {watermarked && (
+          {watermarked ? (
             <View style={base.coverBadgeRow}>
               <View style={base.coverBadge}>
                 <Text style={base.coverBadgeText}>BROUILLON — NON VALIDÉ</Text>
@@ -669,7 +669,7 @@ export function TechnicalFilePDF({
                 Généré par Conforva (aide à la conformité). Doit être validé par un expert qualifié avant toute mise sur le marché.
               </Text>
             </View>
-          )}
+          ) : null}
 
           {/* Table of contents */}
           <H1>Sommaire</H1>
@@ -702,32 +702,32 @@ export function TechnicalFilePDF({
           PAGE 2 — SECTIONS 1–3: Description / Usage / Fabricant
           =================================================================== */}
       <Page size="A4" style={base.page}>
-        {watermarked && <WatermarkText />}
+        {watermarked ? <WatermarkText /> : null}
         <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
 
         {/* Section 1 */}
         <H1>1. Description générale du produit</H1>
-        {aiSectionContent("description") && (
+        {aiSectionContent("description") ? (
           <Text style={[base.body, { marginBottom: 8 }]}>{aiSectionContent("description")}</Text>
-        )}
+        ) : null}
         <Row label={lbl.product} value={product?.name ?? "N/A"} />
         <Row label={lbl.refLabel} value={product?.reference ?? "N/A"} />
         <Row label={lbl.category} value={category?.name_fr ?? "N/A"} />
         <Row label={lbl.materials} value={product?.materials?.join(", ") ?? "N/A"} />
-        {product?.weight_g && <Row label={lbl.weight} value={`${product.weight_g} g`} />}
+        {product?.weight_g ? <Row label={lbl.weight} value={`${product.weight_g} g`} /> : null}
         <Row label={lbl.markets} value={product?.target_markets?.join(", ") ?? "UE"} />
-        {product?.description && (
-          <>
+        {product?.description ? (
+          <View>
             <H2>Description détaillée</H2>
             <Text style={base.body}>{product.description}</Text>
-          </>
-        )}
-        {ra.product_description && (
-          <>
+          </View>
+        ) : null}
+        {ra.product_description ? (
+          <View>
             <H2>Description technique</H2>
             <Text style={base.body}>{ra.product_description}</Text>
-          </>
-        )}
+          </View>
+        ) : null}
 
         {/* Section 1.2 — BOM */}
         <View style={{ marginTop: 14 }} wrap={false}>
@@ -777,59 +777,59 @@ export function TechnicalFilePDF({
         {/* Section 2 */}
         <View style={{ marginTop: 18 }}>
           <H1>2. Usage prévu et utilisation prévisible abusive</H1>
-          {aiSectionContent("usage") && (
+          {aiSectionContent("usage") ? (
             <Text style={[base.body, { marginBottom: 8 }]}>{aiSectionContent("usage")}</Text>
-          )}
+          ) : null}
           <Row label={lbl.intendedUse} value={product?.intended_use ?? "N/A"} />
           <Row label="Utilisateurs cibles" value={product?.target_users ?? ra.target_users ?? "Grand public"} />
-          {ra.foreseeable_misuse && (
-            <>
+          {ra.foreseeable_misuse ? (
+            <View>
               <H2>Utilisation prévisible abusive</H2>
               <Text style={base.body}>{ra.foreseeable_misuse}</Text>
-            </>
-          )}
-          {ra.vulnerable_groups && (
-            <>
+            </View>
+          ) : null}
+          {ra.vulnerable_groups ? (
+            <View>
               <H2>Groupes vulnérables concernés</H2>
               <Text style={base.body}>{ra.vulnerable_groups}</Text>
-            </>
-          )}
+            </View>
+          ) : null}
         </View>
 
         {/* Section 3 */}
         <View style={{ marginTop: 18 }}>
           <H1>3. Fabricant et chaîne d'approvisionnement</H1>
-          {aiSectionContent("fabricant") && (
+          {aiSectionContent("fabricant") ? (
             <Text style={[base.body, { marginBottom: 8 }]}>{aiSectionContent("fabricant")}</Text>
-          )}
+          ) : null}
           <H2>{rp ? lbl.rpTitle : lbl.orgTitle}</H2>
           {rp ? (
-            <>
+            <View>
               <Row label={lbl.society} value={rp.company_name ?? "N/A"} />
               <Row label={lbl.address} value={`${rp.address_line ?? ""}, ${rp.postal_code ?? ""} ${rp.city ?? ""}, ${rp.country_eu ?? ""}`.replace(/^,\s*/, "")} />
               <Row label={lbl.email} value={rp.email ?? "N/A"} />
-              {rp.phone && <Row label={lbl.phone} value={rp.phone} />}
+              {rp.phone ? <Row label={lbl.phone} value={rp.phone} /> : null}
               <Row label={lbl.type} value={rp.type === "importer" ? "Importateur / Personne Responsable UE" : "Représentant Autorisé UE"} />
-            </>
+            </View>
           ) : (
-            <>
+            <View>
               <Row label={lbl.society} value={org?.name ?? "N/A"} />
               <Row label={lbl.country} value={org?.country ?? "N/A"} />
-            </>
+            </View>
           )}
-          {org?.name && rp && (
-            <>
+          {org?.name && rp ? (
+            <View>
               <H2>Donneur d'ordre</H2>
               <Row label={lbl.society} value={org.name} />
               <Row label={lbl.country} value={org.country ?? "N/A"} />
-            </>
-          )}
-          {ra.supply_chain && (
-            <>
+            </View>
+          ) : null}
+          {ra.supply_chain ? (
+            <View>
               <H2>Chaîne d'approvisionnement</H2>
               <Text style={base.body}>{ra.supply_chain}</Text>
-            </>
-          )}
+            </View>
+          ) : null}
         </View>
 
         <PageFooter language={language} branded={branded} />
@@ -839,13 +839,13 @@ export function TechnicalFilePDF({
           PAGE 3 — SECTION 4: Normes et réglementations
           =================================================================== */}
       <Page size="A4" style={base.page}>
-        {watermarked && <WatermarkText />}
+        {watermarked ? <WatermarkText /> : null}
         <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
 
         <H1>4. Normes et réglementations applicables</H1>
-        {aiSectionContent("norme") && (
+        {aiSectionContent("norme") ? (
           <Text style={[base.body, { marginBottom: 10 }]}>{aiSectionContent("norme")}</Text>
-        )}
+        ) : null}
 
         <H2>Réglementations de base</H2>
         <View style={base.tbl}>
@@ -885,8 +885,8 @@ export function TechnicalFilePDF({
           ))}
         </View>
 
-        {standards.length > 0 && (
-          <>
+        {standards.length > 0 ? (
+          <View>
             <H2>Normes harmonisées et documents techniques</H2>
             <View style={base.tbl}>
               <View style={base.tblHeaderRow}>
@@ -908,10 +908,8 @@ export function TechnicalFilePDF({
                 </View>
               ))}
             </View>
-          </>
-        )}
-
-        {standards.length === 0 && (
+          </View>
+        ) : (
           <View style={base.warnBox}>
             <Text style={base.warnBoxText}>
               Aucune norme harmonisée identifiée automatiquement. Une recherche dans le Journal officiel de l'UE est recommandée.
@@ -920,8 +918,8 @@ export function TechnicalFilePDF({
         )}
 
         {/* Market-specific requirements */}
-        {ra.market_specific_requirements && (
-          <>
+        {ra.market_specific_requirements ? (
+          <View>
             <H2>Exigences spécifiques par marché</H2>
             {Object.entries(ra.market_specific_requirements)
               .filter(([, req]: [string, any]) => req?.applicable)
@@ -938,8 +936,8 @@ export function TechnicalFilePDF({
                   ))}
                 </View>
               ))}
-          </>
-        )}
+          </View>
+        ) : null}
 
         <PageFooter language={language} branded={branded} />
       </Page>
@@ -948,7 +946,7 @@ export function TechnicalFilePDF({
           PAGE 4 — SECTIONS 5–6: Méthodologie + Risk matrix + Hazards
           =================================================================== */}
       <Page size="A4" style={base.page}>
-        {watermarked && <WatermarkText />}
+        {watermarked ? <WatermarkText /> : null}
         <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
 
         {/* Section 5 */}
@@ -965,9 +963,9 @@ export function TechnicalFilePDF({
             résiduel est ensuite évalué et documenté.
           </Text>
         )}
-        {ra.risk_assessment_methodology && (
+        {ra.risk_assessment_methodology ? (
           <Text style={[base.body, { marginTop: 6 }]}>{ra.risk_assessment_methodology}</Text>
-        )}
+        ) : null}
 
         <H2>Matrice de criticité (Gravité × Probabilité)</H2>
         <RiskMatrix />
@@ -1007,41 +1005,41 @@ export function TechnicalFilePDF({
                   <SeverityBadge sev={h.severity ?? "low"} lang={language} />
                 </View>
                 <Text style={base.hazardDesc}>{h.description ?? ""}</Text>
-                {h.severity_justification && (
+                {h.severity_justification ? (
                   <Text style={{ fontSize: 7.5, color: GRAY, marginBottom: 2 }}>
                     Justification : {h.severity_justification}
                   </Text>
-                )}
-                {h.exposure_conditions && (
+                ) : null}
+                {h.exposure_conditions ? (
                   <Text style={{ fontSize: 7.5, color: GRAY, marginBottom: 2 }}>
                     Conditions : {h.exposure_conditions}
                   </Text>
-                )}
+                ) : null}
                 <View style={base.hazardMeta}>
-                  {h.probability && (
+                  {h.probability ? (
                     <View style={base.hazardMetaItem}>
                       <Text style={base.hazardMetaLabel}>Probabilité :</Text>
                       <Text style={base.hazardMetaValue}>{h.probability}</Text>
                     </View>
-                  )}
-                  {h.risk_level && (
+                  ) : null}
+                  {h.risk_level ? (
                     <View style={base.hazardMetaItem}>
                       <Text style={base.hazardMetaLabel}>Niveau :</Text>
                       <Text style={base.hazardMetaValue}>{h.risk_level}</Text>
                     </View>
-                  )}
-                  {h.affected_users?.length > 0 && (
+                  ) : null}
+                  {h.affected_users?.length > 0 ? (
                     <View style={base.hazardMetaItem}>
                       <Text style={base.hazardMetaLabel}>Utilisateurs :</Text>
                       <Text style={base.hazardMetaValue}>{h.affected_users.join(", ")}</Text>
                     </View>
-                  )}
+                  ) : null}
                 </View>
-                {h.referenced_standards?.length > 0 && (
+                {h.referenced_standards?.length > 0 ? (
                   <Text style={{ fontSize: 7.5, color: BLUE, marginTop: 3 }}>
                     {h.referenced_standards.join(" · ")}
                   </Text>
-                )}
+                ) : null}
               </View>
             ))
           )}
@@ -1053,9 +1051,9 @@ export function TechnicalFilePDF({
       {/* ===================================================================
           PAGE 5 — SECTION 6 suite (remaining hazards)
           =================================================================== */}
-      {hazards.length > 3 && (
+      {hazards.length > 3 ? (
         <Page size="A4" style={base.page}>
-          {watermarked && <WatermarkText />}
+          {watermarked ? <WatermarkText /> : null}
           <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
           <H1>6. Dangers identifiés (suite)</H1>
           {hazards.slice(3).map((h: any, i: number) => (
@@ -1067,52 +1065,52 @@ export function TechnicalFilePDF({
                 <SeverityBadge sev={h.severity ?? "low"} lang={language} />
               </View>
               <Text style={base.hazardDesc}>{h.description ?? ""}</Text>
-              {h.severity_justification && (
+              {h.severity_justification ? (
                 <Text style={{ fontSize: 7.5, color: GRAY, marginBottom: 2 }}>
                   Justification : {h.severity_justification}
                 </Text>
-              )}
-              {h.exposure_conditions && (
+              ) : null}
+              {h.exposure_conditions ? (
                 <Text style={{ fontSize: 7.5, color: GRAY, marginBottom: 2 }}>
                   Conditions : {h.exposure_conditions}
                 </Text>
-              )}
+              ) : null}
               <View style={base.hazardMeta}>
-                {h.probability && (
+                {h.probability ? (
                   <View style={base.hazardMetaItem}>
                     <Text style={base.hazardMetaLabel}>Probabilité :</Text>
                     <Text style={base.hazardMetaValue}>{h.probability}</Text>
                   </View>
-                )}
-                {h.risk_level && (
+                ) : null}
+                {h.risk_level ? (
                   <View style={base.hazardMetaItem}>
                     <Text style={base.hazardMetaLabel}>Niveau :</Text>
                     <Text style={base.hazardMetaValue}>{h.risk_level}</Text>
                   </View>
-                )}
+                ) : null}
               </View>
-              {h.referenced_standards?.length > 0 && (
+              {h.referenced_standards?.length > 0 ? (
                 <Text style={{ fontSize: 7.5, color: BLUE, marginTop: 3 }}>
                   {h.referenced_standards.join(" · ")}
                 </Text>
-              )}
+              ) : null}
             </View>
           ))}
           <PageFooter language={language} branded={branded} />
         </Page>
-      )}
+      ) : null}
 
       {/* ===================================================================
           PAGE 6 — SECTION 7: Mesures de mitigation
           =================================================================== */}
       <Page size="A4" style={base.page}>
-        {watermarked && <WatermarkText />}
+        {watermarked ? <WatermarkText /> : null}
         <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
 
         <H1>7. Mesures de mitigation</H1>
-        {aiSectionContent("mitigation") && (
+        {aiSectionContent("mitigation") ? (
           <Text style={[base.body, { marginBottom: 10 }]}>{aiSectionContent("mitigation")}</Text>
-        )}
+        ) : null}
 
         {mitigations.length === 0 ? (
           <View style={base.warnBox}>
@@ -1128,9 +1126,9 @@ export function TechnicalFilePDF({
                 <Text style={base.mitigationMeasure}>
                   {m.measure ?? m.description ?? m.text ?? `Mesure ${i + 1}`}
                 </Text>
-                {m.implementation_details && (
+                {m.implementation_details ? (
                   <Text style={base.mitigationDetail}>{m.implementation_details}</Text>
-                )}
+                ) : null}
                 <Text style={base.mitigationMeta}>
                   {[
                     m.type,
@@ -1160,9 +1158,9 @@ export function TechnicalFilePDF({
                   <Text style={base.mitigationMeasure}>
                     {r.hazard_id ? `[${r.hazard_id}] ` : ""}{r.title ?? r.description ?? `Risque résiduel ${i + 1}`}
                   </Text>
-                  {r.description && r.title && (
+                  {r.description && r.title ? (
                     <Text style={base.mitigationDetail}>{r.description}</Text>
-                  )}
+                  ) : null}
                   <Text style={base.mitigationMeta}>
                     {[r.acceptability, r.mitigation_applied].filter(Boolean).join(" · ")}
                   </Text>
@@ -1177,18 +1175,18 @@ export function TechnicalFilePDF({
             </View>
           )}
 
-          {ra.summary && (
-            <>
+          {ra.summary ? (
+            <View>
               <H2>Synthèse de l'évaluation</H2>
               <Text style={base.body}>{ra.summary}</Text>
-              {ra.overall_severity && (
+              {ra.overall_severity ? (
                 <View style={{ flexDirection: "row", marginTop: 6, alignItems: "center" }}>
                   <Text style={{ fontSize: 8.5, color: GRAY, marginRight: 8 }}>Niveau de risque global :</Text>
                   <SeverityBadge sev={ra.overall_severity} lang={language} />
                 </View>
-              )}
-            </>
-          )}
+              ) : null}
+            </View>
+          ) : null}
         </View>
 
         <PageFooter language={language} branded={branded} />
@@ -1198,13 +1196,13 @@ export function TechnicalFilePDF({
           PAGE 7 — SECTION 9: Tests requis
           =================================================================== */}
       <Page size="A4" style={base.page}>
-        {watermarked && <WatermarkText />}
+        {watermarked ? <WatermarkText /> : null}
         <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
 
         <H1>9. Tests et essais requis</H1>
-        {aiSectionContent("tests") && (
+        {aiSectionContent("tests") ? (
           <Text style={[base.body, { marginBottom: 10 }]}>{aiSectionContent("tests")}</Text>
-        )}
+        ) : null}
 
         {requiredTests.length === 0 ? (
           <View style={base.warnBox}>
@@ -1224,7 +1222,7 @@ export function TechnicalFilePDF({
                 <View style={mandatory ? base.testDotMandatory : base.testDotOptional} />
                 <View style={{ flex: 1 }}>
                   <Text style={base.testName}>{testName}</Text>
-                  {testStd && <Text style={base.testStd}>Norme : {testStd}{labAccred ? ` · ${labAccred}` : ""}</Text>}
+                  {testStd ? <Text style={base.testStd}>Norme : {testStd}{labAccred ? ` · ${labAccred}` : ""}</Text> : null}
                 </View>
                 <Text style={[base.testTag, { color: mandatory ? BLUE : GRAY }]}>
                   {mandatory ? "OBLIGATOIRE" : "RECOMMANDÉ"}
@@ -1269,9 +1267,9 @@ export function TechnicalFilePDF({
             "Durée de vie du produit et conditions de fin de vie / recyclage",
             "Contact fabricant et service après-vente",
           ]} />
-          {product?.instructions_url && (
+          {product?.instructions_url ? (
             <Row label="URL des instructions" value={product.instructions_url} />
-          )}
+          ) : null}
         </View>
 
         <PageFooter language={language} branded={branded} />
@@ -1281,7 +1279,7 @@ export function TechnicalFilePDF({
           PAGE 8 — SECTIONS 12–15: Substances / Traçabilité / Marchés / Conclusion
           =================================================================== */}
       <Page size="A4" style={base.page}>
-        {watermarked && <WatermarkText />}
+        {watermarked ? <WatermarkText /> : null}
         <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
 
         {/* Section 12 */}
@@ -1341,12 +1339,12 @@ export function TechnicalFilePDF({
             "Procédure de rappel produit documentée",
             "Enregistrements de contrôle qualité conservés pendant la durée réglementaire",
           ]} />
-          {(product?.batch_number || product?.serial_number) && (
-            <>
-              {product?.batch_number && <Row label="N° de lot" value={product.batch_number} />}
-              {product?.serial_number && <Row label="N° de série" value={product.serial_number} />}
-            </>
-          )}
+          {product?.batch_number || product?.serial_number ? (
+            <View>
+              {product?.batch_number ? <Row label="N° de lot" value={product.batch_number} /> : null}
+              {product?.serial_number ? <Row label="N° de série" value={product.serial_number} /> : null}
+            </View>
+          ) : null}
         </View>
 
         {/* Section 14 */}
@@ -1433,9 +1431,9 @@ export function TechnicalFilePDF({
       {/* ===================================================================
           ANNEXE A — AI technical file sections (if present)
           =================================================================== */}
-      {aiSections.length > 0 && (
+      {aiSections.length > 0 ? (
         <Page size="A4" style={base.page}>
-          {watermarked && <WatermarkText />}
+          {watermarked ? <WatermarkText /> : null}
           <PageHeader docRef={docRef} productName={product?.name ?? "N/A"} branded={branded} />
           <H1>Annexe A — Contenu généré par analyse IA</H1>
           <Text style={[base.body, { marginBottom: 12 }]}>
@@ -1451,7 +1449,7 @@ export function TechnicalFilePDF({
           ))}
           <PageFooter language={language} branded={branded} />
         </Page>
-      )}
+      ) : null}
     </Document>
   )
 }
@@ -1493,19 +1491,19 @@ export function DeclarationOfConformityPDF({
   return (
     <Document title={`Déclaration de Conformité — ${product?.name ?? "Produit"}`}>
       <Page size="A4" style={base.page}>
-        {watermarked && <WatermarkText label="PROJET — NON SIGNÉ" />}
+        {watermarked ? <WatermarkText label="PROJET — NON SIGNÉ" /> : null}
 
         {/* Header */}
         <View style={base.docHeader}>
           <View>
-            {branded && (
+            {branded ? (
               <View style={base.docLogoRow}>
                 <View style={base.docLogoBox}>
                   <Text style={base.docLogoLetter}>C</Text>
                 </View>
                 <Text style={base.docAppName}>Conforva</Text>
               </View>
-            )}
+            ) : null}
             <Text style={base.docTitle}>DÉCLARATION UE DE CONFORMITÉ</Text>
             <Text style={base.docSubtitle}>Conformément à l'Article 24 du Règlement (UE) 2023/988</Text>
           </View>
@@ -1513,11 +1511,11 @@ export function DeclarationOfConformityPDF({
             <Text style={base.docRefLine}>N° {docRef}</Text>
             <Text style={base.docRefLine}>Version 1.0</Text>
             <Text style={base.docRefLine}>{genDate}</Text>
-            {watermarked && (
+            {watermarked ? (
               <View style={[base.coverBadge, { marginTop: 6 }]}>
                 <Text style={base.coverBadgeText}>NON SIGNÉ</Text>
               </View>
-            )}
+            ) : null}
           </View>
         </View>
 
@@ -1528,11 +1526,11 @@ export function DeclarationOfConformityPDF({
             <Row label="Désignation du produit" value={product?.name ?? "N/A"} />
             <Row label="Référence / Modèle" value={product?.reference ?? "N/A"} />
             <Row label="Catégorie" value={category?.name_fr ?? "N/A"} />
-            {product?.intended_use && <Row label="Usage prévu" value={product.intended_use} />}
-            {product?.materials?.length > 0 && (
+            {product?.intended_use ? <Row label="Usage prévu" value={product.intended_use} /> : null}
+            {product?.materials?.length > 0 ? (
               <Row label="Matériaux principaux" value={product.materials.join(", ")} />
-            )}
-            {product?.weight_g && <Row label="Poids" value={`${product.weight_g} g`} />}
+            ) : null}
+            {product?.weight_g ? <Row label="Poids" value={`${product.weight_g} g`} /> : null}
             <Row label="Marchés cibles" value={product?.target_markets?.join(", ") ?? "UE"} />
           </View>
         </View>
@@ -1545,8 +1543,8 @@ export function DeclarationOfConformityPDF({
               <>
                 <Row label="Dénomination sociale" value={rp.company_name ?? "N/A"} />
                 <Row label="Adresse complète" value={responsibleAddress} />
-                {responsibleEmail && <Row label="Email" value={responsibleEmail} />}
-                {rp.phone && <Row label="Téléphone" value={rp.phone} />}
+                {responsibleEmail ? <Row label="Email" value={responsibleEmail} /> : null}
+                {rp.phone ? <Row label="Téléphone" value={rp.phone} /> : null}
                 <Row
                   label="Qualité"
                   value={rp.type === "importer" ? "Importateur / Personne Responsable UE" : "Représentant Autorisé UE"}
@@ -1558,9 +1556,9 @@ export function DeclarationOfConformityPDF({
                 <Row label="Pays d'établissement" value={org?.country ?? "À compléter"} />
               </>
             )}
-            {org?.name && rp && (
+            {org?.name && rp ? (
               <Row label="Donneur d'ordre" value={org.name} />
-            )}
+            ) : null}
           </View>
         </View>
 
@@ -1610,11 +1608,11 @@ export function DeclarationOfConformityPDF({
             {doc.assessment_procedure ??
               "Évaluation interne de la conformité conformément à l'Annexe III du Règlement (UE) 2023/988. L'évaluation des risques a été réalisée selon la méthodologie ISO 12100:2010. Aucun organisme notifié n'est requis pour cette catégorie de produit."}
           </Text>
-          {ra.notified_body && (
+          {ra.notified_body ? (
             <Text style={[base.declBody, { marginTop: 4 }]}>
               Organisme notifié : {ra.notified_body}
             </Text>
-          )}
+          ) : null}
         </View>
 
         {/* Section 7 — Déclaration et signature */}
@@ -1789,7 +1787,7 @@ export function LabelPDF({
   return (
     <Document title={`Étiquette — ${product?.name} — ${language}`}>
       <Page size="A5" style={{ ...base.page, padding: 28, paddingBottom: 28 }}>
-        {watermarked && <Text style={{ ...base.watermark, fontSize: 34, top: 170 }}>NON VALIDÉ</Text>}
+        {watermarked ? <Text style={{ ...base.watermark, fontSize: 34, top: 170 }}>NON VALIDÉ</Text> : null}
 
         {/* Outer border box */}
         <View style={{ border: `2 solid ${BLUE}`, borderRadius: 7, padding: 16, flex: 1 }}>
@@ -1819,15 +1817,15 @@ export function LabelPDF({
             <Text style={{ width: 70, fontSize: 8, color: GRAY, fontFamily: "Helvetica-Bold" }}>{lbl.product}</Text>
             <Text style={{ flex: 1, fontSize: 8.5, color: DARK, fontFamily: "Helvetica-Bold" }}>{product?.name ?? "N/A"}</Text>
           </View>
-          {product?.reference && (
+          {product?.reference ? (
             <View style={{ flexDirection: "row", marginBottom: 7 }}>
               <Text style={{ width: 70, fontSize: 8, color: GRAY, fontFamily: "Helvetica-Bold" }}>{lbl.ref}</Text>
               <Text style={{ flex: 1, fontSize: 8, color: MID }}>{product.reference}</Text>
             </View>
-          )}
+          ) : null}
 
           {/* Pictograms */}
-          {pictograms.length > 0 && (
+          {pictograms.length > 0 ? (
             <View style={{ marginBottom: 8 }}>
               <Text style={{ fontSize: 7.5, fontFamily: "Helvetica-Bold", color: MID, marginBottom: 4 }}>
                 Pictogrammes :
@@ -1843,10 +1841,10 @@ export function LabelPDF({
                 ))}
               </View>
             </View>
-          )}
+          ) : null}
 
           {/* Certifications */}
-          {certifications.length > 0 && (
+          {certifications.length > 0 ? (
             <View style={{ marginBottom: 8 }}>
               <Text style={{ fontSize: 7.5, fontFamily: "Helvetica-Bold", color: MID, marginBottom: 4 }}>
                 {lbl.certifications} :
@@ -1862,10 +1860,10 @@ export function LabelPDF({
                 ))}
               </View>
             </View>
-          )}
+          ) : null}
 
           {/* Warnings */}
-          {warnings.length > 0 && (
+          {warnings.length > 0 ? (
             <View style={{
               backgroundColor: AMBER_BG,
               border: `1 solid ${AMBER_BORDER}`,
@@ -1883,7 +1881,7 @@ export function LabelPDF({
                 </View>
               ))}
             </View>
-          )}
+          ) : null}
 
           {/* Footer inside box */}
           <View style={{ borderTop: `1 solid ${BORDER}`, paddingTop: 6, marginTop: "auto" }}>
