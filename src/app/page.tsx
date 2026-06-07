@@ -11,6 +11,7 @@ import {
   Ban, Plane, ClipboardX, Scale,
   Package, ShoppingBag, Tag,
   Download, Bell, Settings, LayoutDashboard, Plus, Sparkles,
+  Shield, Clock, Zap, AlertCircle,
 } from "lucide-react"
 
 function FadeIn({ children, className = "", delay = 0 }: {
@@ -25,6 +26,344 @@ function FadeIn({ children, className = "", delay = 0 }: {
       className={className}>
       {children}
     </motion.div>
+  )
+}
+
+function DashboardMock() {
+  const [activeNav, setActiveNav] = useState<"dashboard" | "products" | "documents" | "labels" | "rp">("dashboard")
+
+  const navItems = [
+    { id: "dashboard" as const, icon: LayoutDashboard, label: "Tableau de bord" },
+    { id: "products" as const, icon: Package, label: "Produits" },
+    { id: "documents" as const, icon: FileText, label: "Documents" },
+    { id: "labels" as const, icon: Tag, label: "Étiquettes" },
+    { id: "rp" as const, icon: Shield, label: "Pers. Responsable" },
+    { id: null as any, icon: Settings, label: "Paramètres" },
+  ]
+
+  const products = [
+    { name: "Bougie parfumée — cire de soja", ref: "BG-SOY-200", score: 94, status: "conforme" as const, updated: "Il y a 2j" },
+    { name: "Diffuseur huile essentielle", ref: "DIF-HE-100", score: 87, status: "conforme" as const, updated: "Il y a 5j" },
+    { name: "Savon surgras karité", ref: "SAV-KRT-80", score: 81, status: "conforme" as const, updated: "Il y a 1 sem." },
+    { name: "Baume lèvres naturel", ref: "BLV-NAT-15", score: 52, status: "en cours" as const, updated: "Aujourd'hui" },
+    { name: "Huile végétale argan", ref: "HVA-ARG-30", score: 0, status: "non démarré" as const, updated: "—" },
+  ]
+
+  const documents = [
+    { name: "Bougie parfumée — cire de soja", type: "Dossier technique", date: "03/06/2025", status: "signé" as const },
+    { name: "Bougie parfumée — cire de soja", type: "Décl. conformité", date: "03/06/2025", status: "signé" as const },
+    { name: "Diffuseur huile essentielle", type: "Dossier technique", date: "28/05/2025", status: "signé" as const },
+    { name: "Savon surgras karité", type: "Dossier technique", date: "21/05/2025", status: "signé" as const },
+    { name: "Baume lèvres naturel", type: "Dossier technique", date: "07/06/2025", status: "brouillon" as const },
+  ]
+
+  const statusColor = (s: string) =>
+    s === "conforme" ? "text-emerald-700 bg-emerald-50" :
+    s === "en cours" ? "text-amber-700 bg-amber-50" :
+    "text-gray-500 bg-gray-100"
+
+  const scoreColor = (n: number) =>
+    n >= 80 ? "bg-emerald-500" : n >= 40 ? "bg-amber-400" : "bg-gray-200"
+
+  return (
+    <div className="rounded-2xl border border-gray-200 shadow-2xl overflow-hidden bg-white select-none">
+      {/* Browser chrome */}
+      <div className="flex items-center gap-3 px-4 py-2.5 bg-gray-100 border-b border-gray-200">
+        <div className="flex gap-1.5">
+          <span className="h-3 w-3 rounded-full bg-red-400" />
+          <span className="h-3 w-3 rounded-full bg-yellow-400" />
+          <span className="h-3 w-3 rounded-full bg-emerald-400" />
+        </div>
+        <div className="flex-1 flex justify-center">
+          <div className="flex items-center gap-1.5 bg-white rounded-md px-3 py-1 text-[11px] text-gray-400 border border-gray-200 w-52 justify-center">
+            <span className="text-gray-300">🔒</span> conforva.com/dashboard
+          </div>
+        </div>
+      </div>
+
+      <div className="flex" style={{ minHeight: 520 }}>
+        {/* Sidebar */}
+        <div className="w-48 shrink-0 bg-white border-r border-gray-100 flex flex-col hidden sm:flex">
+          {/* Logo */}
+          <div className="flex h-14 items-center gap-2.5 px-4 border-b border-gray-100">
+            <img src="/favicon.png" alt="Conforva" className="h-7 w-7 rounded-lg object-contain" />
+            <span className="font-bold text-gray-900 text-sm">Conforva</span>
+          </div>
+          {/* Org */}
+          <div className="px-4 py-3 border-b border-gray-100">
+            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-medium">Organisation</p>
+            <p className="text-xs font-semibold text-gray-800 mt-0.5 truncate">Ma Boutique</p>
+          </div>
+          {/* Nav */}
+          <nav className="flex-1 py-2 px-2 space-y-0.5">
+            {navItems.map(item => (
+              <button
+                key={item.label}
+                onClick={() => item.id && setActiveNav(item.id)}
+                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs transition-all text-left ${
+                  activeNav === item.id
+                    ? "bg-blue-50 text-blue-700 font-semibold"
+                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                }`}
+              >
+                <item.icon className="h-3.5 w-3.5 shrink-0" />
+                {item.label}
+                {activeNav === item.id && <ChevronRight className="h-3 w-3 ml-auto text-blue-400" />}
+              </button>
+            ))}
+          </nav>
+          {/* User */}
+          <div className="px-3 py-3 border-t border-gray-100">
+            <div className="flex items-center gap-2">
+              <div className="h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center">
+                <span className="text-[10px] font-bold text-blue-600">M</span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-medium text-gray-700 truncate">marie@boutique.fr</p>
+                <p className="text-[9px] text-gray-400">Plan Starter</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main content */}
+        <div className="flex-1 bg-gray-50 overflow-hidden">
+
+          {/* ── DASHBOARD VIEW ── */}
+          {activeNav === "dashboard" && (
+            <div className="p-5 space-y-4">
+              {/* Header */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-bold text-gray-900">Bonjour, Marie 👋</p>
+                  <p className="text-[11px] text-gray-400 mt-0.5">Samedi 7 juin 2025</p>
+                </div>
+                <button className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-colors">
+                  <Plus className="h-3 w-3" /> Nouveau produit
+                </button>
+              </div>
+
+              {/* Stats */}
+              <div className="grid grid-cols-4 gap-2.5">
+                {[
+                  { label: "Produits", value: "5", sub: "références", color: "text-gray-900" },
+                  { label: "Conformes", value: "3", sub: "Score 80+", color: "text-emerald-600" },
+                  { label: "En cours", value: "1", sub: "Score 40–79", color: "text-amber-600" },
+                  { label: "Critiques", value: "1", sub: "À couvrir", color: "text-red-500" },
+                ].map(s => (
+                  <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-3">
+                    <p className={`text-lg font-bold tabular-nums ${s.color}`}>{s.value}</p>
+                    <p className="text-[10px] font-semibold text-gray-700">{s.label}</p>
+                    <p className="text-[9px] text-gray-400">{s.sub}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-5 gap-3">
+                {/* Products */}
+                <div className="col-span-3 bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+                    <p className="text-xs font-bold text-gray-900">Produits récents</p>
+                    <span className="text-[10px] text-blue-600 font-medium cursor-pointer hover:underline">Voir tout</span>
+                  </div>
+                  <div className="divide-y divide-gray-50">
+                    {products.slice(0, 4).map(p => (
+                      <div key={p.ref} className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                        <div className="h-6 w-6 rounded-md bg-gray-100 flex items-center justify-center shrink-0">
+                          <Package className="h-3 w-3 text-gray-400" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[11px] font-semibold text-gray-800 truncate">{p.name}</p>
+                          <div className="flex items-center gap-1.5 mt-0.5">
+                            <div className="flex-1 h-1 bg-gray-100 rounded-full max-w-[60px]">
+                              <div className={`h-full rounded-full ${scoreColor(p.score)}`} style={{ width: `${p.score}%` }} />
+                            </div>
+                            <span className="text-[9px] text-gray-400 tabular-nums">{p.score}%</span>
+                          </div>
+                        </div>
+                        <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full shrink-0 ${statusColor(p.status)}`}>
+                          {p.status === "conforme" ? "✓" : p.status === "en cours" ? "…" : "—"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Checklist GPSR */}
+                <div className="col-span-2 bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="px-4 py-3 border-b border-gray-100">
+                    <p className="text-xs font-bold text-gray-900">Checklist GPSR</p>
+                  </div>
+                  <div className="divide-y divide-gray-50">
+                    {[
+                      { art: "Art. 22", label: "Dossier technique", done: true },
+                      { art: "Art. 24", label: "Décl. conformité", done: true },
+                      { art: "Art. 9", label: "Étiquetage", done: true },
+                      { art: "Art. 16", label: "Pers. Responsable", done: false },
+                    ].map(c => (
+                      <div key={c.art} className="flex items-center gap-3 px-4 py-2.5">
+                        <div className={`h-4 w-4 rounded-full flex items-center justify-center shrink-0 ${c.done ? "bg-emerald-500" : "bg-gray-200"}`}>
+                          {c.done && <CheckCircle2 className="h-3 w-3 text-white" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[10px] font-semibold text-gray-800">{c.label}</p>
+                          <p className="text-[9px] text-gray-400">{c.art}</p>
+                        </div>
+                        {!c.done && <AlertCircle className="h-3 w-3 text-amber-400 shrink-0" />}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── PRODUCTS VIEW ── */}
+          {activeNav === "products" && (
+            <div className="p-5 space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-bold text-gray-900">Mes produits</p>
+                  <p className="text-[11px] text-gray-400 mt-0.5">5 références — 3 conformes · 1 en cours · 1 non démarré</p>
+                </div>
+                <button className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-colors">
+                  <Plus className="h-3 w-3" /> Nouveau produit
+                </button>
+              </div>
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="grid grid-cols-[1fr_80px_80px_72px] text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-4 py-2 border-b border-gray-100 bg-gray-50">
+                  <span>Produit</span><span className="text-center">Score</span><span className="text-center">Statut</span><span className="text-right">Mis à jour</span>
+                </div>
+                <div className="divide-y divide-gray-50">
+                  {products.map(p => (
+                    <div key={p.ref} className="grid grid-cols-[1fr_80px_80px_72px] items-center px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="h-7 w-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+                          <Package className="h-3.5 w-3.5 text-gray-400" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-xs font-semibold text-gray-800 truncate">{p.name}</p>
+                          <p className="text-[10px] text-gray-400">{p.ref}</p>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-center gap-1">
+                        <span className={`text-xs font-bold tabular-nums ${p.score >= 80 ? "text-emerald-600" : p.score >= 40 ? "text-amber-600" : "text-gray-400"}`}>{p.score > 0 ? `${p.score}%` : "—"}</span>
+                        <div className="w-12 h-1 bg-gray-100 rounded-full">
+                          <div className={`h-full rounded-full ${scoreColor(p.score)}`} style={{ width: `${p.score}%` }} />
+                        </div>
+                      </div>
+                      <div className="flex justify-center">
+                        <span className={`text-[9px] font-semibold px-2 py-0.5 rounded-full ${statusColor(p.status)}`}>{p.status}</span>
+                      </div>
+                      <p className="text-[10px] text-gray-400 text-right">{p.updated}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── DOCUMENTS VIEW ── */}
+          {activeNav === "documents" && (
+            <div className="p-5 space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-bold text-gray-900">Documents</p>
+                  <p className="text-[11px] text-gray-400 mt-0.5">5 documents générés · 4 signés</p>
+                </div>
+              </div>
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="grid grid-cols-[1fr_100px_80px_64px] text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-4 py-2 border-b border-gray-100 bg-gray-50">
+                  <span>Produit</span><span>Type</span><span className="text-center">Statut</span><span className="text-right">Date</span>
+                </div>
+                <div className="divide-y divide-gray-50">
+                  {documents.map((d, i) => (
+                    <div key={i} className="grid grid-cols-[1fr_100px_80px_64px] items-center px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer group">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="h-6 w-6 rounded bg-blue-50 flex items-center justify-center shrink-0">
+                          <FileText className="h-3 w-3 text-blue-500" />
+                        </div>
+                        <p className="text-[11px] font-medium text-gray-700 truncate">{d.name}</p>
+                      </div>
+                      <p className="text-[10px] text-gray-500 truncate">{d.type}</p>
+                      <div className="flex justify-center">
+                        <span className={`text-[9px] font-semibold px-2 py-0.5 rounded-full ${d.status === "signé" ? "bg-emerald-50 text-emerald-700" : "bg-gray-100 text-gray-500"}`}>{d.status}</span>
+                      </div>
+                      <div className="flex items-center justify-end gap-1">
+                        <span className="text-[9px] text-gray-400">{d.date}</span>
+                        <Download className="h-2.5 w-2.5 text-gray-300 group-hover:text-blue-500 transition-colors" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── LABELS VIEW ── */}
+          {activeNav === "labels" && (
+            <div className="p-5 space-y-4">
+              <p className="text-sm font-bold text-gray-900">Étiquettes de sécurité</p>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { name: "Bougie parfumée", langs: ["FR", "EN", "DE"] },
+                  { name: "Diffuseur HE", langs: ["FR", "EN"] },
+                  { name: "Savon surgras", langs: ["FR", "EN", "IT", "ES"] },
+                  { name: "Baume lèvres", langs: ["FR"] },
+                ].map(l => (
+                  <div key={l.name} className="bg-white rounded-xl border border-gray-200 p-4 hover:border-blue-200 transition-colors cursor-pointer">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-6 w-6 rounded bg-amber-50 flex items-center justify-center">
+                        <Tag className="h-3 w-3 text-amber-500" />
+                      </div>
+                      <p className="text-xs font-semibold text-gray-800">{l.name}</p>
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {l.langs.map(lang => (
+                        <span key={lang} className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-50 text-blue-600">{lang}</span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── RP VIEW ── */}
+          {activeNav === "rp" && (
+            <div className="p-5 space-y-4">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-bold text-gray-900">Personne Responsable EU</p>
+                <button className="flex items-center gap-1.5 bg-blue-600 text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg">
+                  <Plus className="h-3 w-3" /> Ajouter
+                </button>
+              </div>
+              <div className="bg-white rounded-xl border border-gray-200 p-4">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+                    <Shield className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="text-sm font-semibold text-gray-900">EU Compliance SAS</p>
+                      <span className="text-[9px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">Actif</span>
+                      <span className="text-[9px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">Importateur</span>
+                    </div>
+                    <p className="text-[11px] text-gray-500 mt-1">12 rue de la Paix, 75001 Paris — FR</p>
+                    <p className="text-[11px] text-gray-400">contact@eucompliance.eu</p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs text-blue-800">
+                <Shield className="h-4 w-4 shrink-0 mt-0.5 text-blue-600" />
+                <p>Cette personne est automatiquement incluse dans tous vos dossiers techniques et déclarations de conformité.</p>
+              </div>
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -802,122 +1141,8 @@ export default function LandingPage() {
             </p>
           </FadeIn>
 
-          {/* Mock dashboard UI */}
           <FadeIn delay={0.1} className="mt-10">
-            <div className="rounded-2xl border border-gray-200 shadow-xl overflow-hidden bg-white">
-              {/* Top bar */}
-              <div className="flex items-center gap-3 px-5 py-3 bg-gray-950 border-b border-white/10">
-                <div className="flex gap-1.5">
-                  <span className="h-3 w-3 rounded-full bg-red-500" />
-                  <span className="h-3 w-3 rounded-full bg-yellow-400" />
-                  <span className="h-3 w-3 rounded-full bg-emerald-400" />
-                </div>
-                <span className="text-xs text-gray-400 ml-2">conforva.com/dashboard</span>
-              </div>
-
-              <div className="flex min-h-[480px]">
-                {/* Sidebar */}
-                <div className="w-52 shrink-0 bg-gray-950 border-r border-white/10 flex flex-col py-4 px-3 gap-1 hidden sm:flex">
-                  <div className="flex items-center gap-2.5 px-3 py-2 mb-3">
-                    <div className="h-7 w-7 rounded-lg bg-blue-600 flex items-center justify-center">
-                      <ShieldCheck className="h-4 w-4 text-white" />
-                    </div>
-                    <span className="text-sm font-bold text-white">Conforva</span>
-                  </div>
-                  {[
-                    { icon: LayoutDashboard, label: "Tableau de bord", active: true },
-                    { icon: Package, label: "Mes produits", active: false },
-                    { icon: FileText, label: "Dossiers", active: false },
-                    { icon: Users, label: "Pers. Responsable", active: false },
-                    { icon: Globe, label: "Marchés", active: false },
-                    { icon: BarChart3, label: "Veille réglementaire", active: false },
-                    { icon: Settings, label: "Paramètres", active: false },
-                  ].map(item => (
-                    <div key={item.label} className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs cursor-default transition-colors ${item.active ? "bg-white/10 text-white font-medium" : "text-gray-400 hover:text-gray-200"}`}>
-                      <item.icon className="h-3.5 w-3.5 shrink-0" />
-                      {item.label}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Main content */}
-                <div className="flex-1 bg-gray-50 p-5 overflow-hidden">
-                  {/* Header row */}
-                  <div className="flex items-center justify-between mb-5">
-                    <div>
-                      <h3 className="font-bold text-gray-900 text-sm">Mes produits</h3>
-                      <p className="text-[11px] text-gray-400 mt-0.5">4 références — 3 conformes · 1 en cours</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-1.5 bg-blue-600 text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg cursor-default">
-                        <Plus className="h-3 w-3" />
-                        Nouveau produit
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Product cards */}
-                  <div className="space-y-2.5">
-                    {[
-                      { name: "Bougie parfumée — cire de soja", ref: "BG-SOY-200", status: "conforme", docs: 5, updated: "Il y a 2j" },
-                      { name: "Diffuseur huile essentielle", ref: "DIF-HE-100", status: "conforme", docs: 5, updated: "Il y a 5j" },
-                      { name: "Savon surgras karité", ref: "SAV-KRT-80", status: "conforme", docs: 5, updated: "Il y a 1 sem." },
-                      { name: "Baume lèvres naturel", ref: "BLV-NAT-15", status: "en cours", docs: 2, updated: "Aujourd'hui" },
-                    ].map((p, i) => (
-                      <motion.div
-                        key={p.ref}
-                        initial={{ opacity: 0, y: 8 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: 0.15 + i * 0.07 }}
-                        className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl px-4 py-3 hover:border-blue-200 hover:shadow-sm transition-all cursor-default"
-                      >
-                        <div className={`h-2 w-2 rounded-full shrink-0 ${p.status === "conforme" ? "bg-emerald-500" : "bg-amber-400"}`} />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold text-gray-900 truncate">{p.name}</p>
-                          <p className="text-[10px] text-gray-400">{p.ref}</p>
-                        </div>
-                        <div className="flex items-center gap-3 shrink-0">
-                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${p.status === "conforme" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>
-                            {p.status === "conforme" ? "✓ Conforme" : "⏳ En cours"}
-                          </span>
-                          <span className="text-[10px] text-gray-400 hidden sm:block">{p.docs} docs</span>
-                          <span className="text-[10px] text-gray-300 hidden md:block">{p.updated}</span>
-                          <div className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-lg px-2 py-1 text-[10px] text-gray-500 font-medium">
-                            <Download className="h-2.5 w-2.5" />
-                            PDF
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {/* AI generation banner */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: 0.5 }}
-                    className="mt-4 flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3"
-                  >
-                    <Sparkles className="h-4 w-4 text-blue-600 shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-blue-900">IA en cours de génération — Baume lèvres naturel</p>
-                      <div className="mt-1.5 h-1 bg-blue-200 rounded-full overflow-hidden">
-                        <motion.div
-                          className="h-full bg-blue-600 rounded-full"
-                          initial={{ width: "0%" }}
-                          whileInView={{ width: "72%" }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
-                        />
-                      </div>
-                    </div>
-                    <span className="text-[11px] font-bold text-blue-600 shrink-0">72%</span>
-                  </motion.div>
-                </div>
-              </div>
-            </div>
+            <DashboardMock />
           </FadeIn>
 
           {/* Feature callouts below the dashboard */}
