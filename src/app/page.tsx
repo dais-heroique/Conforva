@@ -67,8 +67,8 @@ function DashboardMock() {
 
   return (
     <div className="rounded-2xl border border-gray-200 shadow-2xl overflow-hidden bg-white select-none">
-      {/* Browser chrome */}
-      <div className="flex items-center gap-3 px-4 py-2.5 bg-gray-100 border-b border-gray-200">
+      {/* Browser chrome — desktop only */}
+      <div className="hidden sm:flex items-center gap-3 px-4 py-2.5 bg-gray-100 border-b border-gray-200">
         <div className="flex gap-1.5">
           <span className="h-3 w-3 rounded-full bg-red-400" />
           <span className="h-3 w-3 rounded-full bg-yellow-400" />
@@ -81,8 +81,39 @@ function DashboardMock() {
         </div>
       </div>
 
-      <div className="flex" style={{ minHeight: 520 }}>
-        {/* Sidebar */}
+      {/* Mobile top bar */}
+      <div className="sm:hidden flex items-center justify-between px-3 py-2.5 bg-white border-b border-gray-100">
+        <div className="flex items-center gap-2">
+          <img src="/favicon.png" alt="Conforva" className="h-6 w-6 rounded-md object-contain" />
+          <span className="font-bold text-gray-900 text-sm">Conforva</span>
+        </div>
+        <div className="h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center">
+          <span className="text-[10px] font-bold text-blue-600">M</span>
+        </div>
+      </div>
+
+      {/* Mobile tab bar */}
+      <div className="sm:hidden flex border-b border-gray-100 bg-white overflow-x-auto">
+        {navItems.filter(i => i.id).map(item => (
+          <button
+            key={item.label}
+            onClick={() => item.id && setActiveNav(item.id)}
+            className={`flex flex-col items-center gap-0.5 px-3 py-2 text-[10px] font-medium shrink-0 border-b-2 transition-colors ${
+              activeNav === item.id ? "border-blue-600 text-blue-700" : "border-transparent text-gray-400"
+            }`}
+          >
+            <item.icon className="h-4 w-4" />
+            <span className="whitespace-nowrap">{
+              item.label === "Tableau de bord" ? "Accueil"
+              : item.label === "Pers. Responsable" ? "Resp. EU"
+              : item.label
+            }</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="flex" style={{ minHeight: 480 }}>
+        {/* Sidebar — desktop only */}
         <div className="w-48 shrink-0 bg-white border-r border-gray-100 flex flex-col hidden sm:flex">
           {/* Logo */}
           <div className="flex h-14 items-center gap-2.5 px-4 border-b border-gray-100">
@@ -127,55 +158,54 @@ function DashboardMock() {
         </div>
 
         {/* Main content */}
-        <div className="flex-1 bg-gray-50 overflow-hidden">
+        <div className="flex-1 bg-gray-50 overflow-hidden min-w-0">
 
           {/* ── DASHBOARD VIEW ── */}
           {activeNav === "dashboard" && (
-            <div className="p-5 space-y-4">
-              {/* Header */}
+            <div className="p-3 sm:p-5 space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-bold text-gray-900">Bonjour, Marie 👋</p>
-                  <p className="text-[11px] text-gray-400 mt-0.5">Samedi 7 juin 2025</p>
+                  <p className="text-xs sm:text-sm font-bold text-gray-900">Bonjour, Marie 👋</p>
+                  <p className="text-[10px] sm:text-[11px] text-gray-400 mt-0.5">Samedi 7 juin 2025</p>
                 </div>
-                <button className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-colors">
-                  <Plus className="h-3 w-3" /> Nouveau produit
+                <button className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-semibold px-2 py-1 rounded-lg transition-colors whitespace-nowrap">
+                  <Plus className="h-2.5 w-2.5 shrink-0" /> <span className="hidden sm:inline">Nouveau </span>produit
                 </button>
               </div>
 
-              {/* Stats */}
-              <div className="grid grid-cols-4 gap-2.5">
+              {/* Stats — 2×2 on mobile, 4 cols on desktop */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {[
                   { label: "Produits", value: "5", sub: "références", color: "text-gray-900" },
                   { label: "Conformes", value: "3", sub: "Score 80+", color: "text-emerald-600" },
                   { label: "En cours", value: "1", sub: "Score 40–79", color: "text-amber-600" },
                   { label: "Critiques", value: "1", sub: "À couvrir", color: "text-red-500" },
                 ].map(s => (
-                  <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-3">
-                    <p className={`text-lg font-bold tabular-nums ${s.color}`}>{s.value}</p>
+                  <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-2.5 sm:p-3">
+                    <p className={`text-base sm:text-lg font-bold tabular-nums ${s.color}`}>{s.value}</p>
                     <p className="text-[10px] font-semibold text-gray-700">{s.label}</p>
                     <p className="text-[9px] text-gray-400">{s.sub}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="grid grid-cols-5 gap-3">
-                {/* Products */}
-                <div className="col-span-3 bg-white rounded-xl border border-gray-200 overflow-hidden">
-                  <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+              {/* Products + Checklist — stacked on mobile */}
+              <div className="flex flex-col sm:grid sm:grid-cols-5 gap-3">
+                <div className="sm:col-span-3 bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 border-b border-gray-100">
                     <p className="text-xs font-bold text-gray-900">Produits récents</p>
-                    <span className="text-[10px] text-blue-600 font-medium cursor-pointer hover:underline">Voir tout</span>
+                    <span className="text-[10px] text-blue-600 font-medium cursor-pointer">Voir tout</span>
                   </div>
                   <div className="divide-y divide-gray-50">
                     {products.slice(0, 4).map(p => (
-                      <div key={p.ref} className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors">
-                        <div className="h-6 w-6 rounded-md bg-gray-100 flex items-center justify-center shrink-0">
-                          <Package className="h-3 w-3 text-gray-400" />
+                      <div key={p.ref} className="flex items-center gap-2.5 px-3 sm:px-4 py-2 hover:bg-gray-50 transition-colors">
+                        <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-md bg-gray-100 flex items-center justify-center shrink-0">
+                          <Package className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-gray-400" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-[11px] font-semibold text-gray-800 truncate">{p.name}</p>
+                          <p className="text-[10px] sm:text-[11px] font-semibold text-gray-800 truncate">{p.name}</p>
                           <div className="flex items-center gap-1.5 mt-0.5">
-                            <div className="flex-1 h-1 bg-gray-100 rounded-full max-w-[60px]">
+                            <div className="flex-1 h-1 bg-gray-100 rounded-full max-w-[50px]">
                               <div className={`h-full rounded-full ${scoreColor(p.score)}`} style={{ width: `${p.score}%` }} />
                             </div>
                             <span className="text-[9px] text-gray-400 tabular-nums">{p.score}%</span>
@@ -189,9 +219,8 @@ function DashboardMock() {
                   </div>
                 </div>
 
-                {/* Checklist GPSR */}
-                <div className="col-span-2 bg-white rounded-xl border border-gray-200 overflow-hidden">
-                  <div className="px-4 py-3 border-b border-gray-100">
+                <div className="sm:col-span-2 bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="px-3 sm:px-4 py-2.5 border-b border-gray-100">
                     <p className="text-xs font-bold text-gray-900">Checklist GPSR</p>
                   </div>
                   <div className="divide-y divide-gray-50">
@@ -201,15 +230,15 @@ function DashboardMock() {
                       { art: "Art. 9", label: "Étiquetage", done: true },
                       { art: "Art. 16", label: "Pers. Responsable", done: false },
                     ].map(c => (
-                      <div key={c.art} className="flex items-center gap-3 px-4 py-2.5">
+                      <div key={c.art} className="flex items-center gap-2.5 px-3 sm:px-4 py-2.5">
                         <div className={`h-4 w-4 rounded-full flex items-center justify-center shrink-0 ${c.done ? "bg-emerald-500" : "bg-gray-200"}`}>
-                          {c.done && <CheckCircle2 className="h-3 w-3 text-white" />}
+                          {c.done ? <CheckCircle2 className="h-3 w-3 text-white" /> : null}
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-[10px] font-semibold text-gray-800">{c.label}</p>
                           <p className="text-[9px] text-gray-400">{c.art}</p>
                         </div>
-                        {!c.done && <AlertCircle className="h-3 w-3 text-amber-400 shrink-0" />}
+                        {!c.done ? <AlertCircle className="h-3 w-3 text-amber-400 shrink-0" /> : null}
                       </div>
                     ))}
                   </div>
@@ -220,42 +249,33 @@ function DashboardMock() {
 
           {/* ── PRODUCTS VIEW ── */}
           {activeNav === "products" && (
-            <div className="p-5 space-y-4">
+            <div className="p-3 sm:p-5 space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-bold text-gray-900">Mes produits</p>
-                  <p className="text-[11px] text-gray-400 mt-0.5">5 références — 3 conformes · 1 en cours · 1 non démarré</p>
+                  <p className="text-xs sm:text-sm font-bold text-gray-900">Mes produits</p>
+                  <p className="text-[10px] sm:text-[11px] text-gray-400 mt-0.5">5 références · 3 conformes</p>
                 </div>
-                <button className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-colors">
-                  <Plus className="h-3 w-3" /> Nouveau produit
+                <button className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-semibold px-2 py-1 rounded-lg transition-colors whitespace-nowrap">
+                  <Plus className="h-2.5 w-2.5 shrink-0" /> Produit
                 </button>
               </div>
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                <div className="grid grid-cols-[1fr_80px_80px_72px] text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-4 py-2 border-b border-gray-100 bg-gray-50">
-                  <span>Produit</span><span className="text-center">Score</span><span className="text-center">Statut</span><span className="text-right">Mis à jour</span>
-                </div>
                 <div className="divide-y divide-gray-50">
                   {products.map(p => (
-                    <div key={p.ref} className="grid grid-cols-[1fr_80px_80px_72px] items-center px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="h-7 w-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
-                          <Package className="h-3.5 w-3.5 text-gray-400" />
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-xs font-semibold text-gray-800 truncate">{p.name}</p>
-                          <p className="text-[10px] text-gray-400">{p.ref}</p>
-                        </div>
+                    <div key={p.ref} className="flex items-center gap-2.5 px-3 sm:px-4 py-2.5 hover:bg-gray-50 transition-colors cursor-pointer">
+                      <div className="h-6 w-6 sm:h-7 sm:w-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+                        <Package className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-gray-400" />
                       </div>
-                      <div className="flex flex-col items-center gap-1">
-                        <span className={`text-xs font-bold tabular-nums ${p.score >= 80 ? "text-emerald-600" : p.score >= 40 ? "text-amber-600" : "text-gray-400"}`}>{p.score > 0 ? `${p.score}%` : "—"}</span>
-                        <div className="w-12 h-1 bg-gray-100 rounded-full">
-                          <div className={`h-full rounded-full ${scoreColor(p.score)}`} style={{ width: `${p.score}%` }} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[10px] sm:text-xs font-semibold text-gray-800 truncate">{p.name}</p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <div className="w-12 sm:w-16 h-1 bg-gray-100 rounded-full">
+                            <div className={`h-full rounded-full ${scoreColor(p.score)}`} style={{ width: `${p.score}%` }} />
+                          </div>
+                          <span className={`text-[9px] font-bold tabular-nums ${p.score >= 80 ? "text-emerald-600" : p.score >= 40 ? "text-amber-600" : "text-gray-400"}`}>{p.score > 0 ? `${p.score}%` : "—"}</span>
                         </div>
                       </div>
-                      <div className="flex justify-center">
-                        <span className={`text-[9px] font-semibold px-2 py-0.5 rounded-full ${statusColor(p.status)}`}>{p.status}</span>
-                      </div>
-                      <p className="text-[10px] text-gray-400 text-right">{p.updated}</p>
+                      <span className={`text-[9px] font-semibold px-1.5 sm:px-2 py-0.5 rounded-full shrink-0 ${statusColor(p.status)}`}>{p.status}</span>
                     </div>
                   ))}
                 </div>
@@ -265,34 +285,24 @@ function DashboardMock() {
 
           {/* ── DOCUMENTS VIEW ── */}
           {activeNav === "documents" && (
-            <div className="p-5 space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-bold text-gray-900">Documents</p>
-                  <p className="text-[11px] text-gray-400 mt-0.5">5 documents générés · 4 signés</p>
-                </div>
+            <div className="p-3 sm:p-5 space-y-3 sm:space-y-4">
+              <div>
+                <p className="text-xs sm:text-sm font-bold text-gray-900">Documents</p>
+                <p className="text-[10px] sm:text-[11px] text-gray-400 mt-0.5">5 générés · 4 signés</p>
               </div>
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                <div className="grid grid-cols-[1fr_100px_80px_64px] text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-4 py-2 border-b border-gray-100 bg-gray-50">
-                  <span>Produit</span><span>Type</span><span className="text-center">Statut</span><span className="text-right">Date</span>
-                </div>
                 <div className="divide-y divide-gray-50">
                   {documents.map((d, i) => (
-                    <div key={i} className="grid grid-cols-[1fr_100px_80px_64px] items-center px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer group">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="h-6 w-6 rounded bg-blue-50 flex items-center justify-center shrink-0">
-                          <FileText className="h-3 w-3 text-blue-500" />
-                        </div>
-                        <p className="text-[11px] font-medium text-gray-700 truncate">{d.name}</p>
+                    <div key={i} className="flex items-center gap-2.5 px-3 sm:px-4 py-2.5 hover:bg-gray-50 transition-colors cursor-pointer group">
+                      <div className="h-6 w-6 rounded bg-blue-50 flex items-center justify-center shrink-0">
+                        <FileText className="h-3 w-3 text-blue-500" />
                       </div>
-                      <p className="text-[10px] text-gray-500 truncate">{d.type}</p>
-                      <div className="flex justify-center">
-                        <span className={`text-[9px] font-semibold px-2 py-0.5 rounded-full ${d.status === "signé" ? "bg-emerald-50 text-emerald-700" : "bg-gray-100 text-gray-500"}`}>{d.status}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[10px] sm:text-[11px] font-medium text-gray-700 truncate">{d.name}</p>
+                        <p className="text-[9px] text-gray-400">{d.type}</p>
                       </div>
-                      <div className="flex items-center justify-end gap-1">
-                        <span className="text-[9px] text-gray-400">{d.date}</span>
-                        <Download className="h-2.5 w-2.5 text-gray-300 group-hover:text-blue-500 transition-colors" />
-                      </div>
+                      <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full shrink-0 ${d.status === "signé" ? "bg-emerald-50 text-emerald-700" : "bg-gray-100 text-gray-500"}`}>{d.status}</span>
+                      <Download className="h-3 w-3 text-gray-300 group-hover:text-blue-500 transition-colors shrink-0" />
                     </div>
                   ))}
                 </div>
@@ -302,21 +312,21 @@ function DashboardMock() {
 
           {/* ── LABELS VIEW ── */}
           {activeNav === "labels" && (
-            <div className="p-5 space-y-4">
-              <p className="text-sm font-bold text-gray-900">Étiquettes de sécurité</p>
-              <div className="grid grid-cols-2 gap-3">
+            <div className="p-3 sm:p-5 space-y-3 sm:space-y-4">
+              <p className="text-xs sm:text-sm font-bold text-gray-900">Étiquettes de sécurité</p>
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 {[
                   { name: "Bougie parfumée", langs: ["FR", "EN", "DE"] },
                   { name: "Diffuseur HE", langs: ["FR", "EN"] },
                   { name: "Savon surgras", langs: ["FR", "EN", "IT", "ES"] },
                   { name: "Baume lèvres", langs: ["FR"] },
                 ].map(l => (
-                  <div key={l.name} className="bg-white rounded-xl border border-gray-200 p-4 hover:border-blue-200 transition-colors cursor-pointer">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="h-6 w-6 rounded bg-amber-50 flex items-center justify-center">
-                        <Tag className="h-3 w-3 text-amber-500" />
+                  <div key={l.name} className="bg-white rounded-xl border border-gray-200 p-2.5 sm:p-4 hover:border-blue-200 transition-colors cursor-pointer">
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-2">
+                      <div className="h-5 w-5 sm:h-6 sm:w-6 rounded bg-amber-50 flex items-center justify-center shrink-0">
+                        <Tag className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-amber-500" />
                       </div>
-                      <p className="text-xs font-semibold text-gray-800">{l.name}</p>
+                      <p className="text-[10px] sm:text-xs font-semibold text-gray-800 truncate">{l.name}</p>
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {l.langs.map(lang => (
@@ -331,32 +341,31 @@ function DashboardMock() {
 
           {/* ── RP VIEW ── */}
           {activeNav === "rp" && (
-            <div className="p-5 space-y-4">
+            <div className="p-3 sm:p-5 space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-bold text-gray-900">Personne Responsable EU</p>
-                <button className="flex items-center gap-1.5 bg-blue-600 text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg">
-                  <Plus className="h-3 w-3" /> Ajouter
+                <p className="text-xs sm:text-sm font-bold text-gray-900">Personne Responsable EU</p>
+                <button className="flex items-center gap-1 bg-blue-600 text-white text-[10px] font-semibold px-2 py-1 rounded-lg whitespace-nowrap">
+                  <Plus className="h-2.5 w-2.5 shrink-0" /> Ajouter
                 </button>
               </div>
-              <div className="bg-white rounded-xl border border-gray-200 p-4">
-                <div className="flex items-start gap-3">
-                  <div className="h-9 w-9 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
-                    <Shield className="h-4 w-4 text-blue-600" />
+              <div className="bg-white rounded-xl border border-gray-200 p-3 sm:p-4">
+                <div className="flex items-start gap-2.5 sm:gap-3">
+                  <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+                    <Shield className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600" />
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <p className="text-sm font-semibold text-gray-900">EU Compliance SAS</p>
-                      <span className="text-[9px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">Actif</span>
-                      <span className="text-[9px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">Importateur</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <p className="text-xs sm:text-sm font-semibold text-gray-900">EU Compliance SAS</p>
+                      <span className="text-[9px] font-bold bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded-full">Actif</span>
                     </div>
-                    <p className="text-[11px] text-gray-500 mt-1">12 rue de la Paix, 75001 Paris — FR</p>
-                    <p className="text-[11px] text-gray-400">contact@eucompliance.eu</p>
+                    <p className="text-[10px] sm:text-[11px] text-gray-500 mt-1">12 rue de la Paix, 75001 Paris</p>
+                    <p className="text-[10px] sm:text-[11px] text-gray-400">contact@eucompliance.eu</p>
                   </div>
                 </div>
               </div>
-              <div className="flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs text-blue-800">
-                <Shield className="h-4 w-4 shrink-0 mt-0.5 text-blue-600" />
-                <p>Cette personne est automatiquement incluse dans tous vos dossiers techniques et déclarations de conformité.</p>
+              <div className="flex items-start gap-2.5 rounded-xl border border-blue-200 bg-blue-50 px-3 py-3 text-[10px] sm:text-xs text-blue-800">
+                <Shield className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 mt-0.5 text-blue-600" />
+                <p>Automatiquement incluse dans tous vos dossiers techniques et déclarations de conformité.</p>
               </div>
             </div>
           )}
