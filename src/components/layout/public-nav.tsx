@@ -48,8 +48,10 @@ export function PublicNav() {
             <span className="font-bold text-gray-900">Conforva</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm text-gray-500">
+            <Link href="/conformite-gpsr" className="hover:text-gray-900 transition-colors">Conformité GPSR</Link>
             <Link href="/#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</Link>
             <Link href="/#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</Link>
+            <Link href="/blog" className="hover:text-gray-900 transition-colors">Guides</Link>
           </nav>
           <div className="flex items-center gap-2">
             <Link href="/auth/login" className="hidden sm:block text-sm text-gray-500 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
