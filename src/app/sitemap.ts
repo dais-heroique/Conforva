@@ -36,6 +36,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${BASE}/conformite-gpsr`,
+      lastModified: new Date(LAST_CONTENT_UPDATE),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
       url: `${BASE}/enterprise`,
       lastModified: new Date(LAST_CONTENT_UPDATE),
       changeFrequency: "monthly",
