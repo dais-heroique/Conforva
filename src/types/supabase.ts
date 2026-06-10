@@ -893,6 +893,14 @@ export const Constants = {
 
 export type Plan = "free" | "starter" | "growth" | "pro" | "enterprise"
 
+export type ProductRow = Database["public"]["Tables"]["products"]["Row"]
+export type CategoryRow = Database["public"]["Tables"]["product_categories"]["Row"]
+export type RiskAssessmentRow = Database["public"]["Tables"]["risk_assessments"]["Row"]
+export type TechnicalFileRow = Database["public"]["Tables"]["technical_files"]["Row"]
+export type LabelRow = Database["public"]["Tables"]["labels"]["Row"]
+export type OrganizationRow = Database["public"]["Tables"]["organizations"]["Row"]
+export type ResponsiblePersonRow = Database["public"]["Tables"]["responsible_persons"]["Row"]
+
 export const PLAN_LIMITS: Record<Plan, number> = {
   free: 1,
   starter: 10,
