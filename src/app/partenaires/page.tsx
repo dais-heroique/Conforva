@@ -99,24 +99,38 @@ export default function PartenairesPage() {
 
         {/* Commission calculator */}
         <section className="px-5 py-12 max-w-4xl mx-auto">
-          <h2 className="text-xl font-bold text-gray-900 mb-6 text-center">Combien pouvez-vous gagner ?</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">Combien pouvez-vous gagner ?</h2>
+          <p className="text-sm text-gray-500 text-center mb-8">30% de chaque abonnement, versés chaque mois pendant 12 mois</p>
           <div className="grid sm:grid-cols-3 gap-4">
             {[
-              { clients: 5, plan: "Starter (29€)", mrr: 29, commission: 8.70 },
-              { clients: 10, plan: "Growth (79€)", mrr: 79, commission: 23.70 },
-              { clients: 10, plan: "Pro (199€)", mrr: 199, commission: 59.70 },
-            ].map((s, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-200 p-5 text-center">
-                <p className="text-3xl font-bold text-gray-900 tabular-nums">
-                  {(s.clients * s.commission).toFixed(0)} €
-                </p>
-                <p className="text-xs text-gray-400 mt-1">/ mois</p>
-                <div className="mt-3 pt-3 border-t border-gray-100 space-y-1">
-                  <p className="text-xs text-gray-500"><span className="font-semibold text-gray-700">{s.clients} clients</span> sur plan {s.plan}</p>
-                  <p className="text-xs text-gray-500">Commission : <span className="font-semibold text-emerald-600">{s.commission} €/client/mois</span></p>
+              { clients: 5, plan: "Starter", mrr: 29 },
+              { clients: 10, plan: "Growth", mrr: 79 },
+              { clients: 10, plan: "Pro", mrr: 199 },
+            ].map((s, i) => {
+              const totalMrr = s.clients * s.mrr
+              const commission = totalMrr * 0.30
+              return (
+                <div key={i} className="bg-white rounded-2xl border border-gray-200 p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{s.plan}</span>
+                    <span className="text-xs font-semibold text-gray-400">{s.mrr} €/mois</span>
+                  </div>
+                  <div className="space-y-2 text-sm mb-4">
+                    <div className="flex justify-between text-gray-600">
+                      <span>{s.clients} clients × {s.mrr} €</span>
+                      <span className="font-semibold">{totalMrr} €</span>
+                    </div>
+                    <div className="flex justify-between text-gray-600">
+                      <span>× 30% commission</span>
+                      <span className="font-semibold text-emerald-600">= {commission.toFixed(0)} €</span>
+                    </div>
+                  </div>
+                  <div className="border-t border-gray-100 pt-3 text-center">
+                    <p className="text-2xl font-bold text-gray-900 tabular-nums">{commission.toFixed(0)} €<span className="text-sm font-normal text-gray-400">/mois</span></p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
           <p className="text-center text-xs text-gray-400 mt-4">Commission versée pendant 12 mois par client actif · Aucun plafond</p>
         </section>
