@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
       // Affiliate conversion tracking
       const affiliateRef = session.metadata?.affiliate_ref
       if (affiliateRef) {
-        const svc = createServiceClient()
+        const svc = await createServiceClient()
         const { data: affiliate } = await svc
           .from("affiliates")
           .select("id, commission_rate")
