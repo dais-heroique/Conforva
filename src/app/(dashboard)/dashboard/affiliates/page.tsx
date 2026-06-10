@@ -6,7 +6,7 @@ const ADMIN_EMAIL = "veltris.buisness@gmail.com"
 
 async function markPaid(id: string) {
   "use server"
-  const supabase = createServiceClient()
+  const supabase = await createServiceClient()
   await supabase.from("affiliate_conversions")
     .update({ status: "paid", paid_at: new Date().toISOString() })
     .eq("id", id)
@@ -20,7 +20,7 @@ export default async function AffiliatesAdminPage() {
   const { data: userData } = await supabase.from("users").select("email").eq("id", user.id).single() as any
   if (userData?.email !== ADMIN_EMAIL) redirect("/dashboard")
 
-  const svc = createServiceClient()
+  const svc = await createServiceClient()
 
   const { data: affiliates } = await svc
     .from("affiliates")

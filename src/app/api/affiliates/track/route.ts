@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
   const { code } = await req.json()
   if (!code) return NextResponse.json({ ok: false })
 
-  const supabase = createServiceClient()
+  const supabase = await createServiceClient()
   const { data: affiliate } = await supabase
     .from("affiliates")
     .select("id")

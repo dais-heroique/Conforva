@@ -3,7 +3,7 @@ import { createServiceClient } from "@/lib/supabase/server"
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params
-  const supabase = createServiceClient()
+  const supabase = await createServiceClient()
 
   const { data: affiliate, error } = await supabase
     .from("affiliates")
