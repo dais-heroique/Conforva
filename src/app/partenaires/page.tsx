@@ -104,7 +104,7 @@ export default function PartenairesPage() {
             {[
               { clients: 5, plan: "Starter (29€)", mrr: 29, commission: 8.70 },
               { clients: 10, plan: "Growth (79€)", mrr: 79, commission: 23.70 },
-              { clients: 20, plan: "Growth (79€)", mrr: 79, commission: 23.70 },
+              { clients: 10, plan: "Pro (199€)", mrr: 199, commission: 59.70 },
             ].map((s, i) => (
               <div key={i} className="bg-white rounded-2xl border border-gray-200 p-5 text-center">
                 <p className="text-3xl font-bold text-gray-900 tabular-nums">
