@@ -111,7 +111,6 @@ export default function PartenairesPage() {
               { plan: "Starter", mrr: 29, color: "text-gray-700" },
               { plan: "Growth", mrr: 79, color: "text-blue-700" },
               { plan: "Pro", mrr: 199, color: "text-violet-700" },
-              { plan: "Enterprise", mrr: 490, color: "text-amber-700" },
             ].map((s, i, arr) => {
               const commission = s.mrr * 0.30
               return (
