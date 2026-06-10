@@ -24,7 +24,7 @@ export default async function AffiliatesAdminPage() {
 
   const { data: affiliates } = await svc
     .from("affiliates")
-    .select("id, name, email, company, code, token, status, commission_rate, created_at")
+    .select("id, name, email, company, code, token, status, commission_rate, iban, created_at")
     .order("created_at", { ascending: false })
 
   const { data: conversions } = await svc
@@ -116,6 +116,7 @@ export default async function AffiliatesAdminPage() {
                         <p className="font-medium text-gray-900 text-xs">{a.name}</p>
                         <p className="text-[10px] text-gray-400">{a.email}</p>
                         {a.company && <p className="text-[10px] text-gray-400">{a.company}</p>}
+                        {a.iban && <p className="text-[10px] font-mono text-blue-600 mt-0.5">{a.iban}</p>}
                       </td>
                       <td className="px-4 py-3">
                         <code className="text-xs bg-gray-100 px-2 py-0.5 rounded font-mono">{a.code}</code>

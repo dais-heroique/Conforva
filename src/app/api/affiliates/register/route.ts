@@ -14,10 +14,10 @@ function generateCode(company: string, name: string): string {
 }
 
 export async function POST(req: NextRequest) {
-  const { name, email, company } = await req.json()
+  const { name, email, company, iban } = await req.json()
 
-  if (!name || !email) {
-    return NextResponse.json({ error: "name and email required" }, { status: 400 })
+  if (!name || !email || !iban) {
+    return NextResponse.json({ error: "name, email and iban required" }, { status: 400 })
   }
 
   const supabase = await createServiceClient()
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
   const { data, error } = await supabase
     .from("affiliates")
-    .insert({ name, email, company: company || null, code })
+    .insert({ name, email, company: company || null, code, iban })
     .select("id, code, token")
     .single()
 

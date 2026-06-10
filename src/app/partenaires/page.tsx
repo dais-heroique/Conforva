@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { CheckCircle2, ArrowRight, DollarSign, Users, Link as LinkIcon, BarChart3 } from "lucide-react"
 
 export default function PartenairesPage() {
-  const [form, setForm] = useState({ name: "", email: "", company: "" })
+  const [form, setForm] = useState({ name: "", email: "", company: "", iban: "" })
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [result, setResult] = useState<{ code: string; referral_url: string; stats_url: string } | null>(null)
   const [errorMsg, setErrorMsg] = useState("")
@@ -215,6 +215,19 @@ export default function PartenairesPage() {
                     className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Bigblue, Shopify Agency…"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">IBAN pour le paiement des commissions *</label>
+                  <input
+                    type="text"
+                    required
+                    value={form.iban}
+                    onChange={e => setForm(f => ({ ...f, iban: e.target.value.toUpperCase().replace(/\s/g, "") }))}
+                    className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="FR76 3000 6000 0112 3456 7890 189"
+                  />
+                  <p className="text-[10px] text-gray-400 mt-1">Utilisé uniquement pour vous virer vos commissions.</p>
                 </div>
 
                 {errorMsg && (
