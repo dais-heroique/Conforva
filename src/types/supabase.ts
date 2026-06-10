@@ -892,3 +892,11 @@ export const Constants = {
 } as const
 
 export type Plan = "free" | "starter" | "growth" | "pro" | "enterprise"
+
+export const PLAN_LIMITS: Record<Plan, number> = {
+  free: 1,
+  starter: 10,
+  growth: 50,
+  pro: 200,
+  enterprise: Infinity,
+}
