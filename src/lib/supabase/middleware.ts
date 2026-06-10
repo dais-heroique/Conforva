@@ -46,6 +46,9 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/api/auth/otp') ||
     request.nextUrl.pathname.startsWith('/enterprise') ||
     request.nextUrl.pathname.startsWith('/blog') ||
+    request.nextUrl.pathname.startsWith('/partenaires') ||
+    request.nextUrl.pathname.startsWith('/conformite-gpsr') ||
+    request.nextUrl.pathname.startsWith('/api/affiliates') ||
     request.nextUrl.pathname === '/sitemap.xml' ||
     request.nextUrl.pathname === '/robots.txt'
 

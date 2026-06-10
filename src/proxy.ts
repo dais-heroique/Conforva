@@ -6,9 +6,6 @@ type Locale = typeof LOCALES[number]
 const DEFAULT_LOCALE: Locale = 'fr'
 
 function detectLocale(request: NextRequest): Locale {
-  // Only honour an explicitly set cookie — never auto-detect from Accept-Language.
-  // The app is French-first; defaulting to the browser language causes the auth
-  // pages to appear in English for users with an English-language browser.
   const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value
   if (cookieLocale && LOCALES.includes(cookieLocale as Locale)) {
     return cookieLocale as Locale
@@ -57,8 +54,37 @@ export async function proxy(request: NextRequest) {
     })
   }
 
+  // Affiliate referral tracking — set cookie 30 days, track click
+  const url = new URL(request.url)
+  const ref = url.searchParams.get('ref')
+  if (ref && /^[a-zA-Z0-9_-]{2,40}$/.test(ref)) {
+    const existing = request.cookies.get('conforva_ref')?.value
+    finalResponse.cookies.set('conforva_ref', ref, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30,
+      sameSite: 'lax',
+      httpOnly: true,
+    })
+    // Track click only when a new ref is being set (not refresh with same ref)
+    if (existing !== ref) {
+      const base = url.origin
+      fetch(`${base}/api/affiliates/track`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: ref }),
+      }).catch(() => {})
+    }
+  }
+
   return finalResponse
 }
+
+export const config = {
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
+}
+
 
 export const config = {
   matcher: [
