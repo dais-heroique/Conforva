@@ -66,7 +66,7 @@ export default function QuestionnairePage({ params }: PageProps) {
           .order("version", { ascending: false })
           .limit(1)
           .single()
-        if (tpl) setFields(tpl.fields_json as QuestionnaireField[])
+        if (tpl) setFields(tpl.fields_json as unknown as QuestionnaireField[])
       }
 
       const { data: existing } = await supabase

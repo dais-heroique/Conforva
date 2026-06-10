@@ -907,13 +907,18 @@ export type UserRow = Database["public"]["Tables"]["users"]["Row"]
 export type AuditLogRow = Database["public"]["Tables"]["audit_log"]["Row"]
 
 export interface QuestionnaireField {
-  id: string
+  key: string
   type: string
   label: string
+  label_fr: string
+  step: number
   required?: boolean
   options?: string[]
   placeholder?: string
   description?: string
+  min?: number
+  max?: number
+  unit?: string
 }
 
 export const PLAN_LIMITS: Record<Plan, number> = {
