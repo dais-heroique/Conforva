@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { CheckCircle2, Clock, DollarSign, TrendingUp, MousePointer, Copy } from "lucide-react"
+import { CheckCircle2, Clock, DollarSign, TrendingUp, MousePointer } from "lucide-react"
+import { CopyButton } from "./copy-button"
 
 async function getStats(token: string) {
   const base = process.env.NEXT_PUBLIC_APP_URL || "https://conforva.com"
@@ -59,12 +60,7 @@ export default async function PartnerStatsPage({ params }: { params: Promise<{ t
             <code className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono text-blue-700 break-all min-w-0">
               {referralUrl}
             </code>
-            <button
-              onClick={() => navigator.clipboard.writeText(referralUrl)}
-              className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 transition-colors shrink-0"
-            >
-              <Copy className="h-3.5 w-3.5" /> Copier
-            </button>
+            <CopyButton text={referralUrl} />
           </div>
           <p className="text-xs text-gray-400 mt-2">
             Cookie de 30 jours · Commission de {Math.round(affiliate.commission_rate * 100)}% pendant 12 mois
