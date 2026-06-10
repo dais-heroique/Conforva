@@ -899,7 +899,22 @@ export type RiskAssessmentRow = Database["public"]["Tables"]["risk_assessments"]
 export type TechnicalFileRow = Database["public"]["Tables"]["technical_files"]["Row"]
 export type LabelRow = Database["public"]["Tables"]["labels"]["Row"]
 export type OrganizationRow = Database["public"]["Tables"]["organizations"]["Row"]
+export type OrgRow = OrganizationRow
 export type ResponsiblePersonRow = Database["public"]["Tables"]["responsible_persons"]["Row"]
+export type ComplianceStatusRow = Database["public"]["Tables"]["compliance_status"]["Row"]
+export type QuestionnaireResponseRow = Database["public"]["Tables"]["questionnaire_responses"]["Row"]
+export type UserRow = Database["public"]["Tables"]["users"]["Row"]
+export type AuditLogRow = Database["public"]["Tables"]["audit_log"]["Row"]
+
+export interface QuestionnaireField {
+  id: string
+  type: string
+  label: string
+  required?: boolean
+  options?: string[]
+  placeholder?: string
+  description?: string
+}
 
 export const PLAN_LIMITS: Record<Plan, number> = {
   free: 1,
