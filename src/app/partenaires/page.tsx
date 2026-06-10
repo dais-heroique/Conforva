@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { CheckCircle2, ArrowRight, DollarSign, Users, Link as LinkIcon, BarChart3 } from "lucide-react"
 
 export default function PartenairesPage() {
-  const [form, setForm] = useState({ name: "", email: "", company: "", iban: "" })
+  const [form, setForm] = useState({ name: "", email: "", company: "", payment_method: "paypal", payment_details: "" })
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [result, setResult] = useState<{ code: string; referral_url: string; stats_url: string } | null>(null)
   const [errorMsg, setErrorMsg] = useState("")
@@ -20,7 +20,7 @@ export default function PartenairesPage() {
       const res = await fetch("/api/affiliates/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ name: form.name, email: form.email, company: form.company, payment_method: form.payment_method, payment_details: form.payment_details }),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -218,16 +218,54 @@ export default function PartenairesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">IBAN pour le paiement des commissions *</label>
-                  <input
-                    type="text"
-                    required
-                    value={form.iban}
-                    onChange={e => setForm(f => ({ ...f, iban: e.target.value.toUpperCase().replace(/\s/g, "") }))}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="FR76 3000 6000 0112 3456 7890 189"
-                  />
-                  <p className="text-[10px] text-gray-400 mt-1">Utilisé uniquement pour vous virer vos commissions.</p>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Méthode de paiement des commissions *</label>
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    {[
+                      { value: "paypal", label: "PayPal" },
+                      { value: "wise", label: "Wise" },
+                      { value: "iban", label: "IBAN (EU)" },
+                    ].map(m => (
+                      <button
+                        key={m.value}
+                        type="button"
+                        onClick={() => setForm(f => ({ ...f, payment_method: m.value, payment_details: "" }))}
+                        className={`rounded-xl border px-3 py-2 text-xs font-semibold transition-colors ${form.payment_method === m.value ? "border-blue-500 bg-blue-50 text-blue-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
+                      >
+                        {m.label}
+                      </button>
+                    ))}
+                  </div>
+                  {form.payment_method === "paypal" && (
+                    <input
+                      type="email"
+                      required
+                      value={form.payment_details}
+                      onChange={e => setForm(f => ({ ...f, payment_details: e.target.value }))}
+                      className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="votre-email@paypal.com"
+                    />
+                  )}
+                  {form.payment_method === "wise" && (
+                    <input
+                      type="email"
+                      required
+                      value={form.payment_details}
+                      onChange={e => setForm(f => ({ ...f, payment_details: e.target.value }))}
+                      className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="votre-email@wise.com"
+                    />
+                  )}
+                  {form.payment_method === "iban" && (
+                    <input
+                      type="text"
+                      required
+                      value={form.payment_details}
+                      onChange={e => setForm(f => ({ ...f, payment_details: e.target.value.toUpperCase().replace(/\s/g, "") }))}
+                      className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="FR76 3000 6000 0112 3456 7890 189"
+                    />
+                  )}
+                  <p className="text-[10px] text-gray-400 mt-1">Utilisé uniquement pour vous envoyer vos commissions.</p>
                 </div>
 
                 {errorMsg && (

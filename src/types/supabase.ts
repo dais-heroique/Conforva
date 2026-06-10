@@ -98,6 +98,8 @@ export type Database = {
           id: string
           name: string
           notes: string | null
+          payment_details: string | null
+          payment_method: string | null
           status: string
           token: string
         }
@@ -111,6 +113,8 @@ export type Database = {
           id?: string
           name: string
           notes?: string | null
+          payment_details?: string | null
+          payment_method?: string | null
           status?: string
           token?: string
         }
@@ -124,6 +128,8 @@ export type Database = {
           id?: string
           name?: string
           notes?: string | null
+          payment_details?: string | null
+          payment_method?: string | null
           status?: string
           token?: string
         }
