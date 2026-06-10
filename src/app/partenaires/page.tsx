@@ -98,36 +98,31 @@ export default function PartenairesPage() {
         </section>
 
         {/* Commission calculator */}
-        <section className="px-5 py-12 max-w-4xl mx-auto">
+        <section className="px-5 py-12 max-w-3xl mx-auto">
           <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">Combien pouvez-vous gagner ?</h2>
           <p className="text-sm text-gray-500 text-center mb-8">30% de chaque abonnement, versés chaque mois pendant 12 mois</p>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+            <div className="grid grid-cols-4 bg-gray-50 border-b border-gray-100 px-5 py-3">
+              {["Plan", "Prix", "Votre commission", "× 10 clients"].map(h => (
+                <p key={h} className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">{h}</p>
+              ))}
+            </div>
             {[
-              { clients: 5, plan: "Starter", mrr: 29 },
-              { clients: 10, plan: "Growth", mrr: 79 },
-              { clients: 10, plan: "Pro", mrr: 199 },
-            ].map((s, i) => {
-              const totalMrr = s.clients * s.mrr
-              const commission = totalMrr * 0.30
+              { plan: "Starter", mrr: 29, color: "text-gray-700" },
+              { plan: "Growth", mrr: 79, color: "text-blue-700" },
+              { plan: "Pro", mrr: 199, color: "text-violet-700" },
+              { plan: "Enterprise", mrr: 490, color: "text-amber-700" },
+            ].map((s, i, arr) => {
+              const commission = s.mrr * 0.30
               return (
-                <div key={i} className="bg-white rounded-2xl border border-gray-200 p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{s.plan}</span>
-                    <span className="text-xs font-semibold text-gray-400">{s.mrr} €/mois</span>
+                <div key={s.plan} className={`grid grid-cols-4 px-5 py-4 items-center ${i < arr.length - 1 ? "border-b border-gray-50" : ""}`}>
+                  <p className={`text-sm font-bold ${s.color}`}>{s.plan}</p>
+                  <p className="text-sm text-gray-600 tabular-nums">{s.mrr} €<span className="text-xs text-gray-400">/mois</span></p>
+                  <div>
+                    <p className="text-sm font-semibold text-emerald-600 tabular-nums">{commission.toFixed(2)} €<span className="text-xs text-gray-400">/client</span></p>
+                    <p className="text-[10px] text-gray-400">{s.mrr} × 30%</p>
                   </div>
-                  <div className="space-y-2 text-sm mb-4">
-                    <div className="flex justify-between text-gray-600">
-                      <span>{s.clients} clients × {s.mrr} €</span>
-                      <span className="font-semibold">{totalMrr} €</span>
-                    </div>
-                    <div className="flex justify-between text-gray-600">
-                      <span>× 30% commission</span>
-                      <span className="font-semibold text-emerald-600">= {commission.toFixed(0)} €</span>
-                    </div>
-                  </div>
-                  <div className="border-t border-gray-100 pt-3 text-center">
-                    <p className="text-2xl font-bold text-gray-900 tabular-nums">{commission.toFixed(0)} €<span className="text-sm font-normal text-gray-400">/mois</span></p>
-                  </div>
+                  <p className="text-sm font-bold text-gray-900 tabular-nums">{(commission * 10).toFixed(0)} €<span className="text-xs font-normal text-gray-400">/mois</span></p>
                 </div>
               )
             })}
