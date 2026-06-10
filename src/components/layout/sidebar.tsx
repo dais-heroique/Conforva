@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import {
   LayoutDashboard, Package, FileText, Tag, Settings,
-  Shield, LogOut, ChevronRight, Menu, X,
+  Shield, LogOut, ChevronRight, Menu, X, Users,
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
@@ -32,6 +32,9 @@ function NavContent({ user, org, onClose }: SidebarProps & { onClose?: () => voi
     { href: "/dashboard/labels", label: tSidebar.labels, icon: Tag },
     { href: "/dashboard/responsible-person", label: tSidebar.responsiblePerson, icon: Shield },
     { href: "/dashboard/settings", label: tSidebar.settings, icon: Settings },
+    ...(user.email === "veltris.buisness@gmail.com"
+      ? [{ href: "/dashboard/affiliates", label: "Affiliés", icon: Users }]
+      : []),
   ]
 
   async function handleSignOut() {

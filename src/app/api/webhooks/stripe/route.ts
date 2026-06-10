@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createServiceClient } from "@/lib/supabase/server"
 import type { Plan } from "@/types/supabase"
+
+const PLAN_MRR: Record<string, number> = {
+  starter: 29,
+  growth: 79,
+  pro: 199,
+  enterprise: 490,
+}
 
 // Statuses where the user keeps their paid plan (Stripe is still processing/retrying)
 const ACTIVE_STATUSES = ["active", "trialing", "past_due"]
@@ -46,6 +53,31 @@ export async function POST(req: NextRequest) {
         subscription_status: "active",
         subscription_period_end: periodEndISO(subscription),
       }).eq("id", userId)
+
+      // Affiliate conversion tracking
+      const affiliateRef = session.metadata?.affiliate_ref
+      if (affiliateRef) {
+        const svc = createServiceClient()
+        const { data: affiliate } = await svc
+          .from("affiliates")
+          .select("id, commission_rate")
+          .eq("code", affiliateRef)
+          .eq("status", "active")
+          .single()
+
+        if (affiliate) {
+          const mrr = PLAN_MRR[plan] ?? 29
+          const commission = mrr * Number(affiliate.commission_rate)
+          await svc.from("affiliate_conversions").insert({
+            affiliate_id: affiliate.id,
+            user_id: userId,
+            plan,
+            mrr,
+            commission,
+            stripe_subscription_id: subscriptionId,
+          })
+        }
+      }
     }
   }
 

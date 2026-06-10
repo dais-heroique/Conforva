@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   const formData = await req.formData()
   const priceId = formData.get("priceId") as string
 
-  const { data: userData } = await supabase.from("users").select("stripe_customer_id, email").eq("id", user.id).single()
+  const { data: userData } = await supabase.from("users").select("stripe_customer_id, email, affiliate_ref").eq("id", user.id).single()
 
   let customerId = userData?.stripe_customer_id
   if (!customerId) {
@@ -34,7 +34,10 @@ export async function POST(req: NextRequest) {
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${baseUrl}/dashboard/billing?success=true`,
     cancel_url: `${baseUrl}/dashboard/billing?cancelled=true`,
-    metadata: { user_id: user.id },
+    metadata: {
+      user_id: user.id,
+      ...(userData?.affiliate_ref ? { affiliate_ref: userData.affiliate_ref } : {}),
+    },
   })
 
   return NextResponse.redirect(session.url!, 303)
