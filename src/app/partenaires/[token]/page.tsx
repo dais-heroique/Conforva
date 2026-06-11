@@ -39,6 +39,20 @@ export default async function PartnerStatsPage({ params }: { params: Promise<{ t
       </header>
 
       <main className="max-w-5xl mx-auto px-5 py-10 space-y-8">
+
+        {/* ⚠️ Save this link banner */}
+        <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 flex gap-4 items-start">
+          <div className="text-2xl shrink-0">⚠️</div>
+          <div>
+            <p className="font-bold text-amber-900 text-sm">Sauvegardez cette page maintenant</p>
+            <p className="text-amber-800 text-sm mt-1">
+              Ce lien est <strong>unique et confidentiel</strong> — c'est le seul moyen d'accéder à votre tableau de bord.
+              Nous n'envoyons <strong>pas d'email</strong> avec ce lien. Si vous le perdez, vous n'aurez plus accès à vos stats et commissions.
+            </p>
+            <p className="text-amber-700 text-xs mt-2 font-semibold">👉 Ajoutez cette page en favori maintenant.</p>
+          </div>
+        </div>
+
         {/* Header */}
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
