@@ -97,6 +97,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.1,
     },
+    // ── Affiliate / partner pages ─────────────────────────────────────────────
+    {
+      url: `${BASE}/partenaires`,
+      lastModified: new Date(LAST_CONTENT_UPDATE),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
     // ── Blog articles ─────────────────────────────────────────────────────────
     ...blogEntries,
   ]
