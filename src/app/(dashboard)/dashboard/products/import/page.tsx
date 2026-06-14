@@ -7,7 +7,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { ArrowLeft, Upload, FileSpreadsheet, CheckCircle2, Loader2, AlertTriangle } from "lucide-react"
+import { ArrowLeft, Upload, FileSpreadsheet, CheckCircle2, Loader2, AlertTriangle, Store } from "lucide-react"
 import Papa from "papaparse"
 import type { CategoryRow } from "@/types/supabase"
 import { useT } from "@/components/providers/locale-provider"
@@ -110,6 +110,22 @@ export default function ImportPage() {
           <AlertDescription>{tImport.success.replace("{{count}}", String(imported))}</AlertDescription>
         </Alert>
       )}
+
+      {/* Shopify shortcut */}
+      <Card className="border-blue-200 bg-blue-50/40">
+        <CardContent className="flex items-center gap-4 p-5">
+          <div className="h-10 w-10 rounded-xl bg-blue-600 flex items-center justify-center shrink-0">
+            <Store className="h-5 w-5 text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-gray-900 text-sm">Vous avez une boutique Shopify ?</p>
+            <p className="text-xs text-gray-500 mt-0.5">Importez tous vos produits en un clic via votre token API</p>
+          </div>
+          <Link href="/dashboard/shopify">
+            <Button size="sm" className="shrink-0">Connecter Shopify</Button>
+          </Link>
+        </CardContent>
+      </Card>
 
       {/* Template download */}
       <Card>
