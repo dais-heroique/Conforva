@@ -533,6 +533,7 @@ export default function LandingPage() {
             <span className="font-bold text-gray-900">Conforva</span>
           </Link>
           <nav className="hidden md:flex items-center gap-7 text-sm text-gray-500">
+            <Link href="/audit-gratuit" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors">✓ Audit gratuit</Link>
             <a href="#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</a>
             <a href="#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</a>
             <Link href="/enterprise" className="hover:text-gray-900 transition-colors">Enterprise</Link>
@@ -585,21 +586,21 @@ export default function LandingPage() {
             transition={{ duration: 0.35, delay: 0.3 }}
             className="flex flex-wrap gap-3 justify-center"
           >
-            <Link href="/auth/login">
-              <Button size="lg" className="gap-2">
-                Créer un compte gratuit <ArrowRight className="h-4 w-4" />
+            <Link href="/audit-gratuit">
+              <Button size="lg" className="gap-2 bg-blue-600 hover:bg-blue-700">
+                Tester ma conformité GPSR <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <a href="#comment">
-              <Button size="lg" variant="ghost" className="text-gray-600 hover:text-gray-900">
-                Comment ça marche →
+            <Link href="/auth/login">
+              <Button size="lg" variant="outline" className="gap-2 text-gray-700">
+                Créer un compte gratuit
               </Button>
-            </a>
+            </Link>
           </motion.div>
 
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.42 }}
             className="mt-3 text-xs text-gray-400">
-            Gratuit pour 1 référence · Aucune carte bancaire requise
+            Audit gratuit · Sans inscription · Résultat en 2 minutes
           </motion.p>
 
           <motion.div
@@ -1386,6 +1387,34 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── AUDIT GRATUIT ─── */}
+      <FadeIn>
+        <section className="mb-8 px-5">
+          <div className="max-w-3xl mx-auto rounded-2xl bg-blue-600 px-8 py-10 text-center text-white relative overflow-hidden">
+            <div className="pointer-events-none absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at 20% 50%, white, transparent 55%)" }} />
+            <div className="relative">
+              <p className="text-xs font-bold uppercase tracking-widest text-blue-200 mb-2">Gratuit · Sans inscription · 2 minutes</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-3">Votre boutique est-elle conforme GPSR ?</h2>
+              <p className="text-blue-100 text-sm mb-6 max-w-lg mx-auto">
+                Répondez à 4 questions et obtenez votre score de conformité avec la liste exacte des documents manquants.
+              </p>
+              <div className="flex flex-wrap gap-3 justify-center">
+                <Link href="/audit-gratuit">
+                  <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 shadow gap-2 font-semibold">
+                    Faire mon audit GPSR gratuit <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+              <div className="mt-5 flex flex-wrap justify-center gap-4 text-xs text-blue-200">
+                {["Résultat immédiat", "Aucune carte bancaire", "Recommandations personnalisées"].map(t => (
+                  <span key={t} className="flex items-center gap-1"><CheckCircle2 className="h-3.5 w-3.5" />{t}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
       {/* ─── CTA ─── */}
       <FadeIn>
         <section className="mb-14 bg-[#111110] px-8 py-16 text-center text-white relative overflow-hidden">
@@ -1417,6 +1446,7 @@ export default function LandingPage() {
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Produit</p>
               <ul className="space-y-2 text-sm text-gray-500">
+                <li><Link href="/audit-gratuit" className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">✓ Audit GPSR gratuit</Link></li>
                 <li><a href="#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</a></li>
                 <li><a href="#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</a></li>
                 <li><Link href="/enterprise" className="hover:text-gray-900 transition-colors">Enterprise</Link></li>
