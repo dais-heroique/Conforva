@@ -51,6 +51,8 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/gpsr-amazon') ||
     request.nextUrl.pathname.startsWith('/gpsr-shopify') ||
     request.nextUrl.pathname.startsWith('/gpsr-dropshipping') ||
+    request.nextUrl.pathname.startsWith('/api/shopify') ||
+    request.nextUrl.pathname.startsWith('/shopify-app') ||
     request.nextUrl.pathname.startsWith('/audit-gratuit') ||
     request.nextUrl.pathname.startsWith('/api/affiliates') ||
     request.nextUrl.pathname === '/sitemap.xml' ||
