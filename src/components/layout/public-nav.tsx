@@ -48,8 +48,8 @@ export function PublicNav() {
             <span className="font-bold text-gray-900">Conforva</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm text-gray-500">
+            <Link href="/audit-gratuit" className="hover:text-gray-900 transition-colors font-semibold text-blue-600">✓ Audit gratuit</Link>
             <Link href="/conformite-gpsr" className="hover:text-gray-900 transition-colors">Conformité GPSR</Link>
-            <Link href="/#fonctionnalites" className="hover:text-gray-900 transition-colors">Fonctionnalités</Link>
             <Link href="/#tarifs" className="hover:text-gray-900 transition-colors">Tarifs</Link>
             <Link href="/blog" className="hover:text-gray-900 transition-colors">Guides</Link>
             <Link href="/partenaires" className="hover:text-gray-900 transition-colors">Partenaires</Link>

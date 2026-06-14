@@ -48,6 +48,10 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/blog') ||
     request.nextUrl.pathname.startsWith('/partenaires') ||
     request.nextUrl.pathname.startsWith('/conformite-gpsr') ||
+    request.nextUrl.pathname.startsWith('/gpsr-amazon') ||
+    request.nextUrl.pathname.startsWith('/gpsr-shopify') ||
+    request.nextUrl.pathname.startsWith('/gpsr-dropshipping') ||
+    request.nextUrl.pathname.startsWith('/audit-gratuit') ||
     request.nextUrl.pathname.startsWith('/api/affiliates') ||
     request.nextUrl.pathname === '/sitemap.xml' ||
     request.nextUrl.pathname === '/robots.txt'

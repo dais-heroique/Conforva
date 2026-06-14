@@ -97,6 +97,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.1,
     },
+    // ── Free tools ────────────────────────────────────────────────────────────
+    {
+      url: `${BASE}/audit-gratuit`,
+      lastModified: new Date(LAST_CONTENT_UPDATE),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    // ── SEO landing pages ─────────────────────────────────────────────────────
+    {
+      url: `${BASE}/gpsr-amazon`,
+      lastModified: new Date(LAST_CONTENT_UPDATE),
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${BASE}/gpsr-shopify`,
+      lastModified: new Date(LAST_CONTENT_UPDATE),
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${BASE}/gpsr-dropshipping`,
+      lastModified: new Date(LAST_CONTENT_UPDATE),
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
     // ── Affiliate / partner pages ─────────────────────────────────────────────
     {
       url: `${BASE}/partenaires`,
