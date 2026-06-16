@@ -55,6 +55,7 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/shopify-app') ||
     request.nextUrl.pathname.startsWith('/audit-gratuit') ||
     request.nextUrl.pathname.startsWith('/api/affiliates') ||
+    request.nextUrl.pathname.startsWith('/api/audit') ||
     request.nextUrl.pathname === '/sitemap.xml' ||
     request.nextUrl.pathname === '/robots.txt'
 
