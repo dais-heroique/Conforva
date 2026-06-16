@@ -4,8 +4,8 @@ import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {
-  CheckCircle2, XCircle, AlertTriangle, ArrowRight, ArrowLeft,
-  Shield, Loader2, Link2, Package, ChevronDown,
+  ArrowRight, ArrowLeft, Shield, Loader2, Link2, Package,
+  FileText, AlertTriangle, CheckCircle2, Download, X, ChevronDown,
 } from "lucide-react"
 
 const CATEGORIES = [
@@ -22,420 +22,250 @@ const CATEGORIES = [
   { value: "other", label: "Autre produit physique" },
 ]
 
-const CATEGORY_QUESTIONS: Record<string, Array<{
-  key: string; label: string; type: "boolean" | "select" | "text"
-  options?: string[]; help?: string
-}>> = {
-  candle: [
-    { key: "lab_test_done", label: "Des tests de sécurité ont été réalisés en laboratoire accrédité (EN 15493)", type: "boolean" },
-    { key: "has_clp", label: "Les allergènes et mentions CLP figurent sur l'emballage", type: "boolean" },
-    { key: "has_sds", label: "Une fiche de données de sécurité (FDS) est disponible", type: "boolean" },
-    { key: "ifra_compliant", label: "La fragrance est certifiée conforme IFRA", type: "boolean" },
-  ],
-  toy: [
-    { key: "age_min_months", label: "Âge minimum recommandé", type: "select", options: ["< 18 mois", "18-36 mois", "3-6 ans", "6-12 ans", "12 ans et +"] },
-    { key: "has_small_parts", label: "Contient des petites pièces (risque étouffement)", type: "boolean" },
-    { key: "has_battery", label: "Nécessite des piles ou batterie", type: "boolean" },
-    { key: "lab_test_done", label: "Tests EN 71 réalisés en laboratoire accrédité", type: "boolean" },
-  ],
-  electronics: [
-    { key: "voltage_nominal", label: "Tension nominale", type: "select", options: ["5V (USB)", "12V", "24V", "230V (secteur)", "Pile / batterie autonome"] },
-    { key: "has_wireless", label: "Contient une communication sans fil (WiFi / Bluetooth / Zigbee)", type: "boolean" },
-    { key: "lab_test_done", label: "Tests CEM / LVD réalisés en laboratoire accrédité", type: "boolean" },
-    { key: "doc_available", label: "Une déclaration de conformité UE (DoC) est disponible", type: "boolean" },
-  ],
-  cosmetic: [
-    { key: "for_children", label: "Destiné aux enfants de moins de 3 ans", type: "boolean" },
-    { key: "has_cpsr", label: "Un rapport de sécurité cosmétique (CPSR) est disponible", type: "boolean" },
-    { key: "cpnp_notified", label: "La notification CPNP a été effectuée", type: "boolean" },
-    { key: "has_inci", label: "La liste INCI figure sur l'emballage", type: "boolean" },
-  ],
-  textile: [
-    { key: "target_age", label: "Public cible", type: "select", options: ["Nourrissons (< 3 ans)", "Enfants 3-14 ans", "Adultes", "Tous publics"] },
-    { key: "has_drawstrings", label: "Présence de cordes de serrage (capuche, cou, bas)", type: "boolean" },
-    { key: "azo_dyes_free", label: "Absence de colorants azoïques cancérigènes confirmée", type: "boolean" },
-    { key: "composition_label", label: "Étiquette composition fibres présente (EU 1007/2011)", type: "boolean" },
-  ],
-  puericulture: [
-    { key: "age_range", label: "Tranche d'âge", type: "select", options: ["0-6 mois", "6-12 mois", "0-18 mois", "0-3 ans", "1-3 ans"] },
-    { key: "stability_test", label: "Test de stabilité réalisé en laboratoire accrédité", type: "boolean" },
-    { key: "entrapment_risk", label: "Risque de piégeage (tête / cou / doigts) évalué", type: "boolean" },
-    { key: "ce_marking", label: "Marquage CE présent sur le produit", type: "boolean" },
-  ],
-  decoration: [
-    { key: "for_children_room", label: "Destiné à une chambre d'enfant (< 14 ans)", type: "boolean" },
-    { key: "has_sharp_edges", label: "Présence de bords tranchants potentiels", type: "boolean" },
-    { key: "reach_svhc", label: "Absence de substances SVHC REACH > 0.1% confirmée", type: "boolean" },
-    { key: "batch_traceability", label: "N° de lot présent sur le produit ou emballage", type: "boolean" },
-  ],
-  food_contact: [
-    { key: "material_main", label: "Matériau principal", type: "select", options: ["Plastique", "Inox", "Verre", "Céramique", "Bois / bambou", "Silicone", "Autre"] },
-    { key: "migration_test_done", label: "Test de migration réalisé (EU 1935/2004)", type: "boolean" },
-    { key: "bpa_free", label: "Sans bisphénol A (BPA) — si plastique ou résine", type: "boolean" },
-    { key: "symbol_present", label: "Symbole verre-et-fourchette présent sur le produit", type: "boolean" },
-  ],
-  furniture: [
-    { key: "for_children", label: "Meuble destiné aux enfants (< 14 ans)", type: "boolean" },
-    { key: "stability_test", label: "Test de stabilité réalisé", type: "boolean" },
-    { key: "formaldehyde_class", label: "Classe d'émission formaldéhyde (panneaux bois)", type: "select", options: ["E0 (≤ 0.030 ppm)", "E1 (≤ 0.100 ppm)", "Non mesuré", "Sans panneau bois"] },
-    { key: "assembly_instructions", label: "Notice de montage incluse", type: "boolean" },
-  ],
-  sport: [
-    { key: "is_ppe", label: "L'article est un Équipement de Protection Individuelle (EPI)", type: "boolean" },
-    { key: "lab_test_done", label: "Tests en laboratoire accrédité réalisés", type: "boolean" },
-    { key: "ce_marking", label: "Marquage CE présent", type: "boolean" },
-    { key: "has_user_manual", label: "Notice d'utilisation incluse", type: "boolean" },
-  ],
-  other: [
-    { key: "for_children", label: "Le produit peut être utilisé par des enfants", type: "boolean" },
-    { key: "lab_test_done", label: "Des tests de sécurité ont été réalisés", type: "boolean" },
-    { key: "has_declaration", label: "Une déclaration de conformité UE est disponible", type: "boolean" },
-    { key: "batch_traceability", label: "N° de lot / traçabilité présent sur le produit", type: "boolean" },
-  ],
+type Phase = "input" | "email" | "generating" | "result" | "already_used"
+
+interface AiResult {
+  product_info: {
+    name: string; category: string; intended_use: string; target_users: string
+    manufacturer: string; country_of_origin: string; model_reference: string
+  }
+  score: number
+  technical_file: { sections: Array<{ title: string; content: string }> }
+  risk_assessment: {
+    methodology: string
+    hazards: Array<{
+      id: string; category: string; description: string
+      probability: string; severity: string; risk_level: string; mitigation: string
+    }>
+    conclusion: string
+  }
+  declaration: {
+    product_name: string; model: string; directives: string[]; standards: string[]
+    statement: string; place: string; responsible_person: string
+  }
+  missing_actions: string[]
 }
 
-const DOCS_OPTIONS = [
-  { value: "technical", label: "Dossier technique produit" },
-  { value: "risk", label: "Analyse de risques formalisée" },
-  { value: "declaration", label: "Déclaration de conformité UE" },
-  { value: "ce", label: "Marquage CE (si requis)" },
-  { value: "tests", label: "Rapport de tests laboratoire" },
-  { value: "instructions", label: "Notice / instructions d'utilisation" },
-  { value: "labels", label: "Étiquettes réglementaires conformes" },
-  { value: "responsible", label: "Personne responsable EU désignée" },
-]
+function scoreColor(s: number) { return s >= 75 ? "text-emerald-600" : s >= 45 ? "text-amber-500" : "text-red-600" }
+function scoreBg(s: number) { return s >= 75 ? "bg-emerald-50 border-emerald-200" : s >= 45 ? "bg-amber-50 border-amber-200" : "bg-red-50 border-red-200" }
+function scoreLabel(s: number) { return s >= 75 ? "Bonne conformité estimée" : s >= 45 ? "Conformité partielle — actions requises" : "Non conforme — risque réglementaire élevé" }
+function riskBadge(level: string) {
+  if (level === "Inacceptable") return "bg-red-100 text-red-700 border border-red-200"
+  if (level === "Tolérable") return "bg-amber-100 text-amber-700 border border-amber-200"
+  return "bg-emerald-100 text-emerald-700 border border-emerald-200"
+}
 
-type Phase = "import" | "product" | "safety" | "docs" | "email" | "result" | "already_used"
+function Header({ step, total }: { step: number; total: number }) {
+  return (
+    <header className="border-b border-gray-100 bg-white/95 backdrop-blur-sm sticky top-0 z-10">
+      <div className="max-w-2xl mx-auto px-5 h-14 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2">
+          <img src="/favicon.png" alt="Conforva" className="h-7 w-7 object-contain" />
+          <span className="font-bold text-gray-900 text-sm">Conforva</span>
+        </Link>
+        {total > 0 && <span className="text-xs text-gray-400">Étape {step} / {total}</span>}
+      </div>
+      {total > 0 && (
+        <div className="h-0.5 bg-gray-100">
+          <div className="h-0.5 bg-blue-600 transition-all duration-500" style={{ width: `${(step / total) * 100}%` }} />
+        </div>
+      )}
+    </header>
+  )
+}
 
 export default function AuditGratuitPage() {
-  const [phase, setPhase] = useState<Phase>("import")
+  const [phase, setPhase] = useState<Phase>("input")
 
-  // Import state
-  const [importUrl, setImportUrl] = useState("")
-  const [importing, setImporting] = useState(false)
-  const [importError, setImportError] = useState("")
-
-  // Product
+  // Input
+  const [url, setUrl] = useState("")
+  const [scraped, setScraped] = useState(false)
+  const [scraping, setScraping] = useState(false)
+  const [scrapeError, setScrapeError] = useState("")
   const [productName, setProductName] = useState("")
-  const [productUrl, setProductUrl] = useState("")
+  const [supplierName, setSupplierName] = useState("")
   const [category, setCategory] = useState("")
-  const [manufacturer, setManufacturer] = useState("")
-  const [country, setCountry] = useState("")
 
-  // Safety answers (boolean or string)
-  const [safetyAnswers, setSafetyAnswers] = useState<Record<string, boolean | string>>({})
-
-  // Docs
-  const [existingDocs, setExistingDocs] = useState<string[]>([])
-
-  // Email / result
+  // Email
   const [email, setEmail] = useState("")
-  const [submitting, setSubmitting] = useState(false)
-  const [result, setResult] = useState<{ score: number; missing: string[]; category: string } | null>(null)
-  const [previousAudit, setPreviousAudit] = useState<{ product_name: string; score: number; created_at: string } | null>(null)
 
-  async function handleImport(e: React.FormEvent) {
-    e.preventDefault()
-    if (!importUrl.trim()) { setPhase("product"); return }
-    setImporting(true)
-    setImportError("")
+  // Result
+  const [aiResult, setAiResult] = useState<AiResult | null>(null)
+  const [score, setScore] = useState(0)
+  const [previousAudit, setPreviousAudit] = useState<{
+    product_name: string; score: number; created_at: string; docs: AiResult | null
+  } | null>(null)
+
+  // UI
+  const [showPdfModal, setShowPdfModal] = useState(false)
+  const [activeSection, setActiveSection] = useState<number | null>(0)
+
+  async function handleScrape() {
+    if (!url.trim()) return
+    setScraping(true)
+    setScrapeError("")
     try {
       const res = await fetch("/api/audit/scrape", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: importUrl }),
+        body: JSON.stringify({ url: url.trim() }),
       })
       const data = await res.json()
-      if (!res.ok) { setImportError(data.error ?? "Erreur d'import"); setImporting(false); return }
+      if (!res.ok) { setScrapeError(data.error ?? "Erreur d'import"); return }
       if (data.name) setProductName(data.name)
-      setProductUrl(importUrl)
+      setScraped(true)
     } catch {
-      setImportError("Impossible d'accéder à cette URL")
+      setScrapeError("Impossible d'accéder à cette URL")
+    } finally {
+      setScraping(false)
     }
-    setImporting(false)
-    setPhase("product")
   }
 
-  function toggleDoc(val: string) {
-    setExistingDocs(prev => prev.includes(val) ? prev.filter(d => d !== val) : [...prev, val])
-  }
+  const hasUrl = url.trim().length > 4
+  const canSubmit = hasUrl
+    ? (scraped || productName.trim().length > 1) && supplierName.trim().length > 0
+    : productName.trim().length > 1 && category.length > 0
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setSubmitting(true)
-    const res = await fetch("/api/audit/submit", {
+  async function handleGenerate() {
+    setPhase("generating")
+    const res = await fetch("/api/audit/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email,
-        product_name: productName,
-        product_url: productUrl || null,
-        category,
-        answers: { ...safetyAnswers, existing_docs: existingDocs, manufacturer, country },
+        email: email.toLowerCase().trim(),
+        product_url: hasUrl ? url.trim() : null,
+        product_name: productName || undefined,
+        supplier_name: supplierName || undefined,
+        category: category || undefined,
       }),
     })
     const data = await res.json()
-    setSubmitting(false)
     if (data.already_used) {
       setPreviousAudit(data.previous)
       setPhase("already_used")
-    } else {
-      setResult(data)
+    } else if (data.ok) {
+      setAiResult(data.result)
+      setScore(data.score)
       setPhase("result")
+    } else {
+      // fallback: go back to email with error
+      setPhase("email")
     }
   }
 
-  const scoreColor = (s: number) => s >= 75 ? "text-emerald-600" : s >= 45 ? "text-amber-500" : "text-red-600"
-  const scoreBg = (s: number) => s >= 75 ? "bg-emerald-50 border-emerald-200" : s >= 45 ? "bg-amber-50 border-amber-200" : "bg-red-50 border-red-200"
-  const scoreLabel = (s: number) => s >= 75 ? "Bonne conformité" : s >= 45 ? "Conformité partielle — risques réels" : "Non conforme — risque élevé"
-
-  const catQuestions = CATEGORY_QUESTIONS[category] ?? CATEGORY_QUESTIONS.other
-
-  // ── HEADER ──
-  function Header({ step, total }: { step: number; total: number }) {
-    return (
-      <header className="border-b border-gray-100 bg-white/95 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-5 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <img src="/favicon.png" alt="Conforva" className="h-7 w-7 object-contain" />
-            <span className="font-bold text-gray-900 text-sm">Conforva</span>
-          </Link>
-          <span className="text-xs text-gray-400">Étape {step} / {total}</span>
-        </div>
-        <div className="h-0.5 bg-gray-100">
-          <div className="h-0.5 bg-blue-600 transition-all duration-300" style={{ width: `${(step / total) * 100}%` }} />
-        </div>
-      </header>
-    )
+  function reset() {
+    setPhase("input")
+    setUrl(""); setScraped(false); setScrapeError("")
+    setProductName(""); setSupplierName(""); setCategory("")
+    setEmail(""); setAiResult(null); setPreviousAudit(null)
   }
 
-  // ── PHASE: IMPORT ──
-  if (phase === "import") return (
+  // ── PHASE: INPUT ──
+  if (phase === "input") return (
     <div className="min-h-screen bg-[#F9F8F5]">
-      <Header step={1} total={4} />
-      <main className="max-w-lg mx-auto px-5 py-12 space-y-6">
+      <Header step={1} total={2} />
+      <main className="max-w-lg mx-auto px-5 py-12 space-y-7">
         <div>
-          <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-2">Audit GPSR gratuit — 1 produit complet</p>
-          <h1 className="text-2xl font-bold text-gray-900">Analysons votre produit</h1>
-          <p className="text-sm text-gray-500 mt-1">Collez l'URL de votre produit pour pré-remplir automatiquement, ou renseignez manuellement.</p>
+          <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-2">Audit GPSR gratuit · IA · 1 produit</p>
+          <h1 className="text-2xl font-bold text-gray-900">Analysez votre conformité GPSR</h1>
+          <p className="text-sm text-gray-500 mt-1">L'IA génère votre dossier technique, analyse de risques et déclaration de conformité UE.</p>
         </div>
 
-        <form onSubmit={handleImport} className="space-y-3">
-          <div className="relative">
-            <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+        {/* URL import */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-3">
+          <p className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+            <Link2 className="h-4 w-4 text-blue-500" />
+            Importer depuis une URL
+            <span className="text-xs font-normal text-gray-400 ml-1">optionnel</span>
+          </p>
+          <div className="flex gap-2">
             <input
               type="url"
-              value={importUrl}
-              onChange={e => setImportUrl(e.target.value)}
-              placeholder="https://votre-boutique.com/produit ou Amazon / Shopify..."
-              className="w-full pl-9 pr-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={url}
+              onChange={e => { setUrl(e.target.value); setScraped(false); setScrapeError("") }}
+              placeholder="https://votre-boutique.com/produit..."
+              className="flex-1 px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onKeyDown={e => e.key === "Enter" && handleScrape()}
             />
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleScrape}
+              disabled={!hasUrl || scraping}
+              className="shrink-0"
+            >
+              {scraping ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Importer"}
+            </Button>
           </div>
-          {importError && <p className="text-xs text-red-500">{importError}</p>}
-          <Button type="submit" disabled={importing} className="w-full gap-2">
-            {importing ? <><Loader2 className="h-4 w-4 animate-spin" /> Import en cours...</> : <>Importer depuis l'URL <ArrowRight className="h-4 w-4" /></>}
-          </Button>
-        </form>
-
-        <div className="flex items-center gap-3">
-          <div className="flex-1 h-px bg-gray-200" />
-          <span className="text-xs text-gray-400">ou</span>
-          <div className="flex-1 h-px bg-gray-200" />
+          {scrapeError && <p className="text-xs text-red-500">{scrapeError}</p>}
+          {scraped && productName && (
+            <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+              <p className="text-xs text-emerald-800 font-medium truncate">{productName}</p>
+            </div>
+          )}
         </div>
 
-        <Button variant="outline" onClick={() => setPhase("product")} className="w-full gap-2">
-          <Package className="h-4 w-4" /> Renseigner manuellement
-        </Button>
+        {/* Manual / supplementary fields */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
+          <p className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+            <Package className="h-4 w-4 text-gray-500" />
+            {hasUrl && scraped ? "Compléter les informations" : "Informations produit"}
+          </p>
 
-        <p className="text-xs text-gray-400 text-center">Gratuit · Sans inscription · Limité à 1 produit par email</p>
-      </main>
-    </div>
-  )
-
-  // ── PHASE: PRODUCT ──
-  if (phase === "product") {
-    const canNext = productName.trim().length > 1 && category
-    return (
-      <div className="min-h-screen bg-[#F9F8F5]">
-        <Header step={2} total={4} />
-        <main className="max-w-lg mx-auto px-5 py-10 space-y-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Votre produit</h1>
-            <p className="text-sm text-gray-500 mt-1">Informations de base sur le produit à analyser</p>
-          </div>
-
-          <div className="space-y-4">
+          {/* Product name — always show if no URL or if URL didn't scrape a name */}
+          {(!hasUrl || !scraped || !productName) && (
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-gray-700">Nom du produit <span className="text-red-500">*</span></label>
+              <label className="text-xs font-medium text-gray-600">Nom du produit <span className="text-red-500">*</span></label>
               <input
                 value={productName}
                 onChange={e => setProductName(e.target.value)}
                 placeholder="ex: Bougie soja vanille 200g"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
+          )}
 
+          {/* Category — only if no URL */}
+          {!hasUrl && (
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-gray-700">Catégorie de produit <span className="text-red-500">*</span></label>
+              <label className="text-xs font-medium text-gray-600">Catégorie <span className="text-red-500">*</span></label>
               <div className="relative">
                 <select
                   value={category}
                   onChange={e => setCategory(e.target.value)}
-                  className="w-full appearance-none px-4 py-3 pr-9 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full appearance-none px-3 py-2.5 pr-8 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">— Choisir une catégorie —</option>
                   {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
                 </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400 pointer-events-none" />
               </div>
             </div>
+          )}
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-700">Fabricant</label>
-                <input
-                  value={manufacturer}
-                  onChange={e => setManufacturer(e.target.value)}
-                  placeholder="Nom du fabricant"
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-700">Pays de fabrication</label>
-                <input
-                  value={country}
-                  onChange={e => setCountry(e.target.value)}
-                  placeholder="ex: Chine, France..."
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
+          {/* Supplier name — always */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium text-gray-600">Nom du fournisseur / fabricant <span className="text-red-500">*</span></label>
+            <input
+              value={supplierName}
+              onChange={e => setSupplierName(e.target.value)}
+              placeholder="ex: Shenzhen TechCo Ltd, Alibaba ref…"
+              className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </div>
-
-          <div className="flex gap-3 pt-2">
-            <Button variant="outline" onClick={() => setPhase("import")} className="gap-2">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <Button onClick={() => setPhase("safety")} disabled={!canNext} className="flex-1 gap-2">
-              Continuer <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </main>
-      </div>
-    )
-  }
-
-  // ── PHASE: SAFETY ──
-  if (phase === "safety") return (
-    <div className="min-h-screen bg-[#F9F8F5]">
-      <Header step={3} total={4} />
-      <main className="max-w-lg mx-auto px-5 py-10 space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Profil de sécurité</h1>
-          <p className="text-sm text-gray-500 mt-1">Questions spécifiques à votre catégorie — {CATEGORIES.find(c => c.value === category)?.label}</p>
         </div>
 
-        <div className="space-y-4">
-          {catQuestions.map(q => (
-            <div key={q.key} className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
-              <p className="text-sm font-medium text-gray-800">{q.label}</p>
+        <Button
+          onClick={() => setPhase("email")}
+          disabled={!canSubmit}
+          className="w-full gap-2 h-12 text-base"
+        >
+          Générer mon analyse IA <ArrowRight className="h-5 w-5" />
+        </Button>
 
-              {q.type === "boolean" && (
-                <div className="flex gap-3">
-                  {[
-                    { val: true, label: "Oui" },
-                    { val: false, label: "Non" },
-                  ].map(({ val, label }) => (
-                    <button
-                      key={String(val)}
-                      type="button"
-                      onClick={() => setSafetyAnswers(a => ({ ...a, [q.key]: val }))}
-                      className={`flex-1 py-2 rounded-lg text-sm font-medium border-2 transition-colors ${
-                        safetyAnswers[q.key] === val
-                          ? val ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-red-400 bg-red-50 text-red-700"
-                          : "border-gray-200 text-gray-500 hover:border-gray-300"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {q.type === "select" && q.options && (
-                <div className="relative">
-                  <select
-                    value={(safetyAnswers[q.key] as string) ?? ""}
-                    onChange={e => setSafetyAnswers(a => ({ ...a, [q.key]: e.target.value }))}
-                    className="w-full appearance-none px-3 py-2 pr-8 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">— Sélectionner —</option>
-                    {q.options.map(o => <option key={o} value={o}>{o}</option>)}
-                  </select>
-                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400 pointer-events-none" />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="flex gap-3">
-          <Button variant="outline" onClick={() => setPhase("product")} className="gap-2">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <Button onClick={() => setPhase("docs")} className="flex-1 gap-2">
-            Continuer <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
-      </main>
-    </div>
-  )
-
-  // ── PHASE: DOCS ──
-  if (phase === "docs") return (
-    <div className="min-h-screen bg-[#F9F8F5]">
-      <Header step={4} total={4} />
-      <main className="max-w-lg mx-auto px-5 py-10 space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Documents existants</h1>
-          <p className="text-sm text-gray-500 mt-1">Cochez uniquement ce que vous possédez réellement pour ce produit</p>
-        </div>
-
-        <div className="space-y-2">
-          {DOCS_OPTIONS.map(opt => {
-            const checked = existingDocs.includes(opt.value)
-            return (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => toggleDoc(opt.value)}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 text-left transition-colors ${
-                  checked ? "border-blue-500 bg-blue-50" : "border-gray-200 bg-white hover:border-gray-300"
-                }`}
-              >
-                <div className={`h-5 w-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
-                  checked ? "border-blue-500 bg-blue-500" : "border-gray-300"
-                }`}>
-                  {checked && <CheckCircle2 className="h-3.5 w-3.5 text-white" />}
-                </div>
-                <span className={`text-sm font-medium ${checked ? "text-blue-900" : "text-gray-700"}`}>{opt.label}</span>
-              </button>
-            )
-          })}
-        </div>
-
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
-          <p className="text-xs text-amber-700">Aucun document à cocher ? C'est normal pour les nouveaux vendeurs — Conforva les génère en quelques minutes.</p>
-        </div>
-
-        <div className="flex gap-3">
-          <Button variant="outline" onClick={() => setPhase("safety")} className="gap-2">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <Button onClick={() => setPhase("email")} className="flex-1 gap-2">
-            Voir mon analyse <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
+        <p className="text-xs text-gray-400 text-center">Gratuit · Sans carte bancaire · 1 analyse par email</p>
       </main>
     </div>
   )
@@ -443,15 +273,16 @@ export default function AuditGratuitPage() {
   // ── PHASE: EMAIL GATE ──
   if (phase === "email") return (
     <div className="min-h-screen bg-[#F9F8F5] flex items-center justify-center px-5">
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 max-w-sm w-full text-center space-y-5">
-        <div className="h-14 w-14 rounded-full bg-blue-100 flex items-center justify-center mx-auto">
-          <Shield className="h-7 w-7 text-blue-600" />
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 max-w-sm w-full space-y-5">
+        <div className="text-center space-y-1">
+          <div className="h-14 w-14 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
+            <Shield className="h-7 w-7 text-blue-600" />
+          </div>
+          <h2 className="text-xl font-bold text-gray-900">Presque prêt !</h2>
+          <p className="text-sm text-gray-500">Entrez votre email pour recevoir votre rapport GPSR complet généré par l'IA</p>
         </div>
-        <div>
-          <h2 className="text-xl font-bold text-gray-900">Votre analyse est prête</h2>
-          <p className="text-sm text-gray-500 mt-1">Entrez votre email pour accéder au rapport de conformité de <strong>{productName}</strong></p>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-3 text-left">
+
+        <div className="space-y-3">
           <input
             type="email"
             required
@@ -459,150 +290,360 @@ export default function AuditGratuitPage() {
             onChange={e => setEmail(e.target.value)}
             placeholder="votre@email.com"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onKeyDown={e => e.key === "Enter" && email.includes("@") && handleGenerate()}
           />
-          <Button type="submit" className="w-full gap-2" disabled={submitting}>
-            {submitting ? <><Loader2 className="h-4 w-4 animate-spin" /> Analyse en cours...</> : <>Voir mon rapport GPSR <ArrowRight className="h-4 w-4" /></>}
+          <Button
+            onClick={handleGenerate}
+            className="w-full gap-2 h-11"
+            disabled={!email.includes("@") || !email.includes(".")}
+          >
+            Lancer l'analyse IA <ArrowRight className="h-4 w-4" />
           </Button>
-        </form>
-        <p className="text-xs text-gray-400">1 analyse gratuite par email · Pas de spam · Résultats immédiats</p>
+        </div>
+
+        <button
+          onClick={() => setPhase("input")}
+          className="w-full text-xs text-gray-400 hover:text-gray-600 flex items-center justify-center gap-1"
+        >
+          <ArrowLeft className="h-3 w-3" /> Retour
+        </button>
+
+        <p className="text-xs text-gray-400 text-center">1 analyse gratuite par email · Pas de spam</p>
+      </div>
+    </div>
+  )
+
+  // ── PHASE: GENERATING ──
+  if (phase === "generating") return (
+    <div className="min-h-screen bg-[#F9F8F5] flex items-center justify-center px-5">
+      <div className="text-center space-y-6 max-w-sm">
+        <div className="h-20 w-20 rounded-full bg-blue-600 flex items-center justify-center mx-auto animate-pulse">
+          <Shield className="h-10 w-10 text-white" />
+        </div>
+        <div className="space-y-2">
+          <h2 className="text-xl font-bold text-gray-900">Génération en cours…</h2>
+          <p className="text-sm text-gray-500">L'IA analyse votre produit et rédige votre dossier de conformité GPSR complet.</p>
+        </div>
+        <div className="space-y-2 text-left bg-white rounded-2xl border border-gray-200 p-5">
+          {[
+            "Analyse réglementaire GPSR 2023/988",
+            "Rédaction du dossier technique (8 sections)",
+            "Évaluation des risques ISO 12100",
+            "Déclaration de conformité UE",
+          ].map((item, i) => (
+            <div key={item} className="flex items-center gap-2.5">
+              <Loader2 className="h-3.5 w-3.5 text-blue-500 animate-spin shrink-0" style={{ animationDelay: `${i * 0.2}s` }} />
+              <p className="text-xs text-gray-600">{item}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-gray-400">Environ 15–30 secondes…</p>
       </div>
     </div>
   )
 
   // ── PHASE: ALREADY USED ──
-  if (phase === "already_used" && previousAudit) return (
-    <div className="min-h-screen bg-[#F9F8F5]">
-      <header className="border-b border-gray-100 bg-white/95">
-        <div className="max-w-2xl mx-auto px-5 h-14 flex items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <img src="/favicon.png" alt="Conforva" className="h-7 w-7 object-contain" />
-            <span className="font-bold text-gray-900 text-sm">Conforva</span>
-          </Link>
-        </div>
-      </header>
-      <main className="max-w-lg mx-auto px-5 py-16 space-y-6">
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 text-center space-y-4">
-          <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center mx-auto">
-            <AlertTriangle className="h-6 w-6 text-amber-500" />
-          </div>
-          <div>
-            <h2 className="text-lg font-bold text-gray-900">Audit déjà utilisé</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              Vous avez déjà réalisé un audit gratuit pour <strong>{previousAudit.product_name}</strong> avec un score de <strong>{previousAudit.score}/100</strong>.
-            </p>
-          </div>
-          <div className={`rounded-xl border-2 py-3 px-6 inline-block ${scoreBg(previousAudit.score)}`}>
-            <span className={`text-3xl font-black ${scoreColor(previousAudit.score)}`}>{previousAudit.score}/100</span>
-          </div>
-          <p className="text-sm text-gray-600">Pour analyser d'autres produits et générer vos dossiers GPSR complets, créez un compte Conforva.</p>
-        </div>
-        <div className="bg-blue-600 rounded-2xl p-6 text-white text-center space-y-4">
-          <p className="font-bold text-lg">Passez au plan complet</p>
-          <p className="text-blue-200 text-sm">Produits illimités · Dossiers complets · Déclarations de conformité · Étiquettes</p>
-          <Link href="/auth/login">
-            <Button className="bg-white text-blue-600 hover:bg-blue-50 font-semibold gap-2 w-full">
-              Créer mon compte Conforva <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
-          <p className="text-blue-300 text-xs">Starter dès 29€/mois · Sans engagement · 1 produit gratuit inclus</p>
-        </div>
-      </main>
-    </div>
-  )
-
-  // ── PHASE: RESULT ──
-  if (phase === "result" && result) {
-    const { score, missing } = result
+  if (phase === "already_used" && previousAudit) {
+    const prevDocs = previousAudit.docs
+    const prevScore = previousAudit.score
     return (
       <div className="min-h-screen bg-[#F9F8F5]">
-        <header className="border-b border-gray-100 bg-white/95">
-          <div className="max-w-2xl mx-auto px-5 h-14 flex items-center">
-            <Link href="/" className="flex items-center gap-2">
-              <img src="/favicon.png" alt="Conforva" className="h-7 w-7 object-contain" />
-              <span className="font-bold text-gray-900 text-sm">Conforva</span>
-            </Link>
-          </div>
-        </header>
-
+        <Header step={0} total={0} />
         <main className="max-w-2xl mx-auto px-5 py-10 space-y-5">
-          <div>
-            <p className="text-xs font-semibold text-gray-500 mb-0.5">{productName}</p>
-            <h1 className="text-2xl font-bold text-gray-900">Votre rapport de conformité GPSR</h1>
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex gap-3">
+            <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-semibold text-amber-900">Analyse déjà générée</p>
+              <p className="text-sm text-amber-700">Votre audit gratuit a déjà été utilisé pour <strong>{previousAudit.product_name}</strong>. Voici votre rapport précédent.</p>
+            </div>
           </div>
 
-          {/* Score */}
-          <div className={`rounded-2xl border-2 p-8 text-center ${scoreBg(score)}`}>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Score de conformité GPSR</p>
-            <p className={`text-7xl font-black tabular-nums ${scoreColor(score)}`}>{score}<span className="text-3xl">/100</span></p>
-            <p className={`text-sm font-semibold mt-2 ${scoreColor(score)}`}>{scoreLabel(score)}</p>
-          </div>
-
-          {/* Missing docs */}
-          {missing.length > 0 && (
-            <div className="bg-white rounded-2xl border border-gray-200 p-5">
-              <p className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-amber-500" />
-                {missing.length} document{missing.length > 1 ? "s" : ""} manquant{missing.length > 1 ? "s" : ""}
-              </p>
-              <div className="space-y-2">
-                {missing.map(m => (
-                  <div key={m} className="flex items-start gap-3 p-3 rounded-xl bg-red-50 border border-red-100">
-                    <XCircle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
-                    <p className="text-sm text-gray-800">{m}</p>
-                  </div>
-                ))}
-              </div>
+          {prevDocs ? (
+            <ResultDocs result={prevDocs} score={prevScore} activeSection={activeSection} setActiveSection={setActiveSection} onDownload={() => setShowPdfModal(true)} />
+          ) : (
+            <div className={`rounded-2xl border-2 p-8 text-center ${scoreBg(prevScore)}`}>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Score de conformité</p>
+              <p className={`text-7xl font-black tabular-nums ${scoreColor(prevScore)}`}>{prevScore}<span className="text-3xl">/100</span></p>
             </div>
           )}
 
-          {/* What Conforva generates */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-5">
-            <p className="font-semibold text-gray-900 mb-4">Ce que Conforva génère automatiquement</p>
-            <div className="space-y-2">
-              {[
-                "Dossier technique complet (structuré selon GPSR 2023/988)",
-                "Analyse de risques ISO 12100 personnalisée",
-                "Déclaration de conformité UE prête à signer",
-                "Étiquettes réglementaires aux formats EU / US / UK",
-                "Désignation de la personne responsable EU",
-              ].map(item => (
-                <div key={item} className="flex items-center gap-2.5">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                  <p className="text-sm text-gray-700">{item}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* CTA */}
-          <div className="bg-blue-600 rounded-2xl p-6 text-white text-center space-y-4">
-            <Shield className="h-8 w-8 mx-auto text-blue-200" />
-            <div>
-              <p className="font-bold text-lg">
-                {missing.length === 0
-                  ? "Gardez votre conformité à jour automatiquement"
-                  : `Générez vos ${missing.length} document${missing.length > 1 ? "s" : ""} manquant${missing.length > 1 ? "s" : ""} en quelques minutes`}
-              </p>
-              <p className="text-blue-200 text-sm mt-1">Dossier technique · Analyse de risques · Étiquettes · Personne responsable EU</p>
-            </div>
-            <Link href="/auth/login">
-              <Button className="bg-white text-blue-600 hover:bg-blue-50 font-semibold gap-2 w-full">
-                Mettre mon entreprise en conformité <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <p className="text-blue-300 text-xs">1 produit gratuit à l'inscription · Starter dès 29€/mois · Sans engagement</p>
-          </div>
-
-          <button
-            onClick={() => { setPhase("import"); setProductName(""); setCategory(""); setSafetyAnswers({}); setExistingDocs([]); setEmail(""); setResult(null); setImportUrl("") }}
-            className="w-full text-xs text-gray-400 hover:text-gray-600 text-center py-2"
-          >
-            Analyser un autre produit →
-          </button>
+          <UpgradeBanner />
         </main>
+        {showPdfModal && <PdfModal onClose={() => setShowPdfModal(false)} />}
       </div>
     )
   }
 
+  // ── PHASE: RESULT ──
+  if (phase === "result" && aiResult) return (
+    <div className="min-h-screen bg-[#F9F8F5]">
+      <Header step={0} total={0} />
+      <main className="max-w-2xl mx-auto px-5 py-10 space-y-5">
+        <div>
+          <p className="text-xs font-semibold text-gray-400 mb-0.5">{aiResult.product_info?.name || productName}</p>
+          <h1 className="text-2xl font-bold text-gray-900">Votre dossier de conformité GPSR</h1>
+          <p className="text-sm text-gray-500 mt-1">Généré par IA · Règlement UE 2023/988</p>
+        </div>
+
+        <ResultDocs result={aiResult} score={score} activeSection={activeSection} setActiveSection={setActiveSection} onDownload={() => setShowPdfModal(true)} />
+
+        <UpgradeBanner />
+
+        <button onClick={reset} className="w-full text-xs text-gray-400 hover:text-gray-600 text-center py-2">
+          Analyser un autre produit →
+        </button>
+      </main>
+      {showPdfModal && <PdfModal onClose={() => setShowPdfModal(false)} />}
+    </div>
+  )
+
   return null
+}
+
+// ── RESULT DOCUMENTS COMPONENT ──
+function ResultDocs({
+  result, score, activeSection, setActiveSection, onDownload
+}: {
+  result: AiResult; score: number
+  activeSection: number | null; setActiveSection: (i: number | null) => void
+  onDownload: () => void
+}) {
+  const info = result.product_info
+  const hazards = result.risk_assessment?.hazards ?? []
+  const sections = result.technical_file?.sections ?? []
+  const declaration = result.declaration
+  const missing = result.missing_actions ?? []
+
+  return (
+    <div className="space-y-4">
+      {/* Score card */}
+      <div className={`rounded-2xl border-2 p-6 flex items-center gap-6 ${scoreBg(score)}`}>
+        <div className="text-center shrink-0">
+          <p className={`text-6xl font-black tabular-nums ${scoreColor(score)}`}>{score}<span className="text-2xl">/100</span></p>
+        </div>
+        <div>
+          <p className={`font-bold text-base ${scoreColor(score)}`}>{scoreLabel(score)}</p>
+          <p className="text-xs text-gray-500 mt-1">Catégorie : {info?.category}</p>
+          <p className="text-xs text-gray-500">Fabricant : {info?.manufacturer} · {info?.country_of_origin}</p>
+        </div>
+      </div>
+
+      {/* Product info */}
+      <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-3">
+        <p className="font-semibold text-gray-900 text-sm">Identification du produit</p>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
+          {[
+            ["Nom", info?.name],
+            ["Référence / modèle", info?.model_reference],
+            ["Utilisateurs cibles", info?.target_users],
+            ["Usage prévu", info?.intended_use],
+          ].map(([k, v]) => v ? (
+            <div key={k} className="space-y-0.5">
+              <p className="text-gray-400 uppercase tracking-wide text-[10px]">{k}</p>
+              <p className="text-gray-800">{v}</p>
+            </div>
+          ) : null)}
+        </div>
+      </div>
+
+      {/* Technical file */}
+      {sections.length > 0 && (
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+            <p className="font-semibold text-gray-900 text-sm flex items-center gap-2">
+              <FileText className="h-4 w-4 text-blue-500" />
+              Dossier technique — {sections.length} sections
+            </p>
+            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Règlement GPSR 2023/988</span>
+          </div>
+          <div className="divide-y divide-gray-100">
+            {sections.map((sec, i) => (
+              <div key={i}>
+                <button
+                  onClick={() => setActiveSection(activeSection === i ? null : i)}
+                  className="w-full px-5 py-3.5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+                >
+                  <span className="text-sm font-medium text-gray-800">{sec.title}</span>
+                  <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${activeSection === i ? "rotate-180" : ""}`} />
+                </button>
+                {activeSection === i && (
+                  <div className="px-5 pb-4">
+                    <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{sec.content}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Risk assessment */}
+      {hazards.length > 0 && (
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100">
+            <p className="font-semibold text-gray-900 text-sm flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 text-amber-500" />
+              Analyse de risques · {result.risk_assessment.methodology}
+            </p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-gray-50 text-gray-500 uppercase text-[10px] tracking-wider">
+                <tr>
+                  <th className="px-4 py-2.5 text-left">Danger</th>
+                  <th className="px-4 py-2.5 text-left">Description</th>
+                  <th className="px-4 py-2.5 text-left">Probabilité</th>
+                  <th className="px-4 py-2.5 text-left">Gravité</th>
+                  <th className="px-4 py-2.5 text-left">Niveau</th>
+                  <th className="px-4 py-2.5 text-left">Mesure</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {hazards.map(h => (
+                  <tr key={h.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-3 font-medium text-gray-700 whitespace-nowrap">{h.id} — {h.category}</td>
+                    <td className="px-4 py-3 text-gray-600 max-w-[180px]">{h.description}</td>
+                    <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{h.probability}</td>
+                    <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{h.severity}</td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold ${riskBadge(h.risk_level)}`}>{h.risk_level}</span>
+                    </td>
+                    <td className="px-4 py-3 text-gray-600 max-w-[200px]">{h.mitigation}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {result.risk_assessment.conclusion && (
+            <div className="px-5 py-3 border-t border-gray-100 bg-gray-50">
+              <p className="text-xs text-gray-600"><span className="font-medium">Conclusion :</span> {result.risk_assessment.conclusion}</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* EU Declaration of Conformity */}
+      {declaration && (
+        <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
+          <p className="font-semibold text-gray-900 text-sm flex items-center gap-2">
+            <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+            Déclaration de conformité UE (extrait)
+          </p>
+          <div className="border border-gray-200 rounded-xl p-4 space-y-3 bg-gray-50 text-xs text-gray-700 leading-relaxed">
+            <p><strong>Produit :</strong> {declaration.product_name} {declaration.model && `— Modèle ${declaration.model}`}</p>
+            <p className="italic text-gray-600">{declaration.statement}</p>
+            {declaration.directives?.length > 0 && (
+              <div>
+                <p className="font-medium mb-1">Directives applicables :</p>
+                <ul className="list-disc list-inside space-y-0.5 text-gray-600">
+                  {declaration.directives.map(d => <li key={d}>{d}</li>)}
+                </ul>
+              </div>
+            )}
+            {declaration.standards?.length > 0 && (
+              <div>
+                <p className="font-medium mb-1">Normes harmonisées :</p>
+                <ul className="list-disc list-inside space-y-0.5 text-gray-600">
+                  {declaration.standards.map(s => <li key={s}>{s}</li>)}
+                </ul>
+              </div>
+            )}
+            <div className="pt-2 border-t border-gray-200 flex justify-between text-[10px] text-gray-400">
+              <span>{declaration.place}</span>
+              <span>{declaration.responsible_person}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Missing actions */}
+      {missing.length > 0 && (
+        <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-3">
+          <p className="font-semibold text-gray-900 text-sm flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-amber-500" />
+            {missing.length} actions prioritaires identifiées
+          </p>
+          <ol className="space-y-2">
+            {missing.map((action, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span className="h-5 w-5 rounded-full bg-amber-100 text-amber-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
+                <p className="text-sm text-gray-700">{action}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+
+      {/* Download button */}
+      <button
+        onClick={onDownload}
+        className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border-2 border-dashed border-blue-300 text-blue-600 hover:bg-blue-50 transition-colors text-sm font-medium"
+      >
+        <Download className="h-4 w-4" />
+        Télécharger le dossier complet en PDF
+      </button>
+    </div>
+  )
+}
+
+// ── UPGRADE BANNER ──
+function UpgradeBanner() {
+  return (
+    <div className="bg-blue-600 rounded-2xl p-6 text-white text-center space-y-4">
+      <Shield className="h-8 w-8 mx-auto text-blue-200" />
+      <div>
+        <p className="font-bold text-lg">Mettre ce produit en conformité complète</p>
+        <p className="text-blue-200 text-sm mt-1">Modifiez les documents · Ajoutez vos infos · Signez électroniquement · Gérez tous vos produits</p>
+      </div>
+      <Link href="/auth/login">
+        <Button className="bg-white text-blue-600 hover:bg-blue-50 font-semibold gap-2 w-full">
+          Créer mon compte Conforva <ArrowRight className="h-4 w-4" />
+        </Button>
+      </Link>
+      <p className="text-blue-300 text-xs">1 produit gratuit à l'inscription · Starter dès 29€/mois · Sans engagement</p>
+    </div>
+  )
+}
+
+// ── PDF MODAL ──
+function PdfModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4">
+      <div className="bg-white rounded-2xl w-full max-w-sm space-y-5 p-6">
+        <div className="flex items-start justify-between">
+          <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+            <Download className="h-6 w-6 text-blue-600" />
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="space-y-2">
+          <h3 className="font-bold text-lg text-gray-900">Téléchargez le PDF complet</h3>
+          <p className="text-sm text-gray-500">
+            Créez un compte gratuit pour télécharger votre dossier en PDF, modifier les documents et gérer tous vos produits.
+          </p>
+        </div>
+        <div className="space-y-2 text-xs text-gray-600">
+          {[
+            "PDF sans filigrane prêt à soumettre",
+            "Modification complète des documents",
+            "Déclaration de conformité signée",
+            "1 produit gratuit inclus à l'inscription",
+          ].map(item => (
+            <div key={item} className="flex items-center gap-2">
+              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+        <Link href="/auth/login" className="block">
+          <Button className="w-full gap-2">
+            Créer mon compte gratuit <ArrowRight className="h-4 w-4" />
+          </Button>
+        </Link>
+        <p className="text-xs text-gray-400 text-center">Sans carte bancaire · Starter dès 29€/mois si besoin</p>
+      </div>
+    </div>
+  )
 }
