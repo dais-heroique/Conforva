@@ -4,12 +4,7 @@ import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 export const metadata: Metadata = {
   title: "Politique de confidentialité",
   description: "Politique de confidentialité de Conforva — traitement des données personnelles, droits RGPD, sous-traitants, conservation et sécurité. Conforme RGPD, CCPA, PIPEDA.",
-  openGraph: {
-    title: "Politique de confidentialité — Conforva",
-    description: "Comment Conforva traite vos données personnelles. Conforme RGPD (UE), CCPA (Californie) et PIPEDA (Canada).",
-    url: "https://conforva.com/privacy",
-    type: "website",
-  },
+  robots: { index: false, follow: true },
   alternates: { canonical: "https://conforva.com/privacy" },
 }
 

@@ -4,12 +4,7 @@ import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 export const metadata: Metadata = {
   title: "Politique de cookies",
   description: "Politique de cookies de Conforva — uniquement des cookies techniques essentiels. Aucun tracker publicitaire, aucun cookie Google Analytics ou Meta Pixel. Conforme RGPD.",
-  openGraph: {
-    title: "Politique de cookies — Conforva",
-    description: "Conforva n'utilise que des cookies essentiels. Aucun tracker publicitaire. Conforme RGPD.",
-    url: "https://conforva.com/cookies",
-    type: "website",
-  },
+  robots: { index: false, follow: true },
   alternates: { canonical: "https://conforva.com/cookies" },
 }
 

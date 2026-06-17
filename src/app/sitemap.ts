@@ -66,37 +66,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.4,
     },
-    // ── Legal pages ───────────────────────────────────────────────────────────
-    {
-      url: `${BASE}/cgu`,
-      lastModified: new Date("2026-05-31"),
-      changeFrequency: "yearly",
-      priority: 0.2,
-    },
-    {
-      url: `${BASE}/cgv`,
-      lastModified: new Date("2026-06-03"),
-      changeFrequency: "yearly",
-      priority: 0.2,
-    },
-    {
-      url: `${BASE}/privacy`,
-      lastModified: new Date("2026-05-31"),
-      changeFrequency: "yearly",
-      priority: 0.2,
-    },
-    {
-      url: `${BASE}/cookies`,
-      lastModified: new Date("2026-06-03"),
-      changeFrequency: "yearly",
-      priority: 0.1,
-    },
-    {
-      url: `${BASE}/mentions-legales`,
-      lastModified: new Date("2026-05-31"),
-      changeFrequency: "yearly",
-      priority: 0.1,
-    },
+    // Legal pages intentionally excluded — noindex, no SEO value
     // ── Free tools ────────────────────────────────────────────────────────────
     {
       url: `${BASE}/audit-gratuit`,
