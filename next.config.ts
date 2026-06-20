@@ -3,6 +3,15 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   serverExternalPackages: ["@react-pdf/renderer", "canvas"],
   turbopack: {},
+  async redirects() {
+    return [
+      {
+        source: "/blog/gpsr-guide-complet-ecommerc%C3%A7ants",
+        destination: "/blog/gpsr-guide-complet-ecommercants",
+        permanent: true,
+      },
+    ]
+  },
   async headers() {
     return [
       {

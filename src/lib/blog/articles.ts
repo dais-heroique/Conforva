@@ -20,7 +20,7 @@ export interface BlogArticle {
 
 export const ARTICLES: BlogArticle[] = [
   {
-    slug: "gpsr-guide-complet-ecommerçants",
+    slug: "gpsr-guide-complet-ecommercants",
     title: "GPSR 2025 : guide complet pour les e-commerçants vendant dans l'UE",
     description: "Tout ce que vous devez savoir sur le règlement GPSR (UE) 2023/988 : qui est concerné, quelles obligations, quels documents, quelles sanctions. Guide pratique pour vendeurs en ligne.",
     keywords: ["GPSR e-commerçant", "règlement UE 2023/988", "conformité GPSR", "GPSR vendeur en ligne", "obligations GPSR"],
