@@ -59,16 +59,15 @@ const JSON_LD = {
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Conforva — Dossier technique GPSR en 10 minutes",
-    template: "%s — Conforva",
+    default: "Conforva — Dossier GPSR en 10 min | IA | 1 produit gratuit",
+    template: "%s | Conforva",
   },
-  description: "Conforva génère votre dossier technique GPSR (UE 2023/988) en moins de 10 minutes : analyse de risque ISO 12100, 15 sections obligatoires, déclaration de conformité et étiquetage multilingue. Gratuit pour votre première référence.",
+  description: "Générez votre dossier technique GPSR complet en moins de 10 minutes par IA. Analyse de risques ISO 12100, déclaration de conformité UE, étiquetage multilingue. 1 produit gratuit, sans carte bancaire.",
   keywords: [
-    "Conforva", "GPSR", "conformité GPSR", "dossier technique GPSR", "règlement UE 2023/988",
-    "analyse de risque ISO 12100", "déclaration de conformité UE", "étiquetage sécurité",
-    "conformité produit UE", "personne responsable EU", "e-commerce conformité Europe",
-    "sécurité produit", "Amazon FBA conformité GPSR", "dossier technique Article 22",
-    "logiciel conformité GPSR", "SaaS conformité produit",
+    "GPSR conformité", "dossier technique GPSR", "conformité GPSR gratuit",
+    "règlement UE 2023/988", "analyse de risque ISO 12100", "déclaration de conformité UE",
+    "GPSR Amazon FBA", "GPSR Shopify", "personne responsable EU", "dossier technique Article 22",
+    "logiciel conformité GPSR", "Conforva",
   ],
   authors: [{ name: "Conforva", url: BASE_URL }],
   creator: "Conforva",
@@ -76,9 +75,9 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   icons: {
     icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
       { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon-96.png", type: "image/png", sizes: "96x96" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
     ],
     apple: [{ url: "/favicon-96.png", sizes: "96x96", type: "image/png" }],
     shortcut: "/favicon.ico",
@@ -86,21 +85,21 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Conforva",
-    title: "Conforva — Dossier technique GPSR en 10 minutes",
-    description: "Conforva génère votre dossier technique GPSR (UE 2023/988) en moins de 10 minutes : analyse de risque ISO 12100, déclaration de conformité et étiquetage multilingue. Gratuit pour votre première référence.",
+    title: "Conforva — Dossier GPSR en 10 min | IA | 1 produit gratuit",
+    description: "Générez votre dossier technique GPSR complet en 10 min par IA. Analyse de risques ISO 12100, déclaration UE. 1 produit gratuit, sans carte bancaire.",
     url: BASE_URL,
     locale: "fr_FR",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Conforva — Dossier technique GPSR en 10 minutes",
-    description: "Analyse de risque ISO 12100, dossier 15 sections, déclaration de conformité et étiquetage multilingue. Gratuit pour votre première référence.",
+    title: "Conforva — Dossier GPSR en 10 min | IA | Gratuit",
+    description: "Dossier technique GPSR complet par IA en 10 minutes. Analyse de risques + Déclaration UE. 1 produit gratuit.",
   },
   alternates: { canonical: BASE_URL },
 }
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#060D09",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
