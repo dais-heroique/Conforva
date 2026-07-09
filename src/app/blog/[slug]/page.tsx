@@ -46,9 +46,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "Stratégie": "bg-[#00E676]/15 text-[#00E676] border-[#00E676]/20",
+  "Stratégie": "bg-[#8B5CF6]/15 text-[#A78BFA] border-[#8B5CF6]/20",
   "Amazon FBA": "bg-amber-500/15 text-amber-400 border-amber-500/20",
-  "Outils": "bg-purple-500/15 text-purple-400 border-purple-500/20",
+  "Outils": "bg-[#8B5CF6]/15 text-[#A78BFA] border-[#8B5CF6]/20",
   "Cas d'usage": "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
 }
 
@@ -71,7 +71,7 @@ function renderBody(lines: string[]) {
     if (line.startsWith("✓ ")) {
       return (
         <div key={i} className="flex items-start gap-2.5 py-1">
-          <CheckCircle2 className="h-4 w-4 text-[#00E676] shrink-0 mt-0.5" />
+          <CheckCircle2 className="h-4 w-4 text-[#8B5CF6] shrink-0 mt-0.5" />
           <span className="text-sm text-gray-300">{line.slice(2)}</span>
         </div>
       )
@@ -97,13 +97,13 @@ export default async function BlogArticlePage({ params }: PageProps) {
     "datePublished": article.publishedAt,
     "dateModified": article.updatedAt ?? article.publishedAt,
     "author": { "@type": "Organization", "name": "Conforva", "url": "https://conforva.com" },
-    "publisher": { "@type": "Organization", "name": "Conforva", "logo": { "@type": "ImageObject", "url": "https://conforva.com/favicon.png" } },
+    "publisher": { "@type": "Organization", "name": "Conforva", "logo": { "@type": "ImageObject", "url": "https://conforva.com/favicon.svg" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": `https://conforva.com/blog/${article.slug}` },
     "keywords": article.keywords.join(", "),
   }
 
   return (
-    <div className="min-h-screen bg-[#060D09]">
+    <div className="min-h-screen bg-[#08090C]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PublicNav />
 
@@ -160,11 +160,11 @@ export default async function BlogArticlePage({ params }: PageProps) {
         </article>
 
         {/* CTA */}
-        <div className="my-10 rounded-2xl bg-[#00E676] p-8">
-          <h3 className="text-xl font-bold text-[#060D09] mb-2">{article.cta.heading}</h3>
-          <p className="text-[#060D09]/70 text-sm mb-6 leading-relaxed">{article.cta.text}</p>
+        <div className="my-10 rounded-2xl bg-[#8B5CF6] p-8">
+          <h3 className="text-xl font-bold text-white mb-2">{article.cta.heading}</h3>
+          <p className="text-white/70 text-sm mb-6 leading-relaxed">{article.cta.text}</p>
           <Link href={article.cta.href}>
-            <Button className="bg-[#060D09] text-[#00E676] hover:bg-[#060D09]/90 gap-2">
+            <Button className="bg-white/15 text-white hover:bg-white/25 gap-2 border border-white/20">
               {article.cta.button} <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
@@ -173,13 +173,13 @@ export default async function BlogArticlePage({ params }: PageProps) {
         {/* Navigation */}
         <div className="flex items-center justify-between pt-8 border-t border-white/10 gap-4">
           {prevArticle ? (
-            <Link href={`/blog/${prevArticle.slug}`} className="group flex items-center gap-2 text-sm text-gray-400 hover:text-[#00E676] transition-colors max-w-[48%]">
+            <Link href={`/blog/${prevArticle.slug}`} className="group flex items-center gap-2 text-sm text-gray-400 hover:text-[#8B5CF6] transition-colors max-w-[48%]">
               <ArrowLeft className="h-4 w-4 shrink-0" />
               <span className="line-clamp-2 text-left">{prevArticle.title}</span>
             </Link>
           ) : <div />}
           {nextArticle ? (
-            <Link href={`/blog/${nextArticle.slug}`} className="group flex items-center gap-2 text-sm text-gray-400 hover:text-[#00E676] transition-colors max-w-[48%] text-right ml-auto">
+            <Link href={`/blog/${nextArticle.slug}`} className="group flex items-center gap-2 text-sm text-gray-400 hover:text-[#8B5CF6] transition-colors max-w-[48%] text-right ml-auto">
               <span className="line-clamp-2">{nextArticle.title}</span>
               <ArrowRight className="h-4 w-4 shrink-0" />
             </Link>
@@ -188,7 +188,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
 
         {/* Back to blog */}
         <div className="mt-8 text-center">
-          <Link href="/blog" className="inline-flex items-center gap-2 text-sm text-[#00E676] hover:underline">
+          <Link href="/blog" className="inline-flex items-center gap-2 text-sm text-[#8B5CF6] hover:underline">
             <ArrowLeft className="h-4 w-4" />
             Retour au blog
           </Link>

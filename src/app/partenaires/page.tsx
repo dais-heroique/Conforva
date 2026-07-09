@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { ConforvaLogo } from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import { CheckCircle2, ArrowRight, DollarSign, Users, Link as LinkIcon, BarChart3 } from "lucide-react"
 
@@ -41,16 +42,16 @@ export default function PartenairesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F8F5]">
+    <div className="min-h-screen bg-[#08090C]">
       {/* Nav */}
-      <header className="border-b border-gray-100 bg-white/95 backdrop-blur-sm">
+      <header className="border-b border-white/8 bg-[#08090C]/90 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <img src="/favicon.png" alt="Conforva" className="h-8 w-8 object-contain" />
-            <span className="font-bold text-gray-900">Conforva</span>
+            <ConforvaLogo size={28} />
+            <span className="font-black text-white tracking-tight" style={{ letterSpacing: "-0.02em" }}>CONFORVA</span>
           </Link>
           <Link href="/auth/login">
-            <Button size="sm" variant="ghost">Connexion</Button>
+            <Button size="sm" variant="ghost" className="text-gray-400 hover:text-white">Connexion</Button>
           </Link>
         </div>
       </header>
@@ -58,21 +59,21 @@ export default function PartenairesPage() {
       <main>
         {/* Hero */}
         <section className="px-5 pt-16 pb-12 sm:pt-24 sm:pb-20 max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 mb-6 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5">
-            <span className="text-xs font-semibold text-emerald-700">Programme partenaire — 30% de commission récurrente</span>
+          <div className="inline-flex items-center gap-2 mb-6 rounded-full border border-[#8B5CF6]/30 bg-[#8B5CF6]/10 px-4 py-1.5">
+            <span className="text-xs font-semibold text-[#A78BFA]">Programme partenaire — 30% de commission récurrente</span>
           </div>
-          <h1 className="font-display text-[clamp(2rem,6vw,4rem)] leading-[0.97] tracking-tight text-gray-950 mb-5">
-            Gagnez jusqu'à <em className="italic font-light text-blue-700">237 €/mois</em><br />
+          <h1 className="text-[clamp(2rem,6vw,4rem)] leading-tight tracking-tight font-bold text-white mb-5">
+            Gagnez jusqu'à <span className="text-[#A78BFA]">237 €/mois</span><br />
             par client envoyé
           </h1>
-          <p className="text-base sm:text-lg text-gray-500 leading-relaxed max-w-2xl mx-auto">
-            Recommandez Conforva à vos clients qui vendent en Europe.
+          <p className="text-base sm:text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto">
+            Recommandez Conforva à vos clients e-commerçants.
             Vous recevez 30% de leurs abonnements pendant 12 mois — sans contrat, sans effort.
           </p>
         </section>
 
         {/* How it works */}
-        <section className="px-5 py-10 bg-white border-y border-gray-100">
+        <section className="px-5 py-10 border-y border-white/8">
           <div className="max-w-4xl mx-auto">
             <div className="grid sm:grid-cols-4 gap-6">
               {[
@@ -84,12 +85,12 @@ export default function PartenairesPage() {
                 const Icon = s.icon
                 return (
                   <div key={s.n} className="text-center">
-                    <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center mx-auto mb-3">
-                      <Icon className="h-5 w-5 text-blue-600" />
+                    <div className="h-10 w-10 rounded-xl bg-[#8B5CF6]/15 flex items-center justify-center mx-auto mb-3">
+                      <Icon className="h-5 w-5 text-[#A78BFA]" />
                     </div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">{s.n}</p>
-                    <p className="font-semibold text-gray-900 text-sm mb-1">{s.title}</p>
-                    <p className="text-xs text-gray-500 leading-relaxed">{s.desc}</p>
+                    <p className="text-[10px] font-bold text-gray-600 uppercase tracking-wider mb-1">{s.n}</p>
+                    <p className="font-semibold text-white text-sm mb-1">{s.title}</p>
+                    <p className="text-xs text-gray-400 leading-relaxed">{s.desc}</p>
                   </div>
                 )
               })}
@@ -99,40 +100,40 @@ export default function PartenairesPage() {
 
         {/* Commission calculator */}
         <section className="px-5 py-12 max-w-3xl mx-auto">
-          <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">Combien pouvez-vous gagner ?</h2>
-          <p className="text-sm text-gray-500 text-center mb-8">30% de chaque abonnement, versés chaque mois pendant 12 mois</p>
-          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-            <div className="grid grid-cols-4 bg-gray-50 border-b border-gray-100 px-5 py-3">
+          <h2 className="text-xl font-bold text-white mb-2 text-center">Combien pouvez-vous gagner ?</h2>
+          <p className="text-sm text-gray-400 text-center mb-8">30% de chaque abonnement, versés chaque mois pendant 12 mois</p>
+          <div className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
+            <div className="grid grid-cols-4 border-b border-white/10 px-5 py-3 bg-white/5">
               {["Plan", "Prix", "Votre commission", "× 10 clients"].map(h => (
                 <p key={h} className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">{h}</p>
               ))}
             </div>
             {[
-              { plan: "Starter", mrr: 29, color: "text-gray-700" },
-              { plan: "Growth", mrr: 79, color: "text-blue-700" },
-              { plan: "Pro", mrr: 199, color: "text-violet-700" },
+              { plan: "Starter", mrr: 29, color: "text-gray-300" },
+              { plan: "Growth", mrr: 79, color: "text-[#A78BFA]" },
+              { plan: "Pro", mrr: 199, color: "text-[#8B5CF6]" },
             ].map((s, i, arr) => {
               const commission = s.mrr * 0.30
               return (
-                <div key={s.plan} className={`grid grid-cols-4 px-5 py-4 items-center ${i < arr.length - 1 ? "border-b border-gray-50" : ""}`}>
+                <div key={s.plan} className={`grid grid-cols-4 px-5 py-4 items-center ${i < arr.length - 1 ? "border-b border-white/8" : ""}`}>
                   <p className={`text-sm font-bold ${s.color}`}>{s.plan}</p>
-                  <p className="text-sm text-gray-600 tabular-nums">{s.mrr} €<span className="text-xs text-gray-400">/mois</span></p>
+                  <p className="text-sm text-gray-400 tabular-nums">{s.mrr} €<span className="text-xs text-gray-600">/mois</span></p>
                   <div>
-                    <p className="text-sm font-semibold text-emerald-600 tabular-nums">{commission.toFixed(2)} €<span className="text-xs text-gray-400">/client</span></p>
-                    <p className="text-[10px] text-gray-400">{s.mrr} × 30%</p>
+                    <p className="text-sm font-semibold text-emerald-400 tabular-nums">{commission.toFixed(2)} €<span className="text-xs text-gray-600">/client</span></p>
+                    <p className="text-[10px] text-gray-600">{s.mrr} × 30%</p>
                   </div>
-                  <p className="text-sm font-bold text-gray-900 tabular-nums">{(commission * 10).toFixed(0)} €<span className="text-xs font-normal text-gray-400">/mois</span></p>
+                  <p className="text-sm font-bold text-white tabular-nums">{(commission * 10).toFixed(0)} €<span className="text-xs font-normal text-gray-500">/mois</span></p>
                 </div>
               )
             })}
           </div>
-          <p className="text-center text-xs text-gray-400 mt-4">Commission versée pendant 12 mois par client actif · Aucun plafond</p>
+          <p className="text-center text-xs text-gray-600 mt-4">Commission versée pendant 12 mois par client actif · Aucun plafond</p>
         </section>
 
         {/* Benefits */}
-        <section className="px-5 py-10 bg-white border-y border-gray-100">
+        <section className="px-5 py-10 border-y border-white/8">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-xl font-bold text-gray-900 mb-6 text-center">Ce que vous obtenez</h2>
+            <h2 className="text-xl font-bold text-white mb-6 text-center">Ce que vous obtenez</h2>
             <ul className="grid sm:grid-cols-2 gap-3">
               {[
                 "30% de commission récurrente pendant 12 mois",
@@ -144,8 +145,8 @@ export default function PartenairesPage() {
                 "Support dédié aux partenaires",
                 "Aucun plafond de gains",
               ].map(b => (
-                <li key={b} className="flex items-start gap-2.5 text-sm text-gray-600">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                <li key={b} className="flex items-start gap-2.5 text-sm text-gray-400">
+                  <CheckCircle2 className="h-4 w-4 text-[#8B5CF6] shrink-0 mt-0.5" />
                   {b}
                 </li>
               ))}
@@ -155,101 +156,101 @@ export default function PartenairesPage() {
 
         {/* Registration form */}
         <section className="px-5 py-16 max-w-lg mx-auto">
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-8">
             {status === "success" && result ? (
               <div className="text-center space-y-5">
-                <div className="h-12 w-12 rounded-full bg-emerald-100 flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+                <div className="h-12 w-12 rounded-full bg-[#8B5CF6]/20 flex items-center justify-center mx-auto">
+                  <CheckCircle2 className="h-6 w-6 text-[#8B5CF6]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">Bienvenue dans le programme !</h3>
-                  <p className="text-sm text-gray-500 mt-1">Voici vos informations partenaire. Sauvegardez-les.</p>
+                  <h3 className="text-lg font-bold text-white">Bienvenue dans le programme !</h3>
+                  <p className="text-sm text-gray-400 mt-1">Voici vos informations partenaire. Sauvegardez-les.</p>
                 </div>
                 <div className="space-y-3 text-left">
-                  <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
-                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Votre lien de parrainage</p>
-                    <p className="text-sm font-mono text-blue-700 break-all">{result.referral_url}</p>
+                  <div className="rounded-xl bg-white/5 border border-white/10 p-4">
+                    <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Votre lien de parrainage</p>
+                    <p className="text-sm font-mono text-[#A78BFA] break-all">{result.referral_url}</p>
                   </div>
-                  <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
-                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Votre tableau de bord stats</p>
+                  <div className="rounded-xl bg-white/5 border border-white/10 p-4">
+                    <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Votre tableau de bord stats</p>
                     <a href={result.stats_url} target="_blank" rel="noopener noreferrer"
-                      className="text-sm font-mono text-blue-700 break-all hover:underline">{result.stats_url}</a>
+                      className="text-sm font-mono text-[#A78BFA] break-all hover:underline">{result.stats_url}</a>
                   </div>
                 </div>
                 <a href={result.stats_url} target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full gap-2">
+                  <Button className="w-full gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white">
                     Voir mon tableau de bord <ArrowRight className="h-4 w-4" />
                   </Button>
                 </a>
-                <p className="text-xs text-gray-400">Bookmarkez le lien de votre dashboard — il n'est pas envoyé par email.</p>
+                <p className="text-xs text-gray-600">Bookmarkez le lien de votre dashboard — il n'est pas envoyé par email.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-1">Rejoindre le programme</h2>
-                  <p className="text-sm text-gray-500">Inscription gratuite, lien actif immédiatement.</p>
+                  <h2 className="text-xl font-bold text-white mb-1">Rejoindre le programme</h2>
+                  <p className="text-sm text-gray-400">Inscription gratuite, lien actif immédiatement.</p>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Prénom et nom *</label>
+                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Prénom et nom *</label>
                   <input
                     type="text"
                     required
                     value={form.name}
                     onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#8B5CF6]/60 transition-colors"
                     placeholder="Marie Dupont"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Email professionnel *</label>
+                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Email professionnel *</label>
                   <input
                     type="email"
                     required
                     value={form.email}
                     onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#8B5CF6]/60 transition-colors"
                     placeholder="marie@entreprise.com"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Entreprise</label>
+                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Entreprise</label>
                   <input
                     type="text"
                     value={form.company}
                     onChange={e => setForm(f => ({ ...f, company: e.target.value }))}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#8B5CF6]/60 transition-colors"
                     placeholder="Bigblue, Shopify Agency…"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">IBAN pour recevoir vos commissions *</label>
+                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">IBAN pour recevoir vos commissions *</label>
                   <input
                     type="text"
                     required
                     value={form.iban}
                     onChange={e => setForm(f => ({ ...f, iban: e.target.value.toUpperCase().replace(/\s/g, "") }))}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white font-mono placeholder-gray-600 focus:outline-none focus:border-[#8B5CF6]/60 transition-colors"
                     placeholder="FR76300060000112345678901"
                   />
-                  <p className="text-[10px] text-gray-400 mt-1">Utilisé uniquement pour vous virer vos commissions chaque mois.</p>
+                  <p className="text-[10px] text-gray-600 mt-1">Utilisé uniquement pour vous virer vos commissions chaque mois.</p>
                 </div>
 
                 {errorMsg && (
-                  <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{errorMsg}</p>
+                  <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">{errorMsg}</p>
                 )}
 
-                <Button type="submit" className="w-full gap-2" disabled={status === "loading"}>
+                <Button type="submit" className="w-full gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold" disabled={status === "loading"}>
                   {status === "loading" ? "Inscription..." : "Obtenir mon lien partenaire"}
                   {status !== "loading" && <ArrowRight className="h-4 w-4" />}
                 </Button>
 
-                <p className="text-xs text-gray-400 text-center">
+                <p className="text-xs text-gray-600 text-center">
                   En vous inscrivant, vous acceptez nos{" "}
-                  <Link href="/cgu" className="underline">CGU</Link>.
+                  <Link href="/cgu" className="underline hover:text-gray-400">CGU</Link>.
                   Aucune carte requise.
                 </p>
               </form>
@@ -258,8 +259,8 @@ export default function PartenairesPage() {
         </section>
       </main>
 
-      <footer className="border-t border-gray-100 py-8 text-center text-xs text-gray-400">
-        © {new Date().getFullYear()} Conforva · <Link href="/privacy" className="hover:text-gray-600">Confidentialité</Link>
+      <footer className="border-t border-white/8 py-8 text-center text-xs text-gray-600">
+        © {new Date().getFullYear()} Conforva · <Link href="/privacy" className="hover:text-gray-400 transition-colors">Confidentialité</Link>
       </footer>
     </div>
   )

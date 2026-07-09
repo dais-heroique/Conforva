@@ -3,125 +3,116 @@ import Link from "next/link"
 import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 import { Button } from "@/components/ui/button"
 import {
-  CheckCircle2, ArrowRight, Shield, Globe, Users, FileText,
-  Headphones, BarChart3, Building2, Package, AlertTriangle,
+  CheckCircle2, ArrowRight, Shield, Globe, Users,
+  Headphones, BarChart3, Building2, TrendingDown, Bell, Zap,
 } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Conforva Enterprise — Conformité GPSR pour catalogues 150+ références",
-  description: "Solution Enterprise Conforva : tarification dégressive au volume (à partir de 490 €/mois), gestionnaire de compte dédié, SLA 99,9 %, API access et workspace multi-utilisateurs. Pour catalogues de 150 à 10 000+ références.",
+  title: "Conforva Enterprise — Veille concurrentielle pour grandes équipes",
+  description: "Solution Enterprise Conforva : surveillance illimitée de concurrents, rapports IA avancés, SLA 99,9 %, gestionnaire de compte dédié et API access. Pour les équipes e-commerce exigeantes.",
   keywords: [
-    "Conforva Enterprise", "conformité GPSR grands comptes", "SaaS conformité volume",
-    "dossier technique en masse", "GPSR catalogue produit", "conformité GPSR API",
-    "plateforme conformité e-commerce", "GPSR importateur volume", "compliance SaaS enterprise",
+    "Conforva Enterprise", "veille concurrentielle grands comptes", "repricing entreprise",
+    "surveillance prix API", "intelligence concurrentielle SaaS", "veille e-commerce enterprise",
   ],
   openGraph: {
-    title: "Conforva Enterprise — Conformité GPSR pour grands catalogues",
-    description: "Tarification dégressive au volume, SLA 99,9 %, API access et gestionnaire dédié. Pour catalogues GPSR de 150 à 10 000+ références.",
+    title: "Conforva Enterprise — Veille concurrentielle pour grandes équipes",
+    description: "Surveillance illimitée, SLA 99,9 %, API access et gestionnaire dédié. Pour les équipes e-commerce qui jouent dans la cour des grands.",
     url: "https://conforva.com/enterprise",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Conforva Enterprise — GPSR pour 150 à 10 000+ références",
-    description: "Tarification dégressive, SLA 99,9 %, API access, gestionnaire dédié. Solution Enterprise GPSR.",
+    title: "Conforva Enterprise — Veille concurrentielle illimitée",
+    description: "SLA 99,9 %, API access, gestionnaire dédié. Solution Enterprise pour e-commerce.",
   },
   alternates: { canonical: "https://conforva.com/enterprise" },
 }
 
 const VOLUME_TIERS = [
-  { range: "Jusqu'à 150 / mois", price: "199 €", plan: "Pro", note: "Plan standard" },
-  { range: "150 – 500 / mois", price: "490 €", plan: "Enterprise S", note: "" },
-  { range: "500 – 2 000 / mois", price: "990 €", plan: "Enterprise M", note: "" },
-  { range: "2 000 – 10 000 / mois", price: "1 990 €", plan: "Enterprise L", note: "" },
-  { range: "10 000+ / mois", price: "Sur devis", plan: "Enterprise XL", note: "" },
+  { range: "Jusqu'à 150 concurrents", price: "199 €", plan: "Pro", note: "Plan standard" },
+  { range: "150 – 500 concurrents", price: "490 €", plan: "Enterprise S", note: "" },
+  { range: "500 – 2 000 concurrents", price: "990 €", plan: "Enterprise M", note: "" },
+  { range: "2 000 – 10 000 concurrents", price: "1 990 €", plan: "Enterprise L", note: "" },
+  { range: "10 000+ concurrents", price: "Sur devis", plan: "Enterprise XL", note: "" },
 ]
 
 const ENTERPRISE_FEATURES = [
   {
-    icon: Package,
-    color: "bg-blue-600",
-    title: "Références illimitées selon palier",
-    desc: "Gérez des centaines ou milliers de références produit depuis un tableau de bord unique. Chaque référence dispose de son dossier technique complet, son analyse de risque et ses étiquettes multilingues.",
+    icon: TrendingDown,
+    title: "Surveillance illimitée",
+    desc: "Trackez autant de concurrents et de produits que vous le souhaitez. Aucune limite sur le nombre d'URLs ou de marchés surveillés.",
   },
   {
     icon: Globe,
-    color: "bg-emerald-600",
-    title: "7 marchés, 7 langues, sans restriction",
-    desc: "Tous les marchés (EU, US, GB, CN, CA, JP, AU) et toutes les langues d'étiquetage (FR, EN, DE, IT, ES, ZH, JA) disponibles pour chaque référence, sans limitation.",
-  },
-  {
-    icon: FileText,
-    color: "bg-indigo-600",
-    title: "Export & import complets",
-    desc: "Import Shopify, WooCommerce et CSV pour alimenter rapidement votre catalogue. Export PDF de tous les documents (dossier technique, déclaration de conformité, étiquettes) sans watermark.",
+    title: "Multi-marchés & multi-plateformes",
+    desc: "Couvrez tous vos marchés : Shopify, Amazon FR/DE/UK/US/IT/ES, WooCommerce, et toute URL publique. Sans restriction géographique.",
   },
   {
     icon: BarChart3,
-    color: "bg-amber-500",
-    title: "Rapports de conformité consolidés",
-    desc: "Vue d'ensemble de l'état de conformité de tout votre catalogue : taux de conformité global, documents manquants, alertes par marché, export CSV pour vos outils internes.",
+    title: "Rapports IA avancés",
+    desc: "Rapports hebdomadaires personnalisés par catégorie, par marché, par concurrent. Exports CSV/PDF pour vos outils internes.",
   },
   {
-    icon: AlertTriangle,
-    color: "bg-rose-500",
-    title: "Veille réglementaire active",
-    desc: "Surveillance automatique des évolutions réglementaires sur EUR-Lex, Légifrance, legislation.gov.uk et eCFR. Alertes ciblées selon les marchés et catégories de vos produits.",
+    icon: Bell,
+    title: "Alertes temps réel illimitées",
+    desc: "Configurez autant de règles d'alerte que nécessaire : seuils de prix, ruptures de stock, nouveaux produits — pour chaque concurrent.",
+  },
+  {
+    icon: Zap,
+    title: "API access complet",
+    desc: "Intégrez les données de veille directement dans vos outils internes (PIM, ERP, repricing) via notre API REST documentée.",
   },
   {
     icon: Users,
-    color: "bg-violet-600",
-    title: "Multi-utilisateurs & organisation",
-    desc: "Plusieurs membres de votre équipe (qualité, export, juridique) peuvent accéder au même espace de travail et collaborer sur les dossiers produits.",
+    title: "Multi-utilisateurs & rôles",
+    desc: "Gérez toute votre équipe (acheteurs, category managers, direction) depuis un espace de travail partagé avec contrôle des accès.",
   },
   {
     icon: Headphones,
-    color: "bg-teal-600",
     title: "Gestionnaire de compte dédié",
-    desc: "Un interlocuteur unique qui connaît votre catalogue et vos contraintes. Onboarding personnalisé pour votre équipe et suivi régulier.",
+    desc: "Un interlocuteur unique qui connaît votre marché et vos concurrents. Onboarding personnalisé et suivi mensuel inclus.",
   },
   {
     icon: Shield,
-    color: "bg-orange-500",
     title: "SLA & support prioritaire",
-    desc: "Temps de réponse support garanti contractuellement. Disponibilité 99,9 % avec engagement mensuel. Incidents critiques traités en priorité.",
+    desc: "Temps de réponse garanti contractuellement. Disponibilité 99,9 % avec engagement mensuel. Incidents critiques en priorité.",
   },
 ]
 
 export default function EnterprisePage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#08090C]">
       <PublicNav />
 
       {/* Hero */}
-      <section className="py-20 px-5 border-b border-gray-100">
+      <section className="py-20 px-5 border-b border-white/8">
         <div className="max-w-5xl mx-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3.5 py-1.5 text-xs font-medium text-blue-700 mb-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#8B5CF6]/30 bg-[#8B5CF6]/10 px-3.5 py-1.5 text-xs font-medium text-[#A78BFA] mb-6">
             <Building2 className="h-3.5 w-3.5" />
             Conforva Enterprise
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold text-gray-900 leading-tight tracking-tight mb-6">
-            La conformité GPSR à l'échelle<br className="hidden sm:block" />
-            <span className="text-blue-600"> de votre catalogue</span>
+          <h1 className="text-3xl sm:text-5xl font-bold text-white leading-tight tracking-tight mb-6">
+            La veille concurrentielle à l'échelle<br className="hidden sm:block" />
+            <span className="text-[#A78BFA]"> de votre catalogue</span>
           </h1>
-          <p className="text-lg text-gray-500 max-w-2xl leading-relaxed mb-8">
-            Pour les e-commerçants gérant plus de 150 références par mois,
+          <p className="text-lg text-gray-400 max-w-2xl leading-relaxed mb-8">
+            Pour les équipes e-commerce gérant plus de 150 concurrents ou produits surveillés,
             Conforva Enterprise offre une tarification dégressive, un accès complet
             à toutes les fonctionnalités et un accompagnement dédié.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <Link href="/contact">
-              <Button size="lg" className="gap-2">
+              <Button size="lg" className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white gap-2">
                 Demander un devis <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <Link href="/auth/login">
-              <Button size="lg" variant="outline">
+            <Link href="/auth/register">
+              <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
                 Essayer gratuitement
               </Button>
             </Link>
           </div>
-          <p className="mt-3 text-xs text-gray-400">
+          <p className="mt-3 text-xs text-gray-500">
             Réponse sous 24h ouvrées
           </p>
         </div>
@@ -131,40 +122,40 @@ export default function EnterprisePage() {
       <section className="py-20 px-5">
         <div className="max-w-5xl mx-auto">
           <div className="mb-10">
-            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Tarification</p>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2">Prix dégressifs selon le volume</h2>
-            <p className="text-sm text-gray-500 max-w-xl">
-              Plus votre catalogue est grand, plus le coût par référence baisse.
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#8B5CF6] mb-1">Tarification</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Prix dégressifs selon le volume</h2>
+            <p className="text-sm text-gray-400 max-w-xl">
+              Plus votre périmètre de surveillance est large, plus le coût unitaire baisse.
               Chaque palier Enterprise inclut l'ensemble des fonctionnalités.
             </p>
           </div>
 
-          <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
+          <div className="overflow-x-auto rounded-2xl border border-white/10">
             <table className="w-full text-sm min-w-[480px]">
               <thead>
-                <tr className="border-b border-gray-200 bg-gray-50">
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500">Références / mois</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500">Plan</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500">Prix indicatif / mois</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500"></th>
+                <tr className="border-b border-white/10 bg-white/5">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400">Concurrents / produits surveillés</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400">Plan</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400">Prix indicatif / mois</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-white/8">
                 {VOLUME_TIERS.map((tier, i) => (
-                  <tr key={tier.plan} className={`hover:bg-gray-50/50 ${i === 0 ? "opacity-50" : ""}`}>
-                    <td className="px-6 py-4 font-medium text-gray-900">{tier.range}</td>
+                  <tr key={tier.plan} className={`hover:bg-white/5 ${i === 0 ? "opacity-50" : ""}`}>
+                    <td className="px-6 py-4 font-medium text-white">{tier.range}</td>
                     <td className="px-6 py-4">
                       <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                        i === 0 ? "bg-gray-100 text-gray-500" : "bg-blue-100 text-blue-700"
+                        i === 0 ? "bg-white/10 text-gray-400" : "bg-[#8B5CF6]/20 text-[#A78BFA]"
                       }`}>{tier.plan}</span>
-                      {tier.note && <span className="ml-2 text-xs text-gray-400">{tier.note}</span>}
+                      {tier.note && <span className="ml-2 text-xs text-gray-500">{tier.note}</span>}
                     </td>
-                    <td className="px-6 py-4 font-semibold text-gray-900">{tier.price}</td>
+                    <td className="px-6 py-4 font-semibold text-white">{tier.price}</td>
                     <td className="px-6 py-4">
                       {i === 0 ? (
-                        <Link href="/auth/login" className="text-xs text-blue-600 hover:underline">Accéder au plan Pro →</Link>
+                        <Link href="/auth/register" className="text-xs text-[#8B5CF6] hover:underline">Accéder au plan Pro →</Link>
                       ) : (
-                        <Link href="/contact" className="text-xs text-blue-600 hover:underline">Demander un devis →</Link>
+                        <Link href="/contact" className="text-xs text-[#8B5CF6] hover:underline">Demander un devis →</Link>
                       )}
                     </td>
                   </tr>
@@ -172,30 +163,30 @@ export default function EnterprisePage() {
               </tbody>
             </table>
           </div>
-          <p className="mt-4 text-xs text-gray-400">
+          <p className="mt-4 text-xs text-gray-500">
             Prix indicatifs HT. Tarifs définitifs établis après échange sur votre volume et vos besoins.
           </p>
         </div>
       </section>
 
       {/* Features */}
-      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
+      <section className="py-20 px-5 border-y border-white/8">
         <div className="max-w-5xl mx-auto">
           <div className="mb-10">
-            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Fonctionnalités</p>
-            <h2 className="text-2xl sm:text-3xl font-bold">Tout ce dont vous avez besoin</h2>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#8B5CF6] mb-1">Fonctionnalités</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">Tout ce dont vous avez besoin</h2>
           </div>
           <div className="grid sm:grid-cols-2 gap-5">
             {ENTERPRISE_FEATURES.map((f) => {
               const Icon = f.icon
               return (
-                <div key={f.title} className="flex gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <div className={`h-10 w-10 rounded-xl ${f.color} flex items-center justify-center shrink-0 mt-0.5`}>
-                    <Icon className="h-5 w-5 text-white" />
+                <div key={f.title} className="flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-6">
+                  <div className="h-10 w-10 rounded-xl bg-[#8B5CF6]/15 flex items-center justify-center shrink-0 mt-0.5">
+                    <Icon className="h-5 w-5 text-[#A78BFA]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1.5">{f.title}</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+                    <h3 className="font-semibold text-white mb-1.5">{f.title}</h3>
+                    <p className="text-sm text-gray-400 leading-relaxed">{f.desc}</p>
                   </div>
                 </div>
               )
@@ -208,8 +199,8 @@ export default function EnterprisePage() {
       <section className="py-20 px-5">
         <div className="max-w-5xl mx-auto">
           <div className="mb-10">
-            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">SLA & Support</p>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2">Engagements de service</h2>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#8B5CF6] mb-1">SLA & Support</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Engagements de service</h2>
           </div>
           <div className="grid sm:grid-cols-3 gap-4">
             {[
@@ -217,10 +208,10 @@ export default function EnterprisePage() {
               { metric: "< 4h", label: "Temps de réponse support", sub: "En heures ouvrées (9h-18h CET). Traitement prioritaire pour les clients Enterprise." },
               { metric: "24h", label: "Réponse commerciale", sub: "Devis et questions Enterprise traités le jour ouvré suivant la demande." },
             ].map(s => (
-              <div key={s.metric} className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                <p className="text-3xl font-black text-blue-600 mb-1">{s.metric}</p>
-                <p className="text-sm font-semibold text-gray-900 mb-1">{s.label}</p>
-                <p className="text-xs text-gray-500 leading-relaxed">{s.sub}</p>
+              <div key={s.metric} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                <p className="text-3xl font-black text-[#8B5CF6] mb-1">{s.metric}</p>
+                <p className="text-sm font-semibold text-white mb-1">{s.label}</p>
+                <p className="text-xs text-gray-400 leading-relaxed">{s.sub}</p>
               </div>
             ))}
           </div>
@@ -228,34 +219,32 @@ export default function EnterprisePage() {
       </section>
 
       {/* All included */}
-      <section className="py-20 px-5 bg-gray-50 border-y border-gray-100">
+      <section className="py-20 px-5 border-y border-white/8">
         <div className="max-w-5xl mx-auto">
           <div className="mb-10">
-            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Inclus dans tous les plans Enterprise</p>
-            <h2 className="text-2xl sm:text-3xl font-bold">Sans supplément, sans surprise</h2>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#8B5CF6] mb-1">Inclus dans tous les plans Enterprise</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">Sans supplément, sans surprise</h2>
           </div>
           <div className="grid sm:grid-cols-2 gap-3">
             {[
-              "Références selon palier (voir tableau ci-dessus)",
-              "Étiquetage en 7 langues sans restriction",
-              "Couverture 7 marchés (EU, US, GB, CN, CA, JP, AU)",
-              "Export PDF sans watermark",
-              "Dossier technique 15 sections (Art. 22 GPSR)",
-              "Déclaration de Conformité (Art. 24 GPSR)",
-              "Personne Responsable EU (Art. 16 GPSR)",
-              "Analyse de risque ISO 12100 complète",
-              "Veille réglementaire (EUR-Lex, Légifrance, UK, US)",
-              "Import Shopify, WooCommerce et CSV",
-              "Multi-utilisateurs avec accès partagé",
-              "Journaux d'audit complets horodatés",
-              "Rapports de conformité exportables",
+              "Surveillance concurrents selon palier (voir tableau ci-dessus)",
+              "Détection des changements de prix en temps réel",
+              "Alertes stock et nouveaux produits illimitées",
+              "Rapports IA hebdomadaires personnalisés",
+              "Historique des prix sur 12 mois glissants",
+              "Export CSV / PDF sans limitation",
+              "Intégration Shopify, Amazon, WooCommerce",
+              "API REST complète avec documentation",
+              "Multi-utilisateurs avec contrôle des accès",
+              "Journaux d'activité complets horodatés",
+              "Rapports de performance par concurrent/catégorie",
               "Onboarding et formation de votre équipe",
               "Gestionnaire de compte dédié",
               "SLA contractuel avec engagement de disponibilité",
             ].map(item => (
-              <div key={item} className="flex items-center gap-2.5 rounded-xl bg-white border border-gray-100 px-4 py-3 shadow-sm">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                <span className="text-sm text-gray-700">{item}</span>
+              <div key={item} className="flex items-center gap-2.5 rounded-xl bg-white/5 border border-white/10 px-4 py-3">
+                <CheckCircle2 className="h-4 w-4 text-[#8B5CF6] shrink-0" />
+                <span className="text-sm text-gray-300">{item}</span>
               </div>
             ))}
           </div>
@@ -265,22 +254,22 @@ export default function EnterprisePage() {
       {/* CTA */}
       <section className="py-20 px-5">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="rounded-2xl bg-gray-950 p-12 text-white relative overflow-hidden">
-            <div className="pointer-events-none absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at 70% 30%, white, transparent 50%)" }} />
-            <h2 className="relative text-2xl sm:text-3xl font-bold mb-3">
-              Prêt à mettre votre catalogue en conformité ?
+          <div className="rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 p-12 relative overflow-hidden">
+            <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 70% 30%, #8B5CF6, transparent 50%)" }} />
+            <h2 className="relative text-2xl sm:text-3xl font-bold text-white mb-3">
+              Prêt à surveiller vos concurrents sans limites ?
             </h2>
             <p className="relative text-gray-400 mb-8 text-sm max-w-lg mx-auto">
-              Indiquez-nous votre volume de références et vos marchés cibles.
+              Indiquez-nous votre volume de surveillance et vos marchés cibles.
               Nous vous préparons une proposition sous 24h.
             </p>
             <div className="relative flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/contact">
-                <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100 gap-2">
+                <Button size="lg" className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white gap-2">
                   Contacter l'équipe Enterprise <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/auth/login">
+              <Link href="/auth/register">
                 <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
                   Essayer gratuitement
                 </Button>

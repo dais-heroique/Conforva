@@ -6,7 +6,7 @@ import { CheckCircle2, TrendingDown, Zap, Shield, ArrowRight } from "lucide-reac
 
 export const metadata: Metadata = {
   title: "À propos de Conforva — Notre mission",
-  description: "Conforva est un agent IA de veille concurrentielle pour e-commerçants. Surveillance des prix en temps réel, alertes intelligentes et recommandations Gemini AI pour Shopify, Amazon et WooCommerce.",
+  description: "Conforva est un agent IA de veille concurrentielle pour e-commerçants. Surveillance des prix en temps réel, alertes intelligentes et recommandations IA pour Shopify, Amazon et WooCommerce.",
   keywords: ["Conforva", "à propos Conforva", "veille concurrentielle IA", "suivi prix concurrents", "repricing e-commerce", "intelligence concurrentielle"],
   openGraph: {
     title: "À propos de Conforva — Agent IA de veille concurrentielle",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "À propos de Conforva — Agent IA de veille concurrentielle",
-    description: "Surveillance des prix en temps réel + recommandations Gemini AI pour e-commerçants.",
+    description: "Surveillance des prix en temps réel + recommandations IA pour e-commerçants.",
   },
   alternates: { canonical: "https://conforva.com/about" },
 }
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 const VALUES = [
   {
     icon: TrendingDown,
-    color: "bg-[#00E676]/15 text-[#00E676]",
+    color: "bg-[#8B5CF6]/15 text-[#8B5CF6]",
     title: "Données fraîches, décisions rapides",
     desc: "Nos scrapers surveillent vos concurrents en continu. Chaque mouvement de prix est capturé, horodaté et analysé — pas de données périmées, pas de surprises.",
   },
@@ -33,11 +33,11 @@ const VALUES = [
     icon: Zap,
     color: "bg-amber-500/15 text-amber-400",
     title: "IA actionnable, pas théorique",
-    desc: "Les rapports Gemini AI de Conforva ne décrivent pas — ils prescrivent. Chaque insight vient avec une action concrète : ajuster ce prix, pousser ce produit, surveiller ce concurrent.",
+    desc: "Les rapports IA de Conforva ne décrivent pas — ils prescrivent. Chaque insight vient avec une action concrète : ajuster ce prix, pousser ce produit, surveiller ce concurrent.",
   },
   {
     icon: Shield,
-    color: "bg-purple-500/15 text-purple-400",
+    color: "bg-[#8B5CF6]/15 text-[#A78BFA]",
     title: "Données protégées",
     desc: "Vos données stratégiques ne quittent jamais notre infrastructure sécurisée. Aucune revente, aucun entraînement de modèles tiers — vos informations concurrentielles restent vôtres.",
   },
@@ -46,20 +46,20 @@ const VALUES = [
 const TIMELINE = [
   { date: "2024", event: "Constat : les outils de veille concurrentielle coûtent des milliers d'euros par mois — inaccessibles pour 99% des e-commerçants indépendants." },
   { date: "Jan. 2026", event: "Lancement de Conforva : surveillance automatique des prix concurrents avec alertes en temps réel pour Shopify, Amazon et WooCommerce." },
-  { date: "Avr. 2026", event: "Intégration de Gemini AI pour les rapports hebdomadaires d'intelligence concurrentielle — insights actionnables, en français, chaque lundi matin." },
+  { date: "Avr. 2026", event: "Intégration de l'IA pour les rapports hebdomadaires d'intelligence concurrentielle — insights actionnables, en français, chaque lundi matin." },
   { date: "2026+", event: "Conforva accompagne des centaines de marchands dans leur stratégie tarifaire, couvrant les principaux marchés européens et Nord-Américains." },
 ]
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#060D09]">
+    <div className="min-h-screen bg-[#08090C]">
       <PublicNav />
 
       <main>
         {/* Hero */}
         <section className="py-20 px-5 text-center">
           <div className="max-w-2xl mx-auto">
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#00E676] mb-4">À propos</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#8B5CF6] mb-4">À propos</p>
             <h1 className="text-3xl sm:text-4xl font-bold text-white mb-5 leading-tight">
               La veille concurrentielle ne devrait pas être réservée aux grandes marques.
             </h1>
@@ -89,7 +89,7 @@ export default function AboutPage() {
                 </p>
                 <p>
                   Conforva comble ce gap. Surveillance continue, alertes intelligentes, et chaque lundi
-                  matin, un rapport Gemini AI vous dit exactement quoi faire cette semaine.
+                  matin, un rapport IA vous dit exactement quoi faire cette semaine.
                 </p>
               </div>
             </div>
@@ -99,12 +99,12 @@ export default function AboutPage() {
                 "Surveille vos concurrents 24h/24 en continu",
                 "Détecte chaque changement de prix et de stock",
                 "Alerte instantanément par email sur vos seuils",
-                "Génère des rapports IA hebdomadaires (Gemini)",
+                "Génère des rapports IA hebdomadaires",
                 "Identifie les nouvelles références de vos concurrents",
                 "S'intègre à Shopify, Amazon et WooCommerce",
               ].map(item => (
                 <div key={item} className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-[#00E676] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-[#8B5CF6] shrink-0 mt-0.5" />
                   <span className="text-sm text-gray-300">{item}</span>
                 </div>
               ))}
@@ -139,8 +139,8 @@ export default function AboutPage() {
           <div className="relative pl-6 border-l-2 border-white/10 space-y-8">
             {TIMELINE.map((t, i) => (
               <div key={i} className="relative">
-                <div className="absolute -left-[1.65rem] top-1 h-4 w-4 rounded-full bg-[#00E676] border-2 border-[#060D09]" />
-                <p className="text-xs font-bold text-[#00E676] mb-1">{t.date}</p>
+                <div className="absolute -left-[1.65rem] top-1 h-4 w-4 rounded-full bg-[#8B5CF6] border-2 border-[#08090C]" />
+                <p className="text-xs font-bold text-[#8B5CF6] mb-1">{t.date}</p>
                 <p className="text-sm text-gray-400 leading-relaxed">{t.event}</p>
               </div>
             ))}
@@ -152,7 +152,7 @@ export default function AboutPage() {
           <h2 className="text-2xl font-bold text-white mb-3">Prêt à surveiller vos concurrents ?</h2>
           <p className="text-gray-400 text-sm mb-6">14 jours d'essai gratuit — aucune carte bancaire requise.</p>
           <Link href="/auth/register">
-            <Button size="lg" className="bg-[#00E676] text-[#060D09] hover:bg-[#00E676]/90 gap-2 font-semibold">
+            <Button size="lg" className="bg-[#8B5CF6] text-white hover:bg-[#7C3AED] gap-2 font-semibold">
               Commencer gratuitement <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
