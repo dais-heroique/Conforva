@@ -66,6 +66,7 @@ export async function registerUser({
   })
 
   await db.insert(organizationMembers).values({
+    id: crypto.randomUUID(),
     organizationId: orgId,
     userId,
     role: "owner",

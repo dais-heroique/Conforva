@@ -17,14 +17,33 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const userId = session.user.id
   const db = getDb()
 
-  const [membership] = await db
+  let [membership] = await db
     .select({ org: organizations })
     .from(organizationMembers)
     .innerJoin(organizations, eq(organizationMembers.organizationId, organizations.id))
     .where(eq(organizationMembers.userId, userId))
     .limit(1)
 
-  if (!membership) redirect("/onboarding")
+  // Fallback: user owns an org but the membership row is missing — auto-repair
+  if (!membership) {
+    const [ownedOrg] = await db
+      .select()
+      .from(organizations)
+      .where(eq(organizations.ownerId, userId))
+      .limit(1)
+
+    if (ownedOrg) {
+      await db.insert(organizationMembers).values({
+        id: crypto.randomUUID(),
+        organizationId: ownedOrg.id,
+        userId,
+        role: "owner",
+      }).onConflictDoNothing()
+      membership = { org: ownedOrg }
+    } else {
+      redirect("/onboarding")
+    }
+  }
 
   const org = membership.org
 

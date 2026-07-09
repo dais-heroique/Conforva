@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { ConforvaLogo } from "@/components/logo"
-import { Globe, Loader2, Check, Zap } from "lucide-react"
+import { Globe, Loader2, Check, Sparkles } from "lucide-react"
 
 const PLATFORMS = [
   { value: "shopify", label: "Shopify", emoji: "🛍️" },
@@ -21,7 +21,19 @@ export default function OnboardingPage() {
   const [competitorDomain, setCompetitorDomain] = useState("")
   const [platform, setPlatform] = useState("shopify")
   const [loading, setLoading] = useState(false)
+  const [checking, setChecking] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  // If user already has an org, skip onboarding
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.orgId) router.replace("/dashboard")
+        else setChecking(false)
+      })
+      .catch(() => setChecking(false))
+  }, [router])
 
   async function handleFinish() {
     setLoading(true)
@@ -56,8 +68,16 @@ export default function OnboardingPage() {
     }
   }
 
+  if (checking) {
+    return (
+      <div className="min-h-screen bg-[#08090C] flex items-center justify-center">
+        <Loader2 className="h-6 w-6 text-[#8B5CF6] animate-spin" />
+      </div>
+    )
+  }
+
   return (
-    <div className="min-h-screen bg-[#060D09] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#08090C] flex items-center justify-center px-4">
       <div className="w-full max-w-lg">
         {/* Logo */}
         <div className="text-center mb-10">
@@ -73,7 +93,7 @@ export default function OnboardingPage() {
         <div className="flex items-center gap-2 mb-8">
           {[1, 2].map((s) => (
             <div key={s} className="flex-1">
-              <div className={`h-1 rounded-full transition-colors ${s <= step ? "bg-[#00E676]" : "bg-white/10"}`} />
+              <div className={`h-1 rounded-full transition-colors ${s <= step ? "bg-[#8B5CF6]" : "bg-white/10"}`} />
             </div>
           ))}
         </div>
@@ -88,12 +108,12 @@ export default function OnboardingPage() {
                 value={orgName}
                 onChange={(e) => setOrgName(e.target.value)}
                 placeholder="Ma Super Boutique"
-                className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#00E676]/50 transition-colors"
+                className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#8B5CF6]/50 transition-colors"
               />
             </div>
             <button
               onClick={() => setStep(2)}
-              className="w-full py-3 bg-[#00E676] hover:bg-[#00c964] text-[#060D09] font-bold text-sm rounded-xl transition-colors"
+              className="w-full py-3 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold text-sm rounded-xl transition-colors"
             >
               Continuer →
             </button>
@@ -123,7 +143,7 @@ export default function OnboardingPage() {
                     value={competitorDomain}
                     onChange={(e) => setCompetitorDomain(e.target.value)}
                     placeholder="concurrent.com"
-                    className="w-full pl-9 pr-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#00E676]/50 transition-colors"
+                    className="w-full pl-9 pr-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#8B5CF6]/50 transition-colors"
                   />
                 </div>
               </div>
@@ -135,7 +155,7 @@ export default function OnboardingPage() {
                   value={competitorName}
                   onChange={(e) => setCompetitorName(e.target.value)}
                   placeholder="Zalando, Amazon, Fnac…"
-                  className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#00E676]/50 transition-colors"
+                  className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#8B5CF6]/50 transition-colors"
                 />
               </div>
 
@@ -149,7 +169,7 @@ export default function OnboardingPage() {
                       onClick={() => setPlatform(p.value)}
                       className={`py-2 px-2 rounded-xl text-xs font-medium transition-colors text-center ${
                         platform === p.value
-                          ? "bg-[#00E676]/20 border border-[#00E676]/40 text-[#00E676]"
+                          ? "bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 text-[#A78BFA]"
                           : "bg-white/5 border border-white/10 text-gray-400 hover:border-white/20"
                       }`}
                     >
@@ -161,18 +181,18 @@ export default function OnboardingPage() {
             </div>
 
             {/* What happens next */}
-            <div className="bg-[#00E676]/8 border border-[#00E676]/20 rounded-2xl p-4">
+            <div className="bg-[#8B5CF6]/8 border border-[#8B5CF6]/20 rounded-2xl p-4">
               <div className="flex items-start gap-2">
-                <Zap className="h-4 w-4 text-[#00E676] mt-0.5 flex-shrink-0" />
+                <Sparkles className="h-4 w-4 text-[#A78BFA] mt-0.5 flex-shrink-0" />
                 <div className="space-y-1.5">
-                  <p className="text-xs font-semibold text-[#00E676]">Ce qui va se passer</p>
+                  <p className="text-xs font-semibold text-[#A78BFA]">Ce qui va se passer</p>
                   {[
                     "Premier scan dans les 24h",
                     "Rapport IA le lendemain matin",
                     "Alertes email dès qu'un prix bouge",
                   ].map((item) => (
                     <p key={item} className="text-xs text-gray-300 flex items-center gap-1.5">
-                      <Check className="h-3 w-3 text-[#00E676] flex-shrink-0" />
+                      <Check className="h-3 w-3 text-[#A78BFA] flex-shrink-0" />
                       {item}
                     </p>
                   ))}
@@ -194,7 +214,7 @@ export default function OnboardingPage() {
               <button
                 onClick={handleFinish}
                 disabled={loading}
-                className="flex-1 py-3 bg-[#00E676] hover:bg-[#00c964] text-[#060D09] font-bold text-sm rounded-xl transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold text-sm rounded-xl transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
               >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                 {loading ? "Finalisation…" : "Lancer la veille"}
