@@ -1,9 +1,10 @@
 export function ConforvaLogo({ size = 32 }: { size?: number }) {
-  const h = Math.round(size * 36 / 32)
   return (
-    <svg width={size} height={h} viewBox="0 0 32 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M16 1L30 7V18C30 27.5 23.5 33.5 16 35.5C8.5 33.5 2 27.5 2 18V7L16 1Z" fill="#00E676"/>
-      <path d="M10.5 18.5L14.5 22.5L21.5 13.5" stroke="#060D09" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 8,50 C 22,20 78,20 92,50 C 78,80 22,80 8,50 Z" stroke="#8B5CF6" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="50" cy="50" r="16" stroke="#8B5CF6" strokeWidth="5" fill="none"/>
+      <path d="M 50,34 A 16,16 0 0 1 66,50 A 12,12 0 0 1 50,62 A 9,9 0 0 1 41,50 A 6,6 0 0 1 50,44" stroke="#8B5CF6" strokeWidth="4.5" fill="none" strokeLinecap="round"/>
+      <circle cx="57" cy="42" r="3.5" fill="#8B5CF6"/>
     </svg>
   )
 }

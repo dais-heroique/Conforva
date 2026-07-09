@@ -34,7 +34,7 @@ const JSON_LD = {
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
       "url": BASE_URL,
-      "description": "Agent IA de veille concurrentielle pour e-commerçants. Surveillance des prix, stocks et nouveaux produits de vos concurrents avec analyse Gemini AI.",
+      "description": "Agent IA de veille concurrentielle pour e-commerçants. Surveillance des prix, stocks et nouveaux produits de vos concurrents avec analyse par intelligence artificielle.",
       "offers": [
         { "@type": "Offer", "name": "Starter", "price": "29", "priceCurrency": "EUR" },
         { "@type": "Offer", "name": "Growth", "price": "79", "priceCurrency": "EUR" },
