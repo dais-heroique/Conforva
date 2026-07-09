@@ -1,86 +1,75 @@
-import { NextResponse, NextRequest } from 'next/server'
-import { updateSession } from '@/lib/supabase/middleware'
+import { auth } from "@/auth"
+import { NextResponse, type NextRequest } from "next/server"
 
-const LOCALES = ['fr', 'en', 'de', 'it', 'es'] as const
-type Locale = typeof LOCALES[number]
-const DEFAULT_LOCALE: Locale = 'fr'
+const PUBLIC_PREFIXES = [
+  "/",
+  "/auth/",
+  "/blog",
+  "/conformite-gpsr",
+  "/partenaires",
+  "/about",
+  "/contact",
+  "/faq",
+  "/status",
+  "/security",
+  "/cgu",
+  "/cgv",
+  "/privacy",
+  "/cookies",
+  "/mentions-legales",
+  "/enterprise",
+  "/audit-gratuit",
+  "/api/auth",
+  "/api/audit",
+  "/api/webhooks",
+  "/api/affiliates",
+  "/api/competitors", // allow public read for now
+]
 
-function detectLocale(request: NextRequest): Locale {
-  const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value
-  if (cookieLocale && LOCALES.includes(cookieLocale as Locale)) {
-    return cookieLocale as Locale
-  }
-  return DEFAULT_LOCALE
+function isPublic(pathname: string): boolean {
+  if (pathname === "/") return true
+  return PUBLIC_PREFIXES.some((p) => pathname === p || pathname.startsWith(p))
 }
 
 export async function proxy(request: NextRequest) {
-  const locale = detectLocale(request)
+  const { pathname } = request.nextUrl
 
-  const requestHeaders = new Headers(request.headers)
-  requestHeaders.set('x-locale', locale)
+  // Affiliate referral tracking
+  const ref = request.nextUrl.searchParams.get("ref")
+  let response: NextResponse
 
-  const modifiedRequest = new NextRequest(request.url, {
-    method: request.method,
-    headers: requestHeaders,
-    body: request.body,
-    // @ts-ignore
-    duplex: 'half',
-  })
-
-  request.cookies.getAll().forEach(({ name, value }) => {
-    modifiedRequest.cookies.set(name, value)
-  })
-
-  const supabaseResponse = await updateSession(modifiedRequest)
-
-  if (supabaseResponse.status === 307 || supabaseResponse.status === 302 || supabaseResponse.status === 308) {
-    return supabaseResponse
+  if (!isPublic(pathname)) {
+    const session = await auth()
+    if (!session?.user?.id) {
+      const loginUrl = new URL("/auth/login", request.url)
+      loginUrl.searchParams.set("callbackUrl", pathname)
+      return NextResponse.redirect(loginUrl)
+    }
   }
 
-  const finalResponse = NextResponse.next({
-    request: { headers: requestHeaders },
-  })
+  response = NextResponse.next()
 
-  supabaseResponse.cookies.getAll().forEach(cookie => {
-    finalResponse.cookies.set(cookie)
-  })
-
-  const existingCookie = request.cookies.get('NEXT_LOCALE')?.value
-  if (!existingCookie || !LOCALES.includes(existingCookie as Locale)) {
-    finalResponse.cookies.set('NEXT_LOCALE', locale, {
-      path: '/',
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: 'lax',
-    })
-  }
-
-  // Affiliate referral tracking — set cookie 30 days, track click
-  const url = new URL(request.url)
-  const ref = url.searchParams.get('ref')
   if (ref && /^[a-zA-Z0-9_-]{2,40}$/.test(ref)) {
-    const existing = request.cookies.get('conforva_ref')?.value
-    finalResponse.cookies.set('conforva_ref', ref, {
-      path: '/',
+    const existing = request.cookies.get("conforva_ref")?.value
+    response.cookies.set("conforva_ref", ref, {
+      path: "/",
       maxAge: 60 * 60 * 24 * 30,
-      sameSite: 'lax',
+      sameSite: "lax",
       httpOnly: true,
     })
-    // Track click only when a new ref is being set (not refresh with same ref)
     if (existing !== ref) {
-      const base = url.origin
+      const base = request.nextUrl.origin
       fetch(`${base}/api/affiliates/track`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: ref }),
       }).catch(() => {})
     }
   }
 
-  return finalResponse
+  return response
 }
 
 export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
 }
