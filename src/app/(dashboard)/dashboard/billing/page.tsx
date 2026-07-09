@@ -1,159 +1,153 @@
-import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { CheckCircle2, Zap, TrendingUp } from "lucide-react"
-import { getPlanLabel } from "@/lib/utils"
-import type { Plan } from "@/types/supabase"
-import { getLocale, getDictionary } from "@/lib/i18n"
+import Link from "next/link"
+import { auth } from "@/auth"
+import { getDb } from "@/lib/db"
+import { organizations, organizationMembers } from "@/lib/db/schema"
+import { eq } from "drizzle-orm"
+import { Check, Zap, CreditCard, ExternalLink } from "lucide-react"
 
-const PLAN_KEYS: Plan[] = ["free", "starter", "growth", "pro"]
-const PLAN_PRICES: Record<Plan, string> = {
-  free: "0€",
-  starter: "29€",
-  growth: "79€",
-  pro: "199€",
-  enterprise: "Sur devis",
-}
-const PLAN_PRODUCTS: Record<Plan, number> = {
-  free: 1,
-  starter: 5,
-  growth: 30,
-  pro: 150,
-  enterprise: 0,
-}
-const PLAN_POPULAR: Partial<Record<Plan, boolean>> = {
-  growth: true,
-}
-const PLAN_PRICE_IDS: Partial<Record<Plan, string | undefined>> = {
-  starter: process.env.STRIPE_PRICE_STARTER,
-  growth: process.env.STRIPE_PRICE_GROWTH,
-  pro: process.env.STRIPE_PRICE_PRO,
+const PLANS = [
+  {
+    key: "starter",
+    name: "Starter",
+    price: "29€/mois",
+    features: ["2 concurrents", "20 produits suivis", "5 alertes", "Rapport hebdo IA", "Mises à jour journalières"],
+    priceId: process.env.STRIPE_PRICE_STARTER!,
+  },
+  {
+    key: "growth",
+    name: "Growth",
+    price: "79€/mois",
+    features: ["10 concurrents", "150 produits suivis", "Alertes illimitées", "Rapport IA quotidien", "Mises à jour 2x/jour", "Export CSV"],
+    priceId: process.env.STRIPE_PRICE_GROWTH!,
+    highlight: true,
+  },
+  {
+    key: "pro",
+    name: "Pro",
+    price: "199€/mois",
+    features: ["Concurrents illimités", "Produits illimités", "Alertes illimitées", "Rapport IA temps réel", "Mises à jour horaires", "API complète", "Multi-utilisateurs"],
+    priceId: process.env.STRIPE_PRICE_PRO!,
+  },
+]
+
+const PLAN_LABELS: Record<string, string> = {
+  free: "Gratuit",
+  starter: "Starter",
+  growth: "Growth",
+  pro: "Pro",
+  enterprise: "Enterprise",
 }
 
 export default async function BillingPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect("/auth/login")
+  const session = await auth()
+  if (!session?.user?.id) redirect("/auth/login")
 
-  const { data: userData } = await supabase.from("users").select("id, plan, stripe_subscription_id").eq("id", user.id).single()
-  const currentPlan = userData?.plan as Plan ?? "free"
+  const db = getDb()
 
-  const { count: productCount } = await supabase
-    .from("products")
-    .select("id", { count: "exact", head: true })
-    .eq("org_id", (await supabase.from("organizations").select("id").eq("owner_id", user.id).single()).data?.id ?? "")
+  const [membership] = await db
+    .select({ org: organizations })
+    .from(organizationMembers)
+    .innerJoin(organizations, eq(organizationMembers.organizationId, organizations.id))
+    .where(eq(organizationMembers.userId, session.user.id))
+    .limit(1)
 
-  const locale = await getLocale()
-  const dict = await getDictionary(locale)
-  const t = dict.dashboard.billing
+  if (!membership) redirect("/onboarding")
+  const org = membership.org
 
   return (
-    <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-5xl mx-auto">
+    <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">{t.title}</h1>
-        <p className="text-sm text-gray-500 mt-1">{t.subtitle}</p>
+        <h1 className="text-xl font-bold text-white">Facturation</h1>
+        <p className="text-sm text-gray-500 mt-0.5">
+          Plan actuel : <span className="text-[#00E676] font-semibold">{PLAN_LABELS[org.plan] ?? org.plan}</span>
+        </p>
       </div>
 
-      {/* Current plan */}
-      <Card className="border-blue-200 bg-blue-50">
-        <CardContent className="py-5">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600">
-                <Zap className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <p className="text-sm text-blue-600 font-medium">{t.currentPlan}</p>
-                <p className="text-xl font-bold text-blue-900">{getPlanLabel(currentPlan)}</p>
-                <p className="text-sm text-blue-700">
-                  {t.referencesUsed
-                    .replace('{{used}}', String(productCount ?? 0))
-                    .replace('{{max}}', String(PLAN_PRODUCTS[currentPlan] ?? 1))}
-                </p>
-              </div>
+      {/* Current plan info */}
+      {org.subscriptionStatus === "active" && org.stripeCustomerId && (
+        <div className="bg-white/5 border border-white/8 rounded-2xl p-5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <CreditCard className="h-5 w-5 text-[#00E676]" />
+            <div>
+              <p className="text-sm font-semibold text-white">Abonnement actif — {PLAN_LABELS[org.plan]}</p>
+              <p className="text-xs text-gray-500 mt-0.5">Gérez votre abonnement, vos factures et votre mode de paiement</p>
             </div>
-            {userData?.stripe_subscription_id && (
-              <form action="/api/billing/portal" method="POST">
-                <Button type="submit" variant="outline">{t.manageSubscription}</Button>
-              </form>
-            )}
           </div>
-        </CardContent>
-      </Card>
+          <form action="/api/billing/portal" method="POST">
+            <button
+              type="submit"
+              className="flex items-center gap-1.5 text-sm text-[#00E676] border border-[#00E676]/30 px-4 py-2 rounded-xl hover:bg-[#00E676]/10 transition-colors"
+            >
+              Gérer <ExternalLink className="h-3.5 w-3.5" />
+            </button>
+          </form>
+        </div>
+      )}
 
-      {/* Plans grid */}
+      {/* Plans */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t.choosePlan}</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {PLAN_KEYS.map((planKey) => {
-            const isCurrent = planKey === currentPlan
-            const isPopular = !!PLAN_POPULAR[planKey]
-            const planFeatures = t.plans[planKey as keyof typeof t.plans]?.features ?? []
-            const products = PLAN_PRODUCTS[planKey]
-            const priceId = PLAN_PRICE_IDS[planKey]
+        <h2 className="text-sm font-semibold text-gray-400 mb-4">Choisir un plan</h2>
+        <div className="grid md:grid-cols-3 gap-4">
+          {PLANS.map((plan) => {
+            const isCurrent = org.plan === plan.key
             return (
-              <Card key={planKey} className={isPopular ? "border-blue-500 ring-1 ring-blue-500 shadow-lg" : ""}>
-                <CardHeader className="pb-3">
-                  {isPopular && <Badge className="w-fit bg-blue-600 text-white mb-1">{t.mostPopular}</Badge>}
-                  {isCurrent && <Badge className="w-fit bg-green-100 text-green-700 mb-1">{t.currentPlanBadge}</Badge>}
-                  <CardTitle className="text-base">{getPlanLabel(planKey)}</CardTitle>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-2xl font-bold text-gray-900">{PLAN_PRICES[planKey]}</span>
-                    <span className="text-gray-400 text-sm">{t.perMonth}</span>
+              <div
+                key={plan.key}
+                className={`relative rounded-2xl p-5 flex flex-col border transition-colors ${
+                  plan.highlight ? "border-[#00E676]/40 bg-[#00E676]/5" :
+                  isCurrent ? "border-white/20 bg-white/5" :
+                  "border-white/8 bg-white/3"
+                }`}
+              >
+                {plan.highlight && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00E676] text-[#060D09] text-xs font-bold px-3 py-0.5 rounded-full whitespace-nowrap">
+                    Le plus populaire
+                  </span>
+                )}
+                <div className="mb-4">
+                  <p className="font-bold text-white">{plan.name}</p>
+                  <p className="text-2xl font-black text-white mt-1">{plan.price}</p>
+                </div>
+                <ul className="space-y-2 flex-1 mb-4">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-center gap-2 text-xs text-gray-300">
+                      <Check className="h-3.5 w-3.5 text-[#00E676] flex-shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                {isCurrent ? (
+                  <div className="w-full text-center py-2 text-xs font-semibold text-[#00E676] border border-[#00E676]/30 rounded-xl">
+                    Plan actuel
                   </div>
-                  <p className="text-sm text-blue-600 font-medium">
-                    {products} {products > 1 ? t.references : t.reference}
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <ul className="space-y-2">
-                    {(planFeatures as string[]).map((f: string) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
-                        <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />{f}
-                      </li>
-                    ))}
-                  </ul>
-                  {isCurrent ? (
-                    <Button variant="secondary" className="w-full" disabled>{t.currentPlanButton}</Button>
-                  ) : planKey === "free" ? (
-                    <Button variant="outline" className="w-full" disabled>{t.freeButton}</Button>
-                  ) : (
-                    <form action="/api/billing/checkout" method="POST">
-                      <input type="hidden" name="priceId" value={priceId ?? ""} />
-                      <input type="hidden" name="plan" value={planKey} />
-                      <Button type="submit" className="w-full" variant={isPopular ? "default" : "outline"}>
-                        {t.choosePlanButton.replace('{{name}}', getPlanLabel(planKey))}
-                      </Button>
-                    </form>
-                  )}
-                </CardContent>
-              </Card>
+                ) : (
+                  <form action="/api/billing/checkout" method="POST">
+                    <input type="hidden" name="priceId" value={plan.priceId} />
+                    <button
+                      type="submit"
+                      className={`w-full py-2.5 rounded-xl font-bold text-sm transition-colors ${
+                        plan.highlight
+                          ? "bg-[#00E676] text-[#060D09] hover:bg-[#00c964]"
+                          : "bg-white/10 text-white hover:bg-white/20"
+                      }`}
+                    >
+                      {org.plan === "free" ? "Passer à " : "Changer pour "}{plan.name}
+                    </button>
+                  </form>
+                )}
+              </div>
             )
           })}
         </div>
       </div>
 
-      {/* Enterprise */}
-      <Card>
-        <CardContent className="py-5">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-800">
-                <TrendingUp className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900">{t.enterprise.title}</p>
-                <p className="text-sm text-gray-500">{t.enterprise.desc}</p>
-              </div>
-            </div>
-            <a href="mailto:contact.conforva@gmail.com">
-              <Button variant="outline">{t.enterprise.contact}</Button>
-            </a>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="text-center">
+        <p className="text-xs text-gray-500">
+          Besoin d'un plan Enterprise ?{" "}
+          <Link href="/contact" className="text-[#00E676] hover:underline">Contactez-nous</Link>
+        </p>
+      </div>
     </div>
   )
 }

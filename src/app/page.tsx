@@ -1,557 +1,470 @@
 "use client"
 
 import Link from "next/link"
-import { motion, useInView } from "framer-motion"
-import { useRef, useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect, useRef } from "react"
 import { ConforvaLogo } from "@/components/logo"
-import {
-  CheckCircle2, ArrowRight, ChevronRight, X,
-  FileText, Shield, Zap, Package, Tag, Settings, LayoutDashboard,
-} from "lucide-react"
+import { ArrowRight, Bell, RefreshCw, BarChart3, Zap, ShieldCheck, ChevronRight, Check, X, AlertTriangle, Package, Eye } from "lucide-react"
 
-function FadeIn({ children, className = "", delay = 0 }: {
-  children: React.ReactNode; className?: string; delay?: number
-}) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: "-40px" })
-  return (
-    <motion.div ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, ease: "easeOut", delay }}
-      className={className}>
-      {children}
-    </motion.div>
-  )
-}
+// ─── Nav ──────────────────────────────────────────────────────────────────────
 
-// ── DASHBOARD MOCK ──────────────────────────────────────────────────────────
-function DashboardMock() {
-  const [active, setActive] = useState<"products" | "documents">("products")
-
-  const products = [
-    { name: "Bougie soja vanille 200g", ref: "BG-SOY-200", score: 94, status: "conforme" as const },
-    { name: "Diffuseur huile essentielle", ref: "DIF-HE-100", score: 87, status: "conforme" as const },
-    { name: "Savon surgras karité", ref: "SAV-KRT-80", score: 81, status: "conforme" as const },
-    { name: "Baume lèvres naturel", ref: "BLV-NAT-15", score: 52, status: "en cours" as const },
-    { name: "Huile végétale argan", ref: "HVA-ARG-30", score: 0, status: "non démarré" as const },
-  ]
-
-  const documents = [
-    { name: "Bougie soja vanille 200g", type: "Dossier technique", status: "signé" as const },
-    { name: "Bougie soja vanille 200g", type: "Décl. conformité", status: "signé" as const },
-    { name: "Diffuseur huile essentielle", type: "Dossier technique", status: "signé" as const },
-    { name: "Savon surgras karité", type: "Dossier technique", status: "signé" as const },
-    { name: "Baume lèvres naturel", type: "Dossier technique", status: "brouillon" as const },
-  ]
-
-  const scoreBar = (n: number) => n >= 80 ? "bg-[#00E676]" : n >= 40 ? "bg-amber-400" : "bg-white/10"
-  const statusPill = (s: string) =>
-    s === "conforme" ? "text-[#00E676] bg-[#00E676]/10" :
-    s === "en cours" ? "text-amber-400 bg-amber-400/10" :
-    "text-white/30 bg-white/5"
-
-  return (
-    <div className="rounded-2xl border border-white/10 shadow-2xl overflow-hidden bg-[#0D160F] select-none">
-      {/* Browser bar */}
-      <div className="flex items-center gap-3 px-4 py-2.5 bg-[#0A100C] border-b border-white/10">
-        <div className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-red-500/60" />
-          <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/60" />
-          <span className="h-2.5 w-2.5 rounded-full bg-[#00E676]/60" />
-        </div>
-        <div className="flex-1 flex justify-center">
-          <div className="flex items-center gap-1.5 bg-white/5 rounded-md px-3 py-1 text-[11px] text-white/30 border border-white/10 w-52 justify-center">
-            🔒 conforva.com/dashboard
-          </div>
-        </div>
-      </div>
-
-      <div className="flex min-h-[340px]">
-        {/* Sidebar */}
-        <aside className="hidden sm:flex flex-col w-44 border-r border-white/10 py-4 gap-0.5 shrink-0 bg-[#0A100C]">
-          {[
-            { id: "dashboard", icon: LayoutDashboard, label: "Tableau de bord" },
-            { id: "products", icon: Package, label: "Produits" },
-            { id: "documents", icon: FileText, label: "Documents" },
-            { id: "labels", icon: Tag, label: "Étiquettes" },
-            { id: "rp", icon: Shield, label: "Pers. Responsable" },
-            { id: "settings", icon: Settings, label: "Paramètres" },
-          ].map(item => (
-            <button key={item.id}
-              onClick={() => (item.id === "products" || item.id === "documents") && setActive(item.id as any)}
-              className={`flex items-center gap-2.5 px-3 py-2 text-xs mx-2 rounded-lg transition-colors ${
-                active === item.id
-                  ? "bg-[#00E676]/15 text-[#00E676] font-semibold"
-                  : "text-white/30 hover:text-white/60 hover:bg-white/5"
-              }`}>
-              <item.icon className="h-3.5 w-3.5 shrink-0" />
-              {item.label}
-            </button>
-          ))}
-        </aside>
-
-        {/* Content */}
-        <div className="flex-1 overflow-hidden">
-          {active === "products" && (
-            <div>
-              <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-                <p className="text-sm font-semibold text-white">Mes produits</p>
-                <button className="flex items-center gap-1 text-[11px] font-bold text-[#060D09] bg-[#00E676] rounded-lg px-2.5 py-1.5 hover:bg-[#00FF84] transition-colors">
-                  + Ajouter
-                </button>
-              </div>
-              <div className="divide-y divide-white/5">
-                {products.map(p => (
-                  <div key={p.ref} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/3 transition-colors cursor-pointer group">
-                    <div className="h-7 w-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                      <Package className="h-3.5 w-3.5 text-white/30" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-white/80 truncate">{p.name}</p>
-                      <p className="text-[10px] text-white/30">{p.ref}</p>
-                    </div>
-                    <div className="hidden sm:flex items-center gap-1.5 w-16 shrink-0">
-                      <div className="flex-1 h-1 rounded-full bg-white/10 overflow-hidden">
-                        <div className={`h-full rounded-full transition-all ${scoreBar(p.score)}`} style={{ width: `${p.score}%` }} />
-                      </div>
-                      <span className="text-[10px] font-bold text-white/40 w-5 text-right">{p.score || "—"}</span>
-                    </div>
-                    <span className={`hidden sm:inline-flex text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${statusPill(p.status)}`}>{p.status}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {active === "documents" && (
-            <div>
-              <div className="px-4 py-3 border-b border-white/10">
-                <p className="text-sm font-semibold text-white">Documents générés</p>
-              </div>
-              <div className="divide-y divide-white/5">
-                {documents.map((d, i) => (
-                  <div key={i} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/3">
-                    <FileText className="h-4 w-4 text-[#00E676]/60 shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-white/80 truncate">{d.name}</p>
-                      <p className="text-[10px] text-white/30">{d.type}</p>
-                    </div>
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${d.status === "signé" ? "text-[#00E676] bg-[#00E676]/10" : "text-amber-400 bg-amber-400/10"}`}>
-                      {d.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ── PLANS ───────────────────────────────────────────────────────────────────
-const PLANS = [
-  {
-    name: "Gratuit", price: "0", sub: "1 produit",
-    features: ["1 dossier technique", "Analyse de risques", "Déclaration UE", "2 langues"],
-    cta: "Commencer", href: "/auth/login", highlight: false,
-  },
-  {
-    name: "Starter", price: "29", sub: "5 produits / mois",
-    features: ["5 dossiers", "Analyse ISO 12100", "Déclaration UE", "3 langues", "Alertes normes"],
-    cta: "Choisir Starter", href: "/auth/login", highlight: false,
-  },
-  {
-    name: "Growth", price: "79", sub: "30 produits / mois",
-    features: ["30 dossiers", "5 langues", "Import Shopify", "Personne Resp. EU", "Support prioritaire"],
-    cta: "Choisir Growth", href: "/auth/login", highlight: true,
-  },
-  {
-    name: "Pro", price: "199", sub: "150 produits / mois",
-    features: ["150 dossiers", "7 langues", "Import Shopify + CSV", "Alertes normes", "Support dédié"],
-    cta: "Choisir Pro", href: "/auth/login", highlight: false,
-  },
-]
-
-// ── PAGE ────────────────────────────────────────────────────────────────────
-export default function LandingPage() {
-  const [navVisible, setNavVisible] = useState(true)
-  const lastScrollY = useRef(0)
+function Nav() {
+  const [visible, setVisible] = useState(true)
+  const lastY = useRef(0)
 
   useEffect(() => {
     function onScroll() {
-      const current = window.scrollY
-      if (current < 80) setNavVisible(true)
-      else if (current > lastScrollY.current + 4) setNavVisible(false)
-      else if (current < lastScrollY.current - 4) setNavVisible(true)
-      lastScrollY.current = current
+      const y = window.scrollY
+      if (y < 80) setVisible(true)
+      else if (y > lastY.current + 4) setVisible(false)
+      else if (y < lastY.current - 4) setVisible(true)
+      lastY.current = y
     }
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#060D09] text-white overflow-x-hidden">
-
-      {/* ── NAV ── */}
-      <motion.header
-        initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className={`fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#060D09]/95 backdrop-blur-sm transition-transform duration-300 ${
-          navVisible ? "translate-y-0" : "-translate-y-full"
-        }`}
-      >
-        <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <ConforvaLogo size={28} />
-            <span className="font-black text-white tracking-tight">CONFORVA</span>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 border-b border-white/8 bg-[#060D09]/90 backdrop-blur-md transition-transform duration-300 ${
+        visible ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
+      <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2.5">
+          <ConforvaLogo size={28} />
+          <span className="font-black text-white tracking-tight" style={{ letterSpacing: "-0.02em" }}>CONFORVA</span>
+        </Link>
+        <nav className="hidden md:flex items-center gap-6 text-sm text-gray-400">
+          <Link href="/#fonctionnalites" className="hover:text-white transition-colors">Fonctionnalités</Link>
+          <Link href="/#tarifs" className="hover:text-white transition-colors">Tarifs</Link>
+          <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
+        </nav>
+        <div className="flex items-center gap-3">
+          <Link href="/auth/login" className="hidden sm:block text-sm text-gray-400 hover:text-white transition-colors px-3 py-1.5">
+            Connexion
           </Link>
-          <nav className="hidden md:flex items-center gap-7 text-sm text-white/50">
-            <Link href="/audit-gratuit" className="text-[#00E676] font-bold hover:text-[#00FF84] transition-colors">Audit gratuit</Link>
-            <Link href="/conformite-gpsr" className="hover:text-white transition-colors">Guide GPSR</Link>
-            <a href="#tarifs" className="hover:text-white transition-colors">Tarifs</a>
-            <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
-          </nav>
-          <div className="flex items-center gap-2">
-            <Link href="/auth/login" className="hidden md:block text-sm text-white/40 hover:text-white px-3 py-1.5 transition-colors">
-              Connexion
-            </Link>
-            <Link href="/auth/login">
-              <Button size="sm" className="bg-[#00E676] text-[#060D09] hover:bg-[#00FF84] font-bold gap-1.5">
-                Essai gratuit <ChevronRight className="h-3.5 w-3.5" />
-              </Button>
-            </Link>
+          <Link
+            href="/auth/register"
+            className="flex items-center gap-1.5 bg-[#00E676] hover:bg-[#00c964] text-[#060D09] font-bold text-sm px-4 py-2 rounded-xl transition-colors"
+          >
+            Essai gratuit <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      </div>
+    </header>
+  )
+}
+
+// ─── Live price ticker ────────────────────────────────────────────────────────
+
+const TICKER_ITEMS = [
+  { name: "Nike Air Max 270", old: "129.99", new: "109.99", dir: "down", competitor: "Zalando" },
+  { name: "Sony WH-1000XM5", old: "349.00", new: "279.00", dir: "down", competitor: "Fnac" },
+  { name: "Dyson V15 Detect", old: "699.00", new: "749.00", dir: "up", competitor: "Darty" },
+  { name: "Apple AirPods Pro", old: "249.00", new: "199.00", dir: "down", competitor: "Amazon" },
+  { name: "Samsung 65\" QLED", old: "1199.00", new: "899.00", dir: "down", competitor: "Boulanger" },
+  { name: "Lego Technic 42183", old: "89.99", new: "74.99", dir: "down", competitor: "JouéClub" },
+  { name: "Adidas Ultraboost 23", old: "189.00", new: "219.00", dir: "up", competitor: "Sport 2000" },
+]
+
+function LiveTicker() {
+  return (
+    <div className="relative overflow-hidden border-y border-white/8 bg-white/3 py-3">
+      <div className="flex gap-8 whitespace-nowrap" style={{ animation: "ticker 25s linear infinite", width: "max-content" }}>
+        {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
+          <div key={i} className="inline-flex items-center gap-2.5 text-sm">
+            <span className="text-gray-500">{item.competitor}</span>
+            <span className="text-gray-300">{item.name}</span>
+            <span className="text-gray-500 line-through">{item.old}€</span>
+            <span className={item.dir === "down" ? "text-[#00E676] font-semibold" : "text-red-400 font-semibold"}>
+              {item.dir === "down" ? "↓" : "↑"} {item.new}€
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ─── Dashboard mockup ─────────────────────────────────────────────────────────
+
+function DashboardMock() {
+  return (
+    <div className="relative w-full max-w-4xl mx-auto">
+      <div className="absolute inset-0 bg-[#00E676]/10 blur-3xl rounded-3xl" />
+      <div className="relative bg-[#0D1611] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-white/8">
+          <div className="h-3 w-3 rounded-full bg-red-500/60" />
+          <div className="h-3 w-3 rounded-full bg-yellow-500/60" />
+          <div className="h-3 w-3 rounded-full bg-green-500/60" />
+          <span className="text-xs text-gray-600 ml-2">conforva.com/dashboard</span>
+        </div>
+        <div className="flex">
+          <div className="w-14 border-r border-white/8 flex flex-col items-center py-4 gap-4">
+            <BarChart3 className="h-4 w-4 text-[#00E676]" />
+            <Eye className="h-4 w-4 text-gray-600" />
+            <Bell className="h-4 w-4 text-gray-600" />
+            <Package className="h-4 w-4 text-gray-600" />
+          </div>
+          <div className="flex-1 p-4 space-y-4">
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { label: "Concurrents", value: "7", sub: "+2 ce mois", green: true },
+                { label: "Produits suivis", value: "284", sub: "+18 ce mois", green: true },
+                { label: "Alertes 24h", value: "12", sub: "3 urgentes", green: false },
+              ].map((kpi) => (
+                <div key={kpi.label} className="bg-white/5 rounded-xl p-3">
+                  <p className="text-xs text-gray-500">{kpi.label}</p>
+                  <p className="text-2xl font-bold text-white mt-1">{kpi.value}</p>
+                  <p className={`text-xs mt-0.5 ${kpi.green ? "text-[#00E676]" : "text-orange-400"}`}>{kpi.sub}</p>
+                </div>
+              ))}
+            </div>
+            <div className="bg-white/5 rounded-xl p-3">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs font-semibold text-gray-300">Changements de prix récents</p>
+                <span className="text-xs text-[#00E676] bg-[#00E676]/10 px-2 py-0.5 rounded-full">Live</span>
+              </div>
+              <div className="space-y-2">
+                {[
+                  { name: "Nike Air Max 270", competitor: "Zalando", change: "-15%", amount: "-20€", type: "down" },
+                  { name: "Sony WH-1000XM5", competitor: "Fnac", change: "-20%", amount: "-70€", type: "down" },
+                  { name: "Dyson V15 Detect", competitor: "Darty", change: "+7%", amount: "+50€", type: "up" },
+                ].map((item) => (
+                  <div key={item.name} className="flex items-center justify-between text-xs">
+                    <div>
+                      <p className="text-gray-200 font-medium">{item.name}</p>
+                      <p className="text-gray-500">{item.competitor}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className={`font-bold ${item.type === "down" ? "text-[#00E676]" : "text-red-400"}`}>{item.change}</p>
+                      <p className="text-gray-500">{item.amount}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-[#00E676]/8 border border-[#00E676]/20 rounded-xl p-3">
+              <div className="flex items-start gap-2">
+                <Zap className="h-3.5 w-3.5 text-[#00E676] mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-xs font-semibold text-[#00E676] mb-1">Analyse IA — Action recommandée</p>
+                  <p className="text-xs text-gray-300 leading-relaxed">Zalando a baissé les Nike Air Max 270 de 15%. Descendre à 105€ vous positionne 4€ en dessous tout en maintenant votre marge à 28%.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </motion.header>
+      </div>
+    </div>
+  )
+}
 
-      {/* ── HERO ── */}
-      <section className="relative px-5 pt-32 sm:pt-48 pb-20 sm:pb-32 text-center overflow-hidden">
-        {/* Background glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#00E676]/8 rounded-full blur-[120px]" />
-        </div>
+// ─── Pricing ──────────────────────────────────────────────────────────────────
 
+const PLANS = [
+  {
+    name: "Starter",
+    price: 29,
+    description: "Pour démarrer l'intelligence tarifaire",
+    features: ["2 concurrents suivis", "20 produits suivis", "Mises à jour journalières", "5 alertes prix", "Rapport hebdo IA", "Historique 30j"],
+    missing: ["Scraping multi-plateforme", "Rapport quotidien", "API"],
+    highlight: false,
+  },
+  {
+    name: "Growth",
+    price: 79,
+    description: "Pour les e-commerçants ambitieux",
+    features: ["10 concurrents suivis", "150 produits suivis", "Mises à jour 2x/jour", "Alertes illimitées", "Rapport IA quotidien", "Historique 90j", "Scraping multi-plateforme", "Export CSV"],
+    missing: ["API accès", "Manager dédié"],
+    highlight: true,
+  },
+  {
+    name: "Pro",
+    price: 199,
+    description: "Pour les équipes e-com avancées",
+    features: ["Concurrents illimités", "Produits illimités", "Mises à jour horaires", "Alertes illimitées", "Rapport IA temps réel", "Historique illimité", "API complète", "Multi-utilisateurs", "Manager dédié"],
+    missing: [],
+    highlight: false,
+  },
+]
+
+function PricingCard({ plan }: { plan: typeof PLANS[0] }) {
+  return (
+    <div className={`relative rounded-2xl p-6 flex flex-col ${plan.highlight ? "bg-[#00E676] text-[#060D09]" : "bg-white/5 border border-white/10 text-white"}`}>
+      {plan.highlight && (
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#060D09] text-[#00E676] text-xs font-bold px-3 py-1 rounded-full border border-[#00E676]/30 whitespace-nowrap">
+          Le plus populaire
+        </span>
+      )}
+      <p className={`font-bold text-lg ${plan.highlight ? "text-[#060D09]" : "text-white"}`}>{plan.name}</p>
+      <p className={`text-xs mt-0.5 mb-4 ${plan.highlight ? "text-[#060D09]/70" : "text-gray-400"}`}>{plan.description}</p>
+      <div className="mb-6">
+        <span className={`text-4xl font-black ${plan.highlight ? "text-[#060D09]" : "text-white"}`}>{plan.price}€</span>
+        <span className={`text-sm ml-1 ${plan.highlight ? "text-[#060D09]/70" : "text-gray-400"}`}>/mois</span>
+      </div>
+      <ul className="space-y-2.5 flex-1 mb-6">
+        {plan.features.map((f) => (
+          <li key={f} className="flex items-start gap-2 text-sm">
+            <Check className={`h-4 w-4 mt-0.5 flex-shrink-0 ${plan.highlight ? "text-[#060D09]" : "text-[#00E676]"}`} />
+            <span className={plan.highlight ? "text-[#060D09]/90" : "text-gray-300"}>{f}</span>
+          </li>
+        ))}
+        {plan.missing.map((f) => (
+          <li key={f} className="flex items-start gap-2 text-sm opacity-40">
+            <X className="h-4 w-4 mt-0.5 flex-shrink-0" />
+            <span>{f}</span>
+          </li>
+        ))}
+      </ul>
+      <Link
+        href="/auth/register"
+        className={`w-full text-center py-2.5 rounded-xl font-bold text-sm transition-colors ${plan.highlight ? "bg-[#060D09] text-[#00E676] hover:bg-[#0a1a0f]" : "bg-[#00E676] text-[#060D09] hover:bg-[#00c964]"}`}
+      >
+        Démarrer
+      </Link>
+    </div>
+  )
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
+export default function HomePage() {
+  return (
+    <div className="min-h-screen bg-[#060D09] text-white">
+      <Nav />
+      <div className="h-16" />
+
+      {/* Hero */}
+      <section className="relative pt-20 pb-10 px-5 text-center overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#00E676]/8 blur-3xl rounded-full pointer-events-none" />
         <div className="relative max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-            className="inline-flex items-center gap-2 mb-8 bg-[#00E676]/10 border border-[#00E676]/30 rounded-full px-4 py-1.5">
-            <span className="h-1.5 w-1.5 bg-[#00E676] rounded-full animate-pulse" />
-            <span className="text-[11px] font-bold text-[#00E676] tracking-widest uppercase">
-              GPSR (UE) 2023/988 — Obligatoire depuis déc. 2024
-            </span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.06 }}
-            className="font-display text-[clamp(2.5rem,9vw,7rem)] leading-[0.9] tracking-tight text-white mb-6"
-          >
-            Conformité GPSR.<br />
-            <span className="text-[#00E676]">En 10 minutes.</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-            className="text-base sm:text-xl text-white/50 max-w-lg mx-auto mb-10"
-          >
-            Dossier technique · Analyse de risques · Déclaration UE<br className="hidden sm:block" />
-            Générés par IA pour chaque produit que vous vendez en Europe.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.28 }}
-            className="flex flex-wrap gap-3 justify-center mb-5"
-          >
-            <Link href="/audit-gratuit">
-              <Button size="lg" className="bg-[#00E676] text-[#060D09] hover:bg-[#00FF84] font-bold gap-2 h-13 px-7 text-base">
-                Tester gratuitement <ArrowRight className="h-5 w-5" />
-              </Button>
+          <div className="inline-flex items-center gap-2 bg-[#00E676]/10 border border-[#00E676]/20 text-[#00E676] text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+            <Zap className="h-3 w-3" />
+            Agent IA de veille concurrentielle — Bêta ouverte
+          </div>
+          <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-[1.05] mb-6">
+            Vos concurrents<br />
+            <span className="text-[#00E676]">baissent leurs prix.</span><br />
+            <span className="text-gray-300">Vous le saurez en premier.</span>
+          </h1>
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+            Conforva surveille les prix, stocks et nouveaux produits de vos concurrents 24h/24.
+            Notre IA analyse chaque mouvement et vous dit exactement quoi faire.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/auth/register" className="flex items-center gap-2 bg-[#00E676] hover:bg-[#00c964] text-[#060D09] font-bold px-8 py-3.5 rounded-xl text-base transition-colors">
+              Démarrer gratuitement <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link href="/auth/login">
-              <Button size="lg" variant="outline" className="border-white/20 text-white/70 hover:bg-white/5 hover:text-white gap-2 h-13 px-7 text-base">
-                Créer un compte
-              </Button>
+            <Link href="#fonctionnalites" className="text-gray-400 hover:text-white text-sm transition-colors flex items-center gap-1.5">
+              Voir comment ça marche <ChevronRight className="h-4 w-4" />
             </Link>
-          </motion.div>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
-            className="text-xs text-white/30">
-            Sans inscription · Sans carte bancaire · Résultat en 30 secondes
-          </motion.p>
+          </div>
+          <p className="text-xs text-gray-600 mt-4">Aucune CB · 14 jours d'essai · Résiliable à tout moment</p>
         </div>
       </section>
 
-      {/* ── 3 CHIFFRES CLÉS ── */}
-      <section className="border-y border-white/10 py-8 px-5 bg-[#0A100C]">
-        <div className="max-w-3xl mx-auto grid grid-cols-3 text-center gap-4">
+      <LiveTicker />
+
+      {/* Stats */}
+      <section className="py-12 px-5">
+        <div className="max-w-4xl mx-auto grid grid-cols-3 gap-6 text-center">
           {[
-            { n: "50 000€", sub: "Amende maximale GPSR", color: "text-red-400" },
-            { n: "13 déc. 2024", sub: "Date d'entrée en vigueur", color: "text-amber-400" },
-            { n: "< 10 min", sub: "Pour être conforme avec Conforva", color: "text-[#00E676]" },
-          ].map(({ n, sub, color }) => (
-            <div key={n}>
-              <p className={`text-xl sm:text-4xl font-black tabular-nums ${color}`}>{n}</p>
-              <p className="text-[11px] sm:text-sm text-white/30 mt-1">{sub}</p>
+            { value: "47×", label: "changements de prix/jour par concurrent en moyenne" },
+            { value: "< 1h", label: "délai moyen de détection d'une baisse de prix" },
+            { value: "+23%", label: "de marge récupérée par nos clients en 3 mois" },
+          ].map((s) => (
+            <div key={s.value}>
+              <p className="text-4xl md:text-5xl font-black text-[#00E676]">{s.value}</p>
+              <p className="text-xs text-gray-500 mt-2 leading-relaxed">{s.label}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── PRODUIT VISUEL ── */}
-      <section className="py-20 sm:py-28 px-5">
+      {/* Dashboard visual */}
+      <section className="py-16 px-5">
         <div className="max-w-5xl mx-auto">
-          <FadeIn className="text-center mb-12">
-            <p className="text-xs font-bold text-[#00E676] uppercase tracking-widest mb-3">La plateforme</p>
-            <h2 className="text-3xl sm:text-5xl font-black text-white leading-tight">
-              Tous vos produits.<br />Un seul endroit.
-            </h2>
-          </FadeIn>
-          <FadeIn>
-            <DashboardMock />
-          </FadeIn>
-          <div className="mt-6 grid grid-cols-3 gap-4">
-            {[
-              { icon: Zap, title: "IA intégrée", desc: "Contenu réglementaire généré automatiquement" },
-              { icon: FileText, title: "PDF en 1 clic", desc: "Structuré selon l'Article 22 GPSR" },
-              { icon: Shield, title: "Toujours à jour", desc: "Alertes si une norme applicable change" },
-            ].map(({ icon: Icon, title, desc }, i) => (
-              <FadeIn key={title} delay={i * 0.07}>
-                <div className="bg-[#0D160F] rounded-2xl border border-white/10 p-4 text-center hover:border-[#00E676]/30 transition-colors">
-                  <div className="h-10 w-10 rounded-xl bg-[#00E676]/10 flex items-center justify-center mx-auto mb-3">
-                    <Icon className="h-5 w-5 text-[#00E676]" />
-                  </div>
-                  <p className="text-sm font-bold text-white">{title}</p>
-                  <p className="text-xs text-white/40 mt-1">{desc}</p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
+          <DashboardMock />
         </div>
       </section>
 
-      {/* ── COMMENT ÇA MARCHE ── */}
-      <section className="py-20 sm:py-28 px-5 bg-[#0A100C] border-y border-white/10">
-        <div className="max-w-4xl mx-auto">
-          <FadeIn className="text-center mb-14">
-            <p className="text-xs font-bold text-[#00E676] uppercase tracking-widest mb-3">Simple</p>
-            <h2 className="text-3xl sm:text-5xl font-black text-white">3 étapes. C'est tout.</h2>
-          </FadeIn>
-          <div className="grid sm:grid-cols-3 gap-8">
-            {[
-              { n: "01", icon: Package, title: "Importez votre produit", desc: "URL, nom ou import Shopify direct." },
-              { n: "02", icon: Zap, title: "L'IA génère tout", desc: "Dossier technique, analyse ISO 12100, déclaration UE." },
-              { n: "03", icon: FileText, title: "Exportez en PDF", desc: "Prêt pour Amazon, Etsy ou les douanes." },
-            ].map(({ n, icon: Icon, title, desc }, i) => (
-              <FadeIn key={n} delay={i * 0.08}>
-                <div className="relative">
-                  <p className="text-8xl font-black text-white/5 leading-none mb-2">{n}</p>
-                  <div className="h-12 w-12 rounded-2xl bg-[#00E676]/10 border border-[#00E676]/30 flex items-center justify-center mb-4">
-                    <Icon className="h-6 w-6 text-[#00E676]" />
-                  </div>
-                  <p className="text-lg font-bold text-white mb-2">{title}</p>
-                  <p className="text-sm text-white/40">{desc}</p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── AUDIT GRATUIT BANNER ── */}
-      <FadeIn>
-        <section className="py-14 px-5 bg-[#00E676] text-[#060D09] text-center">
-          <p className="text-xs font-black uppercase tracking-widest mb-3 opacity-60">Outil gratuit — sans inscription</p>
-          <h2 className="text-2xl sm:text-4xl font-black mb-3">Testez votre produit maintenant</h2>
-          <p className="text-[#060D09]/70 text-sm mb-7">L'IA génère un vrai dossier de conformité complet en 30 secondes.</p>
-          <Link href="/audit-gratuit">
-            <Button size="lg" className="bg-[#060D09] text-[#00E676] hover:bg-black gap-2 font-black text-base h-13 px-8">
-              Lancer l'audit gratuit <ArrowRight className="h-5 w-5" />
-            </Button>
-          </Link>
-        </section>
-      </FadeIn>
-
-      {/* ── COMPARAISON ── */}
-      <FadeIn>
-        <section className="py-20 sm:py-28 px-5 bg-[#060D09]">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-10">
-              <h2 className="text-2xl sm:text-4xl font-black text-white">Conforva vs les alternatives</h2>
-            </div>
-            <div className="overflow-x-auto border border-white/10 rounded-2xl bg-[#0D160F]">
-              <table className="w-full text-sm min-w-[500px]">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="px-5 py-4 text-left text-xs font-bold text-white/20 w-36"></th>
-                    <th className="px-5 py-4 text-center text-xs font-black text-[#00E676]">Conforva</th>
-                    <th className="px-5 py-4 text-center text-xs font-semibold text-white/30">Template Word</th>
-                    <th className="px-5 py-4 text-center text-xs font-semibold text-white/30">Expert juridique</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  {[
-                    ["Temps", "< 10 min", "2-5 jours", "1-4 semaines"],
-                    ["Coût", "dès 29€/mois", "Gratuit", "500-2 000€"],
-                    ["Dossier Art. 22", true, "Partiel", true],
-                    ["Analyse ISO 12100", true, false, true],
-                    ["Mise à jour auto", true, false, false],
-                    ["PDF prêt à signer", true, false, true],
-                  ].map(([label, ...vals]) => (
-                    <tr key={String(label)} className="hover:bg-white/3">
-                      <td className="px-5 py-3 text-xs font-semibold text-white/50">{label as string}</td>
-                      {vals.map((v, i) => (
-                        <td key={i} className="px-5 py-3 text-center text-xs">
-                          {v === true
-                            ? <CheckCircle2 className={`h-4 w-4 mx-auto ${i === 0 ? "text-[#00E676]" : "text-white/30"}`} />
-                            : v === false
-                            ? <X className="h-4 w-4 text-white/10 mx-auto" />
-                            : <span className={i === 0 ? "text-[#00E676] font-bold" : "text-white/30"}>{v as string}</span>
-                          }
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-      </FadeIn>
-
-      {/* ── TARIFS ── */}
-      <section id="tarifs" className="py-20 sm:py-28 px-5 bg-[#0A100C] border-y border-white/10">
+      {/* How it works */}
+      <section id="fonctionnalites" className="py-20 px-5">
         <div className="max-w-5xl mx-auto">
-          <FadeIn className="text-center mb-12">
-            <p className="text-xs font-bold text-[#00E676] uppercase tracking-widest mb-3">Tarifs</p>
-            <h2 className="text-3xl sm:text-5xl font-black text-white">Simple et transparent</h2>
-            <p className="text-sm text-white/40 mt-3">Sans engagement · Résiliable à tout moment</p>
-          </FadeIn>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
-            {PLANS.map((plan, i) => (
-              <FadeIn key={plan.name} delay={i * 0.06}>
-                <div className={`relative flex flex-col rounded-2xl border p-6 gap-5 ${
-                  plan.highlight
-                    ? "border-[#00E676]/50 bg-[#00E676]/5 shadow-xl shadow-[#00E676]/10"
-                    : "border-white/10 bg-[#0D160F]"
-                }`}>
-                  {plan.highlight && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#00E676] text-[#060D09] px-3 py-0.5 text-[11px] font-black">
-                      Le plus populaire
-                    </span>
-                  )}
-                  <div>
-                    <p className={`text-[11px] font-black uppercase tracking-widest mb-2 ${plan.highlight ? "text-[#00E676]" : "text-white/30"}`}>{plan.name}</p>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-4xl font-black text-white">{plan.price}€</span>
-                      <span className="text-sm text-white/30">/mois</span>
-                    </div>
-                    <p className={`text-xs mt-1 font-semibold ${plan.highlight ? "text-[#00E676]" : "text-white/30"}`}>{plan.sub}</p>
-                  </div>
-                  <ul className="flex-1 space-y-2">
-                    {plan.features.map(f => (
-                      <li key={f} className="flex items-center gap-2 text-sm text-white/60">
-                        <CheckCircle2 className={`h-3.5 w-3.5 shrink-0 ${plan.highlight ? "text-[#00E676]" : "text-white/20"}`} />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link href={plan.href}>
-                    <Button className={`w-full font-bold ${plan.highlight ? "bg-[#00E676] text-[#060D09] hover:bg-[#00FF84]" : "bg-white/10 text-white hover:bg-white/20 border-0"}`}>
-                      {plan.cta}
-                    </Button>
-                  </Link>
-                </div>
-              </FadeIn>
-            ))}
+          <div className="text-center mb-14">
+            <h2 className="text-4xl font-black tracking-tight">Comment ça marche</h2>
+            <p className="text-gray-400 mt-3">Trois étapes. Configuré en 5 minutes.</p>
           </div>
-          <FadeIn>
-            <div className="mt-5 rounded-2xl border border-white/10 bg-[#0D160F] p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              <div className="flex-1">
-                <p className="font-black text-white text-base">Enterprise — volume et besoins spécifiques</p>
-                <p className="text-sm text-white/40 mt-1">Intégration API · Volume illimité · Accompagnement dédié</p>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { step: "01", icon: <Eye className="h-6 w-6" />, title: "Ajoutez vos concurrents", desc: "Entrez l'URL d'une boutique. On détecte automatiquement la plateforme (Shopify, Amazon, WooCommerce) et surveille tous ses produits." },
+              { step: "02", icon: <RefreshCw className="h-6 w-6" />, title: "On scrape en continu", desc: "Prix, stocks et nouveaux produits surveillés toutes les heures. Chaque changement est horodaté et archivé pour votre analyse." },
+              { step: "03", icon: <Zap className="h-6 w-6" />, title: "L'IA vous dit quoi faire", desc: "Gemini AI analyse chaque mouvement et génère des recommandations concrètes : quel prix fixer, quand attaquer, quand défendre." },
+            ].map((step) => (
+              <div key={step.step}>
+                <div className="text-6xl font-black text-white/5 mb-4">{step.step}</div>
+                <div className="text-[#00E676] mb-3">{step.icon}</div>
+                <h3 className="text-lg font-bold text-white mb-2">{step.title}</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">{step.desc}</p>
               </div>
-              <Link href="/enterprise" className="shrink-0">
-                <Button variant="outline" className="border-white/20 text-white hover:bg-white/5 gap-2">
-                  Nous contacter <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-          </FadeIn>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── FINAL CTA ── */}
-      <section className="py-24 sm:py-36 px-5 text-center relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-[#00E676]/6 rounded-full blur-[100px]" />
+      {/* Features grid */}
+      <section className="py-16 px-5 border-t border-white/8">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-black tracking-tight">Pas juste des chiffres. Des décisions.</h2>
+            <p className="text-gray-400 mt-3 max-w-xl mx-auto">La différence entre Conforva et un simple comparateur de prix, c'est notre couche d'analyse IA.</p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { icon: <Bell className="h-5 w-5" />, title: "Alertes instantanées", desc: "Email dès qu'un concurrent bouge un prix ou rompt un stock. Seuils configurables par produit." },
+              { icon: <BarChart3 className="h-5 w-5" />, title: "Historique de prix", desc: "Graphiques interactifs sur 90 jours pour chaque produit concurrent. Identifiez les patterns saisonniers." },
+              { icon: <Zap className="h-5 w-5" />, title: "Analyse IA hebdomadaire", desc: "Rapport Gemini AI tous les lundis : tendances, opportunités, menaces. Actionnable, pas descriptif." },
+              { icon: <Package className="h-5 w-5" />, title: "Détection nouveaux produits", desc: "Sachez avant tout le monde quand un concurrent lance un nouveau produit sur votre marché." },
+              { icon: <Eye className="h-5 w-5" />, title: "Positionnement temps réel", desc: "Voyez où vous vous situez par rapport à chaque concurrent sur l'ensemble de votre catalogue." },
+              { icon: <ShieldCheck className="h-5 w-5" />, title: "Multi-plateforme", desc: "Shopify, Amazon, WooCommerce, PrestaShop, et tout site custom. On s'adapte à votre marché." },
+            ].map((f) => (
+              <div key={f.title} className="bg-white/4 border border-white/8 rounded-2xl p-5 hover:border-[#00E676]/30 transition-colors">
+                <div className="text-[#00E676] mb-3">{f.icon}</div>
+                <h3 className="font-bold text-white mb-1.5">{f.title}</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
-        <FadeIn className="relative max-w-2xl mx-auto space-y-7">
-          <h2 className="text-4xl sm:text-6xl font-black text-white leading-tight">
-            1 produit gratuit.<br />
-            <span className="text-[#00E676]">Dès maintenant.</span>
+      </section>
+
+      {/* Comparison */}
+      <section className="py-16 px-5 border-t border-white/8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-black tracking-tight">Conforva vs les alternatives</h2>
+          </div>
+          <div className="overflow-x-auto rounded-2xl border border-white/10">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left p-4 text-gray-400 font-medium w-1/3">Fonctionnalité</th>
+                  <th className="text-center p-4 text-[#00E676] font-bold">Conforva</th>
+                  <th className="text-center p-4 text-gray-500 font-medium">Prisync</th>
+                  <th className="text-center p-4 text-gray-500 font-medium">Minderest</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ["Suivi de prix en temps réel", true, true, true],
+                  ["Alertes automatiques", true, true, true],
+                  ["Analyse IA des tendances", true, false, false],
+                  ["Recommandations de repricing", true, false, false],
+                  ["Rapport hebdo IA", true, false, false],
+                  ["Détection nouveaux produits", true, false, true],
+                  ["Shopify + Amazon + WooCommerce", true, true, false],
+                  ["Prix accessible PME (< 100€)", true, false, false],
+                ].map(([feat, us, p, m], i) => (
+                  <tr key={i} className={`border-b border-white/5 ${i % 2 === 0 ? "bg-white/2" : ""}`}>
+                    <td className="p-4 text-gray-300">{feat as string}</td>
+                    <td className="p-4 text-center">{us ? <Check className="h-4 w-4 text-[#00E676] mx-auto" /> : <X className="h-4 w-4 text-gray-600 mx-auto" />}</td>
+                    <td className="p-4 text-center">{p ? <Check className="h-4 w-4 text-gray-400 mx-auto" /> : <X className="h-4 w-4 text-gray-600 mx-auto" />}</td>
+                    <td className="p-4 text-center">{m ? <Check className="h-4 w-4 text-gray-400 mx-auto" /> : <X className="h-4 w-4 text-gray-600 mx-auto" />}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section id="tarifs" className="py-20 px-5 border-t border-white/8">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-black tracking-tight">Tarifs transparents</h2>
+            <p className="text-gray-400 mt-3">14 jours d'essai gratuit sur tous les plans. Aucune CB requise.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {PLANS.map((plan) => <PricingCard key={plan.name} plan={plan} />)}
+          </div>
+          <div className="text-center mt-8">
+            <p className="text-sm text-gray-500">
+              Besoin de plus ?{" "}
+              <Link href="/enterprise" className="text-[#00E676] hover:underline">Contactez-nous pour Enterprise →</Link>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA banner */}
+      <section className="py-20 px-5 border-t border-white/8">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 text-[#00E676] text-sm mb-6">
+            <AlertTriangle className="h-4 w-4" />
+            Pendant que vous lisez ça, vos concurrents ont peut-être déjà changé leurs prix.
+          </div>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
+            Commencez à surveiller<br />vos concurrents maintenant
           </h2>
-          <p className="text-white/40 text-base">Aucune carte bancaire · Compte créé en 30 secondes</p>
-          <Link href="/auth/login">
-            <Button size="lg" className="bg-[#00E676] text-[#060D09] hover:bg-[#00FF84] font-black gap-2 h-14 px-10 text-lg">
-              Créer mon compte gratuit <ArrowRight className="h-5 w-5" />
-            </Button>
+          <p className="text-gray-400 mb-8">Configuration en 5 minutes. Premier rapport IA dans 24h.</p>
+          <Link href="/auth/register" className="inline-flex items-center gap-2 bg-[#00E676] hover:bg-[#00c964] text-[#060D09] font-bold px-10 py-4 rounded-xl text-base transition-colors">
+            Essai gratuit 14 jours <ArrowRight className="h-4 w-4" />
           </Link>
-        </FadeIn>
+        </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="border-t border-white/10 bg-[#060D09] py-12 px-5 text-white/40">
+      {/* Footer */}
+      <footer className="border-t border-white/8 bg-[#030806] py-12 px-5">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
             <div className="col-span-2 md:col-span-1">
-              <Link href="/" className="flex items-center gap-2.5 mb-4">
-                <ConforvaLogo size={26} />
-                <span className="font-black text-white tracking-tight">CONFORVA</span>
+              <Link href="/" className="flex items-center gap-2.5 mb-3">
+                <ConforvaLogo size={24} />
+                <span className="font-black text-white tracking-tight" style={{ letterSpacing: "-0.02em" }}>CONFORVA</span>
               </Link>
-              <p className="text-sm leading-relaxed max-w-xs">Conformité GPSR par IA pour les e-commerçants EU.</p>
-              <p className="mt-3 text-xs text-[#00E676]">contact.conforva@gmail.com</p>
+              <p className="text-sm text-gray-500 leading-relaxed max-w-xs">
+                Agent IA de veille concurrentielle pour les e-commerçants qui veulent gagner la guerre des prix.
+              </p>
+              <p className="mt-3 text-xs text-gray-600">contact.conforva@gmail.com</p>
             </div>
             <div>
-              <p className="text-xs font-black uppercase tracking-widest text-white/20 mb-3">Produit</p>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/audit-gratuit" className="text-[#00E676] font-semibold hover:text-[#00FF84] transition-colors">Audit gratuit</Link></li>
-                <li><a href="#tarifs" className="hover:text-white transition-colors">Tarifs</a></li>
-                <li><Link href="/enterprise" className="hover:text-white transition-colors">Enterprise</Link></li>
-                <li><Link href="/partenaires" className="hover:text-white transition-colors">Affiliés</Link></li>
-              </ul>
-            </div>
-            <div>
-              <p className="text-xs font-black uppercase tracking-widest text-white/20 mb-3">Ressources</p>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/blog" className="hover:text-white transition-colors">Blog GPSR</Link></li>
-                <li><Link href="/conformite-gpsr" className="hover:text-white transition-colors">Guide GPSR</Link></li>
-                <li><Link href="/gpsr-amazon" className="hover:text-white transition-colors">GPSR Amazon</Link></li>
-                <li><Link href="/gpsr-shopify" className="hover:text-white transition-colors">GPSR Shopify</Link></li>
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-3">Produit</p>
+              <ul className="space-y-2 text-sm text-gray-500">
+                <li><Link href="/#fonctionnalites" className="hover:text-white transition-colors">Fonctionnalités</Link></li>
+                <li><Link href="/#tarifs" className="hover:text-white transition-colors">Tarifs</Link></li>
+                <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
                 <li><Link href="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
               </ul>
             </div>
             <div>
-              <p className="text-xs font-black uppercase tracking-widest text-white/20 mb-3">Légal</p>
-              <ul className="space-y-2 text-sm">
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-3">Entreprise</p>
+              <ul className="space-y-2 text-sm text-gray-500">
+                <li><Link href="/about" className="hover:text-white transition-colors">À propos</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                <li><Link href="/enterprise" className="hover:text-white transition-colors">Enterprise</Link></li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-3">Légal</p>
+              <ul className="space-y-2 text-sm text-gray-500">
                 <li><Link href="/cgu" className="hover:text-white transition-colors">CGU</Link></li>
-                <li><Link href="/cgv" className="hover:text-white transition-colors">CGV</Link></li>
                 <li><Link href="/privacy" className="hover:text-white transition-colors">Confidentialité</Link></li>
                 <li><Link href="/mentions-legales" className="hover:text-white transition-colors">Mentions légales</Link></li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/20">
-            <p>© 2026 Conforva. Tous droits réservés.</p>
-            <p>Les documents générés constituent une aide structurée, non un avis juridique.</p>
+          <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-xs text-gray-600">© {new Date().getFullYear()} Conforva. Tous droits réservés.</p>
+            <p className="text-xs text-gray-600">Intelligence artificielle propulsée par Gemini AI</p>
           </div>
         </div>
       </footer>
+
+      <style>{`
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+      `}</style>
     </div>
   )
 }

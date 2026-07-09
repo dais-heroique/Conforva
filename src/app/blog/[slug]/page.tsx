@@ -46,10 +46,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "Réglementation": "bg-blue-50 text-blue-700 border-blue-100",
-  "Amazon FBA": "bg-amber-50 text-amber-700 border-amber-100",
-  "Documentation": "bg-indigo-50 text-indigo-700 border-indigo-100",
-  "Cas d'usage": "bg-emerald-50 text-emerald-700 border-emerald-100",
+  "Stratégie": "bg-[#00E676]/15 text-[#00E676] border-[#00E676]/20",
+  "Amazon FBA": "bg-amber-500/15 text-amber-400 border-amber-500/20",
+  "Outils": "bg-purple-500/15 text-purple-400 border-purple-500/20",
+  "Cas d'usage": "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
 }
 
 function formatDate(d: string) {
@@ -61,9 +61,9 @@ function renderBody(lines: string[]) {
     if (line.startsWith("**") && line.includes("**")) {
       const parts = line.split(/\*\*(.*?)\*\*/)
       return (
-        <p key={i} className="text-gray-700 leading-relaxed">
+        <p key={i} className="text-gray-300 leading-relaxed">
           {parts.map((part, j) =>
-            j % 2 === 1 ? <strong key={j} className="font-semibold text-gray-900">{part}</strong> : part
+            j % 2 === 1 ? <strong key={j} className="font-semibold text-white">{part}</strong> : part
           )}
         </p>
       )
@@ -71,12 +71,12 @@ function renderBody(lines: string[]) {
     if (line.startsWith("✓ ")) {
       return (
         <div key={i} className="flex items-start gap-2.5 py-1">
-          <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-          <span className="text-sm text-gray-700">{line.slice(2)}</span>
+          <CheckCircle2 className="h-4 w-4 text-[#00E676] shrink-0 mt-0.5" />
+          <span className="text-sm text-gray-300">{line.slice(2)}</span>
         </div>
       )
     }
-    return <p key={i} className="text-gray-700 leading-relaxed">{line}</p>
+    return <p key={i} className="text-gray-300 leading-relaxed">{line}</p>
   })
 }
 
@@ -103,48 +103,46 @@ export default async function BlogArticlePage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#060D09]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PublicNav />
 
       <main className="max-w-3xl mx-auto px-5 py-16">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-gray-400 mb-8">
-          <Link href="/" className="hover:text-gray-600 transition-colors">Accueil</Link>
+        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
+          <Link href="/" className="hover:text-gray-300 transition-colors">Accueil</Link>
           <span>/</span>
-          <Link href="/blog" className="hover:text-gray-600 transition-colors">Blog</Link>
+          <Link href="/blog" className="hover:text-gray-300 transition-colors">Blog</Link>
           <span>/</span>
-          <span className="text-gray-600 truncate">{article.category}</span>
+          <span className="text-gray-400 truncate">{article.category}</span>
         </nav>
 
         {/* Header */}
         <header className="mb-10">
           <div className="flex items-center gap-3 mb-4">
-            <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${CATEGORY_COLORS[article.category] ?? "bg-gray-50 text-gray-600 border-gray-100"}`}>
+            <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${CATEGORY_COLORS[article.category] ?? "bg-white/5 text-gray-400 border-white/10"}`}>
               <Tag className="h-3 w-3" />{article.category}
             </span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">{article.title}</h1>
-          <p className="text-lg text-gray-500 leading-relaxed mb-6">{article.description}</p>
-          <div className="flex items-center gap-5 text-sm text-gray-400 pb-6 border-b border-gray-100">
-            <span>Par <span className="font-medium text-gray-600">Conforva</span></span>
+          <h1 className="text-2xl sm:text-4xl font-bold text-white leading-tight mb-4">{article.title}</h1>
+          <p className="text-lg text-gray-400 leading-relaxed mb-6">{article.description}</p>
+          <div className="flex items-center gap-5 text-sm text-gray-500 pb-6 border-b border-white/10">
+            <span>Par <span className="font-medium text-gray-300">Conforva</span></span>
             <span>{formatDate(article.publishedAt)}</span>
             <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{article.readingTime} min de lecture</span>
           </div>
         </header>
 
         {/* Article content */}
-        <article className="prose-style">
-          {/* Intro */}
-          <p className="text-base text-gray-700 leading-relaxed mb-8 text-lg font-[450]">
+        <article>
+          <p className="text-base text-gray-300 leading-relaxed mb-8 text-lg font-[450]">
             {article.intro}
           </p>
 
-          {/* Sections */}
           {article.sections.map((section, i) => (
             <section key={i} className="mb-10">
               {section.heading && (
-                <h2 className="text-xl font-bold text-gray-900 mb-4 mt-10 first:mt-0">
+                <h2 className="text-xl font-bold text-white mb-4 mt-10 first:mt-0">
                   {section.heading}
                 </h2>
               )}
@@ -155,33 +153,33 @@ export default async function BlogArticlePage({ params }: PageProps) {
           ))}
 
           {/* Conclusion */}
-          <div className="my-10 rounded-xl bg-gray-50 border border-gray-200 p-6">
-            <h2 className="text-base font-bold text-gray-900 mb-2">En résumé</h2>
-            <p className="text-sm text-gray-600 leading-relaxed">{article.conclusion}</p>
+          <div className="my-10 rounded-xl bg-white/5 border border-white/10 p-6">
+            <h2 className="text-base font-bold text-white mb-2">En résumé</h2>
+            <p className="text-sm text-gray-300 leading-relaxed">{article.conclusion}</p>
           </div>
         </article>
 
         {/* CTA */}
-        <div className="my-10 rounded-2xl bg-blue-600 p-8 text-white">
-          <h3 className="text-xl font-bold mb-2">{article.cta.heading}</h3>
-          <p className="text-blue-100 text-sm mb-6 leading-relaxed">{article.cta.text}</p>
+        <div className="my-10 rounded-2xl bg-[#00E676] p-8">
+          <h3 className="text-xl font-bold text-[#060D09] mb-2">{article.cta.heading}</h3>
+          <p className="text-[#060D09]/70 text-sm mb-6 leading-relaxed">{article.cta.text}</p>
           <Link href={article.cta.href}>
-            <Button className="bg-white text-blue-600 hover:bg-blue-50 gap-2">
+            <Button className="bg-[#060D09] text-[#00E676] hover:bg-[#060D09]/90 gap-2">
               {article.cta.button} <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center justify-between pt-8 border-t border-gray-100 gap-4">
+        <div className="flex items-center justify-between pt-8 border-t border-white/10 gap-4">
           {prevArticle ? (
-            <Link href={`/blog/${prevArticle.slug}`} className="group flex items-center gap-2 text-sm text-gray-500 hover:text-blue-600 transition-colors max-w-[48%]">
+            <Link href={`/blog/${prevArticle.slug}`} className="group flex items-center gap-2 text-sm text-gray-400 hover:text-[#00E676] transition-colors max-w-[48%]">
               <ArrowLeft className="h-4 w-4 shrink-0" />
               <span className="line-clamp-2 text-left">{prevArticle.title}</span>
             </Link>
           ) : <div />}
           {nextArticle ? (
-            <Link href={`/blog/${nextArticle.slug}`} className="group flex items-center gap-2 text-sm text-gray-500 hover:text-blue-600 transition-colors max-w-[48%] text-right ml-auto">
+            <Link href={`/blog/${nextArticle.slug}`} className="group flex items-center gap-2 text-sm text-gray-400 hover:text-[#00E676] transition-colors max-w-[48%] text-right ml-auto">
               <span className="line-clamp-2">{nextArticle.title}</span>
               <ArrowRight className="h-4 w-4 shrink-0" />
             </Link>
@@ -190,7 +188,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
 
         {/* Back to blog */}
         <div className="mt-8 text-center">
-          <Link href="/blog" className="inline-flex items-center gap-2 text-sm text-blue-600 hover:underline">
+          <Link href="/blog" className="inline-flex items-center gap-2 text-sm text-[#00E676] hover:underline">
             <ArrowLeft className="h-4 w-4" />
             Retour au blog
           </Link>

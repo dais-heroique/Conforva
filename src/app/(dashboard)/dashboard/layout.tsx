@@ -1,34 +1,42 @@
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
-import { createClient } from "@/lib/supabase/server"
-import { Sidebar } from "@/components/layout/sidebar"
-import { ChatWidget } from "@/components/chat/ChatWidget"
+import { auth } from "@/auth"
+import { getDb } from "@/lib/db"
+import { organizations, organizationMembers } from "@/lib/db/schema"
+import { eq } from "drizzle-orm"
+import { DashboardSidebar } from "@/components/layout/dashboard-sidebar"
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const session = await auth()
+  if (!session?.user?.id) redirect("/auth/login")
 
-  if (!user) redirect("/auth/login")
+  const userId = session.user.id
+  const db = getDb()
 
-  const [{ data: userData }, { data: org }] = await Promise.all([
-    supabase.from("users").select("id, email, plan").eq("id", user.id).single() as any,
-    supabase.from("organizations").select("id, name, owner_id").eq("owner_id", user.id).single() as any,
-  ])
+  const [membership] = await db
+    .select({ org: organizations })
+    .from(organizationMembers)
+    .innerJoin(organizations, eq(organizationMembers.organizationId, organizations.id))
+    .where(eq(organizationMembers.userId, userId))
+    .limit(1)
 
-  if (!userData) redirect("/auth/login")
-  if (!org) redirect("/onboarding")
+  if (!membership) redirect("/onboarding")
+
+  const org = membership.org
 
   return (
-    <div className="flex h-dvh overflow-hidden bg-gray-50">
-      <Sidebar user={userData} org={org} />
-      <main className="flex-1 overflow-y-auto pt-14 md:pt-0">
+    <div className="flex h-dvh overflow-hidden bg-[#060D09]">
+      <DashboardSidebar
+        user={{ id: userId, email: session.user.email!, name: session.user.name, image: session.user.image }}
+        org={{ id: org.id, name: org.name, plan: org.plan }}
+      />
+      <main className="flex-1 overflow-y-auto">
         {children}
       </main>
-      <ChatWidget />
     </div>
   )
 }

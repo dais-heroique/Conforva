@@ -5,31 +5,33 @@ import { ARTICLES } from "@/lib/blog/articles"
 import { Clock, ArrowRight, Tag } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Blog GPSR — Conformité produit pour e-commerçants",
-  description: "Guides pratiques sur la conformité GPSR (UE) 2023/988 : dossier technique, analyse de risque, Amazon FBA, dropshipping, personne responsable EU. Mis à jour régulièrement.",
+  title: "Blog — Veille concurrentielle & stratégie prix e-commerce",
+  description: "Guides pratiques sur la veille concurrentielle, le repricing et la stratégie tarifaire pour e-commerçants Shopify, Amazon et WooCommerce.",
   keywords: [
-    "blog GPSR", "guide conformité GPSR", "actualité GPSR", "GPSR e-commerce",
-    "dossier technique guide", "conformité produit UE",
+    "veille concurrentielle e-commerce", "stratégie prix", "repricing Shopify", "suivi prix Amazon",
+    "intelligence concurrentielle", "blog e-commerce",
   ],
   openGraph: {
-    title: "Blog GPSR — Guides conformité pour e-commerçants",
-    description: "Guides pratiques sur la conformité GPSR : dossier technique, Amazon FBA, dropshipping, personne responsable EU.",
+    title: "Blog Conforva — Veille concurrentielle e-commerce",
+    description: "Guides pratiques sur la veille concurrentielle et la stratégie tarifaire pour e-commerçants.",
     url: "https://conforva.com/blog",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blog GPSR — Guides conformité pour e-commerçants",
-    description: "Guides pratiques sur la conformité GPSR : dossier technique, Amazon FBA, dropshipping, personne responsable EU.",
+    title: "Blog Conforva — Veille concurrentielle e-commerce",
+    description: "Guides pratiques sur la veille concurrentielle et la stratégie tarifaire pour e-commerçants.",
   },
   alternates: { canonical: "https://conforva.com/blog" },
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "Réglementation": "bg-blue-50 text-blue-700 border-blue-100",
-  "Amazon FBA": "bg-amber-50 text-amber-700 border-amber-100",
-  "Documentation": "bg-indigo-50 text-indigo-700 border-indigo-100",
-  "Cas d'usage": "bg-emerald-50 text-emerald-700 border-emerald-100",
+  "Réglementation": "bg-blue-500/15 text-blue-400 border-blue-500/20",
+  "Amazon FBA": "bg-amber-500/15 text-amber-400 border-amber-500/20",
+  "Documentation": "bg-indigo-500/15 text-indigo-400 border-indigo-500/20",
+  "Cas d'usage": "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
+  "Stratégie": "bg-[#00E676]/15 text-[#00E676] border-[#00E676]/20",
+  "Outils": "bg-purple-500/15 text-purple-400 border-purple-500/20",
 }
 
 function formatDate(d: string) {
@@ -40,37 +42,37 @@ export default function BlogPage() {
   const [featured, ...rest] = ARTICLES
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#060D09]">
       <PublicNav />
 
       <main className="max-w-5xl mx-auto px-5 py-16">
         <div className="mb-12">
-          <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-2">Blog</p>
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Guides & actualités GPSR</h1>
-          <p className="text-gray-500 text-base max-w-2xl leading-relaxed">
-            Tout ce que vous devez savoir sur la conformité GPSR pour vendre en Europe — réglementation, pratique, outils.
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#00E676] mb-2">Blog</p>
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">Guides & stratégie e-commerce</h1>
+          <p className="text-gray-400 text-base max-w-2xl leading-relaxed">
+            Veille concurrentielle, repricing, stratégie tarifaire — tout ce que vous devez savoir pour gagner la guerre des prix.
           </p>
         </div>
 
         {/* Featured article */}
         <Link href={`/blog/${featured.slug}`} className="group block mb-10">
-          <div className="rounded-2xl border border-gray-200 bg-white hover:border-blue-200 hover:shadow-md transition-all duration-150 p-8 sm:p-10">
+          <div className="rounded-2xl border border-white/10 bg-white/5 hover:border-[#00E676]/30 hover:bg-white/8 transition-all duration-150 p-8 sm:p-10">
             <div className="flex items-center gap-3 mb-4">
-              <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${CATEGORY_COLORS[featured.category] ?? "bg-gray-50 text-gray-600 border-gray-100"}`}>
+              <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${CATEGORY_COLORS[featured.category] ?? "bg-white/5 text-gray-400 border-white/10"}`}>
                 <Tag className="h-3 w-3" />{featured.category}
               </span>
-              <span className="text-xs text-gray-400">À la une</span>
+              <span className="text-xs text-gray-500">À la une</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-700 transition-colors leading-snug">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 group-hover:text-[#00E676] transition-colors leading-snug">
               {featured.title}
             </h2>
-            <p className="text-gray-500 leading-relaxed mb-5 max-w-3xl">{featured.description}</p>
+            <p className="text-gray-400 leading-relaxed mb-5 max-w-3xl">{featured.description}</p>
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4 text-xs text-gray-400">
+              <div className="flex items-center gap-4 text-xs text-gray-500">
                 <span>{formatDate(featured.publishedAt)}</span>
                 <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{featured.readingTime} min de lecture</span>
               </div>
-              <span className="flex items-center gap-1 text-sm font-medium text-blue-600 group-hover:gap-2 transition-all">
+              <span className="flex items-center gap-1 text-sm font-medium text-[#00E676] group-hover:gap-2 transition-all">
                 Lire l'article <ArrowRight className="h-4 w-4" />
               </span>
             </div>
@@ -81,22 +83,22 @@ export default function BlogPage() {
         <div className="grid sm:grid-cols-2 gap-5">
           {rest.map(article => (
             <Link key={article.slug} href={`/blog/${article.slug}`} className="group block">
-              <div className="h-full rounded-2xl border border-gray-200 bg-white hover:border-blue-200 hover:shadow-md transition-all duration-150 p-6">
+              <div className="h-full rounded-2xl border border-white/10 bg-white/5 hover:border-[#00E676]/30 hover:bg-white/8 transition-all duration-150 p-6">
                 <div className="mb-3">
-                  <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${CATEGORY_COLORS[article.category] ?? "bg-gray-50 text-gray-600 border-gray-100"}`}>
+                  <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${CATEGORY_COLORS[article.category] ?? "bg-white/5 text-gray-400 border-white/10"}`}>
                     <Tag className="h-3 w-3" />{article.category}
                   </span>
                 </div>
-                <h2 className="text-base font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors leading-snug">
+                <h2 className="text-base font-bold text-white mb-2 group-hover:text-[#00E676] transition-colors leading-snug">
                   {article.title}
                 </h2>
-                <p className="text-sm text-gray-500 leading-relaxed mb-4 line-clamp-2">{article.description}</p>
+                <p className="text-sm text-gray-400 leading-relaxed mb-4 line-clamp-2">{article.description}</p>
                 <div className="flex items-center justify-between mt-auto">
-                  <div className="flex items-center gap-3 text-xs text-gray-400">
+                  <div className="flex items-center gap-3 text-xs text-gray-500">
                     <span>{formatDate(article.publishedAt)}</span>
                     <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{article.readingTime} min</span>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-blue-500 transition-colors" />
+                  <ArrowRight className="h-4 w-4 text-gray-600 group-hover:text-[#00E676] transition-colors" />
                 </div>
               </div>
             </Link>
