@@ -2,71 +2,71 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 import { Button } from "@/components/ui/button"
-import { CheckCircle2, ShieldCheck, Globe, FileText, ArrowRight } from "lucide-react"
+import { CheckCircle2, TrendingDown, Zap, Shield, ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "À propos de Conforva — Notre mission GPSR",
-  description: "Conforva est un SaaS de conformité GPSR (UE 2023/988) qui génère dossiers techniques, analyses de risque ISO 12100 et étiquetage multilingue en moins de 10 minutes. Découvrez notre mission.",
-  keywords: ["Conforva", "à propos Conforva", "qui sommes nous", "conformité GPSR SaaS", "mission conformité produit", "logiciel conformité UE"],
+  title: "À propos de Conforva — Notre mission",
+  description: "Conforva est un agent IA de veille concurrentielle pour e-commerçants. Surveillance des prix en temps réel, alertes intelligentes et recommandations Gemini AI pour Shopify, Amazon et WooCommerce.",
+  keywords: ["Conforva", "à propos Conforva", "veille concurrentielle IA", "suivi prix concurrents", "repricing e-commerce", "intelligence concurrentielle"],
   openGraph: {
-    title: "À propos de Conforva — SaaS de conformité GPSR",
-    description: "Conforva génère dossiers techniques GPSR, analyses de risque ISO 12100 et étiquetage multilingue en moins de 10 minutes. Notre mission : rendre la conformité accessible à tous les e-commerçants.",
+    title: "À propos de Conforva — Agent IA de veille concurrentielle",
+    description: "Conforva surveille vos concurrents 24h/24, détecte chaque changement de prix et génère des recommandations IA actionnables. Notre mission : donner aux e-commerçants les mêmes outils que les grandes marques.",
     url: "https://conforva.com/about",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "À propos de Conforva — SaaS de conformité GPSR",
-    description: "Conforva génère dossiers techniques GPSR et analyses de risque ISO 12100 en moins de 10 minutes.",
+    title: "À propos de Conforva — Agent IA de veille concurrentielle",
+    description: "Surveillance des prix en temps réel + recommandations Gemini AI pour e-commerçants.",
   },
   alternates: { canonical: "https://conforva.com/about" },
 }
 
 const VALUES = [
   {
-    icon: ShieldCheck,
-    color: "bg-blue-100 text-blue-600",
-    title: "Précision avant tout",
-    desc: "Chaque document généré s'appuie sur le texte réglementaire officiel (Règlement (UE) 2023/988), les normes harmonisées CEN/CENELEC et la méthodologie ISO 12100:2010. Nous ne fabriquons pas de conformité — nous la structurons.",
+    icon: TrendingDown,
+    color: "bg-[#00E676]/15 text-[#00E676]",
+    title: "Données fraîches, décisions rapides",
+    desc: "Nos scrapers surveillent vos concurrents en continu. Chaque mouvement de prix est capturé, horodaté et analysé — pas de données périmées, pas de surprises.",
   },
   {
-    icon: Globe,
-    color: "bg-emerald-100 text-emerald-600",
-    title: "Transparence sur les limites",
-    desc: "Conforva est un outil d'aide à la décision, pas un organisme notifié. Nos documents constituent une base solide, mais la responsabilité finale de conformité reste celle de l'opérateur économique. Nous le rappelons clairement à chaque étape.",
+    icon: Zap,
+    color: "bg-amber-500/15 text-amber-400",
+    title: "IA actionnable, pas théorique",
+    desc: "Les rapports Gemini AI de Conforva ne décrivent pas — ils prescrivent. Chaque insight vient avec une action concrète : ajuster ce prix, pousser ce produit, surveiller ce concurrent.",
   },
   {
-    icon: FileText,
-    color: "bg-violet-100 text-violet-600",
+    icon: Shield,
+    color: "bg-purple-500/15 text-purple-400",
     title: "Données protégées",
-    desc: "Vos données produits ne sont jamais utilisées pour entraîner des modèles d'IA. Elles sont chiffrées en transit et au repos, hébergées en Union Européenne, et vous restent exclusivement accessibles.",
+    desc: "Vos données stratégiques ne quittent jamais notre infrastructure sécurisée. Aucune revente, aucun entraînement de modèles tiers — vos informations concurrentielles restent vôtres.",
   },
 ]
 
 const TIMELINE = [
-  { date: "Déc. 2024", event: "Entrée en vigueur du Règlement GPSR (UE) 2023/988. Des milliers d'e-commerçants européens découvrent leurs nouvelles obligations sans accompagnement adapté." },
-  { date: "Janv. 2025", event: "Lancement des premières versions de Conforva : génération automatique d'analyses de risque et de dossiers techniques pour les catégories produits les plus courantes." },
-  { date: "Mars 2025", event: "Ajout du support multi-marchés (US, UK, Chine, Canada, Japon, Australie) et des connecteurs Shopify et WooCommerce." },
-  { date: "2026", event: "Conforva accompagne des centaines de marchands dans leur mise en conformité, couvrant plus de 7 marchés et 7 langues d'étiquetage." },
+  { date: "2024", event: "Constat : les outils de veille concurrentielle coûtent des milliers d'euros par mois — inaccessibles pour 99% des e-commerçants indépendants." },
+  { date: "Jan. 2026", event: "Lancement de Conforva : surveillance automatique des prix concurrents avec alertes en temps réel pour Shopify, Amazon et WooCommerce." },
+  { date: "Avr. 2026", event: "Intégration de Gemini AI pour les rapports hebdomadaires d'intelligence concurrentielle — insights actionnables, en français, chaque lundi matin." },
+  { date: "2026+", event: "Conforva accompagne des centaines de marchands dans leur stratégie tarifaire, couvrant les principaux marchés européens et Nord-Américains." },
 ]
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#060D09]">
       <PublicNav />
 
       <main>
         {/* Hero */}
-        <section className="py-20 px-5 text-center bg-gradient-to-b from-blue-50/60 to-white">
+        <section className="py-20 px-5 text-center">
           <div className="max-w-2xl mx-auto">
-            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-4">À propos</p>
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-5 leading-tight">
-              La conformité GPSR ne devrait pas être un obstacle pour les bons produits.
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#00E676] mb-4">À propos</p>
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-5 leading-tight">
+              La veille concurrentielle ne devrait pas être réservée aux grandes marques.
             </h1>
-            <p className="text-gray-500 text-base leading-relaxed">
-              Conforva a été conçu pour que les e-commerçants sérieux puissent se concentrer sur leur produit —
-              pas sur 300 pages de réglementation. Nous transformons les exigences complexes du Règlement GPSR
-              en documents clairs, structurés et exportables.
+            <p className="text-gray-400 text-base leading-relaxed">
+              Conforva a été conçu pour que les e-commerçants indépendants puissent se battre à armes égales —
+              sans équipe dédiée, sans budget astronomique. Nous automatisons la surveillance des prix
+              et transformons les données en décisions actionnables grâce à l'IA.
             </p>
           </div>
         </section>
@@ -75,38 +75,36 @@ export default function AboutPage() {
         <section className="py-16 px-5 max-w-4xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Pourquoi Conforva ?</h2>
-              <div className="space-y-4 text-sm text-gray-600 leading-relaxed">
+              <h2 className="text-2xl font-bold text-white mb-4">Pourquoi Conforva ?</h2>
+              <div className="space-y-4 text-sm text-gray-400 leading-relaxed">
                 <p>
-                  Le 13 décembre 2024, le Règlement GPSR est entré en vigueur dans l'Union Européenne.
-                  Pour la première fois, <strong className="text-gray-800">tous les vendeurs en ligne</strong> vendant des produits
-                  aux consommateurs européens — y compris ceux basés hors de l'UE — doivent constituer un dossier
-                  technique complet, réaliser une analyse de risque, rédiger une déclaration de conformité
-                  et désigner une Personne Responsable.
+                  Les outils de veille concurrentielle existants (Prisync, Minderest, Price2Spy) coûtent
+                  entre 400€ et 4 000€ par mois. Inaccessibles pour une boutique Shopify qui génère
+                  100k€ par an.
                 </p>
                 <p>
-                  Ces obligations, initialement conçues pour les grandes entreprises avec des équipes dédiées,
-                  s'appliquent désormais aux boutiques indépendantes, aux marques DTC et aux importateurs
-                  qui n'ont ni l'expertise ni les ressources pour s'y conformer seuls.
+                  Pourtant, <strong className="text-white">les prix sont la variable la plus impactante sur les conversions</strong> —
+                  et vos concurrents les ajustent en temps réel. Chaque heure sans surveillance est
+                  une heure où vous naviguez à l'aveugle.
                 </p>
                 <p>
-                  Conforva comble ce gap. Nous automatisons ce qui peut l'être, guidons ce qui ne peut pas l'être,
-                  et laissons toujours l'utilisateur final valider avant d'exporter.
+                  Conforva comble ce gap. Surveillance continue, alertes intelligentes, et chaque lundi
+                  matin, un rapport Gemini AI vous dit exactement quoi faire cette semaine.
                 </p>
               </div>
             </div>
-            <div className="rounded-2xl bg-gray-950 text-white p-8 space-y-4">
+            <div className="rounded-2xl bg-white/5 border border-white/10 p-8 space-y-4">
               <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">Ce que Conforva fait</p>
               {[
-                "Génère les 15 sections du dossier technique (Art. 22)",
-                "Produit une analyse de risque ISO 12100:2010",
-                "Rédige la déclaration UE de conformité (Art. 24)",
-                "Crée des étiquettes multilingues (7 langues)",
-                "Importe vos produits depuis Shopify / WooCommerce",
-                "Suit la veille réglementaire EUR-Lex, Légifrance, UK, US",
+                "Surveille vos concurrents 24h/24 en continu",
+                "Détecte chaque changement de prix et de stock",
+                "Alerte instantanément par email sur vos seuils",
+                "Génère des rapports IA hebdomadaires (Gemini)",
+                "Identifie les nouvelles références de vos concurrents",
+                "S'intègre à Shopify, Amazon et WooCommerce",
               ].map(item => (
                 <div key={item} className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-[#00E676] shrink-0 mt-0.5" />
                   <span className="text-sm text-gray-300">{item}</span>
                 </div>
               ))}
@@ -115,19 +113,19 @@ export default function AboutPage() {
         </section>
 
         {/* Values */}
-        <section className="py-16 px-5 bg-gray-50 border-y border-gray-100">
+        <section className="py-16 px-5 border-y border-white/10">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-10 text-center">Nos engagements</h2>
+            <h2 className="text-2xl font-bold text-white mb-10 text-center">Nos engagements</h2>
             <div className="grid md:grid-cols-3 gap-6">
               {VALUES.map(v => {
                 const Icon = v.icon
                 return (
-                  <div key={v.title} className="rounded-2xl bg-white border border-gray-100 p-6 shadow-sm">
+                  <div key={v.title} className="rounded-2xl bg-white/5 border border-white/10 p-6">
                     <div className={`h-10 w-10 rounded-xl ${v.color} flex items-center justify-center mb-4`}>
                       <Icon className="h-5 w-5" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">{v.title}</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">{v.desc}</p>
+                    <h3 className="font-semibold text-white mb-2">{v.title}</h3>
+                    <p className="text-sm text-gray-400 leading-relaxed">{v.desc}</p>
                   </div>
                 )
               })}
@@ -137,48 +135,28 @@ export default function AboutPage() {
 
         {/* Timeline */}
         <section className="py-16 px-5 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-10">Notre parcours</h2>
-          <div className="relative pl-6 border-l-2 border-gray-100 space-y-8">
+          <h2 className="text-2xl font-bold text-white mb-10">Notre parcours</h2>
+          <div className="relative pl-6 border-l-2 border-white/10 space-y-8">
             {TIMELINE.map((t, i) => (
               <div key={i} className="relative">
-                <div className="absolute -left-[1.65rem] top-1 h-4 w-4 rounded-full bg-blue-600 border-2 border-white ring-2 ring-blue-100" />
-                <p className="text-xs font-bold text-blue-600 mb-1">{t.date}</p>
-                <p className="text-sm text-gray-600 leading-relaxed">{t.event}</p>
+                <div className="absolute -left-[1.65rem] top-1 h-4 w-4 rounded-full bg-[#00E676] border-2 border-[#060D09]" />
+                <p className="text-xs font-bold text-[#00E676] mb-1">{t.date}</p>
+                <p className="text-sm text-gray-400 leading-relaxed">{t.event}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Transparency box */}
-        <section className="py-6 px-5 mb-10">
-          <div className="max-w-3xl mx-auto rounded-2xl border border-amber-200 bg-amber-50 p-7">
-            <h3 className="font-bold text-gray-900 mb-3">Ce que Conforva ne fait pas</h3>
-            <ul className="space-y-2">
-              {[
-                "Conforva n'est pas un organisme notifié et ne délivre pas de certifications.",
-                "Les documents générés ne remplacent pas l'avis d'un expert en conformité ou d'un juriste spécialisé.",
-                "Conforva ne garantit pas qu'un dossier généré sera accepté par une autorité de surveillance du marché.",
-                "L'analyse de risque générée par l'IA doit être relue et validée par un responsable produit avant utilisation.",
-              ].map(item => (
-                <li key={item} className="flex items-start gap-2.5 text-sm text-amber-800">
-                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
         {/* CTA */}
-        <section className="py-14 px-5 text-center border-t border-gray-100">
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">Prêt à commencer ?</h2>
-          <p className="text-gray-500 text-sm mb-6">Créez votre compte gratuitement — premier dossier en moins de 5 minutes.</p>
-          <Link href="/auth/login">
-            <Button size="lg" className="gap-2">
-              Créer un compte gratuit <ArrowRight className="h-4 w-4" />
+        <section className="py-14 px-5 text-center border-t border-white/10">
+          <h2 className="text-2xl font-bold text-white mb-3">Prêt à surveiller vos concurrents ?</h2>
+          <p className="text-gray-400 text-sm mb-6">14 jours d'essai gratuit — aucune carte bancaire requise.</p>
+          <Link href="/auth/register">
+            <Button size="lg" className="bg-[#00E676] text-[#060D09] hover:bg-[#00E676]/90 gap-2 font-semibold">
+              Commencer gratuitement <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
-          <p className="mt-3 text-xs text-gray-400">Aucune carte bancaire · Sans engagement</p>
+          <p className="mt-3 text-xs text-gray-500">Sans engagement · Annulation en 1 clic</p>
         </section>
       </main>
 
