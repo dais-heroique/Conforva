@@ -30,7 +30,7 @@ export default function SettingsPage() {
               </div>
               <div className="relative mt-0.5">
                 <input type="checkbox" defaultChecked className="sr-only peer" id={item.id} />
-                <label htmlFor={item.id} className="w-9 h-5 bg-white/10 peer-checked:bg-[#00E676] rounded-full cursor-pointer block transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-transform peer-checked:after:translate-x-4" />
+                <label htmlFor={item.id} className="w-9 h-5 bg-white/10 peer-checked:bg-[#8B5CF6] rounded-full cursor-pointer block transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-transform peer-checked:after:translate-x-4" />
               </div>
             </label>
           ))}

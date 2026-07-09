@@ -8,7 +8,7 @@ import { Bell, Plus, Zap, TrendingDown, Package, ShoppingCart, TrendingUp, Trash
 import { AddAlertButton } from "./add-alert-button"
 
 const ALERT_TYPE_LABELS: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
-  price_drop: { label: "Baisse de prix", icon: <TrendingDown className="h-3.5 w-3.5" />, color: "text-[#00E676]" },
+  price_drop: { label: "Baisse de prix", icon: <TrendingDown className="h-3.5 w-3.5" />, color: "text-[#8B5CF6]" },
   price_increase: { label: "Hausse de prix", icon: <TrendingUp className="h-3.5 w-3.5" />, color: "text-red-400" },
   out_of_stock: { label: "Rupture de stock", icon: <Package className="h-3.5 w-3.5" />, color: "text-orange-400" },
   back_in_stock: { label: "Retour en stock", icon: <ShoppingCart className="h-3.5 w-3.5" />, color: "text-blue-400" },
@@ -82,7 +82,7 @@ export default async function AlertsPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className={`h-2 w-2 rounded-full ${alert.isActive ? "bg-[#00E676]" : "bg-gray-600"}`} />
+                  <div className={`h-2 w-2 rounded-full ${alert.isActive ? "bg-[#8B5CF6]" : "bg-gray-600"}`} />
                 </div>
               </div>
             )

@@ -29,7 +29,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const org = membership.org
 
   return (
-    <div className="flex h-dvh overflow-hidden bg-[#060D09]">
+    <div className="flex h-dvh overflow-hidden bg-[#08090C]">
       <DashboardSidebar
         user={{ id: userId, email: session.user.email!, name: session.user.name, image: session.user.image }}
         org={{ id: org.id, name: org.name, plan: org.plan }}

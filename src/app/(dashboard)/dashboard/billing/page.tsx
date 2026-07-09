@@ -60,7 +60,7 @@ export default async function BillingPage() {
       <div>
         <h1 className="text-xl font-bold text-white">Facturation</h1>
         <p className="text-sm text-gray-500 mt-0.5">
-          Plan actuel : <span className="text-[#00E676] font-semibold">{PLAN_LABELS[org.plan] ?? org.plan}</span>
+          Plan actuel : <span className="text-[#8B5CF6] font-semibold">{PLAN_LABELS[org.plan] ?? org.plan}</span>
         </p>
       </div>
 
@@ -68,7 +68,7 @@ export default async function BillingPage() {
       {org.subscriptionStatus === "active" && org.stripeCustomerId && (
         <div className="bg-white/5 border border-white/8 rounded-2xl p-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <CreditCard className="h-5 w-5 text-[#00E676]" />
+            <CreditCard className="h-5 w-5 text-[#8B5CF6]" />
             <div>
               <p className="text-sm font-semibold text-white">Abonnement actif — {PLAN_LABELS[org.plan]}</p>
               <p className="text-xs text-gray-500 mt-0.5">Gérez votre abonnement, vos factures et votre mode de paiement</p>
@@ -77,7 +77,7 @@ export default async function BillingPage() {
           <form action="/api/billing/portal" method="POST">
             <button
               type="submit"
-              className="flex items-center gap-1.5 text-sm text-[#00E676] border border-[#00E676]/30 px-4 py-2 rounded-xl hover:bg-[#00E676]/10 transition-colors"
+              className="flex items-center gap-1.5 text-sm text-[#8B5CF6] border border-[#8B5CF6]/30 px-4 py-2 rounded-xl hover:bg-[#8B5CF6]/10 transition-colors"
             >
               Gérer <ExternalLink className="h-3.5 w-3.5" />
             </button>
@@ -95,13 +95,13 @@ export default async function BillingPage() {
               <div
                 key={plan.key}
                 className={`relative rounded-2xl p-5 flex flex-col border transition-colors ${
-                  plan.highlight ? "border-[#00E676]/40 bg-[#00E676]/5" :
+                  plan.highlight ? "border-[#8B5CF6]/40 bg-[#8B5CF6]/5" :
                   isCurrent ? "border-white/20 bg-white/5" :
                   "border-white/8 bg-white/3"
                 }`}
               >
                 {plan.highlight && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00E676] text-[#060D09] text-xs font-bold px-3 py-0.5 rounded-full whitespace-nowrap">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#8B5CF6] text-[#08090C] text-xs font-bold px-3 py-0.5 rounded-full whitespace-nowrap">
                     Le plus populaire
                   </span>
                 )}
@@ -112,13 +112,13 @@ export default async function BillingPage() {
                 <ul className="space-y-2 flex-1 mb-4">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-center gap-2 text-xs text-gray-300">
-                      <Check className="h-3.5 w-3.5 text-[#00E676] flex-shrink-0" />
+                      <Check className="h-3.5 w-3.5 text-[#8B5CF6] flex-shrink-0" />
                       {f}
                     </li>
                   ))}
                 </ul>
                 {isCurrent ? (
-                  <div className="w-full text-center py-2 text-xs font-semibold text-[#00E676] border border-[#00E676]/30 rounded-xl">
+                  <div className="w-full text-center py-2 text-xs font-semibold text-[#8B5CF6] border border-[#8B5CF6]/30 rounded-xl">
                     Plan actuel
                   </div>
                 ) : (
@@ -128,7 +128,7 @@ export default async function BillingPage() {
                       type="submit"
                       className={`w-full py-2.5 rounded-xl font-bold text-sm transition-colors ${
                         plan.highlight
-                          ? "bg-[#00E676] text-[#060D09] hover:bg-[#00c964]"
+                          ? "bg-[#8B5CF6] text-[#08090C] hover:bg-[#7C3AED]"
                           : "bg-white/10 text-white hover:bg-white/20"
                       }`}
                     >
@@ -145,7 +145,7 @@ export default async function BillingPage() {
       <div className="text-center">
         <p className="text-xs text-gray-500">
           Besoin d'un plan Enterprise ?{" "}
-          <Link href="/contact" className="text-[#00E676] hover:underline">Contactez-nous</Link>
+          <Link href="/contact" className="text-[#8B5CF6] hover:underline">Contactez-nous</Link>
         </p>
       </div>
     </div>

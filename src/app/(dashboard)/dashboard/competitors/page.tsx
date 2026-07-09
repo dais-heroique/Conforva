@@ -46,7 +46,7 @@ export default async function CompetitorsPage() {
         {competitors.length < org.competitorLimit && (
           <Link
             href="/dashboard/competitors/new"
-            className="flex items-center gap-2 bg-[#00E676] hover:bg-[#00c964] text-[#060D09] font-bold text-sm px-4 py-2 rounded-xl transition-colors"
+            className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-[#08090C] font-bold text-sm px-4 py-2 rounded-xl transition-colors"
           >
             <Plus className="h-4 w-4" />
             Ajouter
@@ -63,7 +63,7 @@ export default async function CompetitorsPage() {
           </p>
           <Link
             href="/dashboard/competitors/new"
-            className="inline-flex items-center gap-2 bg-[#00E676] text-[#060D09] font-bold text-sm px-6 py-2.5 rounded-xl"
+            className="inline-flex items-center gap-2 bg-[#8B5CF6] text-[#08090C] font-bold text-sm px-6 py-2.5 rounded-xl"
           >
             <Plus className="h-4 w-4" />
             Ajouter mon premier concurrent
@@ -75,7 +75,7 @@ export default async function CompetitorsPage() {
             <Link
               key={c.id}
               href={`/dashboard/competitors/${c.id}`}
-              className="bg-white/5 border border-white/8 hover:border-[#00E676]/30 rounded-2xl p-5 flex items-center justify-between transition-colors group"
+              className="bg-white/5 border border-white/8 hover:border-[#8B5CF6]/30 rounded-2xl p-5 flex items-center justify-between transition-colors group"
             >
               <div className="flex items-center gap-4 min-w-0">
                 <div className="h-10 w-10 rounded-xl bg-white/8 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
@@ -93,7 +93,7 @@ export default async function CompetitorsPage() {
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${PLATFORM_COLORS[c.platform] ?? PLATFORM_COLORS.custom}`}>
                   {c.platform}
                 </span>
-                <span className={`h-2 w-2 rounded-full ${c.isActive ? "bg-[#00E676]" : "bg-gray-600"}`} />
+                <span className={`h-2 w-2 rounded-full ${c.isActive ? "bg-[#8B5CF6]" : "bg-gray-600"}`} />
               </div>
             </Link>
           ))}

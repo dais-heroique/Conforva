@@ -47,7 +47,7 @@ export default async function ProductsPage() {
         <div className="grid grid-cols-3 gap-4">
           {[
             { label: "Total produits", value: productsWithCompetitor.length, color: "text-white" },
-            { label: "Baisses de prix", value: priceDrops.length, color: "text-[#00E676]" },
+            { label: "Baisses de prix", value: priceDrops.length, color: "text-[#8B5CF6]" },
             { label: "En rupture", value: outOfStock.length, color: "text-orange-400" },
           ].map(({ label, value, color }) => (
             <div key={label} className="bg-white/5 border border-white/8 rounded-xl p-4 text-center">
@@ -65,7 +65,7 @@ export default async function ProductsPage() {
           <p className="text-sm text-gray-400 mb-6 max-w-sm mx-auto">
             Les produits de vos concurrents apparaîtront ici après le premier scan (dans les 24h suivant l'ajout d'un concurrent).
           </p>
-          <Link href="/dashboard/competitors/new" className="inline-flex items-center gap-2 bg-[#00E676] text-[#060D09] font-bold text-sm px-6 py-2.5 rounded-xl">
+          <Link href="/dashboard/competitors/new" className="inline-flex items-center gap-2 bg-[#8B5CF6] text-[#08090C] font-bold text-sm px-6 py-2.5 rounded-xl">
             Ajouter un concurrent
           </Link>
         </div>
@@ -86,7 +86,7 @@ export default async function ProductsPage() {
                 {productsWithCompetitor.map(({ product, competitor }) => (
                   <tr key={product.id} className="border-b border-white/5 hover:bg-white/3 transition-colors">
                     <td className="px-5 py-3 max-w-xs">
-                      <a href={product.url} target="_blank" rel="noopener" className="text-white hover:text-[#00E676] transition-colors flex items-center gap-1.5 truncate">
+                      <a href={product.url} target="_blank" rel="noopener" className="text-white hover:text-[#8B5CF6] transition-colors flex items-center gap-1.5 truncate">
                         {product.name || product.url}
                         <ExternalLink className="h-3 w-3 flex-shrink-0 text-gray-500" />
                       </a>
@@ -107,7 +107,7 @@ export default async function ProductsPage() {
                     <td className="px-4 py-3 text-right">
                       {product.priceChangePercent != null ? (
                         <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-lg ${
-                          product.priceChangePercent < 0 ? "bg-[#00E676]/15 text-[#00E676]" : "bg-red-500/15 text-red-400"
+                          product.priceChangePercent < 0 ? "bg-[#8B5CF6]/15 text-[#8B5CF6]" : "bg-red-500/15 text-red-400"
                         }`}>
                           {product.priceChangePercent < 0 ? <TrendingDown className="h-3 w-3" /> : <TrendingUp className="h-3 w-3" />}
                           {Math.abs(product.priceChangePercent).toFixed(1)}%
@@ -118,7 +118,7 @@ export default async function ProductsPage() {
                       {product.isInStock === null ? (
                         <span className="text-gray-600 text-xs">—</span>
                       ) : product.isInStock ? (
-                        <span className="text-xs text-[#00E676] bg-[#00E676]/10 px-2 py-0.5 rounded-full">En stock</span>
+                        <span className="text-xs text-[#8B5CF6] bg-[#8B5CF6]/10 px-2 py-0.5 rounded-full">En stock</span>
                       ) : (
                         <span className="text-xs text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded-full">Rupture</span>
                       )}

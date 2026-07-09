@@ -56,7 +56,7 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 bg-[#00E676] hover:bg-[#00c964] text-[#060D09] font-bold text-sm px-4 py-2 rounded-xl transition-colors"
+        className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-[#08090C] font-bold text-sm px-4 py-2 rounded-xl transition-colors"
       >
         <Plus className="h-4 w-4" />
         Nouvelle alerte
@@ -64,7 +64,7 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={() => setOpen(false)}>
-          <div className="bg-[#0D1611] border border-white/10 rounded-2xl p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-[#0D0D14] border border-white/10 rounded-2xl p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
             <h2 className="font-bold text-white mb-4">Créer une alerte</h2>
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
@@ -75,7 +75,7 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
                   onChange={e => setName(e.target.value)}
                   required
                   placeholder="Prix Nike sous -10%"
-                  className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#00E676]/50 placeholder-gray-600"
+                  className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#8B5CF6]/50 placeholder-gray-600"
                 />
               </div>
               <div>
@@ -83,9 +83,9 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
                 <select
                   value={type}
                   onChange={e => setType(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#00E676]/50"
+                  className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#8B5CF6]/50"
                 >
-                  {ALERT_TYPES.map(t => <option key={t.value} value={t.value} className="bg-[#0D1611]">{t.label}</option>)}
+                  {ALERT_TYPES.map(t => <option key={t.value} value={t.value} className="bg-[#0D0D14]">{t.label}</option>)}
                 </select>
               </div>
               {competitors.length > 0 && (
@@ -94,10 +94,10 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
                   <select
                     value={competitorId}
                     onChange={e => setCompetitorId(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#00E676]/50"
+                    className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#8B5CF6]/50"
                   >
-                    <option value="" className="bg-[#0D1611]">Tous les concurrents</option>
-                    {competitors.map(c => <option key={c.id} value={c.id} className="bg-[#0D1611]">{c.name}</option>)}
+                    <option value="" className="bg-[#0D0D14]">Tous les concurrents</option>
+                    {competitors.map(c => <option key={c.id} value={c.id} className="bg-[#0D0D14]">{c.name}</option>)}
                   </select>
                 </div>
               )}
@@ -109,7 +109,7 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
                     value={threshold}
                     onChange={e => setThreshold(e.target.value)}
                     min="1" max="100" step="0.5"
-                    className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#00E676]/50"
+                    className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#8B5CF6]/50"
                   />
                 </div>
               )}
@@ -117,7 +117,7 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
                 <button type="button" onClick={() => setOpen(false)} className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-white text-sm rounded-xl transition-colors">
                   Annuler
                 </button>
-                <button type="submit" disabled={loading} className="flex-1 py-2.5 bg-[#00E676] hover:bg-[#00c964] text-[#060D09] font-bold text-sm rounded-xl transition-colors disabled:opacity-60 flex items-center justify-center gap-2">
+                <button type="submit" disabled={loading} className="flex-1 py-2.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-[#08090C] font-bold text-sm rounded-xl transition-colors disabled:opacity-60 flex items-center justify-center gap-2">
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                   Créer
                 </button>

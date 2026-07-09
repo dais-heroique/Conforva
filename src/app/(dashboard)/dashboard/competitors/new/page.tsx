@@ -83,7 +83,7 @@ export default function NewCompetitorPage() {
                 onBlur={handleDomainBlur}
                 required
                 placeholder="concurrent.com ou https://concurrent.com"
-                className="w-full pl-9 pr-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#00E676]/50 transition-colors"
+                className="w-full pl-9 pr-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#8B5CF6]/50 transition-colors"
               />
             </div>
           </div>
@@ -96,7 +96,7 @@ export default function NewCompetitorPage() {
               onChange={(e) => setName(e.target.value)}
               required
               placeholder="Zalando, Fnac, Amazon…"
-              className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#00E676]/50 transition-colors"
+              className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#8B5CF6]/50 transition-colors"
             />
           </div>
 
@@ -110,7 +110,7 @@ export default function NewCompetitorPage() {
                   onClick={() => setPlatform(p.value)}
                   className={`py-2 px-3 rounded-xl text-xs font-medium transition-colors ${
                     platform === p.value
-                      ? "bg-[#00E676]/20 border border-[#00E676]/40 text-[#00E676]"
+                      ? "bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 text-[#8B5CF6]"
                       : "bg-white/5 border border-white/10 text-gray-400 hover:border-white/20"
                   }`}
                 >
@@ -125,11 +125,11 @@ export default function NewCompetitorPage() {
             <select
               value={frequency}
               onChange={(e) => setFrequency(e.target.value)}
-              className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#00E676]/50 transition-colors"
+              className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#8B5CF6]/50 transition-colors"
             >
-              <option value="daily" className="bg-[#0D1611]">1 fois par jour</option>
-              <option value="twice_daily" className="bg-[#0D1611]">2 fois par jour</option>
-              <option value="hourly" className="bg-[#0D1611]">Toutes les heures (Pro)</option>
+              <option value="daily" className="bg-[#0D0D14]">1 fois par jour</option>
+              <option value="twice_daily" className="bg-[#0D0D14]">2 fois par jour</option>
+              <option value="hourly" className="bg-[#0D0D14]">Toutes les heures (Pro)</option>
             </select>
           </div>
         </div>
@@ -141,7 +141,7 @@ export default function NewCompetitorPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 bg-[#00E676] hover:bg-[#00c964] text-[#060D09] font-bold text-sm rounded-xl transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+          className="w-full py-3 bg-[#8B5CF6] hover:bg-[#7C3AED] text-[#08090C] font-bold text-sm rounded-xl transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
         >
           {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Ajout en cours…</> : "Ajouter le concurrent"}
         </button>

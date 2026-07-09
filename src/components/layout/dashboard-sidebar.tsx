@@ -38,7 +38,7 @@ export function DashboardSidebar({ user, org }: Props) {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
 
   return (
-    <aside className="w-56 h-full flex flex-col border-r border-white/8 bg-[#0A1209] flex-shrink-0">
+    <aside className="w-56 h-full flex flex-col border-r border-white/8 bg-[#08090C] flex-shrink-0">
       {/* Logo */}
       <div className="h-14 flex items-center px-4 border-b border-white/8">
         <Link href="/dashboard" className="flex items-center gap-2">
@@ -67,7 +67,7 @@ export function DashboardSidebar({ user, org }: Props) {
               href={href}
               className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm transition-colors ${
                 active
-                  ? "bg-[#00E676]/15 text-[#00E676] font-semibold"
+                  ? "bg-[#8B5CF6]/15 text-[#A78BFA] font-semibold"
                   : "text-gray-400 hover:text-white hover:bg-white/5"
               }`}
             >
@@ -86,7 +86,7 @@ export function DashboardSidebar({ user, org }: Props) {
                 href={href}
                 className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm transition-colors ${
                   active
-                    ? "bg-[#00E676]/15 text-[#00E676] font-semibold"
+                    ? "bg-[#8B5CF6]/15 text-[#A78BFA] font-semibold"
                     : "text-gray-400 hover:text-white hover:bg-white/5"
                 }`}
               >
@@ -104,7 +104,7 @@ export function DashboardSidebar({ user, org }: Props) {
           onClick={() => setUserMenuOpen((v) => !v)}
           className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors"
         >
-          <div className="h-7 w-7 rounded-full bg-[#00E676]/20 flex items-center justify-center text-[#00E676] text-xs font-bold flex-shrink-0">
+          <div className="h-7 w-7 rounded-full bg-[#8B5CF6]/20 flex items-center justify-center text-[#A78BFA] text-xs font-bold flex-shrink-0">
             {(user.name || user.email)[0].toUpperCase()}
           </div>
           <div className="flex-1 text-left min-w-0">
@@ -115,7 +115,7 @@ export function DashboardSidebar({ user, org }: Props) {
         </button>
 
         {userMenuOpen && (
-          <div className="mt-1 bg-[#0D1611] border border-white/10 rounded-xl overflow-hidden">
+          <div className="mt-1 bg-[#0D0D14] border border-white/10 rounded-xl overflow-hidden">
             <Link href="/dashboard/settings" className="flex items-center gap-2 px-3 py-2 text-xs text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
               <Settings className="h-3.5 w-3.5" />
               Paramètres

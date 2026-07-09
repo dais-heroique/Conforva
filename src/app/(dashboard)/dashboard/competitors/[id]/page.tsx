@@ -66,8 +66,8 @@ export default async function CompetitorDetailPage({ params }: { params: { id: s
             <ExternalLink className="h-3 w-3" />{competitor.domain}
           </a>
         </div>
-        <div className={`flex items-center gap-1.5 text-xs ${competitor.isActive ? "text-[#00E676]" : "text-gray-500"}`}>
-          <div className={`h-2 w-2 rounded-full ${competitor.isActive ? "bg-[#00E676]" : "bg-gray-500"}`} />
+        <div className={`flex items-center gap-1.5 text-xs ${competitor.isActive ? "text-[#8B5CF6]" : "text-gray-500"}`}>
+          <div className={`h-2 w-2 rounded-full ${competitor.isActive ? "bg-[#8B5CF6]" : "bg-gray-500"}`} />
           {competitor.isActive ? "Actif" : "Inactif"}
         </div>
       </div>
@@ -76,7 +76,7 @@ export default async function CompetitorDetailPage({ params }: { params: { id: s
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
           { label: "Produits suivis", value: products.length, icon: Package, color: "text-blue-400" },
-          { label: "Baisses de prix", value: drops, icon: TrendingDown, color: "text-[#00E676]" },
+          { label: "Baisses de prix", value: drops, icon: TrendingDown, color: "text-[#8B5CF6]" },
           { label: "Hausses de prix", value: rises, icon: TrendingUp, color: "text-red-400" },
           { label: "En rupture", value: outOfStock, icon: Package, color: "text-orange-400" },
         ].map(({ label, value, icon: Icon, color }) => (
@@ -122,7 +122,7 @@ export default async function CompetitorDetailPage({ params }: { params: { id: s
                 {products.map((product) => (
                   <tr key={product.id} className="border-b border-white/5 hover:bg-white/3 transition-colors">
                     <td className="px-5 py-3">
-                      <a href={product.url} target="_blank" rel="noopener" className="text-white hover:text-[#00E676] transition-colors truncate max-w-xs block">
+                      <a href={product.url} target="_blank" rel="noopener" className="text-white hover:text-[#8B5CF6] transition-colors truncate max-w-xs block">
                         {product.name || product.url}
                       </a>
                       {product.sku && <p className="text-xs text-gray-500">SKU: {product.sku}</p>}
@@ -138,7 +138,7 @@ export default async function CompetitorDetailPage({ params }: { params: { id: s
                     <td className="px-4 py-3 text-right">
                       {product.priceChangePercent != null ? (
                         <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-lg ${
-                          product.priceChangePercent < 0 ? "bg-[#00E676]/15 text-[#00E676]" : "bg-red-500/15 text-red-400"
+                          product.priceChangePercent < 0 ? "bg-[#8B5CF6]/15 text-[#8B5CF6]" : "bg-red-500/15 text-red-400"
                         }`}>
                           {product.priceChangePercent < 0 ? <TrendingDown className="h-3 w-3" /> : <TrendingUp className="h-3 w-3" />}
                           {Math.abs(product.priceChangePercent).toFixed(1)}%
@@ -149,7 +149,7 @@ export default async function CompetitorDetailPage({ params }: { params: { id: s
                       {product.isInStock === null ? (
                         <span className="text-gray-600 text-xs">—</span>
                       ) : product.isInStock ? (
-                        <span className="text-xs text-[#00E676] bg-[#00E676]/10 px-2 py-0.5 rounded-full">En stock</span>
+                        <span className="text-xs text-[#8B5CF6] bg-[#8B5CF6]/10 px-2 py-0.5 rounded-full">En stock</span>
                       ) : (
                         <span className="text-xs text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded-full">Rupture</span>
                       )}
