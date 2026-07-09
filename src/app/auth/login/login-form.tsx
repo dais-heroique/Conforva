@@ -32,10 +32,6 @@ export function LoginForm() {
     router.push(callbackUrl)
   }
 
-  async function handleGoogle() {
-    await signIn("google", { callbackUrl })
-  }
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#060D09] px-4">
       <div className="w-full max-w-sm">
@@ -49,20 +45,6 @@ export function LoginForm() {
         </div>
 
         <div className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4">
-          <button
-            onClick={handleGoogle}
-            className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-white text-gray-900 rounded-xl font-medium text-sm hover:bg-gray-50 transition-colors"
-          >
-            <GoogleIcon />
-            Continuer avec Google
-          </button>
-
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-white/10" />
-            <span className="text-xs text-gray-500">ou</span>
-            <div className="flex-1 h-px bg-white/10" />
-          </div>
-
           <form onSubmit={handleSubmit} className="space-y-3">
             <div>
               <label className="block text-xs font-medium text-gray-400 mb-1.5">Email</label>
@@ -72,7 +54,7 @@ export function LoginForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
-                className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#00E676]/60 transition-colors"
+                className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#8B5CF6]/60 transition-colors"
                 placeholder="vous@exemple.com"
               />
             </div>
@@ -85,7 +67,7 @@ export function LoginForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
-                className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#00E676]/60 transition-colors"
+                className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#8B5CF6]/60 transition-colors"
                 placeholder="••••••••"
               />
             </div>
@@ -97,7 +79,7 @@ export function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 bg-[#00E676] hover:bg-[#00c964] text-[#060D09] font-bold text-sm rounded-xl transition-colors disabled:opacity-60"
+              className="w-full py-2.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold text-sm rounded-xl transition-colors disabled:opacity-60"
             >
               {loading ? "Connexion…" : "Se connecter"}
             </button>
@@ -106,7 +88,7 @@ export function LoginForm() {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Pas encore de compte ?{" "}
-          <Link href="/auth/register" className="text-[#00E676] hover:underline">Créer un compte</Link>
+          <Link href="/auth/register" className="text-[#A78BFA] hover:underline">Créer un compte</Link>
         </p>
       </div>
     </div>
