@@ -3,8 +3,10 @@ import Link from "next/link"
 import { auth } from "@/auth"
 import { getDb } from "@/lib/db"
 import { organizations, organizationMembers, trackedCompetitors, trackedProducts, priceHistory } from "@/lib/db/schema"
-import { eq, and, desc } from "drizzle-orm"
+import { eq, and, desc, count } from "drizzle-orm"
 import { ArrowLeft, ExternalLink, TrendingDown, TrendingUp, Package, RefreshCw } from "lucide-react"
+import { AddProductModal } from "@/components/dashboard/add-product-modal"
+import { DeleteProductButton } from "@/components/dashboard/delete-product-button"
 
 export default async function CompetitorDetailPage({ params }: { params: { id: string } }) {
   const session = await auth()
@@ -20,26 +22,29 @@ export default async function CompetitorDetailPage({ params }: { params: { id: s
     .limit(1)
 
   if (!membership) redirect("/onboarding")
+  const org = membership.org
 
   const [competitor] = await db
     .select()
     .from(trackedCompetitors)
     .where(and(
       eq(trackedCompetitors.id, params.id),
-      eq(trackedCompetitors.organizationId, membership.org.id)
+      eq(trackedCompetitors.organizationId, org.id)
     ))
     .limit(1)
 
   if (!competitor) notFound()
 
-  const products = await db
-    .select()
-    .from(trackedProducts)
-    .where(and(
-      eq(trackedProducts.competitorId, competitor.id),
-      eq(trackedProducts.isActive, true)
-    ))
-    .orderBy(desc(trackedProducts.lastPriceChangedAt))
+  const [products, [{ totalProducts }]] = await Promise.all([
+    db.select()
+      .from(trackedProducts)
+      .where(and(eq(trackedProducts.competitorId, competitor.id), eq(trackedProducts.isActive, true)))
+      .orderBy(desc(trackedProducts.createdAt))
+      .limit(100),
+    db.select({ totalProducts: count() })
+      .from(trackedProducts)
+      .where(and(eq(trackedProducts.organizationId, org.id), eq(trackedProducts.isActive, true))),
+  ])
     .limit(50)
 
   const priceChanges = products.filter(p => p.priceChangePercent !== null && p.priceChangePercent !== undefined)
@@ -48,7 +53,7 @@ export default async function CompetitorDetailPage({ params }: { params: { id: s
   const outOfStock = products.filter(p => p.isInStock === false).length
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 bg-[#08090C] min-h-full">
       <div className="flex items-center gap-3">
         <Link href="/dashboard/competitors" className="text-gray-500 hover:text-white transition-colors">
           <ArrowLeft className="h-4 w-4" />
@@ -66,6 +71,12 @@ export default async function CompetitorDetailPage({ params }: { params: { id: s
             <ExternalLink className="h-3 w-3" />{competitor.domain}
           </a>
         </div>
+        <AddProductModal
+          competitors={[{ id: competitor.id, name: competitor.name, domain: competitor.domain, platform: competitor.platform }]}
+          defaultCompetitorId={competitor.id}
+          productLimit={org.productLimit}
+          currentCount={totalProducts}
+        />
         <div className={`flex items-center gap-1.5 text-xs ${competitor.isActive ? "text-[#8B5CF6]" : "text-gray-500"}`}>
           <div className={`h-2 w-2 rounded-full ${competitor.isActive ? "bg-[#8B5CF6]" : "bg-gray-500"}`} />
           {competitor.isActive ? "Actif" : "Inactif"}
@@ -104,8 +115,17 @@ export default async function CompetitorDetailPage({ params }: { params: { id: s
 
         {products.length === 0 ? (
           <div className="p-12 text-center">
-            <Package className="h-10 w-10 text-gray-600 mx-auto mb-3" />
-            <p className="text-sm text-gray-400">Aucun produit scanné encore. Le premier scan sera effectué dans les 24h.</p>
+            <div className="h-14 w-14 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mx-auto mb-4">
+              <Package className="h-6 w-6 text-[#A78BFA]" />
+            </div>
+            <p className="text-sm font-medium text-white mb-1">Aucun produit ajouté</p>
+            <p className="text-xs text-gray-400 mb-4">Ajoutez les URLs des produits de ce concurrent pour surveiller leurs prix.</p>
+            <AddProductModal
+              competitors={[{ id: competitor.id, name: competitor.name, domain: competitor.domain, platform: competitor.platform }]}
+              defaultCompetitorId={competitor.id}
+              productLimit={org.productLimit}
+              currentCount={totalProducts}
+            />
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -116,43 +136,51 @@ export default async function CompetitorDetailPage({ params }: { params: { id: s
                   <th className="text-right px-4 py-3 font-medium">Prix actuel</th>
                   <th className="text-right px-4 py-3 font-medium">Variation</th>
                   <th className="text-center px-4 py-3 font-medium">Stock</th>
+                  <th className="px-4 py-3" />
                 </tr>
               </thead>
               <tbody>
                 {products.map((product) => (
-                  <tr key={product.id} className="border-b border-white/5 hover:bg-white/3 transition-colors">
-                    <td className="px-5 py-3">
-                      <a href={product.url} target="_blank" rel="noopener" className="text-white hover:text-[#8B5CF6] transition-colors truncate max-w-xs block">
-                        {product.name || product.url}
+                  <tr key={product.id} className="border-b border-white/5 hover:bg-white/3 transition-colors group">
+                    <td className="px-5 py-3.5">
+                      <a href={product.url} target="_blank" rel="noopener" className="text-white hover:text-[#A78BFA] transition-colors truncate max-w-xs block font-medium">
+                        {product.name || new URL(product.url).pathname.split("/").filter(Boolean).pop() || product.url}
                       </a>
-                      {product.sku && <p className="text-xs text-gray-500">SKU: {product.sku}</p>}
+                      {product.sku && <p className="text-xs text-gray-500 mt-0.5">SKU: {product.sku}</p>}
                     </td>
-                    <td className="px-4 py-3 text-right">
-                      <p className="font-semibold text-white">
-                        {product.currentPrice != null ? `${product.currentPrice} ${product.currency ?? "€"}` : "—"}
-                      </p>
-                      {product.previousPrice != null && (
-                        <p className="text-xs text-gray-500 line-through">{product.previousPrice} {product.currency ?? "€"}</p>
+                    <td className="px-4 py-3.5 text-right">
+                      {product.currentPrice != null ? (
+                        <>
+                          <p className="font-bold text-white">{product.currentPrice.toFixed(2)} {product.currency ?? "€"}</p>
+                          {product.previousPrice != null && (
+                            <p className="text-xs text-gray-500 line-through">{product.previousPrice.toFixed(2)} {product.currency ?? "€"}</p>
+                          )}
+                        </>
+                      ) : (
+                        <span className="text-xs text-gray-600">En attente</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3.5 text-right">
                       {product.priceChangePercent != null ? (
                         <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-lg ${
-                          product.priceChangePercent < 0 ? "bg-[#8B5CF6]/15 text-[#8B5CF6]" : "bg-red-500/15 text-red-400"
+                          product.priceChangePercent < 0 ? "bg-emerald-500/15 text-emerald-400" : "bg-red-500/15 text-red-400"
                         }`}>
                           {product.priceChangePercent < 0 ? <TrendingDown className="h-3 w-3" /> : <TrendingUp className="h-3 w-3" />}
                           {Math.abs(product.priceChangePercent).toFixed(1)}%
                         </span>
                       ) : <span className="text-gray-600">—</span>}
                     </td>
-                    <td className="px-4 py-3 text-center">
+                    <td className="px-4 py-3.5 text-center">
                       {product.isInStock === null ? (
                         <span className="text-gray-600 text-xs">—</span>
                       ) : product.isInStock ? (
-                        <span className="text-xs text-[#8B5CF6] bg-[#8B5CF6]/10 px-2 py-0.5 rounded-full">En stock</span>
+                        <span className="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">En stock</span>
                       ) : (
                         <span className="text-xs text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded-full">Rupture</span>
                       )}
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <DeleteProductButton productId={product.id} />
                     </td>
                   </tr>
                 ))}
