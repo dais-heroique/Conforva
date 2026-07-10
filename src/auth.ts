@@ -1,6 +1,10 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
+import bcrypt from "bcryptjs"
+import { getDb } from "@/lib/db"
+import { users, organizations, organizationMembers } from "@/lib/db/schema"
+import { eq } from "drizzle-orm"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
@@ -17,69 +21,68 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null
 
-        // Dynamically import to avoid module-level DB connection at build time
-        const { getDb } = await import("@/lib/db")
-        const { users } = await import("@/lib/db/schema")
-        const { eq } = await import("drizzle-orm")
-        const bcrypt = await import("bcryptjs")
+        try {
+          const db = getDb()
+          const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.email, credentials.email as string))
+            .limit(1)
 
-        const db = getDb()
-        const [user] = await db
-          .select()
-          .from(users)
-          .where(eq(users.email, credentials.email as string))
-          .limit(1)
+          if (!user || !user.passwordHash) return null
 
-        if (!user || !user.passwordHash) return null
+          const valid = await bcrypt.compare(credentials.password as string, user.passwordHash)
+          if (!valid) return null
 
-        const valid = await bcrypt.compare(credentials.password as string, user.passwordHash)
-        if (!valid) return null
-
-        return { id: user.id, email: user.email, name: user.name, image: user.image }
+          return { id: user.id, email: user.email, name: user.name, image: user.image }
+        } catch (err) {
+          console.error("[auth][authorize]", err)
+          return null
+        }
       },
     }),
   ],
   callbacks: {
     async signIn({ user, account }) {
-      // For Google OAuth, create user in DB if not exists
       if (account?.provider === "google" && user.email) {
-        const { getDb } = await import("@/lib/db")
-        const { users, organizations, organizationMembers } = await import("@/lib/db/schema")
-        const { eq } = await import("drizzle-orm")
+        try {
+          const db = getDb()
+          const [existing] = await db.select().from(users).where(eq(users.email, user.email)).limit(1)
 
-        const db = getDb()
-        const [existing] = await db.select().from(users).where(eq(users.email, user.email)).limit(1)
+          if (!existing) {
+            const userId = crypto.randomUUID()
+            await db.insert(users).values({
+              id: userId,
+              email: user.email,
+              name: user.name,
+              image: user.image,
+              emailVerified: new Date(),
+            })
 
-        if (!existing) {
-          const userId = crypto.randomUUID()
-          await db.insert(users).values({
-            id: userId,
-            email: user.email,
-            name: user.name,
-            image: user.image,
-            emailVerified: new Date(),
-          })
-
-          const orgName = `${user.name || user.email}'s Store`
-          const orgId = crypto.randomUUID()
-          await db.insert(organizations).values({
-            id: orgId,
-            name: orgName,
-            slug: orgId.slice(0, 8),
-            ownerId: userId,
-            plan: "free",
-            competitorLimit: 2,
-            productLimit: 20,
-            alertLimit: 5,
-          })
-          await db.insert(organizationMembers).values({
-            organizationId: orgId,
-            userId,
-            role: "owner",
-          })
-          user.id = userId
-        } else {
-          user.id = existing.id
+            const orgId = crypto.randomUUID()
+            await db.insert(organizations).values({
+              id: orgId,
+              name: `${user.name || user.email}'s Store`,
+              slug: orgId.slice(0, 8),
+              ownerId: userId,
+              plan: "free",
+              competitorLimit: 2,
+              productLimit: 20,
+              alertLimit: 5,
+            })
+            await db.insert(organizationMembers).values({
+              id: crypto.randomUUID(),
+              organizationId: orgId,
+              userId,
+              role: "owner",
+            })
+            user.id = userId
+          } else {
+            user.id = existing.id
+          }
+        } catch (err) {
+          console.error("[auth][signIn/google]", err)
+          return false
         }
       }
       return true
