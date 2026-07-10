@@ -80,7 +80,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, product })
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ error: "INVALID_INPUT", details: err.errors }, { status: 400 })
+      return NextResponse.json({ error: "INVALID_INPUT", details: err.issues }, { status: 400 })
     }
     console.error("[products/POST]", err)
     return NextResponse.json({ error: "SERVER_ERROR" }, { status: 500 })
