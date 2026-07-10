@@ -45,7 +45,6 @@ export default async function CompetitorDetailPage({ params }: { params: { id: s
       .from(trackedProducts)
       .where(and(eq(trackedProducts.organizationId, org.id), eq(trackedProducts.isActive, true))),
   ])
-    .limit(50)
 
   const priceChanges = products.filter(p => p.priceChangePercent !== null && p.priceChangePercent !== undefined)
   const drops = priceChanges.filter(p => (p.priceChangePercent ?? 0) < 0).length
