@@ -8,7 +8,8 @@ import { ArrowLeft, ExternalLink, TrendingDown, TrendingUp, Package, RefreshCw }
 import { AddProductModal } from "@/components/dashboard/add-product-modal"
 import { DeleteProductButton } from "@/components/dashboard/delete-product-button"
 
-export default async function CompetitorDetailPage({ params }: { params: { id: string } }) {
+export default async function CompetitorDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const session = await auth()
   if (!session?.user?.id) redirect("/auth/login")
 
@@ -28,7 +29,7 @@ export default async function CompetitorDetailPage({ params }: { params: { id: s
     .select()
     .from(trackedCompetitors)
     .where(and(
-      eq(trackedCompetitors.id, params.id),
+      eq(trackedCompetitors.id, id),
       eq(trackedCompetitors.organizationId, org.id)
     ))
     .limit(1)

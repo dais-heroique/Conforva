@@ -29,14 +29,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             .where(eq(users.email, credentials.email as string))
             .limit(1)
 
-          if (!user || !user.passwordHash) return null
+          if (!user) {
+            console.error("[auth][authorize] user not found:", credentials.email)
+            return null
+          }
+          if (!user.passwordHash) {
+            console.error("[auth][authorize] no password hash for:", credentials.email)
+            return null
+          }
 
           const valid = await bcrypt.compare(credentials.password as string, user.passwordHash)
-          if (!valid) return null
+          if (!valid) {
+            console.error("[auth][authorize] wrong password for:", credentials.email)
+            return null
+          }
 
           return { id: user.id, email: user.email, name: user.name, image: user.image }
         } catch (err) {
-          console.error("[auth][authorize]", err)
+          console.error("[auth][authorize] exception:", err)
           return null
         }
       },
