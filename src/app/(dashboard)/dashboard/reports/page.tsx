@@ -35,29 +35,31 @@ export default async function ReportsPage() {
     .limit(10)
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 bg-[#08090C] min-h-full">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-white">Rapports IA</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Analyses hebdomadaires Gemini AI de vos concurrents</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Rapports IA</h1>
+          <p className="text-sm text-gray-500 mt-0.5">Analyses hebdomadaires de vos concurrents</p>
         </div>
       </div>
 
       {reports.length === 0 ? (
-        <div className="bg-white/5 border border-white/8 rounded-2xl p-12 text-center">
-          <Zap className="h-12 w-12 text-[#8B5CF6]/40 mx-auto mb-4" />
+        <div className="bg-white/4 border border-white/8 rounded-2xl p-14 text-center">
+          <div className="h-16 w-16 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mx-auto mb-5">
+            <Zap className="h-7 w-7 text-[#A78BFA]" />
+          </div>
           <h2 className="text-lg font-bold text-white mb-2">Votre premier rapport arrive bientôt</h2>
           <p className="text-sm text-gray-400 mb-6 max-w-sm mx-auto">
             Le premier rapport IA sera généré dans les 24h suivant le premier scan de vos concurrents.
           </p>
-          <Link href="/dashboard/competitors" className="inline-flex items-center gap-2 text-[#8B5CF6] text-sm hover:underline">
+          <Link href="/dashboard/competitors" className="inline-flex items-center gap-2 text-[#A78BFA] text-sm hover:underline">
             Configurer mes concurrents <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       ) : (
         <div className="space-y-4">
           {reports.map((report) => (
-            <div key={report.id} className="bg-white/5 border border-white/8 rounded-2xl p-5">
+            <div key={report.id} className="bg-white/4 border border-white/8 rounded-2xl p-5">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Zap className="h-4 w-4 text-[#8B5CF6]" />

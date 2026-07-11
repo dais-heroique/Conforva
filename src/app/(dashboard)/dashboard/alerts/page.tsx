@@ -37,10 +37,10 @@ export default async function AlertsPage() {
   ])
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 bg-[#08090C] min-h-full">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-white">Alertes</h1>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Alertes</h1>
           <p className="text-sm text-gray-500 mt-0.5">{alertList.length} / {org.alertLimit} alertes configurées</p>
         </div>
         <AddAlertButton
@@ -51,8 +51,10 @@ export default async function AlertsPage() {
       </div>
 
       {alertList.length === 0 ? (
-        <div className="bg-white/5 border border-white/8 rounded-2xl p-12 text-center">
-          <Bell className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+        <div className="bg-white/4 border border-white/8 rounded-2xl p-14 text-center">
+          <div className="h-16 w-16 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mx-auto mb-5">
+            <Bell className="h-7 w-7 text-[#A78BFA]" />
+          </div>
           <h2 className="text-lg font-bold text-white mb-2">Aucune alerte configurée</h2>
           <p className="text-sm text-gray-400 mb-6 max-w-sm mx-auto">
             Créez des alertes pour être notifié par email dès qu'un concurrent change un prix, rompt un stock ou lance un nouveau produit.
@@ -63,7 +65,7 @@ export default async function AlertsPage() {
           {alertList.map((alert) => {
             const type = ALERT_TYPE_LABELS[alert.type] ?? { label: alert.type, icon: <Bell className="h-3.5 w-3.5" />, color: "text-gray-400" }
             return (
-              <div key={alert.id} className="bg-white/5 border border-white/8 rounded-2xl p-4 flex items-center justify-between">
+              <div key={alert.id} className="bg-white/4 border border-white/8 rounded-2xl p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={`${type.color}`}>{type.icon}</div>
                   <div>

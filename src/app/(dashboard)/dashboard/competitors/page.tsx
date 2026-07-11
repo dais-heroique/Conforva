@@ -37,16 +37,16 @@ export default async function CompetitorsPage() {
     .orderBy(trackedCompetitors.createdAt)
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 bg-[#08090C] min-h-full">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-white">Concurrents</h1>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Concurrents</h1>
           <p className="text-sm text-gray-500 mt-0.5">{competitors.length} / {org.competitorLimit} inclus dans votre plan</p>
         </div>
         {competitors.length < org.competitorLimit && (
           <Link
             href="/dashboard/competitors/new"
-            className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-[#08090C] font-bold text-sm px-4 py-2 rounded-xl transition-colors"
+            className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors shadow-lg shadow-violet-900/20"
           >
             <Plus className="h-4 w-4" />
             Ajouter
@@ -55,34 +55,36 @@ export default async function CompetitorsPage() {
       </div>
 
       {competitors.length === 0 ? (
-        <div className="bg-white/5 border border-white/8 rounded-2xl p-12 text-center">
-          <Eye className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+        <div className="bg-white/4 border border-white/8 rounded-2xl p-14 text-center">
+          <div className="h-16 w-16 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mx-auto mb-5">
+            <Eye className="h-7 w-7 text-[#A78BFA]" />
+          </div>
           <h2 className="text-lg font-bold text-white mb-2">Aucun concurrent suivi</h2>
           <p className="text-sm text-gray-400 mb-6 max-w-sm mx-auto">
             Ajoutez l'URL d'un concurrent pour démarrer la surveillance automatique de ses prix et stocks.
           </p>
           <Link
             href="/dashboard/competitors/new"
-            className="inline-flex items-center gap-2 bg-[#8B5CF6] text-[#08090C] font-bold text-sm px-6 py-2.5 rounded-xl"
+            className="inline-flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
           >
             <Plus className="h-4 w-4" />
             Ajouter mon premier concurrent
           </Link>
         </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-3">
           {competitors.map((c) => (
             <Link
               key={c.id}
               href={`/dashboard/competitors/${c.id}`}
-              className="bg-white/5 border border-white/8 hover:border-[#8B5CF6]/30 rounded-2xl p-5 flex items-center justify-between transition-colors group"
+              className="bg-white/4 border border-white/8 hover:border-[#8B5CF6]/30 hover:bg-white/6 rounded-2xl p-5 flex items-center justify-between transition-colors group"
             >
               <div className="flex items-center gap-4 min-w-0">
-                <div className="h-10 w-10 rounded-xl bg-white/8 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                <div className="h-11 w-11 rounded-xl bg-[#8B5CF6]/12 border border-[#8B5CF6]/20 flex items-center justify-center text-[#A78BFA] font-bold text-sm flex-shrink-0">
                   {c.name[0].toUpperCase()}
                 </div>
                 <div className="min-w-0">
-                  <p className="font-semibold text-white">{c.name}</p>
+                  <p className="font-semibold text-white group-hover:text-[#A78BFA] transition-colors">{c.name}</p>
                   <p className="text-sm text-gray-500 flex items-center gap-1 mt-0.5">
                     <ExternalLink className="h-3 w-3" />
                     {c.domain}

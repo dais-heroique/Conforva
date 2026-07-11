@@ -56,7 +56,7 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-[#08090C] font-bold text-sm px-4 py-2 rounded-xl transition-colors"
+        className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold text-sm px-4 py-2 rounded-xl transition-colors"
       >
         <Plus className="h-4 w-4" />
         Nouvelle alerte
@@ -117,7 +117,7 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
                 <button type="button" onClick={() => setOpen(false)} className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-white text-sm rounded-xl transition-colors">
                   Annuler
                 </button>
-                <button type="submit" disabled={loading} className="flex-1 py-2.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-[#08090C] font-bold text-sm rounded-xl transition-colors disabled:opacity-60 flex items-center justify-center gap-2">
+                <button type="submit" disabled={loading} className="flex-1 py-2.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold text-sm rounded-xl transition-colors disabled:opacity-60 flex items-center justify-center gap-2">
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                   Créer
                 </button>
