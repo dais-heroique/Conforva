@@ -11,14 +11,15 @@ export interface ScrapeDebugInfo {
   strategy: string | null
   httpStatus: number | null
   htmlLength: number | null
+  candidatesFound: number | null
   error: string | null
 }
 
 const USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-const FETCH_TIMEOUT_MS = 12_000
+const FETCH_TIMEOUT_MS = 14_000
 
-async function fetchWithTimeout(url: string): Promise<Response | null> {
+async function fetchOnce(url: string): Promise<Response | null> {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
   try {
@@ -26,7 +27,8 @@ async function fetchWithTimeout(url: string): Promise<Response | null> {
       headers: {
         "User-Agent": USER_AGENT,
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,application/json,*/*;q=0.8",
-        "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.8",
+        "Accept-Language": "fr-FR,fr;q=0.9,en-US;q=0.7,en;q=0.6",
+        "Cache-Control": "no-cache",
       },
       redirect: "follow",
       signal: controller.signal,
@@ -38,9 +40,26 @@ async function fetchWithTimeout(url: string): Promise<Response | null> {
   }
 }
 
+// Retries once on network failure / 403 / 429 / 5xx — many sites are just flaky or rate-limiting.
+async function fetchWithRetry(url: string): Promise<Response | null> {
+  const first = await fetchOnce(url)
+  if (first && first.ok) return first
+  if (first && ![403, 429, 500, 502, 503, 504].includes(first.status)) return first
+
+  await new Promise((r) => setTimeout(r, 600))
+  const second = await fetchOnce(url)
+  return second ?? first
+}
+
+function detectCurrency(raw: string): string {
+  if (raw.includes("£")) return "GBP"
+  if (raw.includes("$")) return "USD"
+  if (/chf/i.test(raw)) return "CHF"
+  return "EUR"
+}
+
 function toNumber(raw: string | undefined | null): number | null {
   if (!raw) return null
-  // Normalize "1 299,90 €" / "1,299.90" / "€19.99" -> 1299.90 / 19.99
   let s = raw.replace(/[^\d.,]/g, "").trim()
   if (!s) return null
 
@@ -50,33 +69,34 @@ function toNumber(raw: string | undefined | null): number | null {
     // comma is decimal separator, dot(s) are thousands
     s = s.replace(/\./g, "").replace(",", ".")
   } else if (lastDot > lastComma) {
-    // dot is decimal separator, comma(s) are thousands
+    // dot is decimal separator, comma(s) are thousands (only if 3+ digits after last comma segment)
     s = s.replace(/,/g, "")
   }
   const n = parseFloat(s)
-  return Number.isFinite(n) && n > 0 ? n : null
+  return Number.isFinite(n) && n > 0 && n < 10_000_000 ? n : null
 }
 
-// Strategy 1: Shopify's public product .json endpoint
+// ── Strategy 1: Shopify's public product .json endpoint ────────────────────
 async function tryShopifyJson(url: string): Promise<ScrapedPrice | null> {
   try {
     const clean = url.split("?")[0].replace(/\/$/, "")
     if (!clean.includes("/products/")) return null
 
-    const res = await fetchWithTimeout(`${clean}.json`)
+    const res = await fetchWithRetry(`${clean}.json`)
     if (!res || !res.ok) return null
 
     const data = await res.json()
     const product = data.product
     if (!product) return null
 
-    const variant = product.variants?.[0]
-    if (!variant) return null
+    const variants = product.variants ?? []
+    const available = variants.find((v: { available?: boolean }) => v.available) ?? variants[0]
+    if (!available) return null
 
     return {
-      price: variant.price != null ? parseFloat(variant.price) : null,
+      price: available.price != null ? parseFloat(available.price) : null,
       currency: "EUR",
-      inStock: variant.available ?? null,
+      inStock: available.available ?? null,
       name: product.title ?? null,
     }
   } catch {
@@ -84,7 +104,39 @@ async function tryShopifyJson(url: string): Promise<ScrapedPrice | null> {
   }
 }
 
-// Strategy 2: JSON-LD Product/Offer schema in the page HTML
+// ── Strategy 2: WooCommerce Store API (public REST endpoint many stores expose) ─
+async function tryWooCommerceStoreApi(pageUrl: string, $: cheerio.CheerioAPI): Promise<ScrapedPrice | null> {
+  try {
+    const origin = new URL(pageUrl).origin
+    const bodyClass = $("body").attr("class") ?? ""
+    const postIdMatch = bodyClass.match(/postid-(\d+)/) ?? $("[data-product_id]").attr("data-product_id")?.match(/\d+/)
+    const productId = Array.isArray(postIdMatch) ? postIdMatch[1] ?? postIdMatch[0] : postIdMatch
+
+    if (!productId) return null
+
+    const res = await fetchWithRetry(`${origin}/wp-json/wc/store/v1/products/${productId}`)
+    if (!res || !res.ok) return null
+
+    const data = await res.json()
+    const priceRaw = data?.prices?.price
+    if (priceRaw == null) return null
+
+    // Store API returns prices in minor units (cents) scaled by currency_minor_unit
+    const minorUnit = data?.prices?.currency_minor_unit ?? 2
+    const price = Number(priceRaw) / Math.pow(10, minorUnit)
+
+    return {
+      price: Number.isFinite(price) && price > 0 ? price : null,
+      currency: data?.prices?.currency_code ?? "EUR",
+      inStock: data?.is_in_stock ?? null,
+      name: data?.name ?? null,
+    }
+  } catch {
+    return null
+  }
+}
+
+// ── Strategy 3: JSON-LD Product/Offer schema ────────────────────────────────
 function parseJsonLd($: cheerio.CheerioAPI): ScrapedPrice | null {
   try {
     const scripts = $('script[type="application/ld+json"]')
@@ -113,7 +165,7 @@ function parseJsonLd($: cheerio.CheerioAPI): ScrapedPrice | null {
 }
 
 function findProductNode(item: unknown, depth = 0): ScrapedPrice | null {
-  if (!item || typeof item !== "object" || depth > 4) return null
+  if (!item || typeof item !== "object" || depth > 5) return null
   const obj = item as Record<string, unknown>
 
   if (obj["@graph"] && Array.isArray(obj["@graph"])) {
@@ -146,7 +198,6 @@ function findProductNode(item: unknown, depth = 0): ScrapedPrice | null {
     }
   }
 
-  // Recurse into nested objects/arrays one level (handles ItemList > Product wrappers)
   for (const key of Object.keys(obj)) {
     const val = obj[key]
     if (Array.isArray(val)) {
@@ -154,7 +205,7 @@ function findProductNode(item: unknown, depth = 0): ScrapedPrice | null {
         const found = findProductNode(v, depth + 1)
         if (found) return found
       }
-    } else if (val && typeof val === "object" && depth < 2) {
+    } else if (val && typeof val === "object" && depth < 3) {
       const found = findProductNode(val, depth + 1)
       if (found) return found
     }
@@ -163,7 +214,7 @@ function findProductNode(item: unknown, depth = 0): ScrapedPrice | null {
   return null
 }
 
-// Strategy 3: microdata / RDFa — itemprop="price" on any element (meta, span, div…)
+// ── Strategy 4: microdata / RDFa — itemprop="price" on any element ─────────
 function parseMicrodata($: cheerio.CheerioAPI): ScrapedPrice | null {
   const el = $('[itemprop="price"]').first()
   if (!el.length) return null
@@ -172,8 +223,9 @@ function parseMicrodata($: cheerio.CheerioAPI): ScrapedPrice | null {
   const price = toNumber(raw)
   if (price == null) return null
 
-  const currency = $('[itemprop="priceCurrency"]').first().attr("content") ?? "EUR"
-  const availabilityAttr = $('[itemprop="availability"]').first().attr("href") ?? $('[itemprop="availability"]').first().attr("content") ?? ""
+  const currency = $('[itemprop="priceCurrency"]').first().attr("content") ?? detectCurrency(raw)
+  const availabilityAttr =
+    $('[itemprop="availability"]').first().attr("href") ?? $('[itemprop="availability"]').first().attr("content") ?? ""
   const name = $('[itemprop="name"]').first().attr("content") ?? $('[itemprop="name"]').first().text() ?? null
 
   return {
@@ -184,7 +236,7 @@ function parseMicrodata($: cheerio.CheerioAPI): ScrapedPrice | null {
   }
 }
 
-// Strategy 4: OpenGraph / product meta price tags
+// ── Strategy 5: OpenGraph / product meta price tags ─────────────────────────
 function parseMetaTags($: cheerio.CheerioAPI): ScrapedPrice | null {
   const priceRaw =
     $('meta[property="og:price:amount"]').attr("content") ??
@@ -210,46 +262,110 @@ function parseMetaTags($: cheerio.CheerioAPI): ScrapedPrice | null {
   }
 }
 
-// Strategy 5: common e-commerce platform CSS selectors (WooCommerce, PrestaShop, Magento, generic)
+// ── Strategy 6: known e-commerce platform / theme CSS selectors ────────────
 const PRICE_SELECTORS = [
+  // WooCommerce
   ".woocommerce-Price-amount bdi",
   ".woocommerce-Price-amount",
   "p.price ins .amount",
   "p.price .amount",
+  "span.price ins .amount",
+  "span.price .amount",
+  // PrestaShop
   "#our_price_display",
+  ".current-price-value",
+  "span.current-price-value",
   ".current-price span[itemprop='price']",
   ".current-price",
-  ".price-box .price",
   ".product-price .price",
-  "[data-price-amount]",
-  ".price__current",
+  // Magento
+  ".price-box .price-final_price .price",
+  ".price-final_price .price",
+  ".price-box .price",
+  // Shopify themes (Dawn, Debut, Turbo, Impulse…)
   ".price-item--sale",
   ".price-item--regular",
+  ".price__current",
+  ".price__regular .price-item",
   ".product__price",
   ".product-single__price",
+  ".product-price__price",
+  // BigCommerce
+  ".price--withoutTax",
+  ".productView-price .price",
+  // Amazon
+  "#corePrice_feature_div .a-offscreen",
+  "#corePriceDisplay_desktop_feature_div .a-offscreen",
+  ".a-price .a-offscreen",
   "#priceblock_ourprice",
   "#priceblock_dealprice",
-  ".a-price .a-offscreen",
-  ".pdp-price",
+  // Cdiscount / Fnac / Darty (FR marketplaces)
+  ".fpPrice",
+  ".f-priceBox__price",
+  ".product-price__actual",
+  // eBay
+  ".x-price-primary",
+  // Generic fallbacks
+  "[data-price-amount]",
+  "[data-product-price]",
   ".ProductPrice",
+  ".pdp-price",
+  ".product-price",
 ]
 
 function parseCssSelectors($: cheerio.CheerioAPI): ScrapedPrice | null {
   for (const selector of PRICE_SELECTORS) {
     const el = $(selector).first()
     if (!el.length) continue
-    const raw = el.attr("data-price-amount") ?? el.text()
+    const raw = el.attr("data-price-amount") ?? el.attr("content") ?? el.text()
     const price = toNumber(raw)
     if (price != null) {
       const name = $("title").text()?.trim() || null
-      return { price, currency: "EUR", inStock: null, name }
+      return { price, currency: detectCurrency(raw), inStock: null, name }
     }
   }
   return null
 }
 
-// Strategy 6: embedded JS state blobs some frameworks server-render into the HTML
-// (Next.js __NEXT_DATA__, Nuxt __NUXT__, generic window.__INITIAL_STATE__)
+// ── Strategy 7: generic DOM scan scored by "price-ish" context ─────────────
+// Catches themes/sites not covered by the fixed selector list above.
+const NEGATIVE_HINTS = /old|was|compare|strike|shipping|delivery|installment|per-month|subtotal|total-shipping|saving/i
+
+function parseGenericDomScan($: cheerio.CheerioAPI, debug?: ScrapeDebugInfo): ScrapedPrice | null {
+  const candidates: { price: number; currency: string; score: number }[] = []
+
+  $('[class*="price" i], [id*="price" i], [class*="prix" i]').each((_, el) => {
+    const node = $(el)
+    const cls = (node.attr("class") ?? "") + " " + (node.attr("id") ?? "")
+    if (NEGATIVE_HINTS.test(cls)) return
+    // Skip container elements with many nested price-ish children — we want leaf-ish text nodes
+    if (node.children().length > 3) return
+
+    const text = node.clone().children("del, s, strike").remove().end().text()
+    if (!text || text.length > 40) return
+    if (!/[\d]/.test(text)) return
+    if (!/[€$£]|EUR|USD|GBP|CHF/i.test(text) && !/^\s*[\d\s.,]+\s*$/.test(text)) return
+
+    const price = toNumber(text)
+    if (price == null) return
+
+    let score = 1
+    if (/price|prix/i.test(cls)) score += 2
+    if (/current|final|sale|now/i.test(cls)) score += 2
+    if (/€|EUR/i.test(text)) score += 1
+
+    candidates.push({ price, currency: detectCurrency(text), score })
+  })
+
+  if (debug) debug.candidatesFound = candidates.length
+  if (candidates.length === 0) return null
+
+  candidates.sort((a, b) => b.score - a.score)
+  const best = candidates[0]
+  return { price: best.price, currency: best.currency, inStock: null, name: $("title").text()?.trim() || null }
+}
+
+// ── Strategy 8: embedded JS state blobs server-rendered into the HTML ──────
 function parseEmbeddedJson($: cheerio.CheerioAPI, html: string): ScrapedPrice | null {
   const nextData = $("#__NEXT_DATA__").text()
   if (nextData) {
@@ -257,7 +373,14 @@ function parseEmbeddedJson($: cheerio.CheerioAPI, html: string): ScrapedPrice | 
     if (found != null) return { price: found, currency: "EUR", inStock: null, name: null }
   }
 
-  // Generic regex: "price":123.45 or "price":"123.45" anywhere in inline scripts
+  // Shopify themes often embed product JSON even when the .json endpoint is blocked
+  const shopifyMatch = html.match(/var\s+meta\s*=\s*(\{[\s\S]*?\});/) ?? html.match(/"product"\s*:\s*(\{[\s\S]*?"variants"[\s\S]*?\]\s*\})/)
+  if (shopifyMatch) {
+    const found = searchJsonForPrice(shopifyMatch[1])
+    if (found != null) return { price: found, currency: "EUR", inStock: null, name: null }
+  }
+
+  // Generic: "price":123.45 / "price":"123.45" anywhere in inline scripts
   const match = html.match(/"price"\s*:\s*"?(\d+(?:[.,]\d{1,2})?)"?/i)
   if (match) {
     const price = toNumber(match[1])
@@ -271,9 +394,9 @@ function searchJsonForPrice(rawJson: string): number | null {
   try {
     const parsed = JSON.parse(rawJson)
     const stack: unknown[] = [parsed]
-    let depth = 0
-    while (stack.length && depth < 5000) {
-      depth++
+    let iterations = 0
+    while (stack.length && iterations < 5000) {
+      iterations++
       const node = stack.pop()
       if (!node || typeof node !== "object") continue
       const obj = node as Record<string, unknown>
@@ -292,19 +415,19 @@ function searchJsonForPrice(rawJson: string): number | null {
   return null
 }
 
-// Strategy 7: last-resort regex scan of the raw HTML for a currency-formatted number
-// near a "price"-ish context. Deliberately last — least precise.
+// ── Strategy 9: last-resort regex scan of the raw HTML ──────────────────────
 function parseRegexFallback(html: string): ScrapedPrice | null {
-  const patterns = [
-    /(?:€|EUR)\s*([\d]{1,4}[.,]\d{2})/,
-    /([\d]{1,4}[.,]\d{2})\s*(?:€|EUR)/,
-    /(?:\$|USD)\s*([\d]{1,4}[.,]\d{2})/,
+  const patterns: [RegExp, string][] = [
+    [/(?:€|EUR)\s?([\d]{1,3}(?:[.\s]\d{3})*[.,]\d{2})/, "EUR"],
+    [/([\d]{1,3}(?:[.\s]\d{3})*[.,]\d{2})\s?(?:€|EUR)/, "EUR"],
+    [/(?:£|GBP)\s?([\d]{1,3}(?:,\d{3})*\.\d{2})/, "GBP"],
+    [/(?:\$|USD)\s?([\d]{1,3}(?:,\d{3})*\.\d{2})/, "USD"],
   ]
-  for (const re of patterns) {
+  for (const [re, currency] of patterns) {
     const match = html.match(re)
     if (match) {
       const price = toNumber(match[1])
-      if (price != null) return { price, currency: "EUR", inStock: null, name: null }
+      if (price != null) return { price, currency, inStock: null, name: null }
     }
   }
   return null
@@ -321,7 +444,7 @@ export async function scrapeProductPrice(
       return shopify
     }
 
-    const res = await fetchWithTimeout(url)
+    const res = await fetchWithRetry(url)
     if (debug) debug.httpStatus = res?.status ?? null
 
     if (!res || !res.ok) {
@@ -333,6 +456,12 @@ export async function scrapeProductPrice(
     if (debug) debug.htmlLength = html.length
 
     const $ = cheerio.load(html)
+
+    const woo = await tryWooCommerceStoreApi(url, $)
+    if (woo && woo.price != null) {
+      if (debug) debug.strategy = "woocommerce_store_api"
+      return woo
+    }
 
     const jsonLd = parseJsonLd($)
     if (jsonLd && jsonLd.price != null) {
@@ -362,6 +491,12 @@ export async function scrapeProductPrice(
     if (embedded && embedded.price != null) {
       if (debug) debug.strategy = "embedded_json"
       return embedded
+    }
+
+    const genericScan = parseGenericDomScan($, debug)
+    if (genericScan && genericScan.price != null) {
+      if (debug) debug.strategy = "generic_dom_scan"
+      return genericScan
     }
 
     const regex = parseRegexFallback(html)

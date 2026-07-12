@@ -14,7 +14,7 @@ export async function GET(req: Request) {
   const url = searchParams.get("url")
   if (!url) return NextResponse.json({ error: "Pass ?url=https://..." }, { status: 400 })
 
-  const debug: ScrapeDebugInfo = { strategy: null, httpStatus: null, htmlLength: null, error: null }
+  const debug: ScrapeDebugInfo = { strategy: null, httpStatus: null, htmlLength: null, candidatesFound: null, error: null }
   const result = await scrapeProductPrice(url, debug)
 
   return NextResponse.json({ url, result, debug })

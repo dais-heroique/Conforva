@@ -14,7 +14,7 @@ export async function scrapeUrlsWithGemini(urls: string[]): Promise<Map<string, 
   const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey || urls.length === 0) return results
 
-  const BATCH_SIZE = 8
+  const BATCH_SIZE = 5
   for (let i = 0; i < urls.length; i += BATCH_SIZE) {
     const batch = urls.slice(i, i + BATCH_SIZE)
     try {
@@ -33,12 +33,19 @@ export async function scrapeUrlsWithGemini(urls: string[]): Promise<Map<string, 
 }
 
 async function scrapeBatch(urls: string[], apiKey: string): Promise<GeminiPriceResult[]> {
-  const prompt = `Tu es un outil d'extraction de prix e-commerce. Pour chacune des URLs ci-dessous, consulte la page produit et trouve le prix actuel affiché (en euros) et si le produit est en stock.
+  const prompt = `Tu es un outil d'extraction de prix e-commerce très précis. Pour chacune des URLs ci-dessous, consulte le contenu réel de la page produit (HTML, balises meta, JSON-LD, microdata) et détermine :
+1. Le prix de vente actuel affiché au client (pas un prix barré, pas un prix "avant réduction")
+2. La devise
+3. Si le produit est actuellement en stock / disponible à l'achat
 
-Réponds UNIQUEMENT avec un tableau JSON strict, sans texte autour, au format exact :
+Cherche activement dans : le texte visible de la page, les balises <meta property="product:price:amount">, les scripts JSON-LD de type Product/Offer, les attributs data-price, et tout élément dont la classe contient "price".
+
+Convertis toujours le prix en nombre décimal avec un point (ex: 19.99, jamais "19,99" ni "19.99€").
+
+Réponds UNIQUEMENT avec un tableau JSON strict, sans aucun texte autour, au format exact :
 [{"url": "https://...", "price": 19.99, "inStock": true}, ...]
 
-Si tu ne parviens pas à trouver le prix d'une URL, mets "price": null et "inStock": null pour cette entrée. N'invente jamais un prix.
+Si tu ne parviens vraiment pas à déterminer le prix d'une URL après avoir consulté la page, mets "price": null. N'invente JAMAIS un prix approximatif.
 
 URLs à analyser :
 ${urls.map((u) => `- ${u}`).join("\n")}`
