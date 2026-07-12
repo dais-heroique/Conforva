@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { X, Link2, Tag, Hash, Loader2, Plus, ShoppingBag } from "lucide-react"
+import { X, Link2, Tag, Hash, Loader2, Plus, ShoppingBag, Euro } from "lucide-react"
 
 interface Competitor {
   id: string
@@ -23,11 +23,12 @@ export function AddProductModal({ competitors, defaultCompetitorId, productLimit
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
+  const [successMsg, setSuccessMsg] = useState<string | null>(null)
 
   const [url, setUrl] = useState("")
   const [name, setName] = useState("")
   const [sku, setSku] = useState("")
+  const [price, setPrice] = useState("")
   const [competitorId, setCompetitorId] = useState(defaultCompetitorId || competitors[0]?.id || "")
 
   const atLimit = currentCount >= productLimit
@@ -38,11 +39,19 @@ export function AddProductModal({ competitors, defaultCompetitorId, productLimit
     setLoading(true)
     setError(null)
 
+    const manualPrice = price.trim() ? parseFloat(price.trim().replace(",", ".")) : undefined
+
     try {
       const res = await fetch("/api/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ competitorId, url: url.trim(), name: name.trim() || undefined, sku: sku.trim() || undefined }),
+        body: JSON.stringify({
+          competitorId,
+          url: url.trim(),
+          name: name.trim() || undefined,
+          sku: sku.trim() || undefined,
+          price: manualPrice != null && Number.isFinite(manualPrice) ? manualPrice : undefined,
+        }),
       })
       const data = await res.json()
 
@@ -55,15 +64,20 @@ export function AddProductModal({ competitors, defaultCompetitorId, productLimit
         return
       }
 
-      setSuccess(true)
+      setSuccessMsg(
+        data.product?.currentPrice != null
+          ? `✓ Ajouté — prix : ${data.product.currentPrice} ${data.product.currency ?? "€"}`
+          : "✓ Ajouté — prix non trouvé automatiquement, vous pourrez le saisir dans la liste"
+      )
       setTimeout(() => {
         setOpen(false)
-        setSuccess(false)
+        setSuccessMsg(null)
         setUrl("")
         setName("")
         setSku("")
+        setPrice("")
         router.refresh()
-      }, 800)
+      }, 1400)
     } catch {
       setError("Erreur réseau.")
       setLoading(false)
@@ -153,24 +167,50 @@ export function AddProductModal({ competitors, defaultCompetitorId, productLimit
                 </div>
               </div>
 
-              {/* SKU */}
-              <div>
-                <label className="block text-xs font-semibold text-gray-400 mb-1.5">SKU / Référence <span className="text-gray-600">(optionnel)</span></label>
-                <div className="relative">
-                  <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-                  <input
-                    type="text"
-                    value={sku}
-                    onChange={(e) => setSku(e.target.value)}
-                    placeholder="REF-12345"
-                    className="w-full pl-9 pr-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#8B5CF6]/50 transition-colors"
-                  />
+              <div className="grid grid-cols-2 gap-3">
+                {/* SKU */}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">SKU <span className="text-gray-600">(optionnel)</span></label>
+                  <div className="relative">
+                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                    <input
+                      type="text"
+                      value={sku}
+                      onChange={(e) => setSku(e.target.value)}
+                      placeholder="REF-12345"
+                      className="w-full pl-9 pr-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#8B5CF6]/50 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                {/* Manual price */}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Prix <span className="text-gray-600">(si connu)</span></label>
+                  <div className="relative">
+                    <Euro className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      placeholder="19.99"
+                      className="w-full pl-9 pr-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#8B5CF6]/50 transition-colors"
+                    />
+                  </div>
                 </div>
               </div>
+              <p className="text-xs text-gray-600 -mt-2">
+                Laissez vide pour une récupération automatique — sinon confirmez le prix vous-même.
+              </p>
 
               {error && (
                 <div className="px-4 py-3 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-400">
                   {error}
+                </div>
+              )}
+              {successMsg && (
+                <div className="px-4 py-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-xs text-emerald-400">
+                  {successMsg}
                 </div>
               )}
 
@@ -184,16 +224,16 @@ export function AddProductModal({ competitors, defaultCompetitorId, productLimit
                 </button>
                 <button
                   type="submit"
-                  disabled={loading || success}
+                  disabled={loading || !!successMsg}
                   className="flex-1 py-2.5 bg-[#8B5CF6] hover:bg-[#7C3AED] disabled:opacity-60 text-white font-bold text-sm rounded-xl transition-colors flex items-center justify-center gap-2"
                 >
                   {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-                  {success ? "✓ Ajouté !" : loading ? "Ajout…" : "Ajouter le produit"}
+                  {loading ? "Ajout…" : "Ajouter le produit"}
                 </button>
               </div>
 
               <p className="text-xs text-gray-600 text-center">
-                Le prix est récupéré immédiatement, puis mis à jour chaque jour
+                Prix récupéré immédiatement si possible, sinon actualisé chaque nuit à minuit (Paris)
               </p>
             </form>
           </div>

@@ -7,6 +7,7 @@ import { eq, and, desc } from "drizzle-orm"
 import { Package, TrendingDown, TrendingUp, ExternalLink, Plus } from "lucide-react"
 import { AddProductModal } from "@/components/dashboard/add-product-modal"
 import { DeleteProductButton } from "@/components/dashboard/delete-product-button"
+import { SetPriceButton } from "@/components/dashboard/set-price-button"
 
 export default async function ProductsPage() {
   const session = await auth()
@@ -151,7 +152,7 @@ export default async function ProductsPage() {
                           )}
                         </>
                       ) : (
-                        <span className="text-xs text-gray-600">En attente</span>
+                        <SetPriceButton productId={product.id} />
                       )}
                     </td>
                     <td className="px-4 py-3.5 text-right">

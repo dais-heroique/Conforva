@@ -7,6 +7,7 @@ import { eq, and, desc, count } from "drizzle-orm"
 import { ArrowLeft, ExternalLink, TrendingDown, TrendingUp, Package, RefreshCw } from "lucide-react"
 import { AddProductModal } from "@/components/dashboard/add-product-modal"
 import { DeleteProductButton } from "@/components/dashboard/delete-product-button"
+import { SetPriceButton } from "@/components/dashboard/set-price-button"
 
 export default async function CompetitorDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -157,7 +158,7 @@ export default async function CompetitorDetailPage({ params }: { params: Promise
                           )}
                         </>
                       ) : (
-                        <span className="text-xs text-gray-600">En attente</span>
+                        <SetPriceButton productId={product.id} />
                       )}
                     </td>
                     <td className="px-4 py-3.5 text-right">
