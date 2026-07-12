@@ -47,6 +47,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.9,
     },
+    {
+      url: `${BASE}/calculateur-marge-ecommerce`,
+      lastModified: new Date(LAST_CONTENT_UPDATE),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
     // ── Company pages ─────────────────────────────────────────────────────────
     {
       url: `${BASE}/about`,

@@ -76,6 +76,7 @@ export function PublicFooter() {
             <ul className="space-y-2 text-sm text-gray-500">
               <li><Link href="/#tarifs" className="hover:text-white transition-colors">Tarifs</Link></li>
               <li><Link href="/comparateur-prix" className="hover:text-white transition-colors">Comparateur gratuit</Link></li>
+              <li><Link href="/calculateur-marge-ecommerce" className="hover:text-white transition-colors">Calculateur de marge</Link></li>
               <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
               <li><Link href="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
             </ul>

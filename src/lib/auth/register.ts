@@ -1,9 +1,8 @@
 import { getDb } from "@/lib/db"
-import { users, organizations, organizationMembers, sentEmails } from "@/lib/db/schema"
+import { users, organizations, organizationMembers } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import bcrypt from "bcryptjs"
-import { sendEmail } from "@/lib/email/send"
-import { welcomeEmail } from "@/lib/email/templates"
+// Email sending (Resend) is temporarily disabled — see src/lib/email/
 
 function slugify(text: string): string {
   return text
@@ -73,15 +72,6 @@ export async function registerUser({
     userId,
     role: "owner",
   })
-
-  // Best-effort — never block registration on the welcome email.
-  try {
-    const { subject, html, text } = welcomeEmail(name.split(" ")[0] || name)
-    await sendEmail({ to: email, subject, html, text })
-    await db.insert(sentEmails).values({ userId, emailType: "welcome" }).onConflictDoNothing()
-  } catch (err) {
-    console.error("[register] welcome email failed:", err)
-  }
 
   return { userId, orgId }
 }

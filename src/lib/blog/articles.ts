@@ -477,6 +477,201 @@ export const ARTICLES: BlogArticle[] = [
       href: "/auth/register",
     },
   },
+  {
+    slug: "dropshipping-surveiller-prix-concurrents",
+    title: "Dropshipping : comment surveiller les prix de vos concurrents en 2026",
+    description: "En dropshipping, vos concurrents vendent souvent le même produit au même fournisseur. Voici comment surveiller leurs prix pour rester compétitif sans sacrifier votre marge déjà serrée.",
+    keywords: ["dropshipping prix concurrents", "veille prix dropshipping", "surveiller concurrent dropshipping", "outil dropshipping prix", "marge dropshipping concurrence"],
+    publishedAt: "2026-06-05",
+    readingTime: 7,
+    category: "Cas d'usage",
+    intro: "Le dropshipping a une particularité que peu d'autres modèles e-commerce partagent : plusieurs boutiques vendent exactement le même produit, acheté au même fournisseur. La différenciation ne peut donc pas venir du produit — elle vient du prix, du marketing et de l'expérience client. Sur ces trois leviers, le prix est le seul que vous pouvez ajuster en quelques secondes. Voici comment en faire un avantage plutôt qu'une source de stress permanent.",
+    sections: [
+      {
+        heading: "Pourquoi la veille prix est différente en dropshipping",
+        body: [
+          "Contrairement à une boutique avec des produits propriétaires, un dropshipper affronte une concurrence directe et identique : d'autres boutiques vendant le même article AliExpress, CJ Dropshipping ou Spocket, avec une structure de coûts quasi identique à la vôtre.",
+          "Cette situation crée deux risques opposés. Le premier : une guerre des prix qui écrase les marges de tout le monde jusqu'à rendre le produit non rentable. Le second : rester trop cher par rapport à des concurrents qui ont trouvé un fournisseur légèrement moins cher, et perdre toutes vos ventes sans même le savoir.",
+          "**La marge en dropshipping est déjà serrée** (généralement 15 à 40% après frais fournisseur, publicité et frais de plateforme). Un écart de prix de 10% avec un concurrent peut représenter la totalité de votre marge nette — d'où l'importance de savoir exactement où vous vous situez, en temps réel.",
+        ],
+      },
+      {
+        heading: "Identifier vos vrais concurrents dropshipping",
+        body: [
+          "Sur un produit dropshipping populaire, vous pouvez avoir des dizaines de boutiques qui vendent le même article. Ne les surveillez pas toutes :",
+          "**Recherchez le produit sur Google Shopping et Facebook Ads Library** : les boutiques qui apparaissent en premier sont celles qui investissent le plus en publicité — ce sont vos concurrents directs pour le même trafic.",
+          "**Identifiez les boutiques qui tournent depuis plus de 3 mois** : une boutique dropshipping qui survit après la phase de test initiale a généralement trouvé un prix qui fonctionne. C'est une référence plus fiable qu'une boutique lancée la semaine dernière.",
+          "**Limitez-vous à 3-5 concurrents par produit phare** : au-delà, la surveillance devient du bruit. Concentrez-vous sur vos meilleures ventes, pas sur l'ensemble de votre catalogue si celui-ci compte des centaines de références.",
+        ],
+      },
+      {
+        heading: "La stratégie de prix qui fonctionne en dropshipping",
+        body: [
+          "**Ne visez pas systématiquement le prix le plus bas.** En dropshipping, le prix le plus bas attire souvent le trafic le moins rentable (acheteurs très sensibles au prix, taux de retour plus élevé). Votre positionnement doit tenir compte de votre coût d'acquisition publicitaire, pas seulement du prix du produit.",
+          "**Surveillez les ruptures de stock fournisseur, pas seulement les prix.** Si un concurrent est en rupture (souvent parce que le fournisseur commun est en rupture), c'est une fenêtre pour capter sa demande — à condition d'avoir vous-même du stock ou un fournisseur alternatif fiable.",
+          "**Détectez les changements de fournisseur.** Un concurrent qui baisse durablement son prix de 15-20% a probablement trouvé un fournisseur moins cher. C'est un signal pour renégocier ou changer de fournisseur vous-même, pas pour vous aligner à perte.",
+        ],
+      },
+      {
+        heading: "Automatiser sans perdre le contrôle",
+        body: [
+          "La tentation en dropshipping est d'automatiser entièrement le repricing pour gagner du temps. Attention : un repricing 100% automatique sans plancher de marge peut détruire votre rentabilité en quelques jours si un concurrent déclenche une guerre des prix.",
+          "La bonne approche : surveillance automatique (prix récupérés en continu) + alertes à seuil (« préviens-moi si un concurrent passe sous mon prix de 8% ») + décision manuelle sur l'ajustement. Vous gardez la vitesse de réaction sans perdre le contrôle sur vos marges.",
+        ],
+      },
+    ],
+    conclusion: "En dropshipping, la veille concurrentielle n'est pas un luxe — c'est une nécessité structurelle du modèle. Avec des marges déjà serrées et une concurrence qui vend littéralement le même produit, savoir en temps réel où vous vous situez face à 3-5 concurrents clés fait souvent la différence entre un produit rentable et un produit qui saigne de l'argent silencieusement.",
+    cta: {
+      heading: "Surveillez vos concurrents dropshipping automatiquement",
+      text: "Conforva récupère le prix de vos concurrents dès l'ajout du produit, puis chaque nuit — avec des alertes sur seuil pour ne jamais être pris de court.",
+      button: "Essai gratuit 14 jours",
+      href: "/auth/register",
+    },
+  },
+  {
+    slug: "keepa-alternative-francaise-veille-prix",
+    title: "Keepa : à quoi ça sert et quelle alternative pour une veille complète en 2026 ?",
+    description: "Keepa est incontournable pour suivre l'historique de prix sur Amazon, mais ne couvre ni Shopify, ni WooCommerce, ni les rapports actionnables. Voici comment le compléter ou le remplacer selon vos besoins.",
+    keywords: ["Keepa alternative", "Keepa avis", "Keepa vs Conforva", "suivi prix Amazon alternative", "outil comme Keepa"],
+    publishedAt: "2026-06-18",
+    readingTime: 6,
+    category: "Amazon FBA",
+    intro: "Keepa est l'un des outils les plus utilisés par les vendeurs et acheteurs Amazon pour visualiser l'historique de prix d'un produit. Extension de navigateur gratuite (avec version payante), elle est devenue un réflexe pour beaucoup de vendeurs FBA. Mais Keepa a un périmètre précis — et des limites claires dès que votre activité dépasse Amazon ou que vous cherchez des recommandations plutôt que des graphiques.",
+    sections: [
+      {
+        heading: "Ce que fait bien Keepa",
+        body: [
+          "Keepa excelle sur un point précis : l'historique de prix Amazon, visualisé sous forme de graphique, produit par produit (par ASIN). C'est extrêmement utile pour vérifier si une promotion Amazon est réelle, analyser la saisonnalité d'un prix, ou surveiller un ASIN précis avant un achat de réapprovisionnement.",
+          "**Points forts** : gratuit pour l'usage basique, extension de navigateur pratique, données historiques profondes sur Amazon, communauté de vendeurs FBA très active.",
+          "**Ce que Keepa ne fait pas** : suivre des concurrents sur Shopify, WooCommerce ou PrestaShop, générer des rapports de recommandations, envoyer des alertes personnalisées par seuil métier, ou donner une vue d'ensemble multi-plateformes de votre marché.",
+        ],
+      },
+      {
+        heading: "Keepa vs Conforva : deux outils, deux usages",
+        body: [
+          "Keepa est un outil de **recherche produit par produit** — vous consultez l'historique d'un ASIN au moment où vous en avez besoin. Conforva est un outil de **surveillance continue et multi-plateforme** — vous configurez vos concurrents une fois, et vous recevez des alertes et des rapports sans avoir à consulter activement.",
+          "**Pour un vendeur 100% Amazon FBA** qui veut juste vérifier l'historique d'un ASIN avant un achat : Keepa reste pertinent et gratuit dans sa version de base.",
+          "**Pour un e-commerçant qui vend sur Shopify, WooCommerce, ou qui combine Amazon avec sa propre boutique** : Keepa ne couvre qu'une partie du besoin. Il faut un outil qui suit l'ensemble de vos canaux et concurrents, avec des rapports qui disent quoi faire plutôt que d'afficher des courbes à interpréter seul.",
+        ],
+      },
+      {
+        heading: "Tableau comparatif synthétique",
+        body: [
+          "✓ Keepa — Gratuit (version pro ~19€/mois) — Historique Amazon uniquement, interface graphique, recherche ponctuelle par ASIN",
+          "✓ Conforva — À partir de 29€/mois — Multi-plateformes (Amazon, Shopify, WooCommerce), rapport IA hebdomadaire actionnable, alertes sur seuil, surveillance continue automatique",
+          "**En résumé** : les deux outils ne sont pas mutuellement exclusifs. Beaucoup de vendeurs FBA utilisent Keepa pour la recherche ponctuelle d'ASIN et un outil comme Conforva pour la surveillance continue de leurs concurrents directs et la génération de recommandations hebdomadaires.",
+        ],
+      },
+    ],
+    conclusion: "Keepa reste une référence pour l'historique de prix Amazon ponctuel. Mais dès que vous avez besoin d'une surveillance continue de vos concurrents directs — sur Amazon et au-delà — avec des rapports qui vous disent quoi faire plutôt que de simples graphiques, un outil complémentaire comme Conforva comble ce vide.",
+    cta: {
+      heading: "Complétez votre veille Amazon avec Conforva",
+      text: "Surveillance continue de vos concurrents FBA (et de vos autres canaux), avec rapport IA hebdomadaire en français.",
+      button: "Essai gratuit 14 jours",
+      href: "/auth/register",
+    },
+  },
+  {
+    slug: "woocommerce-surveiller-prix-concurrents",
+    title: "WooCommerce : comment surveiller automatiquement les prix de vos concurrents",
+    description: "Guide pratique pour mettre en place une veille concurrentielle sur une boutique WooCommerce — méthodes, outils compatibles et intégration avec votre catalogue WordPress.",
+    keywords: ["WooCommerce veille prix", "surveiller concurrents WooCommerce", "outil prix WooCommerce", "repricing WooCommerce", "WooCommerce concurrence"],
+    publishedAt: "2026-06-28",
+    readingTime: 6,
+    category: "Cas d'usage",
+    intro: "WooCommerce propulse plus de 3,7 millions de boutiques dans le monde, souvent gérées par des propriétaires qui font aussi bien le marketing que la technique. Contrairement à Shopify, l'écosystème d'apps de veille concurrentielle dédiées à WooCommerce est plus restreint — voici comment mettre en place une surveillance efficace malgré tout.",
+    sections: [
+      {
+        heading: "Pourquoi WooCommerce a des besoins spécifiques",
+        body: [
+          "WooCommerce est un plugin WordPress, pas une plateforme SaaS fermée comme Shopify. Cela signifie plus de flexibilité technique, mais aussi moins d'apps « clé en main » de veille prix dans un store officiel équivalent à l'app store Shopify.",
+          "La bonne nouvelle : cette ouverture technique n'est pas un obstacle pour un outil de veille externe. Un outil de surveillance de prix n'a pas besoin de s'intégrer profondément à votre back-office WooCommerce — il a juste besoin des URLs des produits concurrents à suivre, peu importe la plateforme sur laquelle ils sont hébergés (WooCommerce, Shopify, PrestaShop, etc.).",
+        ],
+      },
+      {
+        heading: "Ce qui rend WooCommerce plus facile à scraper (côté concurrents)",
+        body: [
+          "De nombreuses boutiques WooCommerce exposent une API publique appelée « WooCommerce Store API », accessible sans authentification, qui donne directement accès aux données produit — y compris le prix — de façon structurée. C'est un avantage technique par rapport à des plateformes où le prix n'est visible que dans le HTML de la page.",
+          "Concrètement, si vos concurrents utilisent WooCommerce, un bon outil de veille peut souvent récupérer leur prix de façon plus fiable et plus rapide que sur d'autres plateformes moins standardisées.",
+        ],
+      },
+      {
+        heading: "Mettre en place votre veille sur WooCommerce en 3 étapes",
+        body: [
+          "**Étape 1 — Listez vos concurrents WooCommerce et non-WooCommerce.** Ne présumez pas que tous vos concurrents utilisent la même plateforme que vous. Un bon outil de veille doit fonctionner peu importe la technologie du concurrent — Shopify, WooCommerce, PrestaShop ou boutique custom.",
+          "**Étape 2 — Ajoutez vos produits phares en priorité.** Sur une boutique WooCommerce typique (souvent 20 à 500 produits), commencez par les 10 à 30 produits qui génèrent le plus de chiffre d'affaires plutôt que l'intégralité du catalogue.",
+          "**Étape 3 — Configurez des alertes email plutôt que de consulter un dashboard quotidiennement.** Les propriétaires de boutiques WooCommerce jonglent souvent avec plusieurs casquettes (marketing, technique, service client) — les alertes proactives évitent d'avoir à penser à vérifier un outil supplémentaire chaque jour.",
+        ],
+      },
+    ],
+    conclusion: "WooCommerce n'a pas besoin d'un outil de veille « natif » pour bénéficier d'une surveillance concurrentielle efficace — il a besoin d'un outil qui fonctionne peu importe la plateforme de vos concurrents, avec une prise en main rapide adaptée à des propriétaires qui gèrent souvent leur boutique seuls.",
+    cta: {
+      heading: "Connectez Conforva à votre boutique WooCommerce",
+      text: "Ajoutez vos concurrents en quelques minutes, peu importe leur plateforme. Prix récupéré immédiatement, alertes automatiques.",
+      button: "Essai gratuit 14 jours",
+      href: "/auth/register",
+    },
+  },
+  {
+    slug: "glossaire-veille-concurrentielle-ecommerce",
+    title: "Glossaire de la veille concurrentielle e-commerce : 20 termes à connaître",
+    description: "Repricing, MAP, Buy Box, taux de marque, élasticité-prix... Le glossaire complet des termes essentiels de la veille concurrentielle et de la stratégie tarifaire e-commerce, expliqués simplement.",
+    keywords: ["glossaire e-commerce prix", "définition repricing", "définition MAP e-commerce", "définition Buy Box", "lexique veille concurrentielle"],
+    publishedAt: "2026-07-08",
+    readingTime: 8,
+    category: "Stratégie",
+    intro: "La veille concurrentielle et la stratégie tarifaire ont leur propre vocabulaire, souvent emprunté à l'anglais ou au jargon technique. Ce glossaire rassemble les 20 termes les plus utiles à connaître pour un e-commerçant qui débute sa veille prix — expliqués simplement, sans jargon inutile.",
+    sections: [
+      {
+        heading: "Les termes de base",
+        body: [
+          "**Veille concurrentielle** : processus de collecte et d'analyse continue des informations sur ses concurrents (prix, stock, nouveaux produits) pour ajuster sa propre stratégie.",
+          "**Repricing** : ajustement automatique ou semi-automatique de ses prix de vente en fonction des signaux du marché (prix concurrents, stock, demande).",
+          "**Scraping** : technique de collecte automatisée de données depuis des pages web (ici, les prix affichés sur les sites concurrents).",
+          "**Taux de marge** : marge divisée par le coût d'achat. Exprime le rendement de l'investissement produit.",
+          "**Taux de marque** : marge divisée par le prix de vente. Exprime la part du prix de vente qui reste après tous les coûts.",
+          "**Élasticité-prix** : mesure de la sensibilité de la demande à une variation de prix. Plus un produit est élastique, plus une baisse de prix génère de ventes supplémentaires (et inversement pour une hausse).",
+        ],
+      },
+      {
+        heading: "Les termes spécifiques à Amazon",
+        body: [
+          "**Buy Box** : l'encadré « Acheter maintenant » sur une fiche produit Amazon, attribué par l'algorithme à un seul vendeur (ou en rotation). Concentre l'immense majorité des ventes sur l'ASIN concerné.",
+          "**ASIN** : identifiant unique d'un produit sur Amazon (Amazon Standard Identification Number).",
+          "**FBA (Fulfillment by Amazon)** : mode de vente où Amazon gère le stockage, l'emballage et l'expédition pour le vendeur. Favorisé par l'algorithme Buy Box.",
+          "**FBM (Fulfillment by Merchant)** : mode de vente où le vendeur gère lui-même la logistique.",
+          "**ODR (Order Defect Rate)** : taux de commandes défectueuses. Doit rester sous 1% pour ne pas être pénalisé sur la Buy Box.",
+          "**Price walking** : technique consistant à remonter progressivement son prix par petits paliers tant que l'on conserve la Buy Box, pour maximiser sa marge.",
+        ],
+      },
+      {
+        heading: "Les termes de contrôle et de distribution",
+        body: [
+          "**MAP (Minimum Advertised Price)** : prix minimum en dessous duquel une marque interdit contractuellement à ses revendeurs d'afficher le produit. Surveillé pour protéger l'image de marque et les marges du réseau de distribution.",
+          "**MSRP (Manufacturer's Suggested Retail Price)** : prix de vente conseillé par le fabricant, à titre indicatif (contrairement au MAP qui est contractuel).",
+          "**Écart de prix (price gap)** : différence, en valeur ou en pourcentage, entre votre prix et celui d'un concurrent sur un produit comparable.",
+        ],
+      },
+      {
+        heading: "Les termes de stratégie et de données",
+        body: [
+          "**JSON-LD** : format de données structurées utilisé par de nombreux sites e-commerce pour décrire un produit (prix, disponibilité, marque) de façon lisible par les machines — y compris les outils de veille et les moteurs de recherche.",
+          "**Seuil d'alerte** : condition définie à l'avance qui déclenche une notification (ex : « alerte si un concurrent baisse de plus de 5% »).",
+          "**Historique de prix** : enregistrement des variations de prix d'un produit dans le temps, utile pour distinguer une promotion ponctuelle d'une tendance durable.",
+          "**Prix plancher** : prix minimum absolu en dessous duquel on refuse de vendre, calculé à partir du coût d'achat, des frais et de la marge minimale acceptable.",
+          "**Positionnement prix** : stratégie globale définissant si l'on se positionne comme le moins cher du marché, dans la moyenne, ou en premium — indépendamment des fluctuations ponctuelles des concurrents.",
+          "**Rapport actionnable** : par opposition à un simple tableau de données, un rapport qui formule des recommandations concrètes et priorisées (« baissez ce produit de 3% », pas juste « ce produit a baissé de 3% chez le concurrent »).",
+        ],
+      },
+    ],
+    conclusion: "Maîtriser ce vocabulaire n'est pas un exercice académique — c'est ce qui vous permet de lire un rapport de veille concurrentielle, de comprendre les recommandations d'un outil, et de prendre des décisions de prix informées plutôt qu'intuitives. Gardez ce glossaire sous la main la prochaine fois qu'un terme vous échappe.",
+    cta: {
+      heading: "Mettez ces concepts en pratique avec Conforva",
+      text: "Rapports IA hebdomadaires, alertes sur seuil, historique de prix — tout ce que ce glossaire décrit, directement dans votre tableau de bord.",
+      button: "Essai gratuit 14 jours",
+      href: "/auth/register",
+    },
+  },
 ]
 
 export function getArticle(slug: string): BlogArticle | undefined {
