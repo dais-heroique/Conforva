@@ -378,6 +378,105 @@ export const ARTICLES: BlogArticle[] = [
       href: "/auth/register",
     },
   },
+  {
+    slug: "conforva-vs-price2spy-comparatif",
+    title: "Conforva vs Price2Spy : quel outil de veille prix choisir en 2026 ?",
+    description: "Comparatif détaillé entre Conforva et Price2Spy pour la surveillance des prix concurrents : tarifs, langue, rapports IA, facilité de prise en main et adéquation selon la taille de votre boutique.",
+    keywords: ["Conforva vs Price2Spy", "Price2Spy avis", "Price2Spy alternative", "comparatif Price2Spy", "outil veille prix français"],
+    publishedAt: "2026-05-12",
+    readingTime: 6,
+    category: "Outils",
+    intro: "Price2Spy est l'un des outils de veille tarifaire les plus connus à l'international, utilisé depuis 2010 par des milliers de boutiques. Mais pour un e-commerçant français ou européen indépendant, est-ce le bon choix en 2026 ? Voici un comparatif honnête, critère par critère, pour vous aider à trancher.",
+    sections: [
+      {
+        heading: "Price2Spy en bref",
+        body: [
+          "Price2Spy est un outil américain historique de surveillance de prix, pensé à l'origine pour les distributeurs et grandes enseignes qui doivent contrôler le respect du prix de vente minimum (MAP) par leurs revendeurs.",
+          "**Points forts** : surveillance MAP/MSRP robuste, couverture internationale large, historique de prix long, API disponible.",
+          "**Limites pour un indépendant** : interface et support entièrement en anglais, tarification par nombre d'URLs suivies qui grimpe vite (à partir de ~75$/mois pour un volume modeste, hors options), pas de rapport de recommandations — vous obtenez des données brutes, pas des actions concrètes. Aucune fonctionnalité pensée spécifiquement pour Shopify ou le marché français.",
+        ],
+      },
+      {
+        heading: "Ce qui différencie Conforva",
+        body: [
+          "Conforva a été pensé dès le départ pour les e-commerçants indépendants francophones (Shopify, Amazon FBA, WooCommerce) — pas pour les grands comptes qui font du contrôle MAP à l'échelle d'un réseau de distributeurs.",
+          "**Rapport IA hebdomadaire en français** : chaque lundi, Conforva ne se contente pas d'afficher des tableaux — il analyse les mouvements de la semaine et formule des recommandations concrètes (« baissez ce produit de 3%, ce concurrent est en rupture, surveillez ce nouveau vendeur »).",
+          "**Tarification simple et prévisible** : à partir de 29€/mois, sans facturation surprise à l'URL ajoutée. Vous savez exactement combien vous payez avant de commencer.",
+          "**Support et interface en français**, pensés pour une prise en main en quelques minutes — pas besoin de documentation technique pour démarrer.",
+        ],
+      },
+      {
+        heading: "Tableau comparatif synthétique",
+        body: [
+          "✓ Conforva — À partir de 29€/mois — Interface FR, rapport IA hebdomadaire actionnable, mise en place en 5 minutes",
+          "✓ Price2Spy — À partir de ~75$/mois — Interface EN, données brutes, orienté contrôle MAP grands comptes",
+          "**En résumé** : Price2Spy reste pertinent pour une marque qui doit surveiller le respect de ses prix par des dizaines de revendeurs. Pour un e-commerçant qui veut simplement savoir où il en est face à 2 à 10 concurrents et quoi en faire, Conforva va droit au but à un tarif nettement plus accessible.",
+        ],
+      },
+    ],
+    conclusion: "Le choix dépend de votre besoin réel : contrôle MAP à grande échelle (Price2Spy) ou veille concurrentielle actionnable pour une boutique indépendante (Conforva). Pour la grande majorité des Shopify, WooCommerce et vendeurs Amazon FBA qui liront cet article, Conforva couvre le besoin à un coût et une complexité largement inférieurs.",
+    cta: {
+      heading: "Essayez Conforva gratuitement pendant 14 jours",
+      text: "Sans carte bancaire, sans engagement. Voyez vos premiers résultats dès l'ajout de votre premier concurrent.",
+      button: "Commencer l'essai gratuit",
+      href: "/auth/register",
+    },
+  },
+  {
+    slug: "meilleur-outil-veille-prix-shopify-2026",
+    title: "Meilleur outil de veille des prix concurrents pour Shopify en 2026",
+    description: "Guide d'achat pour choisir un outil de surveillance des prix concurrents adapté à une boutique Shopify : critères essentiels, pièges à éviter et checklist avant de s'engager.",
+    keywords: ["meilleur outil veille prix Shopify", "surveillance prix concurrents Shopify", "app Shopify veille tarifaire", "outil repricing Shopify 2026", "comparateur prix concurrents Shopify"],
+    publishedAt: "2026-05-28",
+    readingTime: 7,
+    category: "Outils",
+    intro: "Shopify propulse plus de 4,8 millions de boutiques dans le monde, mais très peu d'outils de veille concurrentielle sont réellement pensés pour ce format : catalogues de taille moyenne, propriétaires qui gèrent souvent seuls leur boutique, besoin d'aller vite sans équipe data dédiée. Voici comment choisir le bon outil pour votre boutique Shopify.",
+    sections: [
+      {
+        heading: "Pourquoi les outils génériques ne conviennent pas toujours à Shopify",
+        body: [
+          "La plupart des outils de veille prix historiques (Prisync, Minderest, Price2Spy) ont été conçus pour des distributeurs ou des marketplaces à gros catalogue. Résultat sur une boutique Shopify typique (20 à 300 produits) : vous payez pour des fonctionnalités de contrôle MAP ou de couverture massive dont vous n'avez pas besoin, et vous n'avez pas d'intégration native avec votre catalogue Shopify.",
+          "Une boutique Shopify a des besoins spécifiques : identifier rapidement 3 à 10 concurrents pertinents, suivre un nombre de produits raisonnable, recevoir des alertes exploitables sans devoir interpréter des tableaux de données brutes, et pouvoir tout configurer seul en moins de 30 minutes.",
+        ],
+      },
+      {
+        heading: "Les 5 critères à vérifier avant de choisir",
+        body: [
+          "**1. Récupération automatique du prix, avec option manuelle en secours** : un bon outil doit tenter de récupérer le prix automatiquement dès l'ajout d'un produit — et vous laisser le saisir vous-même si la page ne peut pas être lue automatiquement. Sans ce filet de sécurité, vous vous retrouvez avec des trous dans vos données.",
+          "**2. Fréquence de mise à jour claire** : demandez explicitement à quelle fréquence les prix sont rafraîchis. « En temps réel » est souvent un abus de langage — vérifiez si c'est vraiment toutes les heures, ou une fois par jour comme la majorité des outils du marché.",
+          "**3. Alertes configurables, pas juste des notifications brutes** : vous devez pouvoir définir des seuils (« alerte si un concurrent baisse de plus de 5% ») plutôt que recevoir une notification à chaque changement de 0,01€.",
+          "**4. Rapport de synthèse, pas seulement un tableau de chiffres** : la donnée brute ne vaut rien sans interprétation. Un bon outil doit vous dire quoi faire, pas seulement quoi regarder.",
+          "**5. Tarif prévisible et adapté à un catalogue de taille Shopify** : méfiez-vous des grilles tarifaires calculées par URL suivie qui explosent dès que vous dépassez 50 produits — cela devient vite plus cher qu'un plan pensé pour votre taille réelle.",
+        ],
+      },
+      {
+        heading: "Ce que fait Conforva différemment pour Shopify",
+        body: [
+          "Conforva a été conçu spécifiquement pour ce profil : boutiques Shopify, Amazon FBA et WooCommerce avec 10 à 500 références actives.",
+          "Concrètement : à l'ajout d'un produit concurrent, le prix est récupéré immédiatement (pas d'attente de 24h), avec plusieurs méthodes de récupération en cascade pour couvrir un maximum de boutiques différentes. Si le prix ne peut vraiment pas être trouvé automatiquement, vous pouvez le saisir vous-même en 5 secondes. Chaque nuit, tous les prix sont rafraîchis automatiquement — y compris via une relecture intelligente des pages qui avaient échoué la veille.",
+          "Chaque lundi matin, un rapport IA en français résume les mouvements de la semaine avec des recommandations concrètes, pas juste des graphiques à interpréter seul.",
+        ],
+      },
+      {
+        heading: "Checklist avant de s'engager",
+        body: [
+          "✓ L'outil récupère-t-il le prix automatiquement à l'ajout d'un produit ?",
+          "✓ Puis-je saisir un prix manuellement si l'automatique échoue ?",
+          "✓ La fréquence de mise à jour réelle est-elle clairement annoncée (pas juste « temps réel » marketing) ?",
+          "✓ Puis-je tester gratuitement avant de m'engager, sans carte bancaire ?",
+          "✓ Le tarif reste-t-il prévisible si mon catalogue grandit de 20 à 100 produits ?",
+          "✓ Les rapports sont-ils dans ma langue et exploitables sans expertise data ?",
+        ],
+      },
+    ],
+    conclusion: "Le meilleur outil de veille prix pour Shopify n'est pas forcément le plus connu ou le plus riche en fonctionnalités — c'est celui dimensionné pour votre catalogue, qui vous fait gagner du temps plutôt que d'en demander, et dont vous lirez réellement les rapports chaque semaine. Testez avant de vous engager : un essai gratuit sans carte bancaire est le meilleur moyen de vérifier que l'outil colle à votre réalité.",
+    cta: {
+      heading: "Testez Conforva sur votre boutique Shopify",
+      text: "Ajoutez votre premier concurrent en 2 minutes et recevez votre premier prix immédiatement. Essai gratuit 14 jours, sans carte bancaire.",
+      button: "Essai gratuit 14 jours",
+      href: "/auth/register",
+    },
+  },
 ]
 
 export function getArticle(slug: string): BlogArticle | undefined {

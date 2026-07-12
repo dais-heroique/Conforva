@@ -36,6 +36,7 @@ export function PublicNav() {
             <span className="font-black text-white tracking-tight" style={{ letterSpacing: "-0.02em" }}>CONFORVA</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm text-gray-400">
+            <Link href="/comparateur-prix" className="hover:text-white transition-colors">Comparateur gratuit</Link>
             <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link href="/faq" className="hover:text-white transition-colors">FAQ</Link>
             <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
@@ -74,6 +75,7 @@ export function PublicFooter() {
             <p className="text-xs font-semibold uppercase tracking-wider text-gray-700 mb-3">Produit</p>
             <ul className="space-y-2 text-sm text-gray-500">
               <li><Link href="/#tarifs" className="hover:text-white transition-colors">Tarifs</Link></li>
+              <li><Link href="/comparateur-prix" className="hover:text-white transition-colors">Comparateur gratuit</Link></li>
               <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
               <li><Link href="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
             </ul>

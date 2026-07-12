@@ -187,3 +187,14 @@ export const scrapeJobs = sqliteTable("scrape_jobs", {
   startedAt: integer("started_at", { mode: "timestamp_ms" }),
   completedAt: integer("completed_at", { mode: "timestamp_ms" }),
 })
+
+// ─── Onboarding email tracking ─────────────────────────────────────────────────
+
+export const sentEmails = sqliteTable("sent_emails", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  emailType: text("email_type").notNull(),
+  sentAt: integer("sent_at", { mode: "timestamp_ms" }).notNull().default(sql`(strftime('%s','now') * 1000)`),
+}, (t) => ({
+  uniqueEmailPerUser: uniqueIndex("sent_email_unique").on(t.userId, t.emailType),
+}))

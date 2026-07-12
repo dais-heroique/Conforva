@@ -3,8 +3,10 @@ import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
 import bcrypt from "bcryptjs"
 import { getDb } from "@/lib/db"
-import { users, organizations, organizationMembers } from "@/lib/db/schema"
+import { users, organizations, organizationMembers, sentEmails } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
+import { sendEmail } from "@/lib/email/send"
+import { welcomeEmail } from "@/lib/email/templates"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
@@ -86,6 +88,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               userId,
               role: "owner",
             })
+
+            try {
+              const { subject, html, text } = welcomeEmail((user.name || user.email).split(" ")[0])
+              await sendEmail({ to: user.email, subject, html, text })
+              await db.insert(sentEmails).values({ userId, emailType: "welcome" }).onConflictDoNothing()
+            } catch (err) {
+              console.error("[auth][signIn/google] welcome email failed:", err)
+            }
+
             user.id = userId
           } else {
             user.id = existing.id
