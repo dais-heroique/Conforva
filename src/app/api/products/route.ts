@@ -4,6 +4,7 @@ import { getDb } from "@/lib/db"
 import { organizations, organizationMembers, trackedCompetitors, trackedProducts } from "@/lib/db/schema"
 import { eq, and, count } from "drizzle-orm"
 import { z } from "zod"
+import { scrapeAndApply } from "@/lib/scraping/apply"
 
 const schema = z.object({
   competitorId: z.string().min(1),
@@ -64,10 +65,11 @@ export async function POST(req: Request) {
 
     if (existing) return NextResponse.json({ error: "DUPLICATE_URL" }, { status: 409 })
 
+    const productId = crypto.randomUUID()
     const [product] = await db
       .insert(trackedProducts)
       .values({
-        id: crypto.randomUUID(),
+        id: productId,
         competitorId,
         organizationId: org.id,
         url,
@@ -77,7 +79,21 @@ export async function POST(req: Request) {
       })
       .returning()
 
-    return NextResponse.json({ success: true, product })
+    // Fetch the live price right away instead of waiting for the next cron run.
+    // Best-effort: if the target site can't be scraped, the product is still created
+    // and the daily cron will retry.
+    let finalProduct = product
+    try {
+      const result = await scrapeAndApply({ id: productId, url, currentPrice: null })
+      if (result.scraped) {
+        const [refreshed] = await db.select().from(trackedProducts).where(eq(trackedProducts.id, productId)).limit(1)
+        if (refreshed) finalProduct = refreshed
+      }
+    } catch (err) {
+      console.error("[products/POST] initial scrape failed:", err)
+    }
+
+    return NextResponse.json({ success: true, product: finalProduct })
   } catch (err) {
     if (err instanceof z.ZodError) {
       return NextResponse.json({ error: "INVALID_INPUT", details: err.issues }, { status: 400 })

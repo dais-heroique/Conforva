@@ -2,10 +2,10 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Programme Partenaires & Affiliés — Gagnez 30% de commission",
-  description: "Rejoignez le programme d'affiliation Conforva. Recommandez notre solution GPSR à vos clients e-commerçants et gagnez 30% de commission récurrente sur chaque abonnement. Paiement mensuel par virement.",
+  description: "Rejoignez le programme d'affiliation Conforva. Recommandez notre solution de veille concurrentielle IA à vos clients e-commerçants et gagnez 30% de commission récurrente sur chaque abonnement. Paiement mensuel par virement.",
   keywords: [
-    "programme affilié Conforva", "affiliation conformité GPSR", "partenaire Conforva",
-    "commission conformité produit", "programme partenaires ecommerce", "affiliation SaaS conformité",
+    "programme affilié Conforva", "affiliation veille concurrentielle", "partenaire Conforva",
+    "commission SaaS e-commerce", "programme partenaires ecommerce", "affiliation SaaS prix",
   ],
   alternates: { canonical: "https://conforva.com/partenaires" },
   openGraph: {

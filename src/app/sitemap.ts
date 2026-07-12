@@ -5,7 +5,7 @@ const BASE = "https://conforva.com"
 
 // Static date for pages that rarely change — avoids needless re-crawl on every build
 const SITE_LAUNCH = "2025-01-01"
-const LAST_CONTENT_UPDATE = "2026-06-06"
+const LAST_CONTENT_UPDATE = "2026-07-12"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const blogEntries: MetadataRoute.Sitemap = ARTICLES.map((article) => ({
@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }))
 
   return [
-    // ── Core pages ─────────────────────────────────��──────────────────────────
+    // ── Core pages ─────────────────────────────────────────────────────────
     {
       url: BASE,
       lastModified: new Date(LAST_CONTENT_UPDATE),
@@ -34,12 +34,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(LAST_CONTENT_UPDATE),
       changeFrequency: "monthly",
       priority: 0.85,
-    },
-    {
-      url: `${BASE}/conformite-gpsr`,
-      lastModified: new Date(LAST_CONTENT_UPDATE),
-      changeFrequency: "weekly",
-      priority: 0.95,
     },
     {
       url: `${BASE}/enterprise`,
@@ -67,32 +61,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.4,
     },
     // Legal pages intentionally excluded — noindex, no SEO value
-    // ── Free tools ────────────────────────────────────────────────────────────
-    {
-      url: `${BASE}/audit-gratuit`,
-      lastModified: new Date(LAST_CONTENT_UPDATE),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    // ── SEO landing pages ─────────────────────────────────────────────────────
-    {
-      url: `${BASE}/gpsr-amazon`,
-      lastModified: new Date(LAST_CONTENT_UPDATE),
-      changeFrequency: "monthly",
-      priority: 0.85,
-    },
-    {
-      url: `${BASE}/gpsr-shopify`,
-      lastModified: new Date(LAST_CONTENT_UPDATE),
-      changeFrequency: "monthly",
-      priority: 0.85,
-    },
-    {
-      url: `${BASE}/gpsr-dropshipping`,
-      lastModified: new Date(LAST_CONTENT_UPDATE),
-      changeFrequency: "monthly",
-      priority: 0.85,
-    },
+    // Redirecting URLs (conformite-gpsr, audit-gratuit, gpsr-*) intentionally excluded —
+    // a sitemap should only list canonical, indexable destinations.
     // ── Affiliate / partner pages ─────────────────────────────────────────────
     {
       url: `${BASE}/partenaires`,

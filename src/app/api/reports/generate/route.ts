@@ -3,8 +3,17 @@ import { getDb } from "@/lib/db"
 import { organizations, trackedCompetitors, trackedProducts, priceHistory, weeklyReports } from "@/lib/db/schema"
 import { eq, and, gte, desc } from "drizzle-orm"
 
-// Called by Vercel Cron — protected by secret header
+// Vercel Cron sends a GET request with the Authorization header set automatically.
+export async function GET(req: Request) {
+  return handleGenerate(req)
+}
+
+// Kept for manual/admin triggering via POST.
 export async function POST(req: Request) {
+  return handleGenerate(req)
+}
+
+async function handleGenerate(req: Request) {
   const authHeader = req.headers.get("authorization")
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "UNAUTHORIZED" }, { status: 401 })

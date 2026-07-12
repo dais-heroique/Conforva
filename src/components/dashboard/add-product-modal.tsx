@@ -193,7 +193,7 @@ export function AddProductModal({ competitors, defaultCompetitorId, productLimit
               </div>
 
               <p className="text-xs text-gray-600 text-center">
-                Le prix sera récupéré lors du prochain scan (sous 24h)
+                Le prix est récupéré immédiatement, puis mis à jour chaque jour
               </p>
             </form>
           </div>
