@@ -380,32 +380,59 @@ function parseEmbeddedJson($: cheerio.CheerioAPI, html: string): ScrapedPrice | 
     if (found != null) return { price: found, currency: "EUR", inStock: null, name: null }
   }
 
-  // Generic: "price":123.45 / "price":"123.45" anywhere in inline scripts
-  const match = html.match(/"price"\s*:\s*"?(\d+(?:[.,]\d{1,2})?)"?/i)
-  if (match) {
-    const price = toNumber(match[1])
+  // AliExpress / Alibaba-style SPAs embed a big state blob (window.runParams,
+  // window._d_c_.DCData, __INITIAL_STATE__…) with deeply nested, inconsistently
+  // named price fields (formatedPrice, actSkuCalPrice, salePrice…).
+  const runParamsMatch =
+    html.match(/window\.runParams\s*=\s*(\{[\s\S]*?\});?\s*(?:<\/script>|window\.)/) ??
+    html.match(/__INITIAL_STATE__\s*=\s*(\{[\s\S]*?\});?\s*<\/script>/) ??
+    html.match(/window\._d_c_\.DCData\s*=\s*(\{[\s\S]*?\});/)
+  if (runParamsMatch) {
+    const found = searchJsonForPrice(runParamsMatch[1])
+    if (found != null) return { price: found, currency: "EUR", inStock: null, name: null }
+  }
+
+  // Generic: "price"-like key anywhere in inline scripts, as plain text (no JSON.parse needed)
+  const genericKeyMatch = html.match(
+    /"(?:price|salePrice|formatedPrice|finalPrice|currentPrice|displayPrice)"\s*:\s*"?[\€\$£]?\s?(\d+(?:[.,]\d{1,2})?)"?/i
+  )
+  if (genericKeyMatch) {
+    const price = toNumber(genericKeyMatch[1])
     if (price != null) return { price, currency: "EUR", inStock: null, name: null }
   }
 
   return null
 }
 
+const PRICE_KEY_PATTERN = /^(price|salePrice|formatedPrice|finalPrice|currentPrice|displayPrice|actSkuCalPrice|skuPrice|minPrice|minActivityAmount)$/i
+
 function searchJsonForPrice(rawJson: string): number | null {
   try {
     const parsed = JSON.parse(rawJson)
     const stack: unknown[] = [parsed]
     let iterations = 0
-    while (stack.length && iterations < 5000) {
+    while (stack.length && iterations < 8000) {
       iterations++
       const node = stack.pop()
       if (!node || typeof node !== "object") continue
       const obj = node as Record<string, unknown>
-      if (typeof obj.price === "number" || typeof obj.price === "string") {
-        const n = toNumber(String(obj.price))
-        if (n != null) return n
-      }
+
       for (const key of Object.keys(obj)) {
         const val = obj[key]
+        if (PRICE_KEY_PATTERN.test(key)) {
+          if (typeof val === "number" || typeof val === "string") {
+            const n = toNumber(String(val))
+            if (n != null) return n
+          } else if (val && typeof val === "object") {
+            // Some sites wrap the price in { value: 15.23 } or { amount: "15.23" }
+            const nested = val as Record<string, unknown>
+            const inner = nested.value ?? nested.amount ?? nested.formatedAmount
+            if (inner != null) {
+              const n = toNumber(String(inner))
+              if (n != null) return n
+            }
+          }
+        }
         if (val && typeof val === "object") stack.push(val)
       }
     }
