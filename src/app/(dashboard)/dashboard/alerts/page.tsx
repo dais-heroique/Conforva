@@ -2,10 +2,11 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { auth } from "@/auth"
 import { getDb } from "@/lib/db"
-import { organizations, organizationMembers, alerts, trackedCompetitors } from "@/lib/db/schema"
+import { organizations, organizationMembers, alerts, trackedCompetitors, trackedProducts } from "@/lib/db/schema"
 import { eq, and, desc } from "drizzle-orm"
-import { Bell, Plus, Zap, TrendingDown, Package, ShoppingCart, TrendingUp, Trash2 } from "lucide-react"
+import { Bell, Plus, Zap, TrendingDown, Package, ShoppingCart, TrendingUp, Trash2, Eye } from "lucide-react"
 import { AddAlertButton } from "./add-alert-button"
+import { DeleteAlertButton } from "./delete-alert-button"
 
 const ALERT_TYPE_LABELS: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
   price_drop: { label: "Baisse de prix", icon: <TrendingDown className="h-3.5 w-3.5" />, color: "text-[#8B5CF6]" },
@@ -31,10 +32,16 @@ export default async function AlertsPage() {
   if (!membership) redirect("/onboarding")
   const org = membership.org
 
-  const [alertList, competitors] = await Promise.all([
+  const [alertList, competitors, products] = await Promise.all([
     db.select().from(alerts).where(eq(alerts.organizationId, org.id)).orderBy(desc(alerts.createdAt)),
     db.select().from(trackedCompetitors).where(and(eq(trackedCompetitors.organizationId, org.id), eq(trackedCompetitors.isActive, true))),
+    db.select({ id: trackedProducts.id, name: trackedProducts.name, url: trackedProducts.url, competitorId: trackedProducts.competitorId })
+      .from(trackedProducts)
+      .where(and(eq(trackedProducts.organizationId, org.id), eq(trackedProducts.isActive, true))),
   ])
+
+  const competitorNameById = new Map(competitors.map(c => [c.id, c.name]))
+  const productById = new Map(products.map(p => [p.id, p]))
 
   return (
     <div className="p-6 space-y-6 bg-[#08090C] min-h-full">
@@ -46,6 +53,7 @@ export default async function AlertsPage() {
         <AddAlertButton
           orgId={org.id}
           competitors={competitors.map(c => ({ id: c.id, name: c.name }))}
+          products={products.map(p => ({ id: p.id, name: p.name || p.url, competitorId: p.competitorId }))}
           canAdd={alertList.length < org.alertLimit}
         />
       </div>
@@ -64,16 +72,28 @@ export default async function AlertsPage() {
         <div className="space-y-3">
           {alertList.map((alert) => {
             const type = ALERT_TYPE_LABELS[alert.type] ?? { label: alert.type, icon: <Bell className="h-3.5 w-3.5" />, color: "text-gray-400" }
+            const targetProduct = alert.productId ? productById.get(alert.productId) : null
+            const targetCompetitorName = alert.competitorId ? competitorNameById.get(alert.competitorId) : null
+
             return (
               <div key={alert.id} className="bg-white/4 border border-white/8 rounded-2xl p-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <div className={`${type.color}`}>{type.icon}</div>
-                  <div>
-                    <p className="font-medium text-white text-sm">{alert.name}</p>
-                    <div className="flex items-center gap-2 mt-0.5">
+                  <div className="min-w-0">
+                    <p className="font-medium text-white text-sm truncate">{alert.name}</p>
+                    <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                       <span className={`text-xs ${type.color}`}>{type.label}</span>
                       {alert.threshold && (
                         <span className="text-xs text-gray-500">· seuil {alert.threshold}%</span>
+                      )}
+                      {targetProduct ? (
+                        <span className="text-xs text-gray-500 flex items-center gap-1 truncate">
+                          · <Eye className="h-3 w-3 shrink-0" /> {targetProduct.name}
+                        </span>
+                      ) : targetCompetitorName ? (
+                        <span className="text-xs text-gray-500">· {targetCompetitorName}</span>
+                      ) : (
+                        <span className="text-xs text-gray-500">· Tous les concurrents</span>
                       )}
                       {alert.lastTriggeredAt && (
                         <span className="text-xs text-gray-500">
@@ -83,8 +103,9 @@ export default async function AlertsPage() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 shrink-0">
                   <div className={`h-2 w-2 rounded-full ${alert.isActive ? "bg-[#8B5CF6]" : "bg-gray-600"}`} />
+                  <DeleteAlertButton alertId={alert.id} />
                 </div>
               </div>
             )

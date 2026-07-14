@@ -53,3 +53,31 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "SERVER_ERROR" }, { status: 500 })
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) return NextResponse.json({ error: "UNAUTHORIZED" }, { status: 401 })
+
+    const { searchParams } = new URL(req.url)
+    const alertId = searchParams.get("id")
+    if (!alertId) return NextResponse.json({ error: "MISSING_ID" }, { status: 400 })
+
+    const db = getDb()
+    const [membership] = await db
+      .select({ org: organizations })
+      .from(organizationMembers)
+      .innerJoin(organizations, eq(organizationMembers.organizationId, organizations.id))
+      .where(eq(organizationMembers.userId, session.user.id))
+      .limit(1)
+
+    if (!membership) return NextResponse.json({ error: "NO_ORG" }, { status: 404 })
+
+    await db.delete(alerts).where(and(eq(alerts.id, alertId), eq(alerts.organizationId, membership.org.id)))
+
+    return NextResponse.json({ success: true })
+  } catch (err) {
+    console.error("[alerts/DELETE]", err)
+    return NextResponse.json({ error: "SERVER_ERROR" }, { status: 500 })
+  }
+}

@@ -1,12 +1,24 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Plus, Bell, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
+interface Competitor {
+  id: string
+  name: string
+}
+
+interface Product {
+  id: string
+  name: string
+  competitorId: string
+}
+
 interface Props {
   orgId: string
-  competitors: { id: string; name: string }[]
+  competitors: Competitor[]
+  products: Product[]
   canAdd: boolean
 }
 
@@ -18,14 +30,23 @@ const ALERT_TYPES = [
   { value: "new_product", label: "Nouveau produit" },
 ]
 
-export function AddAlertButton({ competitors, canAdd }: Props) {
+type Scope = "all" | "competitor" | "product"
+
+export function AddAlertButton({ competitors, products, canAdd }: Props) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [name, setName] = useState("")
   const [type, setType] = useState("price_drop")
+  const [scope, setScope] = useState<Scope>(products.length > 0 ? "product" : "all")
   const [competitorId, setCompetitorId] = useState(competitors[0]?.id ?? "")
+  const [productId, setProductId] = useState(products[0]?.id ?? "")
   const [threshold, setThreshold] = useState("5")
   const [loading, setLoading] = useState(false)
+
+  const productsForSelectedCompetitor = useMemo(
+    () => (scope === "product" ? products : []),
+    [scope, products]
+  )
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -34,7 +55,13 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
       await fetch("/api/alerts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, type, competitorId: competitorId || null, threshold: parseFloat(threshold) || null }),
+        body: JSON.stringify({
+          name,
+          type,
+          competitorId: scope === "competitor" ? (competitorId || null) : null,
+          productId: scope === "product" ? (productId || null) : null,
+          threshold: parseFloat(threshold) || null,
+        }),
       })
       setOpen(false)
       setName("")
@@ -78,6 +105,7 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
                   className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#8B5CF6]/50 placeholder-gray-600"
                 />
               </div>
+
               <div>
                 <label className="block text-xs font-medium text-gray-400 mb-1.5">Type d'alerte</label>
                 <select
@@ -88,19 +116,70 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
                   {ALERT_TYPES.map(t => <option key={t.value} value={t.value} className="bg-[#0D0D14]">{t.label}</option>)}
                 </select>
               </div>
-              {competitors.length > 0 && (
+
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">Portée de l'alerte</label>
+                <div className="grid grid-cols-3 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setScope("product")}
+                    disabled={products.length === 0}
+                    className={`py-2 rounded-lg text-xs font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed ${
+                      scope === "product" ? "bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 text-[#A78BFA]" : "bg-white/5 border border-white/10 text-gray-400"
+                    }`}
+                  >
+                    Un produit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setScope("competitor")}
+                    disabled={competitors.length === 0}
+                    className={`py-2 rounded-lg text-xs font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed ${
+                      scope === "competitor" ? "bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 text-[#A78BFA]" : "bg-white/5 border border-white/10 text-gray-400"
+                    }`}
+                  >
+                    Un concurrent
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setScope("all")}
+                    className={`py-2 rounded-lg text-xs font-medium transition-colors ${
+                      scope === "all" ? "bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 text-[#A78BFA]" : "bg-white/5 border border-white/10 text-gray-400"
+                    }`}
+                  >
+                    Tout
+                  </button>
+                </div>
+              </div>
+
+              {scope === "product" && (
                 <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1.5">Concurrent (optionnel)</label>
+                  <label className="block text-xs font-medium text-gray-400 mb-1.5">Produit à surveiller</label>
+                  <select
+                    value={productId}
+                    onChange={e => setProductId(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#8B5CF6]/50"
+                  >
+                    {productsForSelectedCompetitor.map(p => (
+                      <option key={p.id} value={p.id} className="bg-[#0D0D14]">{p.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {scope === "competitor" && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1.5">Concurrent à surveiller</label>
                   <select
                     value={competitorId}
                     onChange={e => setCompetitorId(e.target.value)}
                     className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#8B5CF6]/50"
                   >
-                    <option value="" className="bg-[#0D0D14]">Tous les concurrents</option>
                     {competitors.map(c => <option key={c.id} value={c.id} className="bg-[#0D0D14]">{c.name}</option>)}
                   </select>
                 </div>
               )}
+
               {(type === "price_drop" || type === "price_increase") && (
                 <div>
                   <label className="block text-xs font-medium text-gray-400 mb-1.5">Seuil (%)</label>
@@ -113,6 +192,7 @@ export function AddAlertButton({ competitors, canAdd }: Props) {
                   />
                 </div>
               )}
+
               <div className="flex gap-3 pt-2">
                 <button type="button" onClick={() => setOpen(false)} className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-white text-sm rounded-xl transition-colors">
                   Annuler
