@@ -23,12 +23,12 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[#060D09]">
+    <div className="min-h-screen bg-[#08090C]">
       <PublicNav />
 
       <main className="max-w-3xl mx-auto px-5 py-16">
         <div className="mb-12">
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#00E676] mb-2">Support</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#8B5CF6] mb-2">Support</p>
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">Contactez-nous</h1>
           <p className="text-gray-400 text-base">Je lis chaque message et réponds dès que possible.</p>
         </div>
@@ -36,13 +36,13 @@ export default function ContactPage() {
         <div className="grid sm:grid-cols-2 gap-4 mb-10">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-9 w-9 rounded-xl bg-[#00E676]/15 flex items-center justify-center">
-                <Mail className="h-4 w-4 text-[#00E676]" />
+              <div className="h-9 w-9 rounded-xl bg-[#8B5CF6]/15 flex items-center justify-center">
+                <Mail className="h-4 w-4 text-[#8B5CF6]" />
               </div>
               <p className="font-semibold text-white">Email support</p>
             </div>
             <p className="text-sm text-gray-400 mb-2">Pour toute question, problème ou demande :</p>
-            <a href="mailto:contact.conforva@gmail.com" className="text-sm font-medium text-[#00E676] hover:underline break-all">
+            <a href="mailto:contact.conforva@gmail.com" className="text-sm font-medium text-[#8B5CF6] hover:underline break-all">
               contact.conforva@gmail.com
             </a>
           </div>
@@ -80,13 +80,13 @@ export default function ContactPage() {
               <p className="font-semibold text-white">FAQ</p>
             </div>
             <p className="text-sm text-gray-400 mb-3">Avant d'écrire, consultez nos réponses aux questions fréquentes.</p>
-            <Link href="/faq" className="text-sm font-medium text-[#00E676] hover:underline">
+            <Link href="/faq" className="text-sm font-medium text-[#8B5CF6] hover:underline">
               Voir la FAQ →
             </Link>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-[#00E676]/20 bg-[#00E676]/5 p-6 text-center">
+        <div className="rounded-2xl border border-[#8B5CF6]/20 bg-[#8B5CF6]/5 p-6 text-center">
           <p className="text-sm text-gray-300 leading-relaxed">
             Pour les questions sur la veille concurrentielle ou la stratégie tarifaire,<br />
             nous vous orientons vers les ressources adaptées à votre secteur.<br />

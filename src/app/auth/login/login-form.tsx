@@ -33,7 +33,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#060D09] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#08090C] px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 justify-center">

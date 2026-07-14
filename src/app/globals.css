@@ -1,8 +1,41 @@
 @import "tailwindcss";
 
+/*
+ * Conforva brand tokens — single source of truth for the palette.
+ * Violet was deliberately chosen over the blue/teal that dominates every
+ * competing price-monitoring tool (Prisync, Price2Spy, Minderest): it reads
+ * as AI-forward/premium and differentiates in a category where ~70% of SaaS
+ * brands default to blue. Keep all new UI on these tokens instead of
+ * hardcoding hex values in className strings.
+ */
 :root {
-  --background: #060D09;
+  /* Surfaces */
+  --background: #08090C;
+  --surface: #0F0F17;
   --foreground: #ffffff;
+
+  /* Brand — violet scale */
+  --brand: #8B5CF6;
+  --brand-hover: #7C3AED;
+  --brand-light: #A78BFA;
+  --brand-subtle: rgba(139, 92, 246, 0.1);
+  --brand-border: rgba(139, 92, 246, 0.25);
+
+  /* Semantic (status) — kept distinct from brand so meaning never collides with identity */
+  --success: #34D399;
+  --warning: #F59E0B;
+  --danger: #F87171;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-light: var(--brand-light);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
 }
 
 body {
@@ -17,18 +50,12 @@ body {
 
 html {
   overflow-x: hidden;
-}
-
-html {
-  background-color: #060D09;
+  background-color: var(--background);
+  scroll-behavior: smooth;
 }
 
 * {
   box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 @keyframes spin {

@@ -120,7 +120,7 @@ const FAQ_JSON_LD = {
 
 export default function FAQPage() {
   return (
-    <div className="min-h-screen bg-[#060D09]">
+    <div className="min-h-screen bg-[#08090C]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }}
@@ -129,11 +129,11 @@ export default function FAQPage() {
 
       <main className="max-w-3xl mx-auto px-5 py-16">
         <div className="mb-12">
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#00E676] mb-2">Support</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#8B5CF6] mb-2">Support</p>
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">Questions fréquentes</h1>
           <p className="text-gray-400 text-base leading-relaxed">
             Vous ne trouvez pas ce que vous cherchez ?{" "}
-            <Link href="/contact" className="text-[#00E676] underline underline-offset-2 hover:text-[#00E676]/80">
+            <Link href="/contact" className="text-[#8B5CF6] underline underline-offset-2 hover:text-[#8B5CF6]/80">
               Contactez-moi directement
             </Link>.
           </p>
@@ -162,11 +162,11 @@ export default function FAQPage() {
           ))}
         </div>
 
-        <div className="mt-14 rounded-2xl bg-[#00E676]/10 border border-[#00E676]/20 p-8 text-center">
+        <div className="mt-14 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 p-8 text-center">
           <h2 className="text-lg font-bold text-white mb-2">Vous avez une autre question ?</h2>
           <p className="text-sm text-gray-400 mb-5">Envoyez un message à contact.conforva@gmail.com.</p>
           <Link href="/contact">
-            <button className="inline-flex items-center gap-2 rounded-lg bg-[#00E676] px-5 py-2.5 text-sm font-semibold text-[#060D09] hover:bg-[#00E676]/90 transition-colors">
+            <button className="inline-flex items-center gap-2 rounded-lg bg-[#8B5CF6] px-5 py-2.5 text-sm font-semibold text-[#08090C] hover:bg-[#8B5CF6]/90 transition-colors">
               Envoyer un message
             </button>
           </Link>

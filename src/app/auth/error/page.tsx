@@ -13,7 +13,7 @@ export default function AuthErrorPage({ searchParams }: { searchParams: { error?
   const message = ERRORS[searchParams.error ?? ""] ?? ERRORS.Default
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#060D09] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#08090C] px-4">
       <div className="w-full max-w-sm text-center">
         <Link href="/" className="inline-flex items-center gap-2.5 justify-center mb-8">
           <ConforvaLogo size={32} />
@@ -26,7 +26,7 @@ export default function AuthErrorPage({ searchParams }: { searchParams: { error?
           <p className="text-sm text-gray-400 mb-6">{message}</p>
           <Link
             href="/auth/login"
-            className="inline-block w-full py-2.5 bg-[#00E676] hover:bg-[#00c964] text-[#060D09] font-bold text-sm rounded-xl transition-colors"
+            className="inline-block w-full py-2.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-[#08090C] font-bold text-sm rounded-xl transition-colors"
           >
             Retour à la connexion
           </Link>
