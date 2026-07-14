@@ -16,7 +16,9 @@ const schema = z.object({
 
 const patchSchema = z.object({
   productId: z.string().min(1),
-  price: z.number().positive(),
+  price: z.number().positive().optional(),
+  costPrice: z.number().nonnegative().nullable().optional(),
+  yourPrice: z.number().nonnegative().nullable().optional(),
 })
 
 export async function POST(req: Request) {
@@ -133,7 +135,7 @@ export async function PATCH(req: Request) {
     if (!membership) return NextResponse.json({ error: "NO_ORG" }, { status: 404 })
 
     const body = await req.json()
-    const { productId, price } = patchSchema.parse(body)
+    const { productId, price, costPrice, yourPrice } = patchSchema.parse(body)
 
     const [product] = await db
       .select()
@@ -143,10 +145,19 @@ export async function PATCH(req: Request) {
 
     if (!product) return NextResponse.json({ error: "NOT_FOUND" }, { status: 404 })
 
-    await applyPriceResult(
-      { id: product.id, currentPrice: product.currentPrice },
-      { price, currency: product.currency ?? "EUR", inStock: product.isInStock, name: null }
-    )
+    if (price != null) {
+      await applyPriceResult(
+        { id: product.id, currentPrice: product.currentPrice },
+        { price, currency: product.currency ?? "EUR", inStock: product.isInStock, name: null }
+      )
+    }
+
+    if (costPrice !== undefined || yourPrice !== undefined) {
+      await db.update(trackedProducts).set({
+        ...(costPrice !== undefined ? { costPrice } : {}),
+        ...(yourPrice !== undefined ? { yourPrice } : {}),
+      }).where(eq(trackedProducts.id, productId))
+    }
 
     const [updated] = await db.select().from(trackedProducts).where(eq(trackedProducts.id, productId)).limit(1)
     return NextResponse.json({ success: true, product: updated })

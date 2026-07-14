@@ -106,6 +106,8 @@ export const trackedProducts = sqliteTable("tracked_products", {
   imageUrl: text("image_url"),
   currentPrice: real("current_price"),
   previousPrice: real("previous_price"),
+  costPrice: real("cost_price"),
+  yourPrice: real("your_price"),
   currency: text("currency").default("EUR"),
   isInStock: integer("is_in_stock", { mode: "boolean" }),
   priceChangePercent: real("price_change_percent"),

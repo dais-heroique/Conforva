@@ -2,12 +2,14 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { auth } from "@/auth"
 import { getDb } from "@/lib/db"
-import { organizations, organizationMembers, trackedProducts, trackedCompetitors } from "@/lib/db/schema"
-import { eq, and, desc } from "drizzle-orm"
-import { Package, TrendingDown, TrendingUp, ExternalLink, Plus } from "lucide-react"
+import { organizations, organizationMembers, trackedProducts, trackedCompetitors, priceHistory } from "@/lib/db/schema"
+import { eq, and, desc, inArray, asc } from "drizzle-orm"
+import { Package, TrendingDown, TrendingUp, ExternalLink, Plus, Wallet } from "lucide-react"
 import { AddProductModal } from "@/components/dashboard/add-product-modal"
 import { DeleteProductButton } from "@/components/dashboard/delete-product-button"
 import { SetPriceButton } from "@/components/dashboard/set-price-button"
+import { MarginEditor } from "@/components/dashboard/margin-editor"
+import { PriceSparkline } from "@/components/dashboard/price-sparkline"
 
 export default async function ProductsPage() {
   const session = await auth()
@@ -37,9 +39,32 @@ export default async function ProductsPage() {
       .limit(200),
   ])
 
+  const productIds = productsWithCompetitor.map(({ product }) => product.id)
+  const historyRows = productIds.length > 0
+    ? await db.select()
+        .from(priceHistory)
+        .where(inArray(priceHistory.productId, productIds))
+        .orderBy(asc(priceHistory.scrapedAt))
+    : []
+
+  const historyByProduct = new Map<string, number[]>()
+  for (const row of historyRows) {
+    if (row.price == null) continue
+    const arr = historyByProduct.get(row.productId) ?? []
+    arr.push(row.price)
+    historyByProduct.set(row.productId, arr)
+  }
+
   const priceDrops = productsWithCompetitor.filter(({ product }) => (product.priceChangePercent ?? 0) < 0)
   const outOfStock = productsWithCompetitor.filter(({ product }) => product.isInStock === false)
   const withPrice = productsWithCompetitor.filter(({ product }) => product.currentPrice != null)
+  const withMargin = productsWithCompetitor.filter(({ product }) => product.costPrice != null && product.yourPrice != null)
+  const avgMargin = withMargin.length > 0
+    ? withMargin.reduce((sum, { product }) => {
+        const m = product.costPrice! > 0 ? ((product.yourPrice! - product.costPrice!) / product.costPrice!) * 100 : 0
+        return sum + m
+      }, 0) / withMargin.length
+    : null
 
   return (
     <div className="p-6 space-y-6 bg-[#08090C] min-h-full">
@@ -57,12 +82,18 @@ export default async function ProductsPage() {
 
       {/* Quick stats */}
       {productsWithCompetitor.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           {[
             { label: "Total", value: productsWithCompetitor.length, color: "text-white", bg: "bg-white/5", border: "border-white/8" },
             { label: "Prix récupérés", value: withPrice.length, color: "text-[#A78BFA]", bg: "bg-[#8B5CF6]/8", border: "border-[#8B5CF6]/20" },
             { label: "Baisses de prix", value: priceDrops.length, color: "text-emerald-400", bg: "bg-emerald-500/8", border: "border-emerald-500/20" },
             { label: "En rupture", value: outOfStock.length, color: "text-orange-400", bg: "bg-orange-500/8", border: "border-orange-500/20" },
+            {
+              label: "Marge moyenne",
+              value: avgMargin != null ? `${avgMargin.toFixed(0)}%` : "—",
+              color: avgMargin == null ? "text-gray-600" : avgMargin >= 20 ? "text-emerald-400" : avgMargin >= 0 ? "text-amber-400" : "text-red-400",
+              bg: "bg-white/5", border: "border-white/8",
+            },
           ].map(({ label, value, color, bg, border }) => (
             <div key={label} className={`${bg} border ${border} rounded-xl p-4 text-center`}>
               <p className={`text-2xl font-black ${color}`}>{value}</p>
@@ -115,7 +146,11 @@ export default async function ProductsPage() {
                   <th className="text-left px-5 py-3 font-medium">Produit</th>
                   <th className="text-left px-4 py-3 font-medium">Concurrent</th>
                   <th className="text-right px-4 py-3 font-medium">Prix actuel</th>
+                  <th className="text-center px-4 py-3 font-medium">Historique</th>
                   <th className="text-right px-4 py-3 font-medium">Variation</th>
+                  <th className="text-left px-4 py-3 font-medium">
+                    <span className="inline-flex items-center gap-1"><Wallet className="h-3 w-3" /> Ma marge</span>
+                  </th>
                   <th className="text-center px-4 py-3 font-medium">Stock</th>
                   <th className="px-4 py-3" />
                 </tr>
@@ -155,6 +190,9 @@ export default async function ProductsPage() {
                         <SetPriceButton productId={product.id} />
                       )}
                     </td>
+                    <td className="px-4 py-3.5 text-center">
+                      <PriceSparkline points={historyByProduct.get(product.id) ?? []} />
+                    </td>
                     <td className="px-4 py-3.5 text-right">
                       {product.priceChangePercent != null ? (
                         <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-lg ${
@@ -166,6 +204,14 @@ export default async function ProductsPage() {
                           {Math.abs(product.priceChangePercent).toFixed(1)}%
                         </span>
                       ) : <span className="text-gray-600 text-xs">—</span>}
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <MarginEditor
+                        productId={product.id}
+                        costPrice={product.costPrice}
+                        yourPrice={product.yourPrice}
+                        competitorPrice={product.currentPrice}
+                      />
                     </td>
                     <td className="px-4 py-3.5 text-center">
                       {product.isInStock === null ? (
