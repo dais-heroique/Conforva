@@ -4,7 +4,7 @@ import { notFound } from "next/navigation"
 import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
 import { Button } from "@/components/ui/button"
 import { ARTICLES, getArticle } from "@/lib/blog/articles"
-import { Clock, Tag, ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react"
+import { Clock, Tag, ArrowLeft, ArrowRight, CheckCircle2, Calculator, Percent } from "lucide-react"
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -89,6 +89,12 @@ export default async function BlogArticlePage({ params }: PageProps) {
   const nextArticle = ARTICLES[articleIndex + 1]
   const prevArticle = ARTICLES[articleIndex - 1]
 
+  // Topically related articles (same category) beat purely positional prev/next
+  // for both internal linking value and reader relevance.
+  const relatedArticles = ARTICLES
+    .filter(a => a.slug !== slug && a.category === article.category)
+    .slice(0, 3)
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -102,9 +108,20 @@ export default async function BlogArticlePage({ params }: PageProps) {
     "keywords": article.keywords.join(", "),
   }
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://conforva.com" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://conforva.com/blog" },
+      { "@type": "ListItem", "position": 3, "name": article.title, "item": `https://conforva.com/blog/${article.slug}` },
+    ],
+  }
+
   return (
     <div className="min-h-screen bg-[#08090C]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <PublicNav />
 
       <main className="max-w-3xl mx-auto px-5 py-16">
@@ -169,6 +186,56 @@ export default async function BlogArticlePage({ params }: PageProps) {
             </Button>
           </Link>
         </div>
+
+        {/* Free tools cross-link */}
+        <div className="mb-10 rounded-2xl border border-white/10 bg-white/4 p-6">
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-4">Outils gratuits liés</p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <Link
+              href="/comparateur-prix"
+              className="flex items-center gap-3 p-4 rounded-xl bg-white/5 hover:bg-white/8 border border-white/8 transition-colors group"
+            >
+              <div className="h-9 w-9 rounded-lg bg-[#8B5CF6]/15 flex items-center justify-center shrink-0">
+                <Percent className="h-4 w-4 text-[#A78BFA]" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-white group-hover:text-[#A78BFA] transition-colors">Comparateur de prix</p>
+                <p className="text-xs text-gray-500">Comparez votre prix à un concurrent, gratuitement</p>
+              </div>
+            </Link>
+            <Link
+              href="/calculateur-marge-ecommerce"
+              className="flex items-center gap-3 p-4 rounded-xl bg-white/5 hover:bg-white/8 border border-white/8 transition-colors group"
+            >
+              <div className="h-9 w-9 rounded-lg bg-[#8B5CF6]/15 flex items-center justify-center shrink-0">
+                <Calculator className="h-4 w-4 text-[#A78BFA]" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-white group-hover:text-[#A78BFA] transition-colors">Calculateur de marge</p>
+                <p className="text-xs text-gray-500">Calculez votre marge et prix de vente idéal</p>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Related articles (same category) */}
+        {relatedArticles.length > 0 && (
+          <div className="mb-10">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-4">Articles similaires</h3>
+            <div className="space-y-3">
+              {relatedArticles.map(a => (
+                <Link
+                  key={a.slug}
+                  href={`/blog/${a.slug}`}
+                  className="block p-4 rounded-xl bg-white/4 hover:bg-white/8 border border-white/8 transition-colors group"
+                >
+                  <p className="text-sm font-semibold text-white group-hover:text-[#A78BFA] transition-colors mb-1">{a.title}</p>
+                  <p className="text-xs text-gray-500 line-clamp-2">{a.description}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Navigation */}
         <div className="flex items-center justify-between pt-8 border-t border-white/10 gap-4">

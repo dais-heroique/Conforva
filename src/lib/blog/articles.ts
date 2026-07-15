@@ -672,6 +672,47 @@ export const ARTICLES: BlogArticle[] = [
       href: "/auth/register",
     },
   },
+  {
+    slug: "prestashop-surveiller-prix-concurrents",
+    title: "PrestaShop : comment surveiller les prix de vos concurrents en 2026",
+    description: "Guide pratique pour mettre en place une veille concurrentielle sur une boutique PrestaShop — méthodes, particularités de la plateforme et intégration avec votre catalogue.",
+    keywords: ["PrestaShop veille prix", "surveiller concurrents PrestaShop", "outil prix PrestaShop", "PrestaShop concurrence", "module veille tarifaire PrestaShop"],
+    publishedAt: "2026-07-15",
+    readingTime: 6,
+    category: "Cas d'usage",
+    intro: "PrestaShop reste l'une des plateformes e-commerce les plus utilisées en France et en Europe, en particulier chez les commerçants qui veulent garder la main sur l'hébergement et la personnalisation de leur boutique. Cette liberté technique a un revers : contrairement à Shopify, il n'existe pas d'app store unifié où trouver un outil de veille concurrentielle prêt à l'emploi. Voici comment s'organiser malgré tout.",
+    sections: [
+      {
+        heading: "La spécificité PrestaShop côté veille concurrentielle",
+        body: [
+          "PrestaShop est un logiciel open-source auto-hébergé (ou hébergé chez un prestataire de votre choix), ce qui signifie une grande liberté de configuration mais aussi une plus grande hétérogénéité technique d'une boutique à l'autre — thèmes différents, modules de prix différents, structure HTML variable.",
+          "Pour une boutique qui utilise PrestaShop, cette hétérogénéité s'applique aussi bien à votre propre boutique qu'à celles de vos concurrents. Un outil de veille efficace doit donc être capable de lire le prix affiché quel que soit le thème ou le module utilisé par le concurrent, sans dépendre d'une intégration technique profonde avec PrestaShop lui-même.",
+          "**Bonne nouvelle** : la plupart des thèmes PrestaShop (1.6 comme 1.7/8) utilisent des classes CSS standardisées pour afficher le prix (`.current-price`, `#our_price_display`, `span[itemprop='price']`), ce qui les rend en général plus faciles à lire automatiquement que des sites entièrement sur-mesure.",
+        ],
+      },
+      {
+        heading: "Mettre en place votre veille en 3 étapes",
+        body: [
+          "**Étape 1 — Listez vos concurrents, quelle que soit leur plateforme.** Beaucoup de boutiques PrestaShop françaises sont en concurrence directe avec des boutiques Shopify, WooCommerce ou des marketplaces comme Cdiscount. Un bon outil de veille doit fonctionner peu importe la technologie utilisée en face.",
+          "**Étape 2 — Priorisez vos produits à forte marge ou forte concurrence.** Sur une boutique PrestaShop typique (souvent 50 à 1000 références), commencez par les 20-30 produits qui pèsent le plus dans votre chiffre d'affaires plutôt que l'intégralité du catalogue.",
+          "**Étape 3 — Configurez des seuils d'alerte réalistes.** Un seuil trop bas (1-2%) génère trop de bruit ; un seuil trop haut (15-20%) vous fait rater des mouvements significatifs. Un seuil entre 5 et 8% est un bon point de départ pour la majorité des catégories.",
+        ],
+      },
+      {
+        heading: "Ce qui change une fois la veille en place",
+        body: [
+          "Une fois vos concurrents PrestaShop (et au-delà) configurés, l'objectif n'est pas de consulter un tableau de bord tous les jours — c'est de recevoir uniquement les alertes qui comptent, et un rapport de synthèse régulier qui transforme les mouvements de prix en décisions concrètes plutôt qu'en simples notifications.",
+        ],
+      },
+    ],
+    conclusion: "PrestaShop n'a pas besoin d'un outil de veille développé spécifiquement pour la plateforme — il a besoin d'un outil qui fonctionne indépendamment de la technologie utilisée par vos concurrents, avec une mise en place rapide adaptée aux commerçants qui gèrent souvent leur boutique sans équipe technique dédiée.",
+    cta: {
+      heading: "Connectez Conforva à votre boutique PrestaShop",
+      text: "Ajoutez vos concurrents en quelques minutes, peu importe leur plateforme. Prix récupéré immédiatement, alertes automatiques.",
+      button: "Essai gratuit 14 jours",
+      href: "/auth/register",
+    },
+  },
 ]
 
 export function getArticle(slug: string): BlogArticle | undefined {
