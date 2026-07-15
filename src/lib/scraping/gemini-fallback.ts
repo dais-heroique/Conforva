@@ -21,7 +21,7 @@ export async function scrapeUrlsWithGemini(urls: string[]): Promise<Map<string, 
       const batchResults = await scrapeBatch(batch, apiKey)
       for (const r of batchResults) {
         if (r.price != null) {
-          results.set(r.url, { price: r.price, currency: "EUR", inStock: r.inStock, name: null })
+          results.set(r.url, { price: r.price, currency: "EUR", inStock: r.inStock, name: null, confidence: "low" })
         }
       }
     } catch (err) {

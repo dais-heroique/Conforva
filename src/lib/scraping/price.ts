@@ -1,10 +1,33 @@
 import * as cheerio from "cheerio"
+import type { AnyNode } from "domhandler"
 
 export interface ScrapedPrice {
   price: number | null
   currency: string
   inStock: boolean | null
   name: string | null
+  // Strategies further down the cascade (DOM heuristics, regex, embedded JSON)
+  // are more likely to accidentally pick up a related/recommended product's
+  // price instead of the actual page's product — callers can use this to
+  // sanity-check implausible swings before trusting the result.
+  confidence: "high" | "low"
+}
+
+// Elements inside these widgets are almost never the actual product being viewed —
+// they're "related products", "recommended for you", upsells, etc. Any price found
+// inside one of these containers is very likely the wrong product's price.
+const RELATED_CONTAINER_HINTS =
+  /related|recommend|upsell|cross-sell|crosssell|also-bought|alsobought|similar|suggested|bought-together|boughttogether|carousel|slider|you-may-also|youmayalso|frequently-bought|recently-viewed|recentlyviewed/i
+
+function isInsideRelatedContainer($: cheerio.CheerioAPI, el: AnyNode): boolean {
+  let node = $(el)
+  for (let depth = 0; depth < 6; depth++) {
+    node = node.parent()
+    if (!node.length) return false
+    const ctx = `${node.attr("class") ?? ""} ${node.attr("id") ?? ""} ${node.attr("data-section-type") ?? ""}`
+    if (RELATED_CONTAINER_HINTS.test(ctx)) return true
+  }
+  return false
 }
 
 export interface ScrapeDebugInfo {
@@ -98,6 +121,7 @@ async function tryShopifyJson(url: string): Promise<ScrapedPrice | null> {
       currency: "EUR",
       inStock: available.available ?? null,
       name: product.title ?? null,
+      confidence: "high",
     }
   } catch {
     return null
@@ -130,6 +154,7 @@ async function tryWooCommerceStoreApi(pageUrl: string, $: cheerio.CheerioAPI): P
       currency: data?.prices?.currency_code ?? "EUR",
       inStock: data?.is_in_stock ?? null,
       name: data?.name ?? null,
+      confidence: "high",
     }
   } catch {
     return null
@@ -137,9 +162,14 @@ async function tryWooCommerceStoreApi(pageUrl: string, $: cheerio.CheerioAPI): P
 }
 
 // ── Strategy 3: JSON-LD Product/Offer schema ────────────────────────────────
+// A page can embed MULTIPLE Product blocks (the real one + a "related products"
+// carousel also marked up for SEO). Collect every candidate and prefer the one
+// whose name overlaps with the page's <title>/<h1> — the actual product being
+// viewed — instead of blindly taking whichever appears first in the HTML.
 function parseJsonLd($: cheerio.CheerioAPI): ScrapedPrice | null {
   try {
     const scripts = $('script[type="application/ld+json"]')
+    const candidates: ScrapedPrice[] = []
 
     for (const el of scripts.toArray()) {
       const raw = $(el).contents().text()
@@ -152,27 +182,34 @@ function parseJsonLd($: cheerio.CheerioAPI): ScrapedPrice | null {
         continue
       }
 
-      const candidates = Array.isArray(json) ? json : [json]
-      for (const item of candidates) {
-        const node = findProductNode(item)
-        if (node) return node
+      const items = Array.isArray(json) ? json : [json]
+      for (const item of items) {
+        collectProductNodes(item, candidates)
       }
     }
+
+    if (candidates.length === 0) return null
+    if (candidates.length === 1) return candidates[0]
+
+    const pageTitle = ($("h1").first().text() || $("title").text() || "").toLowerCase()
+    const scored = candidates.map((c) => {
+      const name = (c.name ?? "").toLowerCase()
+      const overlap = name && pageTitle && (pageTitle.includes(name) || name.includes(pageTitle.slice(0, 20)))
+      return { c, score: overlap ? 1 : 0 }
+    })
+    scored.sort((a, b) => b.score - a.score)
+    return scored[0].c
   } catch {
-    // ignore parse errors
+    return null
   }
-  return null
 }
 
-function findProductNode(item: unknown, depth = 0): ScrapedPrice | null {
-  if (!item || typeof item !== "object" || depth > 5) return null
+function collectProductNodes(item: unknown, out: ScrapedPrice[], depth = 0): void {
+  if (!item || typeof item !== "object" || depth > 5 || out.length >= 5) return
   const obj = item as Record<string, unknown>
 
   if (obj["@graph"] && Array.isArray(obj["@graph"])) {
-    for (const g of obj["@graph"]) {
-      const found = findProductNode(g, depth + 1)
-      if (found) return found
-    }
+    for (const g of obj["@graph"]) collectProductNodes(g, out, depth + 1)
   }
 
   const type = obj["@type"]
@@ -188,12 +225,13 @@ function findProductNode(item: unknown, depth = 0): ScrapedPrice | null {
       const availability = String(offer.availability ?? "")
       const priceNum = price != null ? toNumber(String(price)) : null
       if (priceNum != null) {
-        return {
+        out.push({
           price: priceNum,
           currency: (offer.priceCurrency as string) ?? "EUR",
           inStock: availability ? availability.toLowerCase().includes("instock") : null,
           name: (obj.name as string) ?? null,
-        }
+          confidence: "high",
+        })
       }
     }
   }
@@ -201,17 +239,11 @@ function findProductNode(item: unknown, depth = 0): ScrapedPrice | null {
   for (const key of Object.keys(obj)) {
     const val = obj[key]
     if (Array.isArray(val)) {
-      for (const v of val) {
-        const found = findProductNode(v, depth + 1)
-        if (found) return found
-      }
+      for (const v of val) collectProductNodes(v, out, depth + 1)
     } else if (val && typeof val === "object" && depth < 3) {
-      const found = findProductNode(val, depth + 1)
-      if (found) return found
+      collectProductNodes(val, out, depth + 1)
     }
   }
-
-  return null
 }
 
 // ── Strategy 4: microdata / RDFa — itemprop="price" on any element ─────────
@@ -233,6 +265,7 @@ function parseMicrodata($: cheerio.CheerioAPI): ScrapedPrice | null {
     currency,
     inStock: availabilityAttr ? availabilityAttr.toLowerCase().includes("instock") : null,
     name: name?.trim() || null,
+    confidence: "high",
   }
 }
 
@@ -259,6 +292,7 @@ function parseMetaTags($: cheerio.CheerioAPI): ScrapedPrice | null {
     currency,
     inStock: availability ? availability.toLowerCase().includes("in stock") : null,
     name: name?.trim() || null,
+    confidence: "high",
   }
 }
 
@@ -315,13 +349,16 @@ const PRICE_SELECTORS = [
 
 function parseCssSelectors($: cheerio.CheerioAPI): ScrapedPrice | null {
   for (const selector of PRICE_SELECTORS) {
-    const el = $(selector).first()
-    if (!el.length) continue
-    const raw = el.attr("data-price-amount") ?? el.attr("content") ?? el.text()
-    const price = toNumber(raw)
-    if (price != null) {
-      const name = $("title").text()?.trim() || null
-      return { price, currency: detectCurrency(raw), inStock: null, name }
+    const matches = $(selector).toArray()
+    for (const el of matches) {
+      if (isInsideRelatedContainer($, el)) continue
+      const node = $(el)
+      const raw = node.attr("data-price-amount") ?? node.attr("content") ?? node.text()
+      const price = toNumber(raw)
+      if (price != null) {
+        const name = $("title").text()?.trim() || null
+        return { price, currency: detectCurrency(raw), inStock: null, name, confidence: "high" }
+      }
     }
   }
   return null
@@ -338,6 +375,7 @@ function parseGenericDomScan($: cheerio.CheerioAPI, debug?: ScrapeDebugInfo): Sc
     const node = $(el)
     const cls = (node.attr("class") ?? "") + " " + (node.attr("id") ?? "")
     if (NEGATIVE_HINTS.test(cls)) return
+    if (isInsideRelatedContainer($, el)) return
     // Skip container elements with many nested price-ish children — we want leaf-ish text nodes
     if (node.children().length > 3) return
 
@@ -362,7 +400,7 @@ function parseGenericDomScan($: cheerio.CheerioAPI, debug?: ScrapeDebugInfo): Sc
 
   candidates.sort((a, b) => b.score - a.score)
   const best = candidates[0]
-  return { price: best.price, currency: best.currency, inStock: null, name: $("title").text()?.trim() || null }
+  return { price: best.price, currency: best.currency, inStock: null, name: $("title").text()?.trim() || null, confidence: "low" }
 }
 
 // ── Strategy 8: embedded JS state blobs server-rendered into the HTML ──────
@@ -370,14 +408,14 @@ function parseEmbeddedJson($: cheerio.CheerioAPI, html: string): ScrapedPrice | 
   const nextData = $("#__NEXT_DATA__").text()
   if (nextData) {
     const found = searchJsonForPrice(nextData)
-    if (found != null) return { price: found, currency: "EUR", inStock: null, name: null }
+    if (found != null) return { price: found, currency: "EUR", inStock: null, name: null, confidence: "low" }
   }
 
   // Shopify themes often embed product JSON even when the .json endpoint is blocked
   const shopifyMatch = html.match(/var\s+meta\s*=\s*(\{[\s\S]*?\});/) ?? html.match(/"product"\s*:\s*(\{[\s\S]*?"variants"[\s\S]*?\]\s*\})/)
   if (shopifyMatch) {
     const found = searchJsonForPrice(shopifyMatch[1])
-    if (found != null) return { price: found, currency: "EUR", inStock: null, name: null }
+    if (found != null) return { price: found, currency: "EUR", inStock: null, name: null, confidence: "low" }
   }
 
   // AliExpress / Alibaba-style SPAs embed a big state blob (window.runParams,
@@ -389,7 +427,7 @@ function parseEmbeddedJson($: cheerio.CheerioAPI, html: string): ScrapedPrice | 
     html.match(/window\._d_c_\.DCData\s*=\s*(\{[\s\S]*?\});/)
   if (runParamsMatch) {
     const found = searchJsonForPrice(runParamsMatch[1])
-    if (found != null) return { price: found, currency: "EUR", inStock: null, name: null }
+    if (found != null) return { price: found, currency: "EUR", inStock: null, name: null, confidence: "low" }
   }
 
   // Generic: "price"-like key anywhere in inline scripts, as plain text (no JSON.parse needed)
@@ -398,13 +436,17 @@ function parseEmbeddedJson($: cheerio.CheerioAPI, html: string): ScrapedPrice | 
   )
   if (genericKeyMatch) {
     const price = toNumber(genericKeyMatch[1])
-    if (price != null) return { price, currency: "EUR", inStock: null, name: null }
+    if (price != null) return { price, currency: "EUR", inStock: null, name: null, confidence: "low" }
   }
 
   return null
 }
 
 const PRICE_KEY_PATTERN = /^(price|salePrice|formatedPrice|finalPrice|currentPrice|displayPrice|actSkuCalPrice|skuPrice|minPrice|minActivityAmount)$/i
+// Never descend into these — they hold OTHER products' data (related/recommended/upsell
+// widgets embedded in the same page state), which is exactly how a wrong, cheaper price
+// sneaks in.
+const RELATED_KEY_PATTERN = /related|recommend|upsell|crosssell|cross_sell|alsobought|also_bought|similar|suggested|boughttogether|bought_together|recentlyviewed|recently_viewed/i
 
 function searchJsonForPrice(rawJson: string): number | null {
   try {
@@ -418,6 +460,7 @@ function searchJsonForPrice(rawJson: string): number | null {
       const obj = node as Record<string, unknown>
 
       for (const key of Object.keys(obj)) {
+        if (RELATED_KEY_PATTERN.test(key)) continue
         const val = obj[key]
         if (PRICE_KEY_PATTERN.test(key)) {
           if (typeof val === "number" || typeof val === "string") {
@@ -454,7 +497,7 @@ function parseRegexFallback(html: string): ScrapedPrice | null {
     const match = html.match(re)
     if (match) {
       const price = toNumber(match[1])
-      if (price != null) return { price, currency, inStock: null, name: null }
+      if (price != null) return { price, currency, inStock: null, name: null, confidence: "low" }
     }
   }
   return null

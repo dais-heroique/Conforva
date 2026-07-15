@@ -96,7 +96,7 @@ export async function POST(req: Request) {
     try {
       if (price != null) {
         autoScraped = false
-        await applyPriceResult({ id: productId, currentPrice: null }, { price, currency: "EUR", inStock: null, name: null })
+        await applyPriceResult({ id: productId, currentPrice: null }, { price, currency: "EUR", inStock: null, name: null, confidence: "high" })
       } else {
         const result = await scrapeAndApply({ id: productId, url, currentPrice: null })
         autoScraped = result.scraped
@@ -148,7 +148,7 @@ export async function PATCH(req: Request) {
     if (price != null) {
       await applyPriceResult(
         { id: product.id, currentPrice: product.currentPrice },
-        { price, currency: product.currency ?? "EUR", inStock: product.isInStock, name: null }
+        { price, currency: product.currency ?? "EUR", inStock: product.isInStock, name: null, confidence: "high" }
       )
     }
 
