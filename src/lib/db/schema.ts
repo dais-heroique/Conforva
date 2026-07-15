@@ -200,3 +200,14 @@ export const sentEmails = sqliteTable("sent_emails", {
 }, (t) => ({
   uniqueEmailPerUser: uniqueIndex("sent_email_unique").on(t.userId, t.emailType),
 }))
+
+// ─── Free public tool usage limiting (persistent, not just in-memory) ─────────
+
+export const publicToolUsage = sqliteTable("public_tool_usage", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  ip: text("ip").notNull(),
+  tool: text("tool").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().default(sql`(strftime('%s','now') * 1000)`),
+}, (t) => ({
+  ipToolIdx: index("public_tool_usage_ip_tool_idx").on(t.ip, t.tool),
+}))

@@ -9,6 +9,7 @@ interface CompareResult {
   yours: { price: number | null; currency: string; name: string | null } | null
   competitor: { price: number | null; currency: string; name: string | null } | null
   gapPercent: number | null
+  usesRemaining?: number
 }
 
 export default function PriceComparisonClient() {
@@ -16,6 +17,7 @@ export default function PriceComparisonClient() {
   const [competitorUrl, setCompetitorUrl] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [limitReached, setLimitReached] = useState(false)
   const [result, setResult] = useState<CompareResult | null>(null)
 
   async function handleSubmit(e: React.FormEvent) {
@@ -33,7 +35,10 @@ export default function PriceComparisonClient() {
       const data = await res.json()
 
       if (!res.ok) {
-        if (data.error === "RATE_LIMITED") setError("Too many comparisons in a short time — try again in a minute.")
+        if (data.error === "FREE_LIMIT_REACHED") {
+          setLimitReached(true)
+          setError(`You've used your ${data.limit ?? 2} free comparisons. Create a free account for unlimited use and automatic tracking.`)
+        } else if (data.error === "RATE_LIMITED") setError("Too many comparisons in a short time — try again in a minute.")
         else if (data.error === "NO_PRICE_FOUND") setError("Couldn't find a price on either page. Make sure both are product pages.")
         else setError("Couldn't compare these two pages right now.")
         setLoading(false)
@@ -97,20 +102,33 @@ export default function PriceComparisonClient() {
             </div>
           </div>
 
-          {error && (
+          {error && !limitReached && (
             <div className="px-4 py-3 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-400">
               {error}
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3.5 bg-[#8B5CF6] hover:bg-[#7C3AED] disabled:opacity-60 text-white font-bold text-sm rounded-xl transition-colors flex items-center justify-center gap-2"
-          >
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-            {loading ? "Comparing…" : "Compare prices"}
-          </button>
+          {limitReached ? (
+            <div className="rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/25 p-4 space-y-3">
+              <p className="text-sm text-white font-semibold">Free limit reached</p>
+              <p className="text-xs text-gray-400 leading-relaxed">{error}</p>
+              <Link
+                href="/auth/register"
+                className="flex items-center justify-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold text-sm py-2.5 rounded-xl transition-colors"
+              >
+                Create a free account <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          ) : (
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3.5 bg-[#8B5CF6] hover:bg-[#7C3AED] disabled:opacity-60 text-white font-bold text-sm rounded-xl transition-colors flex items-center justify-center gap-2"
+            >
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+              {loading ? "Comparing…" : "Compare prices"}
+            </button>
+          )}
         </form>
 
         {result && (
@@ -176,6 +194,14 @@ export default function PriceComparisonClient() {
                 Free 14-day trial <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
+
+            {result.usesRemaining != null && (
+              <p className="text-xs text-gray-600 text-center">
+                {result.usesRemaining > 0
+                  ? `${result.usesRemaining} free comparison${result.usesRemaining > 1 ? "s" : ""} remaining`
+                  : "That was your last free comparison"}
+              </p>
+            )}
           </div>
         )}
 

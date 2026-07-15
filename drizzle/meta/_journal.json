@@ -22,6 +22,13 @@
       "when": 1784029687889,
       "tag": "0002_add_margin_fields",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1784121373909,
+      "tag": "0003_add_public_tool_usage",
+      "breakpoints": true
     }
   ]
 }
