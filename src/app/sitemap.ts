@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next"
 import { ARTICLES } from "@/lib/blog/articles"
+import { ARTICLES_EN } from "@/lib/blog/articles-en"
 
 const BASE = "https://conforva.com"
 
@@ -13,6 +14,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(article.updatedAt ?? article.publishedAt),
     changeFrequency: "monthly" as const,
     priority: 0.8,
+  }))
+
+  const blogEntriesEn: MetadataRoute.Sitemap = ARTICLES_EN.map((article) => ({
+    url: `${BASE}/en/blog/${article.slug}`,
+    lastModified: new Date(article.updatedAt ?? article.publishedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
   }))
 
   return [
@@ -78,6 +86,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    {
+      url: `${BASE}/en/blog`,
+      lastModified: new Date(LAST_CONTENT_UPDATE),
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
     // ── Company pages ─────────────────────────────────────────────────────────
     {
       url: `${BASE}/about`,
@@ -109,5 +123,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     // ── Blog articles ─────────────────────────────────────────────────────────
     ...blogEntries,
+    // ── English blog articles ──────────────────────────────────────────────────
+    ...blogEntriesEn,
   ]
 }
