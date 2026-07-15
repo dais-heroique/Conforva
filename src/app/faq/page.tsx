@@ -22,7 +22,13 @@ export const metadata: Metadata = {
     title: "FAQ Conforva — Veille concurrentielle e-commerce",
     description: "Comment surveiller les prix de vos concurrents ? Shopify, Amazon, WooCommerce — toutes les réponses.",
   },
-  alternates: { canonical: "https://conforva.com/faq" },
+  alternates: {
+    canonical: "https://conforva.com/faq",
+    languages: {
+      "fr-FR": "https://conforva.com/faq",
+      "en-US": "https://conforva.com/en/faq",
+    },
+  },
 }
 
 const SECTIONS = [

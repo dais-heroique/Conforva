@@ -7,7 +7,13 @@ export const metadata: Metadata = {
     "calculateur marge e-commerce", "calculer marge produit", "taux de marge e-commerce",
     "calculateur prix de vente", "marge Amazon FBA calcul", "calculateur marge Shopify",
   ],
-  alternates: { canonical: "https://conforva.com/calculateur-marge-ecommerce" },
+  alternates: {
+    canonical: "https://conforva.com/calculateur-marge-ecommerce",
+    languages: {
+      "fr-FR": "https://conforva.com/calculateur-marge-ecommerce",
+      "en-US": "https://conforva.com/en/margin-calculator",
+    },
+  },
   openGraph: {
     title: "Calculateur de marge e-commerce gratuit — Conforva",
     description: "Calculez votre marge, taux de marque et prix de vente idéal en tenant compte des frais de plateforme. Gratuit, sans inscription.",
@@ -17,7 +23,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Calculateur de marge e-commerce gratuit — Conforva",
-    description: "Calculez votre marge et votre prix de vente idéal en 10 secondes, gratuitement.",
+    description: "Calculez votre marge et votre prix de vente idéal, gratuitement.",
   },
 }
 

@@ -53,6 +53,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.9,
     },
+    // ── English pages ──────────────────────────────────────────────────────────
+    {
+      url: `${BASE}/en`,
+      lastModified: new Date(LAST_CONTENT_UPDATE),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${BASE}/en/price-comparison`,
+      lastModified: new Date(LAST_CONTENT_UPDATE),
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${BASE}/en/margin-calculator`,
+      lastModified: new Date(LAST_CONTENT_UPDATE),
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${BASE}/en/faq`,
+      lastModified: new Date(LAST_CONTENT_UPDATE),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
     // ── Company pages ─────────────────────────────────────────────────────────
     {
       url: `${BASE}/about`,

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { PublicNav, PublicFooter } from "@/components/layout/public-nav"
+import { PublicNavEn, PublicFooterEn } from "@/components/layout/public-nav-en"
 import { Link2, Loader2, TrendingDown, TrendingUp, Minus, ArrowRight, Sparkles, Search } from "lucide-react"
 
 interface CompareResult {
@@ -11,7 +11,7 @@ interface CompareResult {
   gapPercent: number | null
 }
 
-export default function ComparateurPrixPage() {
+export default function PriceComparisonClient() {
   const [yourUrl, setYourUrl] = useState("")
   const [competitorUrl, setCompetitorUrl] = useState("")
   const [loading, setLoading] = useState(false)
@@ -33,16 +33,16 @@ export default function ComparateurPrixPage() {
       const data = await res.json()
 
       if (!res.ok) {
-        if (data.error === "RATE_LIMITED") setError("Trop de comparaisons en peu de temps — réessayez dans une minute.")
-        else if (data.error === "NO_PRICE_FOUND") setError("Le prix n'a pu être trouvé sur aucune des deux pages. Vérifiez que ce sont bien des pages produit.")
-        else setError("Impossible de comparer ces deux pages pour le moment.")
+        if (data.error === "RATE_LIMITED") setError("Too many comparisons in a short time — try again in a minute.")
+        else if (data.error === "NO_PRICE_FOUND") setError("Couldn't find a price on either page. Make sure both are product pages.")
+        else setError("Couldn't compare these two pages right now.")
         setLoading(false)
         return
       }
 
       setResult(data)
     } catch {
-      setError("Erreur réseau — réessayez.")
+      setError("Network error — please try again.")
     } finally {
       setLoading(false)
     }
@@ -50,32 +50,32 @@ export default function ComparateurPrixPage() {
 
   return (
     <div className="min-h-screen bg-[#08090C]">
-      <PublicNav />
+      <PublicNavEn />
 
       <main className="max-w-2xl mx-auto px-5 py-16">
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#8B5CF6]/30 bg-[#8B5CF6]/10 px-4 py-1.5 mb-5">
             <Sparkles className="h-3.5 w-3.5 text-[#A78BFA]" />
-            <span className="text-xs font-medium text-[#A78BFA]">Outil gratuit — sans inscription</span>
+            <span className="text-xs font-medium text-[#A78BFA]">Free tool — no signup</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            Comparez votre prix à celui d'un concurrent
+            Compare your price to a competitor's
           </h1>
           <p className="text-gray-400 text-base leading-relaxed max-w-lg mx-auto">
-            Collez l'URL de votre produit et celle d'un concurrent. On récupère les deux prix en temps réel et on calcule l'écart.
+            Paste your product's URL and a competitor's. We fetch both prices in real time and calculate the gap.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white/4 border border-white/8 rounded-2xl p-6 space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-gray-400 mb-1.5">Votre produit</label>
+            <label className="block text-xs font-semibold text-gray-400 mb-1.5">Your product</label>
             <div className="relative">
               <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <input
                 type="url"
                 value={yourUrl}
                 onChange={(e) => setYourUrl(e.target.value)}
-                placeholder="https://votreboutique.com/produits/mon-produit"
+                placeholder="https://yourstore.com/products/your-product"
                 required
                 className="w-full pl-9 pr-3 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#8B5CF6]/50 transition-colors"
               />
@@ -83,14 +83,14 @@ export default function ComparateurPrixPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-400 mb-1.5">Produit du concurrent</label>
+            <label className="block text-xs font-semibold text-gray-400 mb-1.5">Competitor's product</label>
             <div className="relative">
               <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <input
                 type="url"
                 value={competitorUrl}
                 onChange={(e) => setCompetitorUrl(e.target.value)}
-                placeholder="https://concurrent.com/produits/produit-similaire"
+                placeholder="https://competitor.com/products/similar-product"
                 required
                 className="w-full pl-9 pr-3 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 text-sm focus:outline-none focus:border-[#8B5CF6]/50 transition-colors"
               />
@@ -109,7 +109,7 @@ export default function ComparateurPrixPage() {
             className="w-full py-3.5 bg-[#8B5CF6] hover:bg-[#7C3AED] disabled:opacity-60 text-white font-bold text-sm rounded-xl transition-colors flex items-center justify-center gap-2"
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-            {loading ? "Comparaison en cours…" : "Comparer les prix"}
+            {loading ? "Comparing…" : "Compare prices"}
           </button>
         </form>
 
@@ -117,19 +117,19 @@ export default function ComparateurPrixPage() {
           <div className="mt-6 space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-white/4 border border-white/8 rounded-2xl p-5 text-center">
-                <p className="text-xs text-gray-500 mb-2">Votre prix</p>
+                <p className="text-xs text-gray-500 mb-2">Your price</p>
                 {result.yours?.price != null ? (
                   <p className="text-2xl font-black text-white">{result.yours.price.toFixed(2)} {result.yours.currency}</p>
                 ) : (
-                  <p className="text-sm text-gray-600">Prix non trouvé</p>
+                  <p className="text-sm text-gray-600">Price not found</p>
                 )}
               </div>
               <div className="bg-white/4 border border-white/8 rounded-2xl p-5 text-center">
-                <p className="text-xs text-gray-500 mb-2">Prix concurrent</p>
+                <p className="text-xs text-gray-500 mb-2">Competitor's price</p>
                 {result.competitor?.price != null ? (
                   <p className="text-2xl font-black text-white">{result.competitor.price.toFixed(2)} {result.competitor.currency}</p>
                 ) : (
-                  <p className="text-sm text-gray-600">Prix non trouvé</p>
+                  <p className="text-sm text-gray-600">Price not found</p>
                 )}
               </div>
             </div>
@@ -155,38 +155,37 @@ export default function ComparateurPrixPage() {
                   </p>
                   <p className="text-sm text-gray-400">
                     {result.gapPercent < 0
-                      ? "Vous êtes moins cher que ce concurrent"
+                      ? "You're cheaper than this competitor"
                       : result.gapPercent > 0
-                        ? "Vous êtes plus cher que ce concurrent"
-                        : "Même prix que ce concurrent"}
+                        ? "You're more expensive than this competitor"
+                        : "Same price as this competitor"}
                   </p>
                 </div>
               </div>
             )}
 
-            {/* CTA */}
             <div className="bg-gradient-to-br from-[#8B5CF6]/12 to-[#7C3AED]/6 border border-[#8B5CF6]/25 rounded-2xl p-6 text-center">
-              <p className="text-sm font-semibold text-white mb-1.5">Envie de suivre cet écart automatiquement ?</p>
+              <p className="text-sm font-semibold text-white mb-1.5">Want to track this gap automatically?</p>
               <p className="text-xs text-gray-400 mb-4 max-w-sm mx-auto leading-relaxed">
-                Conforva surveille ce prix (et autant de produits/concurrents que vous voulez) 24h/24, et vous alerte dès qu'il bouge.
+                Conforva monitors this price (and as many products/competitors as you need) 24/7, and alerts you the moment it moves.
               </p>
               <Link
                 href="/auth/register"
                 className="inline-flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold text-sm px-6 py-2.5 rounded-xl transition-colors"
               >
-                Essai gratuit 14 jours <ArrowRight className="h-4 w-4" />
+                Free 14-day trial <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
         )}
 
         <p className="text-xs text-gray-600 text-center mt-8">
-          Fonctionne avec la plupart des boutiques Shopify, WooCommerce, PrestaShop et Amazon.
-          Certaines pages très dynamiques peuvent ne pas être détectées.
+          Works with most Shopify, WooCommerce, PrestaShop and Amazon stores.
+          Some highly dynamic pages may not be detected.
         </p>
       </main>
 
-      <PublicFooter />
+      <PublicFooterEn />
     </div>
   )
 }
