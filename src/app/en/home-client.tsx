@@ -4,10 +4,17 @@ import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
 import { ConforvaLogo } from "@/components/logo"
 import { PublicFooterEn } from "@/components/layout/public-nav-en"
-import { ArrowRight, Bell, TrendingDown, TrendingUp, BarChart3, Zap, ShieldCheck, Check, X, AlertTriangle, Package, Eye, Activity } from "lucide-react"
+import { ArrowRight, Bell, TrendingDown, TrendingUp, BarChart3, Zap, ShieldCheck, Check, X, AlertTriangle, Package, Eye, Activity, Menu } from "lucide-react"
+
+const HOME_NAV_LINKS_EN = [
+  { href: "/en#how-it-works", label: "How it works" },
+  { href: "/en#pricing", label: "Pricing" },
+  { href: "/en/blog", label: "Blog" },
+]
 
 function Nav() {
   const [visible, setVisible] = useState(true)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const lastY = useRef(0)
 
   useEffect(() => {
@@ -30,9 +37,9 @@ function Nav() {
           <span className="font-black text-white tracking-tight" style={{ letterSpacing: "-0.02em" }}>CONFORVA</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm text-gray-400">
-          <Link href="/en#how-it-works" className="hover:text-white transition-colors">How it works</Link>
-          <Link href="/en#pricing" className="hover:text-white transition-colors">Pricing</Link>
-          <Link href="/en/blog" className="hover:text-white transition-colors">Blog</Link>
+          {HOME_NAV_LINKS_EN.map((l) => (
+            <Link key={l.href} href={l.href} className="hover:text-white transition-colors">{l.label}</Link>
+          ))}
         </nav>
         <div className="flex items-center gap-3">
           <Link href="/" className="hidden sm:block text-xs text-gray-500 hover:text-white transition-colors px-2 py-1.5 border border-white/10 rounded-lg">
@@ -41,11 +48,57 @@ function Nav() {
           <Link href="/auth/login" className="hidden sm:block text-sm text-gray-400 hover:text-white transition-colors px-3 py-1.5">
             Log in
           </Link>
-          <Link href="/auth/register" className="flex items-center gap-1.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold text-sm px-4 py-2 rounded-xl transition-colors">
+          <Link href="/auth/register" className="hidden sm:flex items-center gap-1.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold text-sm px-4 py-2 rounded-xl transition-colors">
+            Free trial <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+          <button
+            onClick={() => setMobileOpen((v) => !v)}
+            className="md:hidden h-9 w-9 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+      </div>
+
+      {mobileOpen && (
+        <div className="md:hidden border-t border-white/8 bg-[#08090C] px-5 py-4 space-y-1">
+          {HOME_NAV_LINKS_EN.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              onClick={() => setMobileOpen(false)}
+              className="block px-2 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+            >
+              {l.label}
+            </Link>
+          ))}
+          <div className="pt-2 mt-2 border-t border-white/8 flex items-center gap-2">
+            <Link
+              href="/"
+              onClick={() => setMobileOpen(false)}
+              className="flex-1 text-center text-xs text-gray-400 hover:text-white transition-colors px-3 py-2 border border-white/10 rounded-lg"
+            >
+              Français
+            </Link>
+            <Link
+              href="/auth/login"
+              onClick={() => setMobileOpen(false)}
+              className="flex-1 text-center text-sm text-gray-300 hover:text-white transition-colors px-3 py-2 border border-white/10 rounded-lg"
+            >
+              Log in
+            </Link>
+          </div>
+          <Link
+            href="/auth/register"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center justify-center gap-1.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold text-sm px-4 py-2.5 rounded-xl transition-colors mt-2"
+          >
             Free trial <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
-      </div>
+      )}
     </header>
   )
 }
