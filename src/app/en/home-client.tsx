@@ -385,8 +385,6 @@ export default function HomePageEn() {
             <h2 className="text-4xl font-black tracking-tight">Up and running in 5 minutes</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8 relative">
-            <div className="hidden md:block absolute top-10 left-[calc(33.333%-1rem)] w-8 h-px bg-[#8B5CF6]/40" />
-            <div className="hidden md:block absolute top-10 left-[calc(66.666%-1rem)] w-8 h-px bg-[#8B5CF6]/40" />
             {[
               {
                 step: "1",
