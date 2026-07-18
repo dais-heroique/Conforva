@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import { DM_Sans } from "next/font/google"
+import { headers } from "next/headers"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@vercel/analytics/next"
@@ -91,9 +92,12 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const pathname = (await headers()).get("x-pathname") ?? ""
+  const lang = pathname.startsWith("/en") ? "en" : "fr"
+
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
