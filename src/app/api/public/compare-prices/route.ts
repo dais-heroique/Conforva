@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { scrapeProductPrice } from "@/lib/scraping/price"
+import { scrapeProductPrice, type ScrapeDebugInfo } from "@/lib/scraping/price"
 import { getDb } from "@/lib/db"
 import { publicToolUsage } from "@/lib/db/schema"
 import { and, eq, count } from "drizzle-orm"
@@ -58,10 +58,16 @@ export async function POST(req: Request) {
     // if no price is found, and this closes the "retry with garbage URLs" loophole.
     await db.insert(publicToolUsage).values({ ip, tool: TOOL_NAME })
 
+    const yoursDebug: ScrapeDebugInfo = { strategy: null, httpStatus: null, htmlLength: null, candidatesFound: null, error: null }
+    const competitorDebug: ScrapeDebugInfo = { strategy: null, httpStatus: null, htmlLength: null, candidatesFound: null, error: null }
+
     const [yours, competitor] = await Promise.all([
-      scrapeProductPrice(yourUrl),
-      scrapeProductPrice(competitorUrl),
+      scrapeProductPrice(yourUrl, yoursDebug),
+      scrapeProductPrice(competitorUrl, competitorDebug),
     ])
+
+    console.log("[public/compare-prices] yours:", yourUrl, JSON.stringify(yoursDebug), "price:", yours?.price ?? null)
+    console.log("[public/compare-prices] competitor:", competitorUrl, JSON.stringify(competitorDebug), "price:", competitor?.price ?? null)
 
     if (!yours?.price && !competitor?.price) {
       return NextResponse.json({ error: "NO_PRICE_FOUND" }, { status: 422 })
