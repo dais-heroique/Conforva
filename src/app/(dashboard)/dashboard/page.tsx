@@ -13,9 +13,23 @@ import {
   Flame, Target, ChevronRight, Sparkles, DollarSign, Percent,
 } from "lucide-react"
 
-export default async function DashboardPage() {
+const RANGE_OPTIONS = [
+  { key: "1h", label: "1 h", hours: 1 },
+  { key: "5h", label: "5 h", hours: 5 },
+  { key: "24h", label: "24 h", hours: 24 },
+  { key: "7j", label: "7 j", hours: 24 * 7 },
+] as const
+
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ range?: string }>
+}) {
   const session = await auth()
   if (!session?.user?.id) redirect("/auth/login")
+
+  const { range } = await searchParams
+  const selectedRange = RANGE_OPTIONS.find((r) => r.key === range) ?? RANGE_OPTIONS[2]
 
   const db = getDb()
 
@@ -31,6 +45,7 @@ export default async function DashboardPage() {
 
   const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000)
   const since7d = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  const sinceSelectedRange = new Date(Date.now() - selectedRange.hours * 60 * 60 * 1000)
 
   const [
     competitors,
@@ -54,7 +69,7 @@ export default async function DashboardPage() {
 
     db.select({ product: trackedProducts })
       .from(trackedProducts)
-      .where(and(eq(trackedProducts.organizationId, org.id), gte(trackedProducts.lastPriceChangedAt, since24h)))
+      .where(and(eq(trackedProducts.organizationId, org.id), gte(trackedProducts.lastPriceChangedAt, sinceSelectedRange)))
       .orderBy(desc(trackedProducts.lastPriceChangedAt))
       .limit(10),
 
@@ -158,7 +173,7 @@ export default async function DashboardPage() {
             href: "/dashboard/alerts",
           },
           {
-            label: "Changements 24h",
+            label: `Changements ${selectedRange.label}`,
             value: recentChanges.length,
             icon: Activity,
             accent: "text-emerald-400",
@@ -237,14 +252,31 @@ export default async function DashboardPage() {
         {/* Price changes */}
         <div className="lg:col-span-2 space-y-5">
           <div className="bg-white/4 border border-white/8 rounded-2xl overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/8">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/8 flex-wrap gap-3">
               <div className="flex items-center gap-2">
                 <Activity className="h-4 w-4 text-[#A78BFA]" />
-                <h2 className="font-semibold text-white text-sm">Changements de prix (24h)</h2>
+                <h2 className="font-semibold text-white text-sm">Changements de prix ({selectedRange.label})</h2>
               </div>
-              <Link href="/dashboard/products" className="text-xs text-[#A78BFA] hover:text-[#8B5CF6] flex items-center gap-1 transition-colors">
-                Tout voir <ArrowRight className="h-3 w-3" />
-              </Link>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1 bg-white/5 border border-white/8 rounded-lg p-0.5">
+                  {RANGE_OPTIONS.map((opt) => (
+                    <Link
+                      key={opt.key}
+                      href={opt.key === "24h" ? "/dashboard" : `/dashboard?range=${opt.key}`}
+                      className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+                        opt.key === selectedRange.key
+                          ? "bg-[#8B5CF6] text-white"
+                          : "text-gray-500 hover:text-white"
+                      }`}
+                    >
+                      {opt.label}
+                    </Link>
+                  ))}
+                </div>
+                <Link href="/dashboard/products" className="text-xs text-[#A78BFA] hover:text-[#8B5CF6] flex items-center gap-1 transition-colors shrink-0">
+                  Tout voir <ArrowRight className="h-3 w-3" />
+                </Link>
+              </div>
             </div>
 
             <div className="p-5">
@@ -270,7 +302,7 @@ export default async function DashboardPage() {
                         <BarChart3 className="h-6 w-6 text-gray-500" />
                       </div>
                       <p className="text-sm font-medium text-white mb-1">Tout est stable</p>
-                      <p className="text-xs text-gray-500">Aucun changement de prix dans les dernières 24h</p>
+                      <p className="text-xs text-gray-500">Aucun changement de prix sur les dernières {selectedRange.label}</p>
                     </>
                   )}
                 </div>
