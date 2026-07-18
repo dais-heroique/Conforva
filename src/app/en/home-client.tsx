@@ -9,6 +9,7 @@ import { ArrowRight, Bell, TrendingDown, TrendingUp, BarChart3, Zap, ShieldCheck
 const HOME_NAV_LINKS_EN = [
   { href: "/en#how-it-works", label: "How it works" },
   { href: "/en#pricing", label: "Pricing" },
+  { href: "/en/price-comparison", label: "Free tool" },
   { href: "/en/blog", label: "Blog" },
 ]
 

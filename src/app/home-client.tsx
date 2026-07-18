@@ -14,6 +14,7 @@ import { ArrowRight, Bell, TrendingDown, TrendingUp, BarChart3, Zap, ShieldCheck
 const HOME_NAV_LINKS = [
   { href: "/#comment", label: "Comment ça marche" },
   { href: "/#tarifs", label: "Tarifs" },
+  { href: "/comparateur-prix", label: "Comparateur gratuit" },
   { href: "/blog", label: "Blog" },
 ]
 
