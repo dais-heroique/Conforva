@@ -5,16 +5,46 @@ import { organizations, organizationMembers, weeklyReports } from "@/lib/db/sche
 import { eq, desc } from "drizzle-orm"
 import { Zap, FileText, Calendar, ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { getLocale } from "@/lib/i18n/locale"
+import type { Locale } from "@/lib/i18n/locale"
 
-function formatDate(ts: Date | number | null): string {
+const DICT = {
+  fr: {
+    title: "Rapports IA",
+    subtitle: "Analyses hebdomadaires de vos concurrents",
+    firstReportSoon: "Votre premier rapport arrive bientôt",
+    firstReportDesc: "Le premier rapport IA sera généré dans les 24h suivant le premier scan de vos concurrents.",
+    configureCompetitors: "Configurer mes concurrents",
+    reportOf: (date: string) => `Rapport du ${date}`,
+    executiveSummary: "Résumé exécutif",
+    keyInsights: "Insights clés",
+    recommendations: "Recommandations",
+  },
+  en: {
+    title: "AI reports",
+    subtitle: "Weekly analysis of your competitors",
+    firstReportSoon: "Your first report is on its way",
+    firstReportDesc: "The first AI report will be generated within 24h of your competitors' first scan.",
+    configureCompetitors: "Set up my competitors",
+    reportOf: (date: string) => `Report of ${date}`,
+    executiveSummary: "Executive summary",
+    keyInsights: "Key insights",
+    recommendations: "Recommendations",
+  },
+}
+
+function formatDate(ts: Date | number | null, locale: Locale): string {
   if (!ts) return ""
   const d = typeof ts === "number" ? new Date(ts) : ts
-  return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
+  return d.toLocaleDateString(locale === "en" ? "en-US" : "fr-FR", { day: "numeric", month: "long", year: "numeric" })
 }
 
 export default async function ReportsPage() {
   const session = await auth()
   if (!session?.user?.id) redirect("/auth/login")
+
+  const locale = await getLocale()
+  const t = DICT[locale]
 
   const db = getDb()
 
@@ -38,8 +68,8 @@ export default async function ReportsPage() {
     <div className="p-6 space-y-6 bg-[#08090C] min-h-full">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Rapports IA</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Analyses hebdomadaires de vos concurrents</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">{t.title}</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{t.subtitle}</p>
         </div>
       </div>
 
@@ -48,12 +78,12 @@ export default async function ReportsPage() {
           <div className="h-16 w-16 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mx-auto mb-5">
             <Zap className="h-7 w-7 text-[#A78BFA]" />
           </div>
-          <h2 className="text-lg font-bold text-white mb-2">Votre premier rapport arrive bientôt</h2>
+          <h2 className="text-lg font-bold text-white mb-2">{t.firstReportSoon}</h2>
           <p className="text-sm text-gray-400 mb-6 max-w-sm mx-auto">
-            Le premier rapport IA sera généré dans les 24h suivant le premier scan de vos concurrents.
+            {t.firstReportDesc}
           </p>
           <Link href="/dashboard/competitors" className="inline-flex items-center gap-2 text-[#A78BFA] text-sm hover:underline">
-            Configurer mes concurrents <ArrowRight className="h-4 w-4" />
+            {t.configureCompetitors} <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       ) : (
@@ -63,30 +93,30 @@ export default async function ReportsPage() {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Zap className="h-4 w-4 text-[#8B5CF6]" />
-                  <span className="font-semibold text-white text-sm">Rapport du {formatDate(report.weekStart)}</span>
+                  <span className="font-semibold text-white text-sm">{t.reportOf(formatDate(report.weekStart, locale))}</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-gray-500">
                   <Calendar className="h-3.5 w-3.5" />
-                  {formatDate(report.weekStart)} – {formatDate(report.weekEnd)}
+                  {formatDate(report.weekStart, locale)} – {formatDate(report.weekEnd, locale)}
                 </div>
               </div>
               {report.summary && (
                 <div className="bg-[#8B5CF6]/8 border border-[#8B5CF6]/15 rounded-xl p-4 mb-4">
-                  <p className="text-xs font-semibold text-[#8B5CF6] mb-1.5">Résumé exécutif</p>
+                  <p className="text-xs font-semibold text-[#8B5CF6] mb-1.5">{t.executiveSummary}</p>
                   <p className="text-sm text-gray-300 leading-relaxed">{report.summary}</p>
                 </div>
               )}
               {report.keyInsights && (
                 <div className="mb-4">
                   <p className="text-xs font-semibold text-gray-400 mb-2 flex items-center gap-1.5">
-                    <FileText className="h-3.5 w-3.5" /> Insights clés
+                    <FileText className="h-3.5 w-3.5" /> {t.keyInsights}
                   </p>
                   <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-line">{report.keyInsights}</p>
                 </div>
               )}
               {report.recommendations && (
                 <div>
-                  <p className="text-xs font-semibold text-gray-400 mb-2">Recommandations</p>
+                  <p className="text-xs font-semibold text-gray-400 mb-2">{t.recommendations}</p>
                   <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-line">{report.recommendations}</p>
                 </div>
               )}

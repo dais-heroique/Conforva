@@ -3,15 +3,23 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Pencil, Loader2, Check, X, TrendingUp, TrendingDown } from "lucide-react"
+import type { Locale } from "@/lib/i18n/locale"
+
+const DICT = {
+  fr: { cost: "Coût", myPrice: "Mon prix", addMargin: "Ajouter ma marge", margin: "marge", costLabel: (c: number | null) => `Coût: ${c}€`, ifMatched: "Si aligné:" },
+  en: { cost: "Cost", myPrice: "My price", addMargin: "Add my margin", margin: "margin", costLabel: (c: number | null) => `Cost: ${c}€`, ifMatched: "If matched:" },
+}
 
 interface Props {
   productId: string
   costPrice: number | null
   yourPrice: number | null
   competitorPrice: number | null
+  locale?: Locale
 }
 
-export function MarginEditor({ productId, costPrice, yourPrice, competitorPrice }: Props) {
+export function MarginEditor({ productId, costPrice, yourPrice, competitorPrice, locale = "fr" }: Props) {
+  const t = DICT[locale]
   const router = useRouter()
   const [editing, setEditing] = useState(false)
   const [cost, setCost] = useState(costPrice != null ? String(costPrice) : "")
@@ -43,12 +51,12 @@ export function MarginEditor({ productId, costPrice, yourPrice, competitorPrice 
       <form onSubmit={handleSubmit} className="flex items-center gap-1 flex-wrap">
         <input
           type="text" inputMode="decimal" autoFocus value={cost} onChange={(e) => setCost(e.target.value)}
-          placeholder="Coût"
+          placeholder={t.cost}
           className="w-16 px-1.5 py-1 bg-white/8 border border-[#8B5CF6]/40 rounded-lg text-white text-xs focus:outline-none focus:border-[#8B5CF6]"
         />
         <input
           type="text" inputMode="decimal" value={mine} onChange={(e) => setMine(e.target.value)}
-          placeholder="Mon prix"
+          placeholder={t.myPrice}
           className="w-16 px-1.5 py-1 bg-white/8 border border-[#8B5CF6]/40 rounded-lg text-white text-xs focus:outline-none focus:border-[#8B5CF6]"
         />
         <button type="submit" disabled={loading} className="text-emerald-400 hover:text-emerald-300">
@@ -64,7 +72,7 @@ export function MarginEditor({ productId, costPrice, yourPrice, competitorPrice 
   if (costPrice == null && yourPrice == null) {
     return (
       <button onClick={() => setEditing(true)} className="inline-flex items-center gap-1 text-xs text-[#A78BFA] hover:text-white transition-colors">
-        <Pencil className="h-3 w-3" /> Ajouter ma marge
+        <Pencil className="h-3 w-3" /> {t.addMargin}
       </button>
     )
   }
@@ -82,14 +90,14 @@ export function MarginEditor({ productId, costPrice, yourPrice, competitorPrice 
       {myMargin != null ? (
         <span className={`inline-flex items-center gap-1 text-xs font-bold ${myMargin >= 20 ? "text-emerald-400" : myMargin >= 0 ? "text-amber-400" : "text-red-400"}`}>
           {myMargin >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-          {myMargin.toFixed(0)}% marge
+          {myMargin.toFixed(0)}% {t.margin}
         </span>
       ) : (
-        <span className="text-xs text-gray-500 group-hover:text-[#A78BFA]">Coût: {costPrice}€</span>
+        <span className="text-xs text-gray-500 group-hover:text-[#A78BFA]">{t.costLabel(costPrice)}</span>
       )}
       {marginIfMatchCompetitor != null && (
         <p className="text-xs text-gray-600 mt-0.5">
-          Si aligné: {marginIfMatchCompetitor >= 0 ? "+" : ""}{marginIfMatchCompetitor.toFixed(0)}%
+          {t.ifMatched} {marginIfMatchCompetitor >= 0 ? "+" : ""}{marginIfMatchCompetitor.toFixed(0)}%
         </p>
       )}
     </button>

@@ -5,6 +5,7 @@ import { getDb } from "@/lib/db"
 import { organizations, organizationMembers, trackedCompetitors, trackedProducts } from "@/lib/db/schema"
 import { eq, and, count } from "drizzle-orm"
 import { Eye, Plus, ExternalLink } from "lucide-react"
+import { getLocale } from "@/lib/i18n/locale"
 
 const PLATFORM_COLORS: Record<string, string> = {
   shopify: "bg-green-500/15 text-green-400",
@@ -14,9 +15,35 @@ const PLATFORM_COLORS: Record<string, string> = {
   custom: "bg-gray-500/15 text-gray-400",
 }
 
+const DICT = {
+  fr: {
+    title: "Concurrents",
+    included: (n: number, limit: number) => `${n} / ${limit} inclus dans votre plan`,
+    add: "Ajouter",
+    noCompetitor: "Aucun concurrent suivi",
+    addFirstDesc: "Ajoutez l'URL d'un concurrent pour démarrer la surveillance automatique de ses prix et stocks.",
+    addFirst: "Ajouter mon premier concurrent",
+    limitReached: (limit: number) => `Vous avez atteint la limite de ${limit} concurrent(s) sur votre plan actuel.`,
+    upgrade: "Passer au plan supérieur →",
+  },
+  en: {
+    title: "Competitors",
+    included: (n: number, limit: number) => `${n} / ${limit} included in your plan`,
+    add: "Add",
+    noCompetitor: "No competitor tracked",
+    addFirstDesc: "Add a competitor's URL to start automatically monitoring their prices and stock.",
+    addFirst: "Add my first competitor",
+    limitReached: (limit: number) => `You've reached the limit of ${limit} competitor(s) on your current plan.`,
+    upgrade: "Upgrade plan →",
+  },
+}
+
 export default async function CompetitorsPage() {
   const session = await auth()
   if (!session?.user?.id) redirect("/auth/login")
+
+  const locale = await getLocale()
+  const t = DICT[locale]
 
   const db = getDb()
 
@@ -40,8 +67,8 @@ export default async function CompetitorsPage() {
     <div className="p-6 space-y-6 bg-[#08090C] min-h-full">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Concurrents</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{competitors.length} / {org.competitorLimit} inclus dans votre plan</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">{t.title}</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{t.included(competitors.length, org.competitorLimit)}</p>
         </div>
         {competitors.length < org.competitorLimit && (
           <Link
@@ -49,7 +76,7 @@ export default async function CompetitorsPage() {
             className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors shadow-lg shadow-violet-900/20"
           >
             <Plus className="h-4 w-4" />
-            Ajouter
+            {t.add}
           </Link>
         )}
       </div>
@@ -59,16 +86,16 @@ export default async function CompetitorsPage() {
           <div className="h-16 w-16 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mx-auto mb-5">
             <Eye className="h-7 w-7 text-[#A78BFA]" />
           </div>
-          <h2 className="text-lg font-bold text-white mb-2">Aucun concurrent suivi</h2>
+          <h2 className="text-lg font-bold text-white mb-2">{t.noCompetitor}</h2>
           <p className="text-sm text-gray-400 mb-6 max-w-sm mx-auto">
-            Ajoutez l'URL d'un concurrent pour démarrer la surveillance automatique de ses prix et stocks.
+            {t.addFirstDesc}
           </p>
           <Link
             href="/dashboard/competitors/new"
             className="inline-flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
           >
             <Plus className="h-4 w-4" />
-            Ajouter mon premier concurrent
+            {t.addFirst}
           </Link>
         </div>
       ) : (
@@ -104,8 +131,8 @@ export default async function CompetitorsPage() {
 
       {competitors.length >= org.competitorLimit && (
         <div className="bg-orange-500/10 border border-orange-500/20 rounded-2xl p-4 text-sm text-orange-300">
-          Vous avez atteint la limite de {org.competitorLimit} concurrent(s) sur votre plan actuel.{" "}
-          <Link href="/dashboard/billing" className="underline">Passer au plan supérieur →</Link>
+          {t.limitReached(org.competitorLimit)}{" "}
+          <Link href="/dashboard/billing" className="underline">{t.upgrade}</Link>
         </div>
       )}
     </div>

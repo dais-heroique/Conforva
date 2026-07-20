@@ -3,8 +3,15 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Pencil, Loader2, Check, X } from "lucide-react"
+import type { Locale } from "@/lib/i18n/locale"
 
-export function SetPriceButton({ productId, compact = false }: { productId: string; compact?: boolean }) {
+const DICT = {
+  fr: { invalidPrice: "Prix invalide", error: "Erreur", networkError: "Erreur réseau", enterPrice: "Entrer le prix" },
+  en: { invalidPrice: "Invalid price", error: "Error", networkError: "Network error", enterPrice: "Enter price" },
+}
+
+export function SetPriceButton({ productId, compact = false, locale = "fr" }: { productId: string; compact?: boolean; locale?: Locale }) {
+  const t = DICT[locale]
   const router = useRouter()
   const [editing, setEditing] = useState(false)
   const [price, setPrice] = useState("")
@@ -15,7 +22,7 @@ export function SetPriceButton({ productId, compact = false }: { productId: stri
     e.preventDefault()
     const value = parseFloat(price.replace(",", "."))
     if (!Number.isFinite(value) || value <= 0) {
-      setError("Prix invalide")
+      setError(t.invalidPrice)
       return
     }
     setLoading(true)
@@ -27,7 +34,7 @@ export function SetPriceButton({ productId, compact = false }: { productId: stri
         body: JSON.stringify({ productId, price: value }),
       })
       if (!res.ok) {
-        setError("Erreur")
+        setError(t.error)
         setLoading(false)
         return
       }
@@ -35,7 +42,7 @@ export function SetPriceButton({ productId, compact = false }: { productId: stri
       setPrice("")
       router.refresh()
     } catch {
-      setError("Erreur réseau")
+      setError(t.networkError)
     } finally {
       setLoading(false)
     }
@@ -48,7 +55,7 @@ export function SetPriceButton({ productId, compact = false }: { productId: stri
         className={`inline-flex items-center gap-1 text-xs text-[#A78BFA] hover:text-white transition-colors ${compact ? "" : "font-medium"}`}
       >
         <Pencil className="h-3 w-3" />
-        {compact ? "" : "Entrer le prix"}
+        {compact ? "" : t.enterPrice}
       </button>
     )
   }

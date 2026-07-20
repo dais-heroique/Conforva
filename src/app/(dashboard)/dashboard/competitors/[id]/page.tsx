@@ -8,11 +8,56 @@ import { ArrowLeft, ExternalLink, TrendingDown, TrendingUp, Package, RefreshCw }
 import { AddProductModal } from "@/components/dashboard/add-product-modal"
 import { DeleteProductButton } from "@/components/dashboard/delete-product-button"
 import { SetPriceButton } from "@/components/dashboard/set-price-button"
+import { getLocale } from "@/lib/i18n/locale"
+
+const DICT = {
+  fr: {
+    active: "Actif",
+    inactive: "Inactif",
+    trackedProducts: "Produits suivis",
+    priceDrops: "Baisses de prix",
+    priceRises: "Hausses de prix",
+    outOfStock: "En rupture",
+    products: (n: number) => `Produits (${n})`,
+    lastScan: (date: string) => `Dernier scan ${date}`,
+    noProduct: "Aucun produit ajouté",
+    noProductDesc: "Ajoutez les URLs des produits de ce concurrent pour surveiller leurs prix.",
+    product: "Produit",
+    currentPrice: "Prix actuel",
+    variation: "Variation",
+    stock: "Stock",
+    inStock: "En stock",
+    outOfStockShort: "Rupture",
+    sku: "SKU",
+  },
+  en: {
+    active: "Active",
+    inactive: "Inactive",
+    trackedProducts: "Tracked products",
+    priceDrops: "Price drops",
+    priceRises: "Price rises",
+    outOfStock: "Out of stock",
+    products: (n: number) => `Products (${n})`,
+    lastScan: (date: string) => `Last scan ${date}`,
+    noProduct: "No product added",
+    noProductDesc: "Add this competitor's product URLs to monitor their prices.",
+    product: "Product",
+    currentPrice: "Current price",
+    variation: "Change",
+    stock: "Stock",
+    inStock: "In stock",
+    outOfStockShort: "Out of stock",
+    sku: "SKU",
+  },
+}
 
 export default async function CompetitorDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const session = await auth()
   if (!session?.user?.id) redirect("/auth/login")
+
+  const locale = await getLocale()
+  const t = DICT[locale]
 
   const db = getDb()
 
@@ -77,20 +122,21 @@ export default async function CompetitorDetailPage({ params }: { params: Promise
           defaultCompetitorId={competitor.id}
           productLimit={org.productLimit}
           currentCount={totalProducts}
+          locale={locale}
         />
         <div className={`flex items-center gap-1.5 text-xs ${competitor.isActive ? "text-[#8B5CF6]" : "text-gray-500"}`}>
           <div className={`h-2 w-2 rounded-full ${competitor.isActive ? "bg-[#8B5CF6]" : "bg-gray-500"}`} />
-          {competitor.isActive ? "Actif" : "Inactif"}
+          {competitor.isActive ? t.active : t.inactive}
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { label: "Produits suivis", value: products.length, icon: Package, color: "text-blue-400" },
-          { label: "Baisses de prix", value: drops, icon: TrendingDown, color: "text-[#8B5CF6]" },
-          { label: "Hausses de prix", value: rises, icon: TrendingUp, color: "text-red-400" },
-          { label: "En rupture", value: outOfStock, icon: Package, color: "text-orange-400" },
+          { label: t.trackedProducts, value: products.length, icon: Package, color: "text-blue-400" },
+          { label: t.priceDrops, value: drops, icon: TrendingDown, color: "text-[#8B5CF6]" },
+          { label: t.priceRises, value: rises, icon: TrendingUp, color: "text-red-400" },
+          { label: t.outOfStock, value: outOfStock, icon: Package, color: "text-orange-400" },
         ].map(({ label, value, icon: Icon, color }) => (
           <div key={label} className="bg-white/5 border border-white/8 rounded-xl p-4">
             <div className="flex items-center justify-between mb-2">
@@ -105,11 +151,11 @@ export default async function CompetitorDetailPage({ params }: { params: Promise
       {/* Products table */}
       <div className="bg-white/5 border border-white/8 rounded-2xl overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/8">
-          <h2 className="font-semibold text-white text-sm">Produits ({products.length})</h2>
+          <h2 className="font-semibold text-white text-sm">{t.products(products.length)}</h2>
           {competitor.lastScrapedAt && (
             <span className="text-xs text-gray-500 flex items-center gap-1.5">
               <RefreshCw className="h-3 w-3" />
-              Dernier scan {new Date(competitor.lastScrapedAt).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" })}
+              {t.lastScan(new Date(competitor.lastScrapedAt).toLocaleString(locale === "en" ? "en-US" : "fr-FR", { dateStyle: "short", timeStyle: "short" }))}
             </span>
           )}
         </div>
@@ -119,13 +165,14 @@ export default async function CompetitorDetailPage({ params }: { params: Promise
             <div className="h-14 w-14 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mx-auto mb-4">
               <Package className="h-6 w-6 text-[#A78BFA]" />
             </div>
-            <p className="text-sm font-medium text-white mb-1">Aucun produit ajouté</p>
-            <p className="text-xs text-gray-400 mb-4">Ajoutez les URLs des produits de ce concurrent pour surveiller leurs prix.</p>
+            <p className="text-sm font-medium text-white mb-1">{t.noProduct}</p>
+            <p className="text-xs text-gray-400 mb-4">{t.noProductDesc}</p>
             <AddProductModal
               competitors={[{ id: competitor.id, name: competitor.name, domain: competitor.domain, platform: competitor.platform }]}
               defaultCompetitorId={competitor.id}
               productLimit={org.productLimit}
               currentCount={totalProducts}
+              locale={locale}
             />
           </div>
         ) : (
@@ -133,10 +180,10 @@ export default async function CompetitorDetailPage({ params }: { params: Promise
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/8 text-xs text-gray-500">
-                  <th className="text-left px-5 py-3 font-medium">Produit</th>
-                  <th className="text-right px-4 py-3 font-medium">Prix actuel</th>
-                  <th className="text-right px-4 py-3 font-medium">Variation</th>
-                  <th className="text-center px-4 py-3 font-medium">Stock</th>
+                  <th className="text-left px-5 py-3 font-medium">{t.product}</th>
+                  <th className="text-right px-4 py-3 font-medium">{t.currentPrice}</th>
+                  <th className="text-right px-4 py-3 font-medium">{t.variation}</th>
+                  <th className="text-center px-4 py-3 font-medium">{t.stock}</th>
                   <th className="px-4 py-3" />
                 </tr>
               </thead>
@@ -147,7 +194,7 @@ export default async function CompetitorDetailPage({ params }: { params: Promise
                       <a href={product.url} target="_blank" rel="noopener" className="text-white hover:text-[#A78BFA] transition-colors truncate max-w-xs block font-medium">
                         {product.name || new URL(product.url).pathname.split("/").filter(Boolean).pop() || product.url}
                       </a>
-                      {product.sku && <p className="text-xs text-gray-500 mt-0.5">SKU: {product.sku}</p>}
+                      {product.sku && <p className="text-xs text-gray-500 mt-0.5">{t.sku}: {product.sku}</p>}
                     </td>
                     <td className="px-4 py-3.5 text-right">
                       {product.currentPrice != null ? (
@@ -158,7 +205,7 @@ export default async function CompetitorDetailPage({ params }: { params: Promise
                           )}
                         </>
                       ) : (
-                        <SetPriceButton productId={product.id} />
+                        <SetPriceButton productId={product.id} locale={locale} />
                       )}
                     </td>
                     <td className="px-4 py-3.5 text-right">
@@ -175,13 +222,13 @@ export default async function CompetitorDetailPage({ params }: { params: Promise
                       {product.isInStock === null ? (
                         <span className="text-gray-600 text-xs">—</span>
                       ) : product.isInStock ? (
-                        <span className="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">En stock</span>
+                        <span className="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">{t.inStock}</span>
                       ) : (
-                        <span className="text-xs text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded-full">Rupture</span>
+                        <span className="text-xs text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded-full">{t.outOfStockShort}</span>
                       )}
                     </td>
                     <td className="px-4 py-3.5">
-                      <DeleteProductButton productId={product.id} />
+                      <DeleteProductButton productId={product.id} locale={locale} />
                     </td>
                   </tr>
                 ))}

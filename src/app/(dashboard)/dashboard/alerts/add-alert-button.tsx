@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react"
 import { Plus, Bell, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import type { Locale } from "@/lib/i18n/locale"
 
 interface Competitor {
   id: string
@@ -20,19 +21,64 @@ interface Props {
   competitors: Competitor[]
   products: Product[]
   canAdd: boolean
+  locale: Locale
 }
 
-const ALERT_TYPES = [
-  { value: "price_drop", label: "Baisse de prix" },
-  { value: "price_increase", label: "Hausse de prix" },
-  { value: "out_of_stock", label: "Rupture de stock" },
-  { value: "back_in_stock", label: "Retour en stock" },
-  { value: "new_product", label: "Nouveau produit" },
-]
+const DICT = {
+  fr: {
+    alertTypes: [
+      { value: "price_drop", label: "Baisse de prix" },
+      { value: "price_increase", label: "Hausse de prix" },
+      { value: "out_of_stock", label: "Rupture de stock" },
+      { value: "back_in_stock", label: "Retour en stock" },
+      { value: "new_product", label: "Nouveau produit" },
+    ],
+    limitReached: "Limite atteinte — Upgrader",
+    newAlert: "Nouvelle alerte",
+    createAlert: "Créer une alerte",
+    alertName: "Nom de l'alerte",
+    alertNamePlaceholder: "Prix Nike sous -10%",
+    alertType: "Type d'alerte",
+    scope: "Portée de l'alerte",
+    scopeProduct: "Un produit",
+    scopeCompetitor: "Un concurrent",
+    scopeAll: "Tout",
+    productToWatch: "Produit à surveiller",
+    competitorToWatch: "Concurrent à surveiller",
+    threshold: "Seuil (%)",
+    cancel: "Annuler",
+    create: "Créer",
+  },
+  en: {
+    alertTypes: [
+      { value: "price_drop", label: "Price drop" },
+      { value: "price_increase", label: "Price increase" },
+      { value: "out_of_stock", label: "Out of stock" },
+      { value: "back_in_stock", label: "Back in stock" },
+      { value: "new_product", label: "New product" },
+    ],
+    limitReached: "Limit reached — Upgrade",
+    newAlert: "New alert",
+    createAlert: "Create an alert",
+    alertName: "Alert name",
+    alertNamePlaceholder: "Nike price under -10%",
+    alertType: "Alert type",
+    scope: "Alert scope",
+    scopeProduct: "A product",
+    scopeCompetitor: "A competitor",
+    scopeAll: "Everything",
+    productToWatch: "Product to watch",
+    competitorToWatch: "Competitor to watch",
+    threshold: "Threshold (%)",
+    cancel: "Cancel",
+    create: "Create",
+  },
+}
 
 type Scope = "all" | "competitor" | "product"
 
-export function AddAlertButton({ competitors, products, canAdd }: Props) {
+export function AddAlertButton({ competitors, products, canAdd, locale }: Props) {
+  const t = DICT[locale]
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [name, setName] = useState("")
@@ -74,7 +120,7 @@ export function AddAlertButton({ competitors, products, canAdd }: Props) {
   if (!canAdd) {
     return (
       <a href="/dashboard/billing" className="flex items-center gap-2 text-sm text-orange-400 border border-orange-400/30 px-4 py-2 rounded-xl hover:bg-orange-400/10 transition-colors">
-        <Bell className="h-4 w-4" /> Limite atteinte — Upgrader
+        <Bell className="h-4 w-4" /> {t.limitReached}
       </a>
     )
   }
@@ -86,39 +132,39 @@ export function AddAlertButton({ competitors, products, canAdd }: Props) {
         className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold text-sm px-4 py-2 rounded-xl transition-colors"
       >
         <Plus className="h-4 w-4" />
-        Nouvelle alerte
+        {t.newAlert}
       </button>
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={() => setOpen(false)}>
           <div className="bg-[#0D0D14] border border-white/10 rounded-2xl p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
-            <h2 className="font-bold text-white mb-4">Créer une alerte</h2>
+            <h2 className="font-bold text-white mb-4">{t.createAlert}</h2>
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Nom de l'alerte</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">{t.alertName}</label>
                 <input
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
                   required
-                  placeholder="Prix Nike sous -10%"
+                  placeholder={t.alertNamePlaceholder}
                   className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#8B5CF6]/50 placeholder-gray-600"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Type d'alerte</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">{t.alertType}</label>
                 <select
                   value={type}
                   onChange={e => setType(e.target.value)}
                   className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#8B5CF6]/50"
                 >
-                  {ALERT_TYPES.map(t => <option key={t.value} value={t.value} className="bg-[#0D0D14]">{t.label}</option>)}
+                  {t.alertTypes.map(at => <option key={at.value} value={at.value} className="bg-[#0D0D14]">{at.label}</option>)}
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Portée de l'alerte</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">{t.scope}</label>
                 <div className="grid grid-cols-3 gap-1.5">
                   <button
                     type="button"
@@ -128,7 +174,7 @@ export function AddAlertButton({ competitors, products, canAdd }: Props) {
                       scope === "product" ? "bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 text-[#A78BFA]" : "bg-white/5 border border-white/10 text-gray-400"
                     }`}
                   >
-                    Un produit
+                    {t.scopeProduct}
                   </button>
                   <button
                     type="button"
@@ -138,7 +184,7 @@ export function AddAlertButton({ competitors, products, canAdd }: Props) {
                       scope === "competitor" ? "bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 text-[#A78BFA]" : "bg-white/5 border border-white/10 text-gray-400"
                     }`}
                   >
-                    Un concurrent
+                    {t.scopeCompetitor}
                   </button>
                   <button
                     type="button"
@@ -147,14 +193,14 @@ export function AddAlertButton({ competitors, products, canAdd }: Props) {
                       scope === "all" ? "bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 text-[#A78BFA]" : "bg-white/5 border border-white/10 text-gray-400"
                     }`}
                   >
-                    Tout
+                    {t.scopeAll}
                   </button>
                 </div>
               </div>
 
               {scope === "product" && (
                 <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1.5">Produit à surveiller</label>
+                  <label className="block text-xs font-medium text-gray-400 mb-1.5">{t.productToWatch}</label>
                   <select
                     value={productId}
                     onChange={e => setProductId(e.target.value)}
@@ -169,7 +215,7 @@ export function AddAlertButton({ competitors, products, canAdd }: Props) {
 
               {scope === "competitor" && (
                 <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1.5">Concurrent à surveiller</label>
+                  <label className="block text-xs font-medium text-gray-400 mb-1.5">{t.competitorToWatch}</label>
                   <select
                     value={competitorId}
                     onChange={e => setCompetitorId(e.target.value)}
@@ -182,7 +228,7 @@ export function AddAlertButton({ competitors, products, canAdd }: Props) {
 
               {(type === "price_drop" || type === "price_increase") && (
                 <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1.5">Seuil (%)</label>
+                  <label className="block text-xs font-medium text-gray-400 mb-1.5">{t.threshold}</label>
                   <input
                     type="number"
                     value={threshold}
@@ -195,11 +241,11 @@ export function AddAlertButton({ competitors, products, canAdd }: Props) {
 
               <div className="flex gap-3 pt-2">
                 <button type="button" onClick={() => setOpen(false)} className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-white text-sm rounded-xl transition-colors">
-                  Annuler
+                  {t.cancel}
                 </button>
                 <button type="submit" disabled={loading} className="flex-1 py-2.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold text-sm rounded-xl transition-colors disabled:opacity-60 flex items-center justify-center gap-2">
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                  Créer
+                  {t.create}
                 </button>
               </div>
             </form>

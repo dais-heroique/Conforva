@@ -3,13 +3,20 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Trash2, Loader2 } from "lucide-react"
+import type { Locale } from "@/lib/i18n/locale"
 
-export function DeleteProductButton({ productId }: { productId: string }) {
+const DICT = {
+  fr: { confirm: "Supprimer ce produit du suivi ?", title: "Supprimer" },
+  en: { confirm: "Remove this product from tracking?", title: "Delete" },
+}
+
+export function DeleteProductButton({ productId, locale = "fr" }: { productId: string; locale?: Locale }) {
+  const t = DICT[locale]
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
   async function handleDelete() {
-    if (!confirm("Supprimer ce produit du suivi ?")) return
+    if (!confirm(t.confirm)) return
     setLoading(true)
     await fetch(`/api/products?id=${productId}`, { method: "DELETE" })
     router.refresh()
@@ -20,7 +27,7 @@ export function DeleteProductButton({ productId }: { productId: string }) {
       onClick={handleDelete}
       disabled={loading}
       className="opacity-0 group-hover:opacity-100 p-1.5 text-gray-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all disabled:opacity-50"
-      title="Supprimer"
+      title={t.title}
     >
       {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
     </button>

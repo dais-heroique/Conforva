@@ -12,13 +12,117 @@ import {
   ArrowRight, AlertTriangle, Package, Activity, ShoppingBag,
   Flame, Target, ChevronRight, Sparkles, DollarSign, Percent,
 } from "lucide-react"
+import { getLocale } from "@/lib/i18n/locale"
 
 const RANGE_OPTIONS = [
-  { key: "1h", label: "1 h", hours: 1 },
-  { key: "5h", label: "5 h", hours: 5 },
-  { key: "24h", label: "24 h", hours: 24 },
-  { key: "7j", label: "7 j", hours: 24 * 7 },
+  { key: "1h", labelFr: "1 h", labelEn: "1h", hours: 1 },
+  { key: "5h", labelFr: "5 h", labelEn: "5h", hours: 5 },
+  { key: "24h", labelFr: "24 h", labelEn: "24h", hours: 24 },
+  { key: "7j", labelFr: "7 j", labelEn: "7d", hours: 24 * 7 },
 ] as const
+
+const DICT = {
+  fr: {
+    greetingMorning: "Bonjour",
+    greetingEvening: "Bonsoir",
+    you: "vous",
+    title: "Vue d'ensemble",
+    subtitle: "Intelligence concurrentielle en temps réel",
+    addCompetitor: "Ajouter un concurrent",
+    kpi: {
+      activeCompetitors: "Concurrents actifs",
+      trackedProducts: "Produits suivis",
+      activeAlerts: "Alertes actives",
+      changes: (range: string) => `Changements ${range}`,
+    },
+    seeDetails: "Voir détails",
+    drops7d: (n: number) => `baisse${n > 1 ? "s" : ""} de prix (7j)`,
+    rises7d: (n: number) => `hausse${n > 1 ? "s" : ""} de prix (7j)`,
+    avgCompetitivePrice: "prix moyen concurrentiel",
+    priceChanges: (range: string) => `Changements de prix (${range})`,
+    seeAll: "Tout voir",
+    noCompetitorTracked: "Aucun concurrent suivi",
+    addFirstCompetitor: "Ajoutez votre premier concurrent pour démarrer la surveillance des prix",
+    allStable: "Tout est stable",
+    noChangeInRange: (range: string) => `Aucun changement de prix sur les dernières ${range}`,
+    avgCompetitorPrices: "Moyenne des prix concurrentiels",
+    details: "Détails →",
+    productsTracked: (n: number) => `${n} produit${n !== 1 ? "s" : ""} suivi${n !== 1 ? "s" : ""}`,
+    avgSuffix: "% moy.",
+    noData: "Aucune donnée",
+    globalAverage: "Moyenne globale",
+    competitors: "Concurrents",
+    manage: "Gérer →",
+    noCompetitorAdded: "Aucun concurrent ajouté",
+    add: "+ Ajouter",
+    products: "produits",
+    aiReport: "Rapport IA hebdomadaire",
+    movementsDetected: (n: number) => `${n} mouvement${n > 1 ? "s" : ""} détecté${n > 1 ? "s" : ""} aujourd'hui. Votre rapport IA analyse les tendances et formule des recommandations.`,
+    addCompetitorsForReport: "Ajoutez vos concurrents pour recevoir votre premier rapport d'intelligence concurrentielle chaque lundi.",
+    nextReport: "Votre prochain rapport hebdomadaire sera généré lundi matin avec les analyses de la semaine.",
+    seeReports: "Voir les rapports",
+    freePlan: "Plan gratuit",
+    upgradeText: "Passez à Starter pour suivre jusqu'à 100 produits et recevoir des alertes email automatiques.",
+    upgradeToStarter: "Passer à Starter",
+    quickActions: "Actions rapides",
+    quick: {
+      addCompetitor: "Ajouter un concurrent",
+      createAlert: "Créer une alerte prix",
+      seeReports: "Voir les rapports IA",
+      manageBilling: "Gérer l'abonnement",
+    },
+  },
+  en: {
+    greetingMorning: "Good morning",
+    greetingEvening: "Good evening",
+    you: "there",
+    title: "Overview",
+    subtitle: "Real-time competitive intelligence",
+    addCompetitor: "Add a competitor",
+    kpi: {
+      activeCompetitors: "Active competitors",
+      trackedProducts: "Tracked products",
+      activeAlerts: "Active alerts",
+      changes: (range: string) => `Changes ${range}`,
+    },
+    seeDetails: "See details",
+    drops7d: (n: number) => `price drop${n > 1 ? "s" : ""} (7d)`,
+    rises7d: (n: number) => `price rise${n > 1 ? "s" : ""} (7d)`,
+    avgCompetitivePrice: "avg. competitor price",
+    priceChanges: (range: string) => `Price changes (${range})`,
+    seeAll: "See all",
+    noCompetitorTracked: "No competitor tracked",
+    addFirstCompetitor: "Add your first competitor to start monitoring prices",
+    allStable: "Everything is stable",
+    noChangeInRange: (range: string) => `No price changes in the last ${range}`,
+    avgCompetitorPrices: "Average competitor prices",
+    details: "Details →",
+    productsTracked: (n: number) => `${n} product${n !== 1 ? "s" : ""} tracked`,
+    avgSuffix: "% avg.",
+    noData: "No data",
+    globalAverage: "Global average",
+    competitors: "Competitors",
+    manage: "Manage →",
+    noCompetitorAdded: "No competitor added",
+    add: "+ Add",
+    products: "products",
+    aiReport: "Weekly AI report",
+    movementsDetected: (n: number) => `${n} movement${n > 1 ? "s" : ""} detected today. Your AI report analyzes trends and gives recommendations.`,
+    addCompetitorsForReport: "Add your competitors to receive your first competitive intelligence report every Monday.",
+    nextReport: "Your next weekly report will be generated Monday morning with this week's analysis.",
+    seeReports: "See reports",
+    freePlan: "Free plan",
+    upgradeText: "Upgrade to Starter to track up to 100 products and get automatic email alerts.",
+    upgradeToStarter: "Upgrade to Starter",
+    quickActions: "Quick actions",
+    quick: {
+      addCompetitor: "Add a competitor",
+      createAlert: "Create a price alert",
+      seeReports: "See AI reports",
+      manageBilling: "Manage subscription",
+    },
+  },
+}
 
 export default async function DashboardPage({
   searchParams,
@@ -28,8 +132,12 @@ export default async function DashboardPage({
   const session = await auth()
   if (!session?.user?.id) redirect("/auth/login")
 
+  const locale = await getLocale()
+  const t = DICT[locale]
+
   const { range } = await searchParams
   const selectedRange = RANGE_OPTIONS.find((r) => r.key === range) ?? RANGE_OPTIONS[2]
+  const rangeLabel = locale === "en" ? selectedRange.labelEn : selectedRange.labelFr
 
   const db = getDb()
 
@@ -110,8 +218,8 @@ export default async function DashboardPage({
   const competitorMap = new Map(competitorAvgs.map((a) => [a.competitorId, a]))
 
   const hour = new Date().getHours()
-  const greeting = hour < 12 ? "Bonjour" : hour < 18 ? "Bonjour" : "Bonsoir"
-  const firstName = session.user.name?.split(" ")[0] || session.user.email?.split("@")[0] || "vous"
+  const greeting = hour < 18 ? t.greetingMorning : t.greetingEvening
+  const firstName = session.user.name?.split(" ")[0] || session.user.email?.split("@")[0] || t.you
 
   // Global avg price across all competitors
   const globalAvgPrice = competitorAvgs.length > 0
@@ -124,15 +232,15 @@ export default async function DashboardPage({
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs font-medium text-[#A78BFA] mb-1">{greeting}, {firstName} 👋</p>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Vue d'ensemble</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Intelligence concurrentielle en temps réel</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">{t.title}</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{t.subtitle}</p>
         </div>
         <Link
           href="/dashboard/competitors/new"
           className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors shadow-lg shadow-violet-900/20"
         >
           <Plus className="h-4 w-4" />
-          Ajouter un concurrent
+          {t.addCompetitor}
         </Link>
       </div>
 
@@ -140,7 +248,7 @@ export default async function DashboardPage({
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
           {
-            label: "Concurrents actifs",
+            label: t.kpi.activeCompetitors,
             value: competitors.length,
             limit: org.competitorLimit,
             icon: Eye,
@@ -151,7 +259,7 @@ export default async function DashboardPage({
             href: "/dashboard/competitors",
           },
           {
-            label: "Produits suivis",
+            label: t.kpi.trackedProducts,
             value: productCount,
             limit: org.productLimit,
             icon: Package,
@@ -162,7 +270,7 @@ export default async function DashboardPage({
             href: "/dashboard/products",
           },
           {
-            label: "Alertes actives",
+            label: t.kpi.activeAlerts,
             value: alertList.length,
             limit: org.alertLimit,
             icon: Bell,
@@ -173,7 +281,7 @@ export default async function DashboardPage({
             href: "/dashboard/alerts",
           },
           {
-            label: `Changements ${selectedRange.label}`,
+            label: t.kpi.changes(rangeLabel),
             value: recentChanges.length,
             icon: Activity,
             accent: "text-emerald-400",
@@ -201,7 +309,7 @@ export default async function DashboardPage({
             ) : (
               <p className="text-xs text-gray-600 mt-1 flex items-center gap-1">
                 <ChevronRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
-                Voir détails
+                {t.seeDetails}
               </p>
             )}
           </Link>
@@ -218,7 +326,7 @@ export default async function DashboardPage({
               </div>
               <div>
                 <p className="text-xl font-black text-emerald-400">{dropCount}</p>
-                <p className="text-xs text-gray-500">baisse{dropCount > 1 ? "s" : ""} de prix (7j)</p>
+                <p className="text-xs text-gray-500">{t.drops7d(dropCount)}</p>
               </div>
             </div>
           )}
@@ -229,7 +337,7 @@ export default async function DashboardPage({
               </div>
               <div>
                 <p className="text-xl font-black text-red-400">{riseCount}</p>
-                <p className="text-xs text-gray-500">hausse{riseCount > 1 ? "s" : ""} de prix (7j)</p>
+                <p className="text-xs text-gray-500">{t.rises7d(riseCount)}</p>
               </div>
             </div>
           )}
@@ -240,7 +348,7 @@ export default async function DashboardPage({
               </div>
               <div>
                 <p className="text-xl font-black text-[#A78BFA]">{globalAvgPrice.toFixed(2)}€</p>
-                <p className="text-xs text-gray-500">prix moyen concurrentiel</p>
+                <p className="text-xs text-gray-500">{t.avgCompetitivePrice}</p>
               </div>
             </div>
           )}
@@ -255,7 +363,7 @@ export default async function DashboardPage({
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/8 flex-wrap gap-3">
               <div className="flex items-center gap-2">
                 <Activity className="h-4 w-4 text-[#A78BFA]" />
-                <h2 className="font-semibold text-white text-sm">Changements de prix ({selectedRange.label})</h2>
+                <h2 className="font-semibold text-white text-sm">{t.priceChanges(rangeLabel)}</h2>
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1 bg-white/5 border border-white/8 rounded-lg p-0.5">
@@ -269,12 +377,12 @@ export default async function DashboardPage({
                           : "text-gray-500 hover:text-white"
                       }`}
                     >
-                      {opt.label}
+                      {locale === "en" ? opt.labelEn : opt.labelFr}
                     </Link>
                   ))}
                 </div>
                 <Link href="/dashboard/products" className="text-xs text-[#A78BFA] hover:text-[#8B5CF6] flex items-center gap-1 transition-colors shrink-0">
-                  Tout voir <ArrowRight className="h-3 w-3" />
+                  {t.seeAll} <ArrowRight className="h-3 w-3" />
                 </Link>
               </div>
             </div>
@@ -287,13 +395,13 @@ export default async function DashboardPage({
                       <div className="h-14 w-14 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mx-auto mb-4">
                         <Eye className="h-6 w-6 text-[#A78BFA]" />
                       </div>
-                      <p className="text-sm font-medium text-white mb-1">Aucun concurrent suivi</p>
-                      <p className="text-xs text-gray-500 mb-4">Ajoutez votre premier concurrent pour démarrer la surveillance des prix</p>
+                      <p className="text-sm font-medium text-white mb-1">{t.noCompetitorTracked}</p>
+                      <p className="text-xs text-gray-500 mb-4">{t.addFirstCompetitor}</p>
                       <Link
                         href="/dashboard/competitors/new"
                         className="inline-flex items-center gap-2 bg-[#8B5CF6] text-white font-semibold text-sm px-4 py-2 rounded-xl hover:bg-[#7C3AED] transition-colors"
                       >
-                        <Plus className="h-4 w-4" /> Ajouter un concurrent
+                        <Plus className="h-4 w-4" /> {t.addCompetitor}
                       </Link>
                     </>
                   ) : (
@@ -301,8 +409,8 @@ export default async function DashboardPage({
                       <div className="h-14 w-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4">
                         <BarChart3 className="h-6 w-6 text-gray-500" />
                       </div>
-                      <p className="text-sm font-medium text-white mb-1">Tout est stable</p>
-                      <p className="text-xs text-gray-500">Aucun changement de prix sur les dernières {selectedRange.label}</p>
+                      <p className="text-sm font-medium text-white mb-1">{t.allStable}</p>
+                      <p className="text-xs text-gray-500">{t.noChangeInRange(rangeLabel)}</p>
                     </>
                   )}
                 </div>
@@ -341,10 +449,10 @@ export default async function DashboardPage({
               <div className="flex items-center justify-between px-5 py-4 border-b border-white/8">
                 <div className="flex items-center gap-2">
                   <Percent className="h-4 w-4 text-[#A78BFA]" />
-                  <h2 className="font-semibold text-white text-sm">Moyenne des prix concurrentiels</h2>
+                  <h2 className="font-semibold text-white text-sm">{t.avgCompetitorPrices}</h2>
                 </div>
                 <Link href="/dashboard/products" className="text-xs text-[#A78BFA] hover:text-[#8B5CF6] transition-colors">
-                  Détails →
+                  {t.details}
                 </Link>
               </div>
               <div className="divide-y divide-white/6">
@@ -361,7 +469,7 @@ export default async function DashboardPage({
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium text-white truncate">{c.name}</p>
-                        <p className="text-xs text-gray-500">{pCount} produit{pCount !== 1 ? "s" : ""} suivi{pCount !== 1 ? "s" : ""}</p>
+                        <p className="text-xs text-gray-500">{t.productsTracked(pCount)}</p>
                       </div>
                       <div className="text-right shrink-0">
                         {avgPrice !== null ? (
@@ -369,12 +477,12 @@ export default async function DashboardPage({
                             <p className="text-sm font-bold text-white">{avgPrice.toFixed(2)}€</p>
                             {avgChange !== null && (
                               <p className={`text-xs font-medium ${avgChange < 0 ? "text-emerald-400" : avgChange > 0 ? "text-red-400" : "text-gray-500"}`}>
-                                {avgChange > 0 ? "+" : ""}{avgChange.toFixed(1)}% moy.
+                                {avgChange > 0 ? "+" : ""}{avgChange.toFixed(1)}{t.avgSuffix}
                               </p>
                             )}
                           </>
                         ) : (
-                          <p className="text-xs text-gray-600">Aucune donnée</p>
+                          <p className="text-xs text-gray-600">{t.noData}</p>
                         )}
                       </div>
                     </div>
@@ -384,7 +492,7 @@ export default async function DashboardPage({
               {competitors.length > 0 && globalAvgPrice && (
                 <div className="px-5 py-3 border-t border-white/8 bg-[#8B5CF6]/5">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-semibold text-gray-400">Moyenne globale</p>
+                    <p className="text-xs font-semibold text-gray-400">{t.globalAverage}</p>
                     <p className="text-sm font-black text-[#A78BFA]">{globalAvgPrice.toFixed(2)}€</p>
                   </div>
                 </div>
@@ -400,18 +508,18 @@ export default async function DashboardPage({
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/8">
               <div className="flex items-center gap-2">
                 <Target className="h-4 w-4 text-[#A78BFA]" />
-                <h2 className="font-semibold text-white text-sm">Concurrents</h2>
+                <h2 className="font-semibold text-white text-sm">{t.competitors}</h2>
               </div>
               <Link href="/dashboard/competitors" className="text-xs text-[#A78BFA] hover:text-[#8B5CF6] transition-colors">
-                Gérer →
+                {t.manage}
               </Link>
             </div>
             <div className="p-3">
               {competitors.length === 0 ? (
                 <div className="px-2 py-3 text-center">
-                  <p className="text-xs text-gray-500">Aucun concurrent ajouté</p>
+                  <p className="text-xs text-gray-500">{t.noCompetitorAdded}</p>
                   <Link href="/dashboard/competitors/new" className="text-xs text-[#A78BFA] mt-1 inline-block hover:underline">
-                    + Ajouter
+                    {t.add}
                   </Link>
                 </div>
               ) : (
@@ -429,7 +537,7 @@ export default async function DashboardPage({
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium text-white truncate group-hover:text-[#A78BFA] transition-colors">{c.name}</p>
-                          <p className="text-xs text-gray-600 truncate">{data?.productCount ?? 0} produits</p>
+                          <p className="text-xs text-gray-600 truncate">{data?.productCount ?? 0} {t.products}</p>
                         </div>
                         <span className={`text-xs px-1.5 py-0.5 rounded-md font-medium shrink-0 ${
                           c.platform === "shopify" ? "bg-green-500/12 text-green-400" :
@@ -453,20 +561,20 @@ export default async function DashboardPage({
               <div className="h-7 w-7 rounded-lg bg-[#8B5CF6]/20 flex items-center justify-center">
                 <Sparkles className="h-3.5 w-3.5 text-[#A78BFA]" />
               </div>
-              <p className="text-xs font-semibold text-[#A78BFA]">Rapport IA hebdomadaire</p>
+              <p className="text-xs font-semibold text-[#A78BFA]">{t.aiReport}</p>
             </div>
             <p className="text-xs text-gray-300 leading-relaxed mb-3">
               {recentChanges.length > 0
-                ? `${recentChanges.length} mouvement${recentChanges.length > 1 ? "s" : ""} détecté${recentChanges.length > 1 ? "s" : ""} aujourd'hui. Votre rapport IA analyse les tendances et formule des recommandations.`
+                ? t.movementsDetected(recentChanges.length)
                 : competitors.length === 0
-                  ? "Ajoutez vos concurrents pour recevoir votre premier rapport d'intelligence concurrentielle chaque lundi."
-                  : "Votre prochain rapport hebdomadaire sera généré lundi matin avec les analyses de la semaine."}
+                  ? t.addCompetitorsForReport
+                  : t.nextReport}
             </p>
             <Link
               href="/dashboard/reports"
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#A78BFA] hover:text-white transition-colors"
             >
-              Voir les rapports <ArrowRight className="h-3 w-3" />
+              {t.seeReports} <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
 
@@ -478,15 +586,15 @@ export default async function DashboardPage({
                   <Flame className="h-3.5 w-3.5 text-amber-400" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-white mb-1">Plan gratuit</p>
+                  <p className="text-xs font-semibold text-white mb-1">{t.freePlan}</p>
                   <p className="text-xs text-gray-400 leading-relaxed mb-2.5">
-                    Passez à Starter pour suivre jusqu'à 100 produits et recevoir des alertes email automatiques.
+                    {t.upgradeText}
                   </p>
                   <Link
                     href="/dashboard/billing"
                     className="inline-flex items-center gap-1 text-xs font-semibold text-[#A78BFA] hover:text-white transition-colors"
                   >
-                    Passer à Starter <ArrowRight className="h-3 w-3" />
+                    {t.upgradeToStarter} <ArrowRight className="h-3 w-3" />
                   </Link>
                 </div>
               </div>
@@ -496,14 +604,14 @@ export default async function DashboardPage({
           {/* Quick actions */}
           <div className="bg-white/4 border border-white/8 rounded-2xl overflow-hidden">
             <div className="px-5 py-3.5 border-b border-white/8">
-              <h2 className="font-semibold text-white text-sm">Actions rapides</h2>
+              <h2 className="font-semibold text-white text-sm">{t.quickActions}</h2>
             </div>
             <div className="p-2">
               {[
-                { label: "Ajouter un concurrent", href: "/dashboard/competitors/new", icon: Eye },
-                { label: "Créer une alerte prix", href: "/dashboard/alerts", icon: Bell },
-                { label: "Voir les rapports IA", href: "/dashboard/reports", icon: Zap },
-                { label: "Gérer l'abonnement", href: "/dashboard/billing", icon: BarChart3 },
+                { label: t.quick.addCompetitor, href: "/dashboard/competitors/new", icon: Eye },
+                { label: t.quick.createAlert, href: "/dashboard/alerts", icon: Bell },
+                { label: t.quick.seeReports, href: "/dashboard/reports", icon: Zap },
+                { label: t.quick.manageBilling, href: "/dashboard/billing", icon: BarChart3 },
               ].map(({ label, href, icon: Icon }) => (
                 <Link
                   key={href}
