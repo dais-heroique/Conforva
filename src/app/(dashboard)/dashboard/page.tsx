@@ -13,6 +13,7 @@ import {
   Flame, Target, ChevronRight, Sparkles, DollarSign, Percent,
 } from "lucide-react"
 import { getLocale } from "@/lib/i18n/locale"
+import { withUnlimitedAccess } from "@/lib/admin"
 
 const RANGE_OPTIONS = [
   { key: "1h", labelFr: "1 h", labelEn: "1h", hours: 1 },
@@ -149,7 +150,7 @@ export default async function DashboardPage({
     .limit(1)
 
   if (!membership) redirect("/onboarding")
-  const org = membership.org
+  const org = withUnlimitedAccess(membership.org, session.user.email)
 
   const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000)
   const since7d = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)

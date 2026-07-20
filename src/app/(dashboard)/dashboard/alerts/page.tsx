@@ -8,6 +8,7 @@ import { Bell, Plus, Zap, TrendingDown, Package, ShoppingCart, TrendingUp, Trash
 import { AddAlertButton } from "./add-alert-button"
 import { DeleteAlertButton } from "./delete-alert-button"
 import { getLocale } from "@/lib/i18n/locale"
+import { withUnlimitedAccess } from "@/lib/admin"
 
 const ALERT_TYPE_LABELS: Record<"fr" | "en", Record<string, { label: string; icon: React.ReactNode; color: string }>> = {
   fr: {
@@ -65,7 +66,7 @@ export default async function AlertsPage() {
     .limit(1)
 
   if (!membership) redirect("/onboarding")
-  const org = membership.org
+  const org = withUnlimitedAccess(membership.org, session.user.email)
 
   const [alertList, competitors, products] = await Promise.all([
     db.select().from(alerts).where(eq(alerts.organizationId, org.id)).orderBy(desc(alerts.createdAt)),

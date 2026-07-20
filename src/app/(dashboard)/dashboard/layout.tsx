@@ -6,6 +6,7 @@ import { organizations, organizationMembers } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { DashboardSidebar } from "@/components/layout/dashboard-sidebar"
 import { getLocale } from "@/lib/i18n/locale"
+import { withUnlimitedAccess } from "@/lib/admin"
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -46,7 +47,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     }
   }
 
-  const org = membership.org
+  const org = withUnlimitedAccess(membership.org, session.user.email)
   const locale = await getLocale()
 
   return (

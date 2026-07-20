@@ -4,6 +4,7 @@ import { getDb } from "@/lib/db"
 import { organizations, organizationMembers, trackedCompetitors } from "@/lib/db/schema"
 import { eq, and, count } from "drizzle-orm"
 import { z } from "zod"
+import { withUnlimitedAccess } from "@/lib/admin"
 
 const schema = z.object({
   name: z.string().min(1).max(100),
@@ -36,7 +37,7 @@ export async function POST(req: Request) {
       .limit(1)
 
     if (!membership) return NextResponse.json({ error: "NO_ORG" }, { status: 404 })
-    const org = membership.org
+    const org = withUnlimitedAccess(membership.org, session.user.email)
 
     const body = await req.json()
     const { name, domain, platform, scrapeFrequency } = schema.parse(body)

@@ -9,6 +9,7 @@ import { AddProductModal } from "@/components/dashboard/add-product-modal"
 import { DeleteProductButton } from "@/components/dashboard/delete-product-button"
 import { SetPriceButton } from "@/components/dashboard/set-price-button"
 import { getLocale } from "@/lib/i18n/locale"
+import { withUnlimitedAccess } from "@/lib/admin"
 
 const DICT = {
   fr: {
@@ -69,7 +70,7 @@ export default async function CompetitorDetailPage({ params }: { params: Promise
     .limit(1)
 
   if (!membership) redirect("/onboarding")
-  const org = membership.org
+  const org = withUnlimitedAccess(membership.org, session.user.email)
 
   const [competitor] = await db
     .select()

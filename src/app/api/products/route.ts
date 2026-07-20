@@ -5,6 +5,7 @@ import { organizations, organizationMembers, trackedCompetitors, trackedProducts
 import { eq, and, count } from "drizzle-orm"
 import { z } from "zod"
 import { scrapeAndApply, applyPriceResult } from "@/lib/scraping/apply"
+import { withUnlimitedAccess } from "@/lib/admin"
 
 const schema = z.object({
   competitorId: z.string().min(1),
@@ -36,7 +37,7 @@ export async function POST(req: Request) {
       .limit(1)
 
     if (!membership) return NextResponse.json({ error: "NO_ORG" }, { status: 404 })
-    const org = membership.org
+    const org = withUnlimitedAccess(membership.org, session.user.email)
 
     const body = await req.json()
     const { competitorId, url, name, sku, price } = schema.parse(body)

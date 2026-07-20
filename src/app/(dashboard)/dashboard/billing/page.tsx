@@ -6,6 +6,7 @@ import { organizations, organizationMembers } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { Check, Zap, CreditCard, ExternalLink } from "lucide-react"
 import { getLocale } from "@/lib/i18n/locale"
+import { withUnlimitedAccess } from "@/lib/admin"
 
 const PLANS = {
   fr: [
@@ -109,7 +110,7 @@ export default async function BillingPage() {
     .limit(1)
 
   if (!membership) redirect("/onboarding")
-  const org = membership.org
+  const org = withUnlimitedAccess(membership.org, session.user.email)
 
   return (
     <div className="p-6 space-y-6 bg-[#08090C] min-h-full">

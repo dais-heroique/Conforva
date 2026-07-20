@@ -11,6 +11,7 @@ import { SetPriceButton } from "@/components/dashboard/set-price-button"
 import { MarginEditor } from "@/components/dashboard/margin-editor"
 import { PriceSparkline } from "@/components/dashboard/price-sparkline"
 import { getLocale } from "@/lib/i18n/locale"
+import { withUnlimitedAccess } from "@/lib/admin"
 
 const DICT = {
   fr: {
@@ -82,7 +83,7 @@ export default async function ProductsPage() {
     .limit(1)
 
   if (!membership) redirect("/onboarding")
-  const org = membership.org
+  const org = withUnlimitedAccess(membership.org, session.user.email)
 
   const [competitors, productsWithCompetitor] = await Promise.all([
     db.select().from(trackedCompetitors)

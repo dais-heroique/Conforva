@@ -6,6 +6,7 @@ import { organizations, organizationMembers, trackedCompetitors, trackedProducts
 import { eq, and, count } from "drizzle-orm"
 import { Eye, Plus, ExternalLink } from "lucide-react"
 import { getLocale } from "@/lib/i18n/locale"
+import { withUnlimitedAccess } from "@/lib/admin"
 
 const PLATFORM_COLORS: Record<string, string> = {
   shopify: "bg-green-500/15 text-green-400",
@@ -55,7 +56,7 @@ export default async function CompetitorsPage() {
     .limit(1)
 
   if (!membership) redirect("/onboarding")
-  const org = membership.org
+  const org = withUnlimitedAccess(membership.org, session.user.email)
 
   const competitors = await db
     .select()

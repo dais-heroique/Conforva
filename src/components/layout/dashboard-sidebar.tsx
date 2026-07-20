@@ -150,7 +150,6 @@ export function DashboardSidebar({ user, org, locale }: Props) {
           </div>
           <div className="flex-1 text-left min-w-0">
             <p className="text-xs font-medium text-white truncate">{user.name || user.email}</p>
-            <p className="text-xs text-gray-500 truncate">{user.email}</p>
           </div>
           <ChevronDown className={`h-3 w-3 text-gray-500 transition-transform ${userMenuOpen ? "rotate-180" : ""}`} />
         </button>
