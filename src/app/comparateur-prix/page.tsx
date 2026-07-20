@@ -37,7 +37,7 @@ export default function ComparateurPrixPage() {
       if (!res.ok) {
         if (data.error === "FREE_LIMIT_REACHED") {
           setLimitReached(true)
-          setError(`Vous avez utilisé vos ${data.limit ?? 2} comparaisons gratuites. Créez un compte gratuit pour un usage illimité et un suivi automatique.`)
+          setError(`Vous avez utilisé vos ${data.limit ?? 5} comparaisons gratuites. Créez un compte gratuit pour un usage illimité et un suivi automatique.`)
         } else if (data.error === "RATE_LIMITED") setError("Trop de comparaisons en peu de temps — réessayez dans une minute.")
         else if (data.error === "NO_PRICE_FOUND") setError("Le prix n'a pu être trouvé sur aucune des deux pages. Vérifiez que ce sont bien des pages produit.")
         else setError("Impossible de comparer ces deux pages pour le moment.")

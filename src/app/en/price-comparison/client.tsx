@@ -37,7 +37,7 @@ export default function PriceComparisonClient() {
       if (!res.ok) {
         if (data.error === "FREE_LIMIT_REACHED") {
           setLimitReached(true)
-          setError(`You've used your ${data.limit ?? 2} free comparisons. Create a free account for unlimited use and automatic tracking.`)
+          setError(`You've used your ${data.limit ?? 5} free comparisons. Create a free account for unlimited use and automatic tracking.`)
         } else if (data.error === "RATE_LIMITED") setError("Too many comparisons in a short time — try again in a minute.")
         else if (data.error === "NO_PRICE_FOUND") setError("Couldn't find a price on either page. Make sure both are product pages.")
         else setError("Couldn't compare these two pages right now.")

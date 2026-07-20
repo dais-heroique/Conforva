@@ -11,7 +11,7 @@ const schema = z.object({
 })
 
 const TOOL_NAME = "compare-prices"
-const FREE_USES_PER_IP = 2
+const FREE_USES_PER_IP = 5
 
 // Small in-memory burst limiter — resets on cold start, catches rapid-fire abuse
 // within the same instance while the persistent per-IP cap (below) settles.
