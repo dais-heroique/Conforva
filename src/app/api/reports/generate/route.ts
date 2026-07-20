@@ -106,12 +106,18 @@ ${data.priceChanges.slice(0, 20).map(p =>
   `- ${p.name || "Produit"}: ${p.previousPrice ?? "?"}→${p.currentPrice ?? "?"}${p.currency} (${p.changePercent != null ? (p.changePercent > 0 ? "+" : "") + p.changePercent.toFixed(1) + "%" : "N/A"})`
 ).join("\n")}
 
-Génère un rapport structuré avec:
-1. RÉSUMÉ EXÉCUTIF (2-3 phrases): vue globale de la semaine
-2. INSIGHTS CLÉS (liste bullet points): tendances importantes, patterns détectés
-3. RECOMMANDATIONS ACTIONNABLES (liste bullet points): actions concrètes à prendre cette semaine
+Génère un rapport structuré avec EXACTEMENT ces trois sections, dans cet ordre, chacune introduite par son titre en majuscules suivi de ":" sur sa propre ligne :
 
-Réponds EN FRANÇAIS. Sois précis, actionnable et business-oriented. Pas de généralités.`
+RÉSUMÉ EXÉCUTIF:
+(2-3 phrases, vue globale de la semaine)
+
+INSIGHTS CLÉS:
+(liste à puces avec "-", tendances importantes, patterns détectés)
+
+RECOMMANDATIONS ACTIONNABLES:
+(liste à puces avec "-", actions concrètes à prendre cette semaine)
+
+Réponds EN FRANÇAIS, en texte brut uniquement. Ne mets AUCUN titre de document, AUCUNE date, AUCUNE introduction avant "RÉSUMÉ EXÉCUTIF:" — commence directement par ce mot. N'utilise aucun markdown (pas de **, pas de #, pas de numérotation). Sois précis, actionnable et business-oriented. Pas de généralités.`
 
   const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
     method: "POST",
@@ -125,16 +131,26 @@ Réponds EN FRANÇAIS. Sois précis, actionnable et business-oriented. Pas de g�
   if (!res.ok) throw new Error(`Gemini API error: ${res.status}`)
 
   const json = await res.json()
-  const text = json.candidates?.[0]?.content?.parts?.[0]?.text ?? ""
+  const rawText = json.candidates?.[0]?.content?.parts?.[0]?.text ?? ""
 
-  // Parse sections
-  const summaryMatch = text.match(/RÉSUMÉ EXÉCUTIF[:\s]*([\s\S]*?)(?=INSIGHTS CLÉS|$)/i)
-  const insightsMatch = text.match(/INSIGHTS CLÉS[:\s]*([\s\S]*?)(?=RECOMMANDATIONS|$)/i)
-  const recoMatch = text.match(/RECOMMANDATIONS[:\s]*([\s\S]*?)$/i)
+  // The model sometimes adds markdown emphasis/headings or numbers the
+  // sections despite instructions not to — strip that before parsing so
+  // stray "**"/"#"/"1." don't break the section regexes or leak into the UI.
+  const text = rawText
+    .replace(/\*\*/g, "")
+    .replace(/^#+\s*/gm, "")
+    .replace(/^\d+\.\s*/gm, "")
+
+  // Parse sections — tolerate a stray preamble before the first heading
+  // (e.g. a title/date line the model added anyway) by only capturing from
+  // the heading onward, never the raw text before it.
+  const summaryMatch = text.match(/RÉSUMÉ EXÉCUTIF\s*:?\s*([\s\S]*?)(?=INSIGHTS CLÉS|RECOMMANDATIONS|$)/i)
+  const insightsMatch = text.match(/INSIGHTS CLÉS\s*:?\s*([\s\S]*?)(?=RECOMMANDATIONS|$)/i)
+  const recoMatch = text.match(/RECOMMANDATIONS\s*(?:ACTIONNABLES)?\s*:?\s*([\s\S]*)$/i)
 
   return {
-    summary: summaryMatch?.[1]?.trim() ?? text.slice(0, 300),
-    keyInsights: insightsMatch?.[1]?.trim() ?? "",
-    recommendations: recoMatch?.[1]?.trim() ?? "",
+    summary: summaryMatch?.[1]?.trim() || "",
+    keyInsights: insightsMatch?.[1]?.trim() || "",
+    recommendations: recoMatch?.[1]?.trim() || "",
   }
 }
