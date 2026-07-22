@@ -377,6 +377,16 @@ export default function HomePageFr() {
             </Link>
           </div>
           <p className="text-xs text-gray-600 mt-4">Aucune CB · Sans engagement · Résiliable en 1 clic</p>
+
+          <div className="mt-14 flex flex-col items-center gap-3">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-600">Compatible avec</p>
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm font-semibold text-gray-500">
+              <span>Shopify</span>
+              <span>Amazon</span>
+              <span>WooCommerce</span>
+              <span>PrestaShop</span>
+            </div>
+          </div>
         </div>
       </section>
 

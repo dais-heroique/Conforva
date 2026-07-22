@@ -353,6 +353,16 @@ export default function HomePageEn() {
             </Link>
           </div>
           <p className="text-xs text-gray-600 mt-4">No card required · No commitment · Cancel anytime</p>
+
+          <div className="mt-14 flex flex-col items-center gap-3">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-600">Works with</p>
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm font-semibold text-gray-500">
+              <span>Shopify</span>
+              <span>Amazon</span>
+              <span>WooCommerce</span>
+              <span>PrestaShop</span>
+            </div>
+          </div>
         </div>
       </section>
 
