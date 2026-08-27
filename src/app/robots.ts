@@ -3,12 +3,9 @@ import type { MetadataRoute } from "next"
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/dashboard/", "/auth/", "/onboarding/", "/api/", "/verify/", "/status/"],
-      },
+      { userAgent: "*", allow: "/", disallow: ["/dashboard/", "/auth/", "/onboarding/", "/api/", "/verify/", "/status/"] },
     ],
     sitemap: "https://conforva.com/sitemap.xml",
+    host: "https://conforva.com",
   }
 }
