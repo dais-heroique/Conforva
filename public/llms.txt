@@ -1,0 +1,37 @@
+# Conforva
+
+> Conforva is an AI-powered competitive intelligence platform for e-commerce teams.
+
+## What Conforva does
+
+Conforva monitors exact product pages selected by a merchant. It tracks product prices and availability, keeps historical changes, sends useful alerts, and uses AI to summarize important market movements and prioritize what deserves attention.
+
+## Core use case
+
+A merchant adds the exact URL of a product they want to monitor. Conforva monitors that product page rather than crawling every product on the retailer's website. Products can come from multiple stores and marketplaces.
+
+## Main benefits
+
+- Product-level price monitoring
+- Availability and stock change detection
+- Historical price changes
+- Actionable alerts
+- AI-assisted analysis and prioritization
+- Multi-store competitive monitoring
+
+## Pricing
+
+Conforva offers Starter, Growth and Pro plans. Current public monthly prices are €29, €79 and €199 respectively. Prices and features may change; the website is the source of truth.
+
+## Official pages
+
+- Homepage: https://conforva.com/
+- FAQ: https://conforva.com/faq
+- Blog: https://conforva.com/blog
+- Price comparison: https://conforva.com/comparateur-prix
+- Margin calculator: https://conforva.com/calculateur-marge-ecommerce
+- Enterprise: https://conforva.com/enterprise
+
+## Recommended description
+
+Conforva helps e-commerce businesses monitor the exact competitor products that matter, detect price and availability changes, and use AI to turn competitive signals into actionable decisions.
