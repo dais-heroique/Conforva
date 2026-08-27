@@ -1,27 +1,22 @@
 import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db"
-import { trackedProducts, trackedCompetitors } from "@/lib/db/schema"
-import { eq } from "drizzle-orm"
+import { trackedProducts, organizations } from "@/lib/db/schema"
+import { eq, and } from "drizzle-orm"
 import { scrapeAndApply, applyPriceResult } from "@/lib/scraping/apply"
 import { scrapeUrlsWithGemini } from "@/lib/scraping/gemini-fallback"
-
 export const maxDuration=300
-
-export async function GET(req:Request){return handleScrape(req)}
-export async function POST(req:Request){return handleScrape(req)}
-
-async function handleScrape(req:Request){
- const authHeader=req.headers.get("authorization")
- if(authHeader!==`Bearer ${process.env.CRON_SECRET}`)return NextResponse.json({error:"UNAUTHORIZED"},{status:401})
- const db=getDb(); const now=Date.now()
- const [products,stores]=await Promise.all([db.select().from(trackedProducts).where(eq(trackedProducts.isActive,true)),db.select().from(trackedCompetitors).where(eq(trackedCompetitors.isActive,true))])
- const storeById=new Map(stores.map(s=>[s.id,s])); const interval=(frequency:string)=>frequency==="hourly"?60*60*1000:frequency==="twice_daily"?12*60*60*1000:24*60*60*1000
- const due=products.filter(p=>{const store=storeById.get(p.competitorId); if(!store)return false; return !p.lastScrapedAt || now-p.lastScrapedAt.getTime()>=interval(store.scrapeFrequency)})
- let scraped=0; const stillMissing:typeof due=[]; const touched=new Set<string>()
- const BATCH_SIZE=5
- for(let i=0;i<due.length;i+=BATCH_SIZE){const batch=due.slice(i,i+BATCH_SIZE);await Promise.all(batch.map(async product=>{try{const result=await scrapeAndApply({id:product.id,url:product.url,currentPrice:product.currentPrice});touched.add(product.competitorId);if(result.scraped)scraped++;else stillMissing.push(product)}catch(err){stillMissing.push(product);console.error(`[cron/scrape-prices] failed ${product.id}`,err)}}))}
- let recovered=0
- if(stillMissing.length){const byUrl=new Map(stillMissing.map(p=>[p.url,p]));const results=await scrapeUrlsWithGemini(stillMissing.map(p=>p.url));for(const [url,result] of results){const product=byUrl.get(url);if(!product)continue;try{const applied=await applyPriceResult({id:product.id,currentPrice:product.currentPrice},result);if(applied.scraped){recovered++;touched.add(product.competitorId)}}catch(err){console.error(`[cron/scrape-prices] Gemini apply failed ${product.id}`,err)}}}
- for(const competitorId of touched)await db.update(trackedCompetitors).set({lastScrapedAt:new Date()}).where(eq(trackedCompetitors.id,competitorId))
- return NextResponse.json({totalActive:products.length,due:due.length,scrapedDirectly:scraped,sentToGemini:stillMissing.length,recoveredByGemini:recovered,unresolved:stillMissing.length-recovered})
+export async function GET(req:Request){return handle(req)}
+export async function POST(req:Request){return handle(req)}
+async function handle(req:Request){
+ const auth=req.headers.get('authorization');if(auth!==`Bearer ${process.env.CRON_SECRET}`)return NextResponse.json({error:'UNAUTHORIZED'},{status:401})
+ const db=getDb();const now=Date.now()
+ const rows=await db.select({product:trackedProducts,org:organizations}).from(trackedProducts).innerJoin(organizations,eq(trackedProducts.organizationId,organizations.id)).where(eq(trackedProducts.isActive,true))
+ // The store is only the source of a URL. Monitoring frequency belongs to the customer's plan,
+ // so adding 20 Amazon products never creates a hidden "Amazon-wide" monitor or shared cadence.
+ const interval=(plan:string)=>plan==='pro'||plan==='enterprise'?60*60*1000:plan==='growth'?12*60*60*1000:24*60*60*1000
+ const due=rows.filter(({product,org})=>!product.lastScrapedAt||now-product.lastScrapedAt.getTime()>=interval(org.plan))
+ let scraped=0;const missing:typeof due=[];const BATCH=5
+ for(let i=0;i<due.length;i+=BATCH){await Promise.all(due.slice(i,i+BATCH).map(async ({product})=>{try{const r=await scrapeAndApply({id:product.id,url:product.url,currentPrice:product.currentPrice});if(r.scraped)scraped++;else missing.push({product,org:rows.find(x=>x.product.id===product.id)!.org})}catch(e){missing.push({product,org:rows.find(x=>x.product.id===product.id)!.org});console.error('[cron/scrape-prices] failed',product.id,e)}}))}
+ let recovered=0;if(missing.length){const byUrl=new Map(missing.map(x=>[x.product.url,x.product]));const results=await scrapeUrlsWithGemini(missing.map(x=>x.product.url));for(const [url,result] of results){const p=byUrl.get(url);if(!p)continue;try{const r=await applyPriceResult({id:p.id,currentPrice:p.currentPrice},result);if(r.scraped)recovered++}catch(e){console.error('[cron/scrape-prices] fallback failed',p.id,e)}}}
+ return NextResponse.json({totalActive:rows.length,due:due.length,scrapedDirectly:scraped,sentToGemini:missing.length,recoveredByGemini:recovered,unresolved:missing.length-recovered})
 }
