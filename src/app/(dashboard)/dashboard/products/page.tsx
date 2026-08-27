@@ -4,7 +4,7 @@ import { auth } from "@/auth"
 import { getDb } from "@/lib/db"
 import { organizations, organizationMembers, trackedProducts, trackedCompetitors, priceHistory } from "@/lib/db/schema"
 import { eq, and, desc, inArray, asc } from "drizzle-orm"
-import { Package, TrendingDown, TrendingUp, ExternalLink, Plus, Wallet } from "lucide-react"
+import { ExternalLink, Package, TrendingDown, TrendingUp, Wallet } from "lucide-react"
 import { AddProductModal } from "@/components/dashboard/add-product-modal"
 import { DeleteProductButton } from "@/components/dashboard/delete-product-button"
 import { SetPriceButton } from "@/components/dashboard/set-price-button"
@@ -13,286 +13,24 @@ import { PriceSparkline } from "@/components/dashboard/price-sparkline"
 import { getLocale } from "@/lib/i18n/locale"
 import { withUnlimitedAccess } from "@/lib/admin"
 
-const DICT = {
-  fr: {
-    title: "Produits suivis",
-    count: (n: number, limit: number) => `${n} / ${limit} produits`,
-    total: "Total",
-    pricesFound: "Prix récupérés",
-    priceDrops: "Baisses de prix",
-    outOfStock: "En rupture",
-    avgMargin: "Marge moyenne",
-    noProduct: "Aucun produit suivi",
-    noProductDescWithCompetitors: "Ajoutez les URLs des produits de vos concurrents pour surveiller leurs prix en temps réel.",
-    noProductDescNoCompetitors: "Commencez par ajouter un concurrent, puis ajoutez les URLs des produits à surveiller.",
-    addCompetitorFirst: "Ajouter un concurrent d'abord",
-    allProducts: (n: number) => `Tous les produits (${n})`,
-    priceUpdateNote: "Prix mis à jour toutes les 24h",
-    product: "Produit",
-    competitor: "Concurrent",
-    currentPrice: "Prix actuel",
-    history: "Historique",
-    variation: "Variation",
-    myMargin: "Ma marge",
-    stock: "Stock",
-    inStock: "En stock",
-    outOfStockShort: "Rupture",
-    sku: "SKU",
-  },
-  en: {
-    title: "Tracked products",
-    count: (n: number, limit: number) => `${n} / ${limit} products`,
-    total: "Total",
-    pricesFound: "Prices found",
-    priceDrops: "Price drops",
-    outOfStock: "Out of stock",
-    avgMargin: "Average margin",
-    noProduct: "No product tracked",
-    noProductDescWithCompetitors: "Add your competitors' product URLs to monitor their prices in real time.",
-    noProductDescNoCompetitors: "Start by adding a competitor, then add the product URLs to track.",
-    addCompetitorFirst: "Add a competitor first",
-    allProducts: (n: number) => `All products (${n})`,
-    priceUpdateNote: "Prices updated every 24h",
-    product: "Product",
-    competitor: "Competitor",
-    currentPrice: "Current price",
-    history: "History",
-    variation: "Change",
-    myMargin: "My margin",
-    stock: "Stock",
-    inStock: "In stock",
-    outOfStockShort: "Out of stock",
-    sku: "SKU",
-  },
+const DICT={
+ fr:{title:"Produits surveillés",count:(n:number,l:number)=>`${n} / ${l} produits`,empty:"Aucun produit surveillé",emptyText:"Collez l'URL exacte d'un produit concurrent. Conforva détecte automatiquement le magasin, le produit et son prix.",all:(n:number)=>`Tous les produits (${n})`,source:"Source",price:"Prix actuel",history:"Historique",change:"Variation",margin:"Ma marge",stock:"Disponibilité",inStock:"En stock",out:"Rupture",update:"Surveillance automatique",unknown:"Produit sans nom",sku:"Référence",tracked:"Surveillé",limit:"Limite atteinte"},
+ en:{title:"Tracked products",count:(n:number,l:number)=>`${n} / ${l} products`,empty:"No tracked products",emptyText:"Paste the exact URL of a competitor product. Conforva automatically detects the store, product and price.",all:(n:number)=>`All products (${n})`,source:"Source",price:"Current price",history:"History",change:"Change",margin:"My margin",stock:"Availability",inStock:"In stock",out:"Out of stock",update:"Automatic monitoring",unknown:"Unnamed product",sku:"Reference",tracked:"Tracked",limit:"Limit reached"}
 }
 
-export default async function ProductsPage() {
-  const session = await auth()
-  if (!session?.user?.id) redirect("/auth/login")
-
-  const locale = await getLocale()
-  const t = DICT[locale]
-
-  const db = getDb()
-
-  const [membership] = await db
-    .select({ org: organizations })
-    .from(organizationMembers)
-    .innerJoin(organizations, eq(organizationMembers.organizationId, organizations.id))
-    .where(eq(organizationMembers.userId, session.user.id))
-    .limit(1)
-
-  if (!membership) redirect("/onboarding")
-  const org = withUnlimitedAccess(membership.org, session.user.email)
-
-  const [competitors, productsWithCompetitor] = await Promise.all([
-    db.select().from(trackedCompetitors)
-      .where(and(eq(trackedCompetitors.organizationId, org.id), eq(trackedCompetitors.isActive, true)))
-      .orderBy(desc(trackedCompetitors.createdAt)),
-    db.select({ product: trackedProducts, competitor: trackedCompetitors })
-      .from(trackedProducts)
-      .innerJoin(trackedCompetitors, eq(trackedProducts.competitorId, trackedCompetitors.id))
-      .where(and(eq(trackedProducts.organizationId, org.id), eq(trackedProducts.isActive, true)))
-      .orderBy(desc(trackedProducts.createdAt))
-      .limit(200),
-  ])
-
-  const productIds = productsWithCompetitor.map(({ product }) => product.id)
-  const historyRows = productIds.length > 0
-    ? await db.select()
-        .from(priceHistory)
-        .where(inArray(priceHistory.productId, productIds))
-        .orderBy(asc(priceHistory.scrapedAt))
-    : []
-
-  const historyByProduct = new Map<string, number[]>()
-  for (const row of historyRows) {
-    if (row.price == null) continue
-    const arr = historyByProduct.get(row.productId) ?? []
-    arr.push(row.price)
-    historyByProduct.set(row.productId, arr)
-  }
-
-  const priceDrops = productsWithCompetitor.filter(({ product }) => (product.priceChangePercent ?? 0) < 0)
-  const outOfStock = productsWithCompetitor.filter(({ product }) => product.isInStock === false)
-  const withPrice = productsWithCompetitor.filter(({ product }) => product.currentPrice != null)
-  const withMargin = productsWithCompetitor.filter(({ product }) => product.costPrice != null && product.yourPrice != null)
-  const avgMargin = withMargin.length > 0
-    ? withMargin.reduce((sum, { product }) => {
-        const m = product.costPrice! > 0 ? ((product.yourPrice! - product.costPrice!) / product.costPrice!) * 100 : 0
-        return sum + m
-      }, 0) / withMargin.length
-    : null
-
-  return (
-    <div className="p-6 space-y-6 bg-[#08090C] min-h-full">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">{t.title}</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{t.count(productsWithCompetitor.length, org.productLimit)}</p>
-        </div>
-        <AddProductModal
-          competitors={competitors}
-          productLimit={org.productLimit}
-          currentCount={productsWithCompetitor.length}
-          locale={locale}
-        />
-      </div>
-
-      {/* Quick stats */}
-      {productsWithCompetitor.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-          {[
-            { label: t.total, value: productsWithCompetitor.length, color: "text-white", bg: "bg-white/5", border: "border-white/8" },
-            { label: t.pricesFound, value: withPrice.length, color: "text-[#A78BFA]", bg: "bg-[#8B5CF6]/8", border: "border-[#8B5CF6]/20" },
-            { label: t.priceDrops, value: priceDrops.length, color: "text-emerald-400", bg: "bg-emerald-500/8", border: "border-emerald-500/20" },
-            { label: t.outOfStock, value: outOfStock.length, color: "text-orange-400", bg: "bg-orange-500/8", border: "border-orange-500/20" },
-            {
-              label: t.avgMargin,
-              value: avgMargin != null ? `${avgMargin.toFixed(0)}%` : "—",
-              color: avgMargin == null ? "text-gray-600" : avgMargin >= 20 ? "text-emerald-400" : avgMargin >= 0 ? "text-amber-400" : "text-red-400",
-              bg: "bg-white/5", border: "border-white/8",
-            },
-          ].map(({ label, value, color, bg, border }) => (
-            <div key={label} className={`${bg} border ${border} rounded-xl p-4 text-center`}>
-              <p className={`text-2xl font-black ${color}`}>{value}</p>
-              <p className="text-xs text-gray-500 mt-1">{label}</p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {productsWithCompetitor.length === 0 ? (
-        <div className="bg-white/4 border border-white/8 rounded-2xl p-14 text-center">
-          <div className="h-16 w-16 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mx-auto mb-5">
-            <Package className="h-7 w-7 text-[#A78BFA]" />
-          </div>
-          <h2 className="text-lg font-bold text-white mb-2">{t.noProduct}</h2>
-          <p className="text-sm text-gray-400 mb-6 max-w-sm mx-auto">
-            {competitors.length === 0
-              ? t.noProductDescNoCompetitors
-              : t.noProductDescWithCompetitors}
-          </p>
-          <div className="flex items-center justify-center gap-3 flex-wrap">
-            {competitors.length === 0 && (
-              <Link
-                href="/dashboard/competitors/new"
-                className="inline-flex items-center gap-2 bg-white/8 border border-white/15 text-white text-sm font-medium px-4 py-2.5 rounded-xl hover:bg-white/12 transition-colors"
-              >
-                {t.addCompetitorFirst}
-              </Link>
-            )}
-            <AddProductModal
-              competitors={competitors}
-              productLimit={org.productLimit}
-              currentCount={0}
-              locale={locale}
-            />
-          </div>
-        </div>
-      ) : (
-        <div className="bg-white/4 border border-white/8 rounded-2xl overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-white/8">
-            <h2 className="font-semibold text-white text-sm">{t.allProducts(productsWithCompetitor.length)}</h2>
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#A78BFA]" />
-              {t.priceUpdateNote}
-            </div>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-white/8 text-xs text-gray-500">
-                  <th className="text-left px-5 py-3 font-medium">{t.product}</th>
-                  <th className="text-left px-4 py-3 font-medium">{t.competitor}</th>
-                  <th className="text-right px-4 py-3 font-medium">{t.currentPrice}</th>
-                  <th className="text-center px-4 py-3 font-medium">{t.history}</th>
-                  <th className="text-right px-4 py-3 font-medium">{t.variation}</th>
-                  <th className="text-left px-4 py-3 font-medium">
-                    <span className="inline-flex items-center gap-1"><Wallet className="h-3 w-3" /> {t.myMargin}</span>
-                  </th>
-                  <th className="text-center px-4 py-3 font-medium">{t.stock}</th>
-                  <th className="px-4 py-3" />
-                </tr>
-              </thead>
-              <tbody>
-                {productsWithCompetitor.map(({ product, competitor }) => (
-                  <tr key={product.id} className="border-b border-white/5 hover:bg-white/3 transition-colors group">
-                    <td className="px-5 py-3.5 max-w-xs">
-                      <a
-                        href={product.url}
-                        target="_blank"
-                        rel="noopener"
-                        className="text-white hover:text-[#A78BFA] transition-colors flex items-center gap-1.5 truncate font-medium"
-                      >
-                        {product.name || new URL(product.url).pathname.split("/").filter(Boolean).pop() || product.url}
-                        <ExternalLink className="h-3 w-3 flex-shrink-0 text-gray-600 group-hover:text-[#A78BFA]" />
-                      </a>
-                      {product.sku && <p className="text-xs text-gray-600 mt-0.5">{t.sku}: {product.sku}</p>}
-                    </td>
-                    <td className="px-4 py-3.5">
-                      <Link
-                        href={`/dashboard/competitors/${competitor.id}`}
-                        className="text-gray-400 hover:text-white transition-colors text-xs font-medium"
-                      >
-                        {competitor.name}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3.5 text-right">
-                      {product.currentPrice != null ? (
-                        <>
-                          <p className="font-bold text-white">{product.currentPrice.toFixed(2)} {product.currency ?? "€"}</p>
-                          {product.previousPrice != null && (
-                            <p className="text-xs text-gray-500 line-through">{product.previousPrice.toFixed(2)} {product.currency ?? "€"}</p>
-                          )}
-                        </>
-                      ) : (
-                        <SetPriceButton productId={product.id} locale={locale} />
-                      )}
-                    </td>
-                    <td className="px-4 py-3.5 text-center">
-                      <PriceSparkline points={historyByProduct.get(product.id) ?? []} />
-                    </td>
-                    <td className="px-4 py-3.5 text-right">
-                      {product.priceChangePercent != null ? (
-                        <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-lg ${
-                          product.priceChangePercent < 0
-                            ? "bg-emerald-500/15 text-emerald-400"
-                            : "bg-red-500/15 text-red-400"
-                        }`}>
-                          {product.priceChangePercent < 0 ? <TrendingDown className="h-3 w-3" /> : <TrendingUp className="h-3 w-3" />}
-                          {Math.abs(product.priceChangePercent).toFixed(1)}%
-                        </span>
-                      ) : <span className="text-gray-600 text-xs">—</span>}
-                    </td>
-                    <td className="px-4 py-3.5">
-                      <MarginEditor
-                        productId={product.id}
-                        costPrice={product.costPrice}
-                        yourPrice={product.yourPrice}
-                        competitorPrice={product.currentPrice}
-                        locale={locale}
-                      />
-                    </td>
-                    <td className="px-4 py-3.5 text-center">
-                      {product.isInStock === null ? (
-                        <span className="text-gray-600 text-xs">—</span>
-                      ) : product.isInStock ? (
-                        <span className="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">{t.inStock}</span>
-                      ) : (
-                        <span className="text-xs text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded-full">{t.outOfStockShort}</span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3.5 text-right">
-                      <DeleteProductButton productId={product.id} locale={locale} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-    </div>
-  )
+export default async function ProductsPage(){
+ const session=await auth(); if(!session?.user?.id) redirect("/auth/login")
+ const locale=await getLocale(); const t=DICT[locale]; const db=getDb()
+ const [membership]=await db.select({org:organizations}).from(organizationMembers).innerJoin(organizations,eq(organizationMembers.organizationId,organizations.id)).where(eq(organizationMembers.userId,session.user.id)).limit(1)
+ if(!membership) redirect("/onboarding"); const org=withUnlimitedAccess(membership.org,session.user.email)
+ const rows=await db.select({product:trackedProducts,source:trackedCompetitors}).from(trackedProducts).innerJoin(trackedCompetitors,eq(trackedProducts.competitorId,trackedCompetitors.id)).where(and(eq(trackedProducts.organizationId,org.id),eq(trackedProducts.isActive,true))).orderBy(desc(trackedProducts.lastPriceChangedAt),desc(trackedProducts.createdAt)).limit(500)
+ const ids=rows.map(r=>r.product.id)
+ const history=ids.length?await db.select().from(priceHistory).where(inArray(priceHistory.productId,ids)).orderBy(asc(priceHistory.scrapedAt)):[]
+ const historyMap=new Map<string,number[]>(); for(const h of history){if(h.price==null)continue; const a=historyMap.get(h.productId)||[];a.push(h.price);historyMap.set(h.productId,a)}
+ const drops=rows.filter(r=>(r.product.priceChangePercent??0)<0).length; const out=rows.filter(r=>r.product.isInStock===false).length
+ return <div className="min-h-full bg-[#08090C] p-5 md:p-7 space-y-6">
+  <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4"><div><p className="text-xs uppercase tracking-[0.16em] text-[#A78BFA] font-semibold mb-2">Conforva</p><h1 className="text-3xl font-black tracking-[-0.03em] text-white">{t.title}</h1><p className="text-sm text-gray-500 mt-1">{t.count(rows.length,org.productLimit)}</p></div><AddProductModal productLimit={org.productLimit} currentCount={rows.length} locale={locale}/></header>
+  {rows.length>0&&<div className="grid grid-cols-2 md:grid-cols-4 gap-3"><div className="rounded-2xl border border-white/8 bg-white/[0.035] p-4"><p className="text-2xl font-black text-white">{rows.length}</p><p className="text-xs text-gray-500 mt-1">{t.tracked}</p></div><div className="rounded-2xl border border-emerald-500/15 bg-emerald-500/[0.04] p-4"><p className="text-2xl font-black text-emerald-400">{drops}</p><p className="text-xs text-gray-500 mt-1">{t.change} ↓</p></div><div className="rounded-2xl border border-orange-500/15 bg-orange-500/[0.04] p-4"><p className="text-2xl font-black text-orange-400">{out}</p><p className="text-xs text-gray-500 mt-1">{t.out}</p></div><div className="rounded-2xl border border-white/8 bg-white/[0.035] p-4"><p className="text-sm font-bold text-white mt-1">{t.update}</p><p className="text-xs text-gray-600 mt-1">Chaque produit est surveillé indépendamment.</p></div></div>}
+  {rows.length===0?<section className="rounded-3xl border border-[#8B5CF6]/20 bg-[#8B5CF6]/[0.045] p-8 md:p-12"><div className="max-w-xl"><div className="h-12 w-12 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center"><Package className="h-5 w-5 text-[#A78BFA]"/></div><h2 className="text-2xl font-black text-white mt-5">{t.empty}</h2><p className="text-sm text-gray-400 mt-3 leading-6">{t.emptyText}</p><div className="mt-6"><AddProductModal productLimit={org.productLimit} currentCount={0} locale={locale}/></div></div></section>:<section className="rounded-2xl border border-white/8 bg-white/[0.025] overflow-hidden"><div className="px-5 py-4 border-b border-white/7 flex items-center justify-between"><div><h2 className="text-sm font-bold text-white">{t.all(rows.length)}</h2><p className="text-xs text-gray-600 mt-1">{t.update}</p></div></div><div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="border-b border-white/8 text-xs text-gray-500"><th className="text-left px-5 py-3 font-medium">Produit</th><th className="text-left px-4 py-3 font-medium">{t.source}</th><th className="text-right px-4 py-3 font-medium">{t.price}</th><th className="text-center px-4 py-3 font-medium">{t.history}</th><th className="text-right px-4 py-3 font-medium">{t.change}</th><th className="text-left px-4 py-3 font-medium"><span className="inline-flex items-center gap-1"><Wallet className="h-3 w-3"/>{t.margin}</span></th><th className="text-center px-4 py-3 font-medium">{t.stock}</th><th/></tr></thead><tbody>{rows.map(({product,source})=><tr key={product.id} className="border-b border-white/5 hover:bg-white/[0.025]"><td className="px-5 py-4 max-w-xs"><a href={product.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-white hover:text-[#A78BFA] font-medium truncate"><span className="truncate">{product.name||t.unknown}</span><ExternalLink className="h-3 w-3 shrink-0 text-gray-600"/></a>{product.sku&&<p className="text-[11px] text-gray-600 mt-1">{t.sku}: {product.sku}</p>}</td><td className="px-4 py-4"><span className="inline-flex items-center rounded-lg bg-white/5 px-2.5 py-1 text-xs text-gray-400">{source.name}</span></td><td className="px-4 py-4 text-right">{product.currentPrice!=null?<><p className="font-bold text-white">{product.currentPrice.toFixed(2)} {product.currency||"€"}</p>{product.previousPrice!=null&&<p className="text-[11px] text-gray-600 line-through">{product.previousPrice.toFixed(2)} {product.currency||"€"}</p>}</>:<SetPriceButton productId={product.id} locale={locale}/>}</td><td className="px-4 py-4"><PriceSparkline points={historyMap.get(product.id)||[]}/></td><td className="px-4 py-4 text-right">{product.priceChangePercent!=null?<span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-lg ${product.priceChangePercent<0?"bg-emerald-500/10 text-emerald-400":"bg-red-500/10 text-red-400"}`}>{product.priceChangePercent<0?<TrendingDown className="h-3 w-3"/>:<TrendingUp className="h-3 w-3"/>}{Math.abs(product.priceChangePercent).toFixed(1)}%</span>:<span className="text-gray-600">—</span>}</td><td className="px-4 py-4"><MarginEditor productId={product.id} costPrice={product.costPrice} yourPrice={product.yourPrice} competitorPrice={product.currentPrice} locale={locale}/></td><td className="px-4 py-4 text-center">{product.isInStock===null?<span className="text-gray-600">—</span>:product.isInStock?<span className="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full">{t.inStock}</span>:<span className="text-xs text-orange-400 bg-orange-500/10 px-2 py-1 rounded-full">{t.out}</span>}</td><td className="px-4 py-4 text-right"><DeleteProductButton productId={product.id} locale={locale}/></td></tr>)}</tbody></table></div></section>}
+ </div>
 }
