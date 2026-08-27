@@ -5,7 +5,6 @@ const PUBLIC_PREFIXES = [
   "/",
   "/auth/",
   "/blog",
-  "/conformite-gpsr",
   "/partenaires",
   "/about",
   "/contact",
@@ -18,12 +17,10 @@ const PUBLIC_PREFIXES = [
   "/cookies",
   "/mentions-legales",
   "/enterprise",
-  "/audit-gratuit",
   "/api/auth",
-  "/api/audit",
   "/api/webhooks",
   "/api/affiliates",
-  "/api/competitors", // allow public read for now
+  "/api/competitors",
 ]
 
 function isPublic(pathname: string): boolean {
@@ -33,8 +30,6 @@ function isPublic(pathname: string): boolean {
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
-
-  // Affiliate referral tracking
   const ref = request.nextUrl.searchParams.get("ref")
   let response: NextResponse
 
